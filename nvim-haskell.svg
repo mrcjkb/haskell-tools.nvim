@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1714.3118"
+   height="729"
+   viewBox="0 0 1714.3118 729"
+   version="1.1"
+   id="svg95"
+   sodipodi:docname="nvim-haskell.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+  <sodipodi:namedview
+     id="namedview97"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="0.93253319"
+     inkscape:cx="703.46021"
+     inkscape:cy="541.53568"
+     inkscape:window-width="3324"
+     inkscape:window-height="2139"
+     inkscape:window-x="0"
+     inkscape:window-y="17"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg95" />
+  <title
+     id="title70">neovim-mark@2x</title>
+  <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+  <defs
+     id="defs87">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient10331">
+      <stop
+         style="stop-color:#159ce0;stop-opacity:0.80000001;"
+         offset="0"
+         id="stop10327" />
+      <stop
+         style="stop-color:#105db5;stop-opacity:0.83529413;"
+         offset="1"
+         id="stop10329" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient7287">
+      <stop
+         style="stop-color:#7ab442;stop-opacity:0.80000001;"
+         offset="0"
+         id="stop7283" />
+      <stop
+         style="stop-color:#499641;stop-opacity:0.8509804;"
+         offset="1"
+         id="stop7285" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4036">
+      <stop
+         style="stop-color:#7bb442;stop-opacity:0.80000001;"
+         offset="0"
+         id="stop4032" />
+      <stop
+         style="stop-color:#459440;stop-opacity:0.8392157;"
+         offset="1"
+         id="stop4034" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2165">
+      <stop
+         style="stop-color:#105bb4;stop-opacity:0.80000001;"
+         offset="0"
+         id="stop2161" />
+      <stop
+         style="stop-color:#159ee1;stop-opacity:0.80784315;"
+         offset="1"
+         id="stop2163" />
+    </linearGradient>
+    <linearGradient
+       x1="167.95833"
+       y1="-0.46142398"
+       x2="167.95833"
+       y2="335.45523"
+       id="linearGradient-1"
+       gradientTransform="scale(0.46142398,2.1672042)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#16B0ED"
+         stop-opacity="0.800235524"
+         offset="0%"
+         id="stop72" />
+      <stop
+         stop-color="#0F59B2"
+         stop-opacity="0.83700023"
+         offset="100%"
+         id="stop74" />
+    </linearGradient>
+    <linearGradient
+       x1="1118.3426"
+       y1="-0.46586797"
+       x2="1118.3426"
+       y2="338.68602"
+       id="linearGradient-2"
+       gradientTransform="scale(0.46586797,2.1465309)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#7DB643"
+         offset="0%"
+         id="stop77" />
+      <stop
+         stop-color="#367533"
+         offset="100%"
+         id="stop79" />
+    </linearGradient>
+    <linearGradient
+       x1="356.33796"
+       y1="0"
+       x2="356.33796"
+       y2="612.9013"
+       id="linearGradient-3"
+       gradientTransform="scale(0.84189739,1.1877932)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#88C649"
+         stop-opacity="0.8"
+         offset="0%"
+         id="stop82" />
+      <stop
+         stop-color="#439240"
+         stop-opacity="0.84"
+         offset="100%"
+         id="stop84" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2165"
+       id="linearGradient2167"
+       x1="0"
+       y1="127.91282"
+       x2="147.60105"
+       y2="127.91282"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4036"
+       id="linearGradient4038"
+       x1="85.216068"
+       y1="127.91282"
+       x2="317.15375"
+       y2="127.91282"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7287"
+       id="linearGradient7289"
+       x1="218.15313"
+       y1="93.738362"
+       x2="358.72556"
+       y2="93.738362"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10331"
+       id="linearGradient10333"
+       x1="260.32486"
+       y1="157.69218"
+       x2="358.72556"
+       y2="157.69218"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     id="Page-1"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd"
+     sketch:type="MSPage"
+     transform="translate(-2,-1.9999991)">
+    <g
+       id="mark-copy"
+       sketch:type="MSLayerGroup"
+       transform="translate(2,3)">
+      <g
+         id="g2159">
+        <path
+           d="M 0,155.5704 155,-1 V 727 L 0,572.23792 Z"
+           id="Left---green"
+           fill="url(#linearGradient-1)"
+           sketch:type="MSShapeGroup"
+           style="fill:url(#linearGradient-1)" />
+        <path
+           d="M 443.0604,156.9824 600,-1 596.81879,727 442,572.21994 Z"
+           id="Right---blue"
+           fill="url(#linearGradient-2)"
+           sketch:type="MSShapeGroup"
+           style="fill:url(#linearGradient-2)"
+           transform="matrix(-1,0,0,1,1042,0)" />
+        <path
+           d="M 154.98629,0 558,615.1897 445.2246,728 42,114.17202 Z"
+           id="Cross---blue"
+           fill="url(#linearGradient-3)"
+           sketch:type="MSShapeGroup"
+           style="fill:url(#linearGradient-3)" />
+        <path
+           d="M 155,283.83232 154.78675,308 31,124.71061 42.461949,113 Z"
+           id="Shadow"
+           fill-opacity="0.13"
+           fill="#000000"
+           sketch:type="MSShapeGroup" />
+      </g>
+    </g>
+  </g>
+  <g
+     id="Page-1-5"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd"
+     transform="matrix(2.8495971,0,0,2.8495971,692.0884,0)">
+    <g
+       id="haskell">
+      <polygon
+         id="Path"
+         fill="#453a62"
+         points="63.257592,255.82564 0,255.82564 84.343456,127.91455 0,0 63.257592,0 147.60105,127.91455 "
+         style="fill-opacity:1;fill:url(#linearGradient2167)" />
+      <polygon
+         id="polygon259"
+         fill="#5e5086"
+         points="148.47366,0 317.15375,255.82564 253.90298,255.82564 201.19173,175.88293 148.47025,255.82564 85.216068,255.82564 169.55952,127.91455 85.216068,0 "
+         style="fill-opacity:1;fill:url(#linearGradient4038)" />
+      <polygon
+         id="polygon261"
+         fill="#8f4e8b"
+         points="260.32486,136.37022 358.72556,136.37022 358.72556,179.01415 288.43935,179.01415 288.43935,179.01071 "
+         style="fill-opacity:1;fill:url(#linearGradient10333)" />
+      <polygon
+         id="polygon263"
+         fill="#8f4e8b"
+         points="358.72556,115.0586 246.26762,115.0586 218.15313,72.418124 358.72556,72.418124 "
+         style="fill-opacity:1;fill:url(#linearGradient7289)" />
+    </g>
+  </g>
+  <metadata
+     id="metadata14713">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>neovim-mark@2x</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

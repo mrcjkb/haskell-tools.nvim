@@ -4,6 +4,8 @@
 
 Improve your Haskell experience in [neovim](https://neovim.io/)!
 
+![](./nvim-haskell.svg)
+
 ## Quick Links
 - [Installation](#installation)
 - [Quick Setup](#quick-setup)
