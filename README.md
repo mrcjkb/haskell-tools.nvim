@@ -41,7 +41,7 @@ If using this plugin, __do not__ call the `lspconfig.hls` setup or set up the ls
 To get started quickly with the default setup, add the following to your NeoVim config:
 
 ```lua
-on_attach = function(_, bufnr)
+local on_attach = function(_, bufnr)
 -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
 end
 
