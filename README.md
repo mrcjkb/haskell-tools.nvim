@@ -11,6 +11,7 @@ Improve your Haskell experience in [neovim](https://neovim.io/)!
 - [Quick Setup](#quick-setup)
 - [Features](#features)
 - [Advanced configuration](#advanced-configuration)
+- [Recommendations](#recommendations)
 
 ## Prerequisites
 
@@ -80,3 +81,10 @@ require('haskell-tools').setup {
 * The full list of defaults [can be found here](./lua/haskell-tools/config.lua)
 * To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`
 * For detailed descriptions of the configs, look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
+
+## Recommendations
+
+Here are some other plugins I recommend for Haskell development in neovim:
+
+* [neotest-haskell](https://github.com/MrcJkb/neotest-haskell)
+* []

@@ -1,9 +1,5 @@
-local M = {
-  config = nil,
-  lsp = nil,
+return {
+  config = require('haskell-tools.config'),
+  lsp = require('haskell-tools.lsp'),
+  deps = require('haskell-tools.deps'),
 }
-
-M.config = require('haskell-tools.config')
-M.lsp = require('haskell-tools.lsp')
-
-return M
