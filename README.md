@@ -70,6 +70,7 @@ require('haskell-tools').setup {
     haskell = {
       formattingProvider = 'fourmolu', -- Defaults to 'ormolu'
       checkProject = false, -- Defaults to true, which could have a performance impact on large monorepos.
+      -- ...
     }
   }
 }
