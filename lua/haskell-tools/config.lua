@@ -6,7 +6,7 @@ local nvim_capabilities = vim.lsp.protocol.make_client_capabilities()
 local capabilities = deps.if_available(
   'cmp_nvim_lsp', 
   function(cmp_nvim_lsp)
-    return cmp_nvim_lsp.update_capabilities(nvim_capabilities) 
+    return cmp_nvim_lsp.default_capabilities(nvim_capabilities) 
   end, 
   nvim_capabilities
 )
