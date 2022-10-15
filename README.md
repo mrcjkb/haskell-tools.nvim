@@ -1,10 +1,10 @@
 # haskell-tools.nvim
 
-> __[WIP]__ 
+![](./nvim-haskell.svg)
+
+# __[WIP]__ 
 
 Improve your Haskell experience in [neovim](https://neovim.io/)!
-
-![](./nvim-haskell.svg)
 
 ## Quick Links
 - [Installation](#installation)
