@@ -54,8 +54,8 @@ require('haskell-tools').setup {
 
 ## Features
 
-[x] Basic haskell-language-server functionality on par with `nvim-lspconfig.hls`
-[x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533))
+- [x] Basic haskell-language-server functionality on par with `nvim-lspconfig.hls`
+- [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533))
 
 
 ## Advanced configuration
