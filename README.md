@@ -91,5 +91,5 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [MrcJkb/neotest-haskell](https://github.com/MrcJkb/neotest-haskell): Interact with tests in neovim
 * [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Hoogle search
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search
-* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monnorepos)
+* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monorepos)
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration
