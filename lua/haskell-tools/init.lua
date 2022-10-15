@@ -1,10 +1,16 @@
-local ht = require('haskell-tools')
-
-local M = {}
+local M = {
+  config = nil,
+  lsp = nil,
+}
 
 function M.setup(opts)
-  ht.config.setup(opts)
-  ht.lsp.setup()
+  local config = require('haskell-tools.config')
+  M.config = config
+  local lsp = require('haskell-tools.lsp')
+  M.lsp = lsp
+
+  config.setup(opts)
+  lsp.setup()
 end
 
 return M
