@@ -73,6 +73,7 @@ local defaults = {
         },
         importLens = {
           globalOn = true,
+          codeActionsOn = true,
           codeLensOn = true,
         },
         moduleName = {globalOn = true,},
