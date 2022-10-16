@@ -2,14 +2,15 @@ local deps = require('haskell-tools.deps')
 
 local M = {}
 
-local nvim_capabilities = vim.lsp.protocol.make_client_capabilities()
-local capabilities = deps.if_available(
+local ht_capabilities = {}
+local cmp_capabilities = deps.if_available(
   'cmp_nvim_lsp', 
   function(cmp_nvim_lsp)
-    return cmp_nvim_lsp.default_capabilities(nvim_capabilities) 
+    return cmp_nvim_lsp.default_capabilities() 
   end, 
-  nvim_capabilities
+  {}
 )
+local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities)
 
 local defaults = {
   -- haskell-language-server config
