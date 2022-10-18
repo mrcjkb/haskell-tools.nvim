@@ -2,9 +2,6 @@
 
 ![](./nvim-haskell.svg)
 
-# __[WIP]__ 
-:warning: This plugin is still in a very early development stage. :warning:
-
 Improve your Haskell experience in [neovim](https://neovim.io/)!
 
 ## Quick Links
