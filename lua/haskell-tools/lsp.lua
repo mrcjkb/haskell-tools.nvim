@@ -19,7 +19,7 @@ end
 
 local function setup_codeLens(opts)
   if opts.autoRefresh then
-    vim.api.nvim_create_autocmd({'BufEnter', 'CursorHold', 'InsertLeave', 'BufWritePost'}, {
+    vim.api.nvim_create_autocmd({'BufEnter', 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged'}, {
       group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
       callback = vim.lsp.codelens.refresh,
     })
