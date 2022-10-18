@@ -70,7 +70,8 @@ require('haskell-tools').setup {
   * [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
   * [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
   * [Fix module names that do not match file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
-- [ ] Enable / disable specific codeLenses in config
+
+For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
 
 
 ## Advanced configuration
