@@ -14,6 +14,12 @@ local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabiliti
 
 local defaults = {
   -- haskell-language-server config
+  tools = {
+    codeLens = {
+      -- Whether to automatically display/refresh codeLenses
+      autoRefresh = true,
+    },
+  },
   hls = {
     on_attach = function(...) end,
     capabilities = capabilities,

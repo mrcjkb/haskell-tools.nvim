@@ -41,8 +41,11 @@ If using this plugin, __do not__ call the `lspconfig.hls` setup or set up the ls
 To get started quickly with the default setup, add the following to your NeoVim config:
 
 ```lua
-local on_attach = function(_, bufnr)
 -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
+local on_attach = function(_, bufnr)
+  -- haskell-language-server relies heavily on codeLenses,
+  -- so auto-refresh (see advanced configuration) is enabled by default
+  vim.keymap.set('n', '<space>cl', vim.lsp.codelens.apply)
 end
 
 require('haskell-tools').setup {
@@ -50,7 +53,6 @@ require('haskell-tools').setup {
     on_attach = on_attach,
   },
 }
-
 ```
 
 ## Features
@@ -66,18 +68,22 @@ require('haskell-tools').setup {
 To modify the language server configs, call
 
 ```lua
-
 require('haskell-tools').setup {
-  hls = {
+  tools = { -- haskell-tools options
+    codeLens = {
+      -- Whether to automatically display/refresh codeLenses
+      autoRefresh = false, -- defaults to true
+    },
+  },
+  hls = { -- LSP client options
     -- ...
-    haskell = {
+    haskell = { -- haskell-language-server options
       formattingProvider = 'fourmolu', -- Defaults to 'ormolu'
       checkProject = false, -- Defaults to true, which could have a performance impact on large monorepos.
       -- ...
     }
   }
 }
-
 ```
 
 * The full list of defaults [can be found here](./lua/haskell-tools/config.lua)
