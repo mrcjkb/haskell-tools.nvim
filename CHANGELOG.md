@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Basic automatic codeLens refresh (can be disabled by setting `tools.codeLens.autoRefresh = false`)
+### Fixed
+- Clean exit of language server on quit 
 
 ## [0.1.0]
 ### Added
