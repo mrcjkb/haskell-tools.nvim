@@ -116,19 +116,6 @@ M.options = {
 
 function M.setup(opts)
   M.options = vim.tbl_deep_extend('force', {}, defaults, opts or {})
-  local function on_attach(client, bufnr)
-    M.options.hls.on_attach(client, bufnr)
-    -- GHC can leave behind corrupted files if it does not exit cleanly.
-    -- (https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
-    -- To minimise the risk of this occurring, we attempt to shut down hls clnly before exiting neovim.
-    vim.api.nvim_create_augroup('VimLeavePre', {
-      group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true} ),
-      callback = function()
-        vim.lsp.stop_client(client, false)
-      end
-    })
-  end
-  defaults.on_attach = on_attach
 end
 
 return M
