@@ -45,7 +45,7 @@ To get started quickly with the default setup, add the following to your NeoVim 
 local on_attach = function(_, bufnr)
   -- haskell-language-server relies heavily on codeLenses,
   -- so auto-refresh (see advanced configuration) is enabled by default
-  vim.keymap.set('n', '<space>cl', vim.lsp.codelens.apply)
+  vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run)
 end
 
 require('haskell-tools').setup {
@@ -58,9 +58,19 @@ require('haskell-tools').setup {
 ## Features
 
 - [x] Basic haskell-language-server functionality on par with `nvim-lspconfig.hls`
+
+### Beyond `nvim-lspconfig.hls`
+
 - [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533))
 - [x] Automatically adds capabilities for the following plugins, if loaded:
   * [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+- [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be diabled.](#advanced-configuration)
+- [x] The following code lenses are currently supported:
+  * [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
+  * [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
+  * [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
+  * [Fix module names that do not match file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
+- [ ] Enable / disable specific codeLenses in config
 
 
 ## Advanced configuration
@@ -99,3 +109,5 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search
 * [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monorepos)
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration
+
+
