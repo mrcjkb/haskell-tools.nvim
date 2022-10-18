@@ -62,7 +62,7 @@ require('haskell-tools').setup {
 - [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533))
 - [x] Automatically adds capabilities for the following plugins, if loaded:
   * [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
-- [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be diabled.](#advanced-configuration)
+- [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be disabled.](#advanced-configuration)
 - [x] The following code lenses are currently supported:
   * [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
   * [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
