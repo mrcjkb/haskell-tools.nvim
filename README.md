@@ -60,9 +60,10 @@ require('haskell-tools').setup {
 
 ### Beyond `nvim-lspconfig.hls`
 
-- [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533))
+- [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533)).
 - [x] Automatically adds capabilities for the following plugins, if loaded:
   * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (provides completion sources for [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)).
+  * [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range) (Adds haskell-specific [expand selection](https://haskell-language-server.readthedocs.io/en/latest/features.html#selection-range) support).
 - [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be disabled.](#advanced-configuration)
 - [x] The following code lenses are currently supported:
 
@@ -106,8 +107,8 @@ require('haskell-tools').setup {
 }
 ```
 
-* The full list of defaults [can be found here](./lua/haskell-tools/config.lua)
-* To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`
+* The full list of defaults [can be found here](./lua/haskell-tools/config.lua).
+* To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`.
 * For detailed descriptions of the configs, look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
 ### How to disable individual code lenses
@@ -150,10 +151,10 @@ hls = {
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
 
-* [MrcJkb/neotest-haskell](https://github.com/MrcJkb/neotest-haskell): Interact with tests in neovim
-* [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Hoogle search
-* [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search
-* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monorepos)
-* [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration
+* [MrcJkb/neotest-haskell](https://github.com/MrcJkb/neotest-haskell): Interact with tests in neovim.
+* [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Hoogle search.
+* [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
+* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monorepos).
+* [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
 
 
