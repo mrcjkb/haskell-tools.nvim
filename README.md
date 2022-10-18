@@ -67,7 +67,7 @@ require('haskell-tools').setup {
   * [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
   * [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
   * [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
-  * [Fix module names that do not match file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
+  * [Fix module names that do not match the file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
 
 ### Planned
 
