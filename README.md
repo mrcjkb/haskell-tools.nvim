@@ -34,7 +34,8 @@ use {
 ## Quick Setup
 
 This plugin automatically configures the haskell-language-server NeoVim client.
-If using this plugin, __do not__ call the `lspconfig.hls` setup or set up the lsp manually, as doing so will cause conflicts.
+
+:warning: __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
 
 To get started quickly with the default setup, add the following to your NeoVim config:
 
