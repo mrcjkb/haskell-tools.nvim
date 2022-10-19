@@ -102,6 +102,42 @@ require('haskell-tools').setup {
 * To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`
 * For detailed descriptions of the configs, look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
+### How to disable individual code lenses
+
+Some code lenses might be more interesting than others.
+For example, the `importLens` could be annoying if you prefer to import everything or use a custom prelude.
+Individual code lenses can be turned off by disabling them in the respective plugin configurations:
+
+```lua
+hls = {
+  haskell = {
+    plugin = {
+      class = { -- missing class methods
+        codeLensOn = false,
+      },
+      importLens = { -- make import lists fully explicit
+        codeLensOn = false,
+      },
+      refineImports = { -- refine imports
+        codeLensOn = false,
+      },
+      tactics = { -- wingman
+        codeLensOn = false,
+      },
+      moduleName = { -- fix module names
+        globalOn = false,
+      },
+      eval = { -- evaluate code snippets
+        globalOn = false,
+      },
+      ['ghcide-type-lenses'] = { -- show/add missing type signatures
+        globalOn = false,
+      },
+    },
+  },
+},
+```
+
 ## Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
