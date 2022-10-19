@@ -2,7 +2,7 @@
 
 ![](./nvim-haskell.svg)
 
-Improve your Haskell experience in [neovim](https://neovim.io/)!
+Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 
 ## Quick Links
 - [Installation](#installation)
