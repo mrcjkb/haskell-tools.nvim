@@ -9,6 +9,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Quick Setup](#quick-setup)
 - [Features](#features)
 - [Advanced configuration](#advanced-configuration)
+- [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
 
 ## Prerequisites
@@ -145,6 +146,13 @@ hls = {
   },
 },
 ```
+
+## Troubleshooting
+
+#### LSP features not working
+Check which version of GHC you are using (`:LspInfo`).
+Sometimes, certain features take some time to be implemented for the latest GHC versions.
+You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
 ## Recommendations
 
