@@ -10,7 +10,14 @@ local cmp_capabilities = deps.if_available(
   end, 
   {}
 )
-local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities)
+local selection_range_capabilities = deps.if_available(
+  'lsp-selection-range',
+  function(lsp_selection_range)
+    return lsp_selection_range.update_capabilities({})
+  end,
+  {}
+)
+local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities, selection_range_capabilities)
 
 local defaults = {
   -- haskell-language-server config
