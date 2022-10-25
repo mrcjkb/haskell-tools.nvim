@@ -27,11 +27,13 @@ local defaults = {
       autoRefresh = true,
     },
     hoogle = {
-      -- 'auto', 'telescope-web', or 'browser'
-      -- NOTE: 'local' mode depends on luc-tielen/telescope_hoogle
+      -- 'auto': Choose a mode automatically, based on what is available.
+      -- 'telescope-local': Force use of a local installation.
+      -- 'telescope-web': The online version (depends on curl).
+      -- 'browser': Open hoogle search in the default browser.
       mode = 'auto', 
-      -- Fall back to a hoogle search if goToDefinition fails
-      goToDefinitionFallback = false,
+      -- -- TODO: Fall back to a hoogle search if goToDefinition fails
+      -- goToDefinitionFallback = false, 
     },
   },
   hls = {

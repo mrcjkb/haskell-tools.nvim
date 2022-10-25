@@ -1,5 +1,6 @@
 local ht = require('haskell-tools')
 local hoogle_web = require('haskell-tools.hoogle-web')
+local hoogle_local = require('haskell-tools.hoogle-local')
 local deps = require('haskell-tools.deps')
 local lsp_util = vim.lsp.util
 
@@ -11,19 +12,22 @@ local function setup_handler(opts)
   if opts.mode == 'telescope-web' then
     M.handler = hoogle_web.telescope_search
   elseif opts.mode == 'telescope-local' then
-    error('haskell-tools.hoogle: telescope-local mode not implemented yet.')
+    M.handler = hoogle_local.telescope_search
   elseif opts.mode == 'browser' then
     M.handler = hoogle_web.browser_search
   elseif opts.mode == 'auto' then
-    if deps.has_telescope() then
-      M.handler = hoogle_web.telescope_search
-    else
+    if not deps.has_telescope() then
       M.handler = hoogle_web.browser_search
+    elseif hoogle_local.has_hoogle() then
+      M.handler = hoogle_local.telescope_search
+    else
+      M.handler = hoogle_web.telescope_search
     end
   end
 end
 
 local function setup_goto_definition_fallback()
+  -- TODO
 end
 
 local function get_signature_from_markdown(docs)
@@ -63,6 +67,7 @@ end
 
 function M.setup()
   hoogle_web.setup()
+  hoogle_local.setup()
   local opts = ht.config.options.tools.hoogle
   setup_handler(opts)
   if opts.goToDefinitionFallback then
