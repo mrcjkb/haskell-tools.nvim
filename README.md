@@ -46,11 +46,11 @@ use {
 
 ## Quick Setup
 
-This plugin automatically configures the haskell-language-server NeoVim client.
+This plugin automatically configures the haskell-language-server neovim client.
 
 :warning: __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
 
-To get started quickly with the default setup, add the following to your NeoVim config:
+To get started quickly with the default setup, add the following to your neovim config:
 
 ```lua
 local ht = require('haskell-tools')
@@ -145,7 +145,7 @@ require('haskell-tools').setup {
     -- ...
     haskell = { -- haskell-language-server options
       formattingProvider = 'ormolu', 
-      checkProject = true, -- Setting this to true could have a performance impact on large monorepos.
+      checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
       -- ...
     }
   }
@@ -206,7 +206,7 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [MrcJkb/neotest-haskell](https://github.com/MrcJkb/neotest-haskell): Interact with tests in neovim.
 * [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Hoogle search.
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
-* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large monorepos).
+* [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large mono repos).
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
 
 
