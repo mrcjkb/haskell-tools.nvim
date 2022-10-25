@@ -18,14 +18,12 @@ function M.if_available(modname, on_available, on_not_available)
   return on_not_available
 end
 
-local function require_or_err(modname, err_msg)
+function M.require_or_err(modname, plugin_name)
   return M.if_available(
     modname,
     function(mod) return mod end,
-    function() error('haskell-tools: ' .. err_msg) end
+    function() error('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.') end
   )
 end
-
-M.lspconfig = require_or_err('lspconfig', 'This plugin requires the neovim/nvim-lspconfig plugin')
 
 return M
