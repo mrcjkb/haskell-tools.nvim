@@ -14,10 +14,17 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 
 ## Prerequisites
 
+### Required
+
 * `neovim >= 0.8`
 * [`nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig)
+* [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim)
 * [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html)
 
+### Optional
+
+* [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
+* A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation
 
 ## Installation
 
@@ -28,9 +35,14 @@ use {
   'MrcJkb/haskell-tools.nvim',
   requires = {
     'neovim/nvim-lspconfig',
-  }
+    'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope.nvim', -- optional
+  },
+  -- tag = 'x.y.z' -- [^1]
 }
 ```
+[^1] It is suggested to use the [latest release tag](./CHANGELOG.md) 
+     and to update it manually, if you would like to avoid breaking changes.
 
 ## Quick Setup
 
@@ -41,19 +53,25 @@ This plugin automatically configures the haskell-language-server NeoVim client.
 To get started quickly with the default setup, add the following to your NeoVim config:
 
 ```lua
--- See nvim-lspconfig's  suggested configuration for keymaps, etc.
-local on_attach = function(_, bufnr)
-  -- haskell-language-server relies heavily on codeLenses,
-  -- so auto-refresh (see advanced configuration) is enabled by default
-  vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run)
-end
+local ht = require('haskell-tools')
 
-require('haskell-tools').setup {
+local opts = { noremap = true, silent = true, buffer = bufnr }
+ht.setup {
   hls = {
-    on_attach = on_attach,
+    -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
+    on_attach = function(client, bufnr)
+      -- haskell-language-server relies heavily on codeLenses,
+      -- so auto-refresh (see advanced configuration) is enabled by default
+      vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
+      vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
+      -- default_on_attach(client, bufnr)  -- if defined, see nvim-lspconfig
+    end,
   },
 }
 ```
+
+If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
+to generate a database.
 
 ## Features
 
@@ -68,17 +86,35 @@ require('haskell-tools').setup {
 - [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be disabled.](#advanced-configuration)
 - [x] The following code lenses are currently supported:
 
-##### [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
+#### [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
 [![asciicast](https://asciinema.org/a/zC88fqMhPq25lHFYgEF6OxMgk.svg)](https://asciinema.org/a/zC88fqMhPq25lHFYgEF6OxMgk?t=0:04)
 
-##### [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
+#### [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
 [![asciicast](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41.svg)](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41?t=0:04)
 
-##### [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
+#### [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
 [![asciicast](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P.svg)](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P?t=0:02)
 
-##### [Fix module names that do not match the file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
+#### [Fix module names that do not match the file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
 [![asciicast](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG.svg)](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG?t=0:02)
+
+### Beyond haskell-language-server
+
+The below features are not implemented by haskell-language-server.
+
+#### Hoogle-search for signature
+
+* Search for the type signature under the cursor.
+* Falls back to the word under the cursor if the type signature cannot be determined.
+* Telescope keymaps:
+  - `<CR>` to copy the selected entry to the clipboard.
+  - `<C-b>` to open the selected entry's URL in a browser.
+
+```lua
+require('haskell-tools').hoogle.hoogle_signature()
+```
+
+[![asciicast](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R.svg)](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R)
 
 ### Planned
 
@@ -90,18 +126,26 @@ For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-to
 To modify the language server configs, call
 
 ```lua
+-- defaults
 require('haskell-tools').setup {
   tools = { -- haskell-tools options
     codeLens = {
       -- Whether to automatically display/refresh codeLenses
-      autoRefresh = false, -- defaults to true
+      autoRefresh = true,
+    },
+    hoogle = {
+      -- 'auto': Choose a mode automatically, based on what is available.
+      -- 'telescope-local': Force use of a local installation.
+      -- 'telescope-web': The online version (depends on curl).
+      -- 'browser': Open hoogle search in the default browser.
+      mode = 'auto', 
     },
   },
   hls = { -- LSP client options
     -- ...
     haskell = { -- haskell-language-server options
-      formattingProvider = 'fourmolu', -- Defaults to 'ormolu'
-      checkProject = false, -- Defaults to true, which could have a performance impact on large monorepos.
+      formattingProvider = 'ormolu', 
+      checkProject = true, -- Setting this to true could have a performance impact on large monorepos.
       -- ...
     }
   }

@@ -26,6 +26,15 @@ local defaults = {
       -- Whether to automatically display/refresh codeLenses
       autoRefresh = true,
     },
+    hoogle = {
+      -- 'auto': Choose a mode automatically, based on what is available.
+      -- 'telescope-local': Force use of a local installation.
+      -- 'telescope-web': The online version (depends on curl).
+      -- 'browser': Open hoogle search in the default browser.
+      mode = 'auto', 
+      -- -- TODO: Fall back to a hoogle search if goToDefinition fails
+      -- goToDefinitionFallback = false, 
+    },
   },
   hls = {
     on_attach = function(...) end,

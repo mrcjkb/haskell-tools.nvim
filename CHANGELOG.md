@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0] - 2022-10-25
 ### Added
+- Hoogle search (BREAKING CHANGE: Depends on [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim))
+- Hoogle search for signature under cursor (telescope-local, telescope-web or browser)
 - Automatic registration of selection range capabilities if [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range) is loaded.
 
 ## [0.2.0] - 2022-10-18

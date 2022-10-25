@@ -37,7 +37,8 @@ local function setup_lsp()
     setup_codeLens(opts.tools.codeLens)
   end
   hls_opts.on_attach = on_attach
-  deps.lspconfig.hls.setup(hls_opts)
+  local lspconfig = deps.require_or_err('lspconfig', 'neovim/nvim-lspconfig')
+  lspconfig.hls.setup(hls_opts)
 end
 
 function M.setup()
