@@ -14,10 +14,16 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 
 ## Prerequisites
 
+### Required
+
 * `neovim >= 0.8`
 * [`nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig)
+* [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim)
 * [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html)
 
+### Optional
+
+* [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
 
 ## Installation
 
@@ -28,9 +34,14 @@ use {
   'MrcJkb/haskell-tools.nvim',
   requires = {
     'neovim/nvim-lspconfig',
-  }
+    'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope.nvim', -- optional
+  },
+  -- tag = 'x.y.z' -- [^1]
 }
 ```
+[^1] It is suggested to use the [latest release tag](./CHANGELOG.md) 
+     and to update it manually, if you would like to avoid breaking changes.
 
 ## Quick Setup
 
@@ -41,16 +52,19 @@ This plugin automatically configures the haskell-language-server NeoVim client.
 To get started quickly with the default setup, add the following to your NeoVim config:
 
 ```lua
--- See nvim-lspconfig's  suggested configuration for keymaps, etc.
-local on_attach = function(_, bufnr)
-  -- haskell-language-server relies heavily on codeLenses,
-  -- so auto-refresh (see advanced configuration) is enabled by default
-  vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run)
-end
+local ht = require('haskell-tools')
 
-require('haskell-tools').setup {
+ht.setup {
   hls = {
-    on_attach = on_attach,
+    -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
+    on_attach = function(client, bufnr)
+      local opts = { noremap = true, silent = true, buffer = bufnr }
+      -- haskell-language-server relies heavily on codeLenses,
+      -- so auto-refresh (see advanced configuration) is enabled by default
+      vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
+      vim.keymap.set('n', '<space>hs', ht.hoogle_signature, opts)
+      -- default_on_attach(client, bufnr)  -- if defined, see nvim-lspconfig
+    end,
   },
 }
 ```
@@ -79,6 +93,17 @@ require('haskell-tools').setup {
 
 ##### [Fix module names that do not match the file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
 [![asciicast](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG.svg)](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG?t=0:02)
+
+### Beyond haskell-language-server
+
+The below features are not implemented by haskell-language-server.
+
+##### Hoogle-search for signature
+Search for the type signature under the cursor.
+Falls back to the word under the cursor if the type signature cannot be determined.
+```lua
+require('haskell-tools').hoogle_signature()
+```
 
 ### Planned
 

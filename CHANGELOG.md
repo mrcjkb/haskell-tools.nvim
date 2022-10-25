@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Hoogle search (BREAKING CHANGE: Depends on [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim))
+- Hoogle search for signature under cursor (telescope-web, telescope-local, or browser)
 - Automatic registration of selection range capabilities if [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range) is loaded.
 
 ## [0.2.0] - 2022-10-18

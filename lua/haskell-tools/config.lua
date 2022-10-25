@@ -26,6 +26,13 @@ local defaults = {
       -- Whether to automatically display/refresh codeLenses
       autoRefresh = true,
     },
+    hoogle = {
+      -- 'auto', 'telescope-web', or 'browser'
+      -- NOTE: 'local' mode depends on luc-tielen/telescope_hoogle
+      mode = 'auto', 
+      -- Fall back to a hoogle search if goToDefinition fails
+      goToDefinitionFallback = false,
+    },
   },
   hls = {
     on_attach = function(...) end,
