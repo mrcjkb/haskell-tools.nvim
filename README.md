@@ -123,7 +123,7 @@ For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-to
 
 ## Advanced configuration
 
-To modify the language server configs, call
+To modify the default configs, call
 
 ```lua
 -- defaults
