@@ -204,7 +204,7 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
 
 * [MrcJkb/neotest-haskell](https://github.com/MrcJkb/neotest-haskell): Interact with tests in neovim.
-* [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Hoogle search.
+* [luc-tielen/telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Live Hoogle search.
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
 * [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large mono repos).
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
