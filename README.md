@@ -24,7 +24,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 ### Optional
 
 * [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
-* A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation
+* A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation (recommended for better hoogle search performance)
 
 ## Installation
 
