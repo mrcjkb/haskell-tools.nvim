@@ -107,14 +107,21 @@ The below features are not implemented by haskell-language-server.
 * Search for the type signature under the cursor.
 * Falls back to the word under the cursor if the type signature cannot be determined.
 * Telescope keymaps:
-  - `<CR>` to copy the selected entry to the clipboard.
-  - `<C-b>` to open the selected entry's URL in a browser.
+  - `<CR>` to copy the selected entry (<name> :: <signature>) to the clipboard.
+  - `<C-b>` to open the selected entry's Hackage URL in a browser.
+  - `<C-r>` to replace the wurd under the cursor with the selected entry.
 
 ```lua
 require('haskell-tools').hoogle.hoogle_signature()
 ```
 
 [![asciicast](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R.svg)](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R)
+
+#### Use Hoogle search to fill holes
+
+With the `<C-r>` keymap, the hoogle search telescope integration can be used to fill holes.
+
+[![asciicast](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw.svg)](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw?t=0:04)
 
 ### Planned
 
