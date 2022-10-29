@@ -119,7 +119,7 @@ require('haskell-tools').hoogle.hoogle_signature()
 
 #### Use Hoogle search to fill holes
 
-With the `<C-r>` keymap, the hoogle search telescope integration can be used to fill holes.
+With the `<C-r>` keymap, the Hoogle search telescope integration can be used to fill holes.
 
 [![asciicast](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw.svg)](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw?t=0:04)
 
