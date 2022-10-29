@@ -60,7 +60,7 @@ local function setup_telescope_search()
         },
         sorter = config.generic_sorter(opts),
         previewer = previewers.display_content.new(opts),
-        attach_mappings = telescope_util.attach_mappings,
+        attach_mappings = telescope_util.hoogle_attach_mappings,
       }):find()
     end)
   end

@@ -13,7 +13,9 @@ function M.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     local entry = actions_state.get_selected_entry()
     local reg = vim.o.clipboard == 'unnamedplus' and '+' or '"'
-    vim.fn.setreg(reg, entry.type_sig)
+    if entry and entry.type_sig then
+      vim.fn.setreg(reg, entry.type_sig)
+    end
     actions.close(buf)
   end)
   map('i', '<C-b>', function()
