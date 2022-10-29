@@ -11,17 +11,24 @@ local M = {}
 
 function M.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
+    -- Copy type signature to clipboard
     local entry = actions_state.get_selected_entry()
     local reg = vim.o.clipboard == 'unnamedplus' and '+' or '"'
-    if entry and entry.type_sig then
-      vim.fn.setreg(reg, entry.type_sig)
-    end
+    vim.fn.setreg(reg, entry.type_sig)
     actions.close(buf)
   end)
   map('i', '<C-b>', function()
+    -- Open in browser
     local entry = actions_state.get_selected_entry()
     util.open_browser(entry.url)
     actions.close(buf)
+  end)
+  map('i', '<C-r>', function()
+    -- Replace word under cursor
+    local entry = actions_state.get_selected_entry()
+    local func_name = entry.type_sig:match("([^%s]*)%s::")
+    actions.close(buf)
+    vim.cmd('normal! ciw' .. func_name)
   end)
   return true
 end
@@ -76,6 +83,7 @@ function M.mk_hoogle_entry(data)
     return nil
   end
   return {
+    value = data,
     valid = true,
     type_sig = type_sig,
     module_name = module_name,
