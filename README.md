@@ -109,7 +109,7 @@ The below features are not implemented by haskell-language-server.
 * Telescope keymaps:
   - `<CR>` to copy the selected entry (<name> :: <signature>) to the clipboard.
   - `<C-b>` to open the selected entry's Hackage URL in a browser.
-  - `<C-r>` to replace the wurd under the cursor with the selected entry.
+  - `<C-r>` to replace the word under the cursor with the selected entry.
 
 ```lua
 require('haskell-tools').hoogle.hoogle_signature()
