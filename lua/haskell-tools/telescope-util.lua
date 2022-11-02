@@ -21,7 +21,6 @@ function M.hoogle_attach_mappings(buf, map)
     -- Open in browser
     local entry = actions_state.get_selected_entry()
     util.open_browser(entry.url)
-    actions.close(buf)
   end)
   map('i', '<C-r>', function()
     -- Replace word under cursor
