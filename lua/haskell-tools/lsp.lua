@@ -35,6 +35,7 @@ local function setup_lsp()
     orig_on_attach(client, bufnr)
     ensure_clean_exit_on_quit(client, bufnr)
     setup_codeLens(opts.tools.codeLens)
+    ht.dap.build_configurations()
   end
   hls_opts.on_attach = on_attach
   local lspconfig = deps.require_or_err('lspconfig', 'neovim/nvim-lspconfig')
