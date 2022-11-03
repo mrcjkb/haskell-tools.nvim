@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2023-04-17
+### Added
+- Support for [`nvim-dap`](https://github.com/mfussenegger/nvim-dap)
+  with [`haskell-debug-adapter`](https://hackage.haskell.org/package/haskell-debug-adapter),
+  an experimental debug adapter for Haskell.
+
 ## [1.9.7] - 2023-04-15
 ### Fixed
 - Remove some prints.

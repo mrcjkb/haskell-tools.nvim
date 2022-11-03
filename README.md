@@ -44,6 +44,8 @@
   installation (recommended for better hoogle search performance)
 - [`fast-tags`](https://github.com/elaforge/fast-tags)
   (for automatic tag generation as a fallback for [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
+- [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/) and
+  [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
 
 ## Installation
 
@@ -97,7 +99,6 @@ To get started quickly with the default setup, add the following to `~/.config/n
 
 ```lua
 local ht = require('haskell-tools')
-local buffer = vim.api.nvim_get_current_buf()
 local def_opts = { noremap = true, silent = true, }
 ht.start_or_attach {
   hls = {
@@ -124,6 +125,10 @@ vim.keymap.set('n', '<leader>rf', function()
   ht.repl.toggle(vim.api.nvim_buf_get_name(0))
 end, def_opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
+
+-- Detect nvim-dap launch configurations
+-- (requires nvim-dap and haskell-debug-adapter)
+ht.dap.discover_configurations(bufnr)
 ```
 
 >**Note**
@@ -137,29 +142,23 @@ to generate a database.
 
 ## Features
 
-- [x] Basic haskell-language-server functionality on par with `nvim-lspconfig.hls`
-
-### Beyond `nvim-lspconfig.hls`
-
-- [x] Dynamically load `haskell-language-server` settings per project from JSON files.
-- [x] Clean shutdown of language server on exit to prevent corrupted files
+- [x] **Set up a `haskell-language-server` client.**
+- [x] **Dynamically load `haskell-language-server` settings per project
+  from JSON files.**
+- [x] **Clean shutdown of language server on exit to prevent corrupted files**
       ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533)).
-- [x] Automatically adds capabilities for the following plugins, if loaded:
+- [x] **Automatically adds capabilities for the following plugins, if loaded:**
   - [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
     (provides completion sources for [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)).
   - [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range)
     (Adds haskell-specific [expand selection](https://haskell-language-server.readthedocs.io/en/latest/features.html#selection-range)
     support).
-- [x] Automatically refreshes code lenses by default,
-      which haskell-language-server heavily relies on. [Can be disabled.](#advanced-configuration)
+- [x] **Automatically refreshes code lenses by default,**
+      which `haskell-language-server` heavily relies on. [Can be disabled.](#advanced-configuration)
 
 ![codeLens](https://user-images.githubusercontent.com/12857160/219738949-c20ed266-3b2d-441e-82fe-faf50f5c582a.gif)
 
-### Beyond haskell-language-server
-
-The below features are not implemented by haskell-language-server.
-
-#### Evaluate all code snippets at once
+- [x] **Evaluate all code snippets at once**
 
 `haskell-language-server` can evaluate code snippets using code lenses.
 `haskell-tools.nvim` provides a `require('haskell-tools').lsp.buf_eval_all()`
@@ -167,7 +166,7 @@ shortcut to evaluate all of them at once.
 
 ![evalAll](https://user-images.githubusercontent.com/12857160/219743339-e7b7f4e0-478b-4310-a903-36d0a5564937.gif)
 
-#### Hoogle-search for signature
+- [x] **Hoogle-search for signature**
 
 - Search for the type signature under the cursor.
 - Falls back to the word under the cursor if the type signature cannot be determined.
@@ -182,14 +181,14 @@ require('haskell-tools').hoogle.hoogle_signature()
 
 ![hoogleSig](https://user-images.githubusercontent.com/12857160/219745914-505a8fc8-9cb9-49fe-b763-a0dea2a3420b.gif)
 
-#### Hole-driven development powered by Hoogle
+- [x] **Hole-driven development powered by Hoogle**
 
 With the `<C-r>` keymap,
 the Hoogle search telescope integration can be used to fill holes.
 
 ![hoogleHole](https://user-images.githubusercontent.com/12857160/219751911-f45e4131-afad-47b3-b016-1d341c71c114.gif)
 
-#### GHCi repl
+- [x] **GHCi repl**
 
 Start a GHCi repl for the current project / buffer.
 
@@ -202,11 +201,11 @@ Start a GHCi repl for the current project / buffer.
 
 ![repl](https://user-images.githubusercontent.com/12857160/219758588-68f3c06f-5804-4279-b23d-1bdcc050d892.gif)
 
-#### Open project/package files for the current buffer
+- [x] **Open project/package files for the current buffer**
 
 ![commands](https://user-images.githubusercontent.com/12857160/219760916-06785cd5-f90a-4bb9-9ca8-94edbd655d46.gif)
 
-#### Hover actions
+- [x] **Hover actions**
 
 Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim),
 this plugin adds the following hover actions (if available):
@@ -225,7 +224,7 @@ users can benefit from syntax highliting of code snippets.
 
 ![hoverActions](https://user-images.githubusercontent.com/12857160/219763211-61fc4207-4300-41f2-99c4-6a420cf940f2.gif)
 
-#### Automatically generate tags
+- [x] **Automatically generate tags**
 
 On attaching, Neovim's LSP client will set up [`tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())
 to query the language server for locations to jump to.
@@ -239,7 +238,20 @@ this plugin will set up `autocmd`s to automatically generate tags:
 
 This feature can be tweaked or disabled in the [advanced configuration](#advanced-configuration).
 
-### Planned
+- [x] **Auto-detect `haskell-debug-adapter` configurations**
+
+If the [`nvim-dap`](https://github.com/mfussenegger/nvim-dap) plugin is installed,
+you can use `haskell-tools.nvim` to auto-detect [`haskell-debug-adapter`](https://hackage.haskell.org/package/haskell-debug-adapter)
+configurations.
+
+![dap](https://user-images.githubusercontent.com/12857160/232348888-4fea5393-d624-417e-b994-6eb44113a3d9.gif)
+
+>**Note**
+>
+>`haskell-debug-adapter` is an experimental design and implementation of
+>a debug adapter for Haskell.
+
+- [ ] **Planned**
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
 
@@ -311,6 +323,9 @@ require('haskell-tools').start_or_attach {
       enable = vim.fn.executable('fast-tags') == 1,
       -- Events to trigger package tag generation
       package_events = { 'BufWritePost' },
+    },
+    dap = {
+      cmd = { 'haskell-debug-adapter' },
     },
   },
   hls = { -- LSP client options
@@ -427,6 +442,14 @@ iron.setup {
 }
 ```
 
+### Create `haskell-debug-adapter` launch configurations
+
+There are two ways this plugin will detect `haskell-debug-adapter` launch configurations:
+
+1. Automatically, by parsing Cabal or Stack project files.
+1. By loading a [`launch.json`](https://github.com/phoityne/hdx4vsc/tree/master/configs)
+  file in the project root.
+
 ### Available functions and commands
 
 For a complete overview, enter `:help haskell-tools` in Neovim.
@@ -517,10 +540,10 @@ ht.project.open_package_yaml()
 ht.project.open_package_cabal()
 
 -- Search for files within the current (sub)package
--- `opts`: Optional telescope.nvim find_files options
+---@param opts: Optional telescope.nvim `find_files` options
 ht.project.telescope_package_files(opts)
 -- Live grep within the current (sub)package
--- `opts`: Optional telescope.nvim live_grep options
+---@param opts: Optional telescope.nvim `live_grep` options
 ht.project.telescope_package_grep(opts)
 ```
 
@@ -532,14 +555,14 @@ The following functions depend on [`fast-tags`](https://github.com/elaforge/fast
 local ht = require('haskell-tools')
 
 -- Generate tags for the whole project
--- `path`: An optional file path, defaults to the current buffer
--- `opts`: Optional options:
--- `opts.refresh`: Whether to refresh tags
---                 if they have already been generated for a project
+---@param path: An optional file path, defaults to the current buffer
+---@param opts: Optional options:
+---@param opts.refresh: Whether to refresh tags
+--- if they have already been generated for a project
 ht.tags.generate_project_tags(path, opts)
 
 -- Generate tags for the whole project
--- `path`: An optional file path, defaults to the current buffer
+---@param path: An optional file path, defaults to the current buffer
 ht.tags.generate_package_tags(path)
 ```
 
@@ -560,6 +583,20 @@ To load the extension, call
 
 ```lua
 require('telescope').load_extension('ht')
+```
+
+#### DAP
+
+```lua
+local ht = require('haskell-tools')
+
+---@param bufnr integer The buffer number
+---@param opts table? Optional
+---@param opts.autodetect: (boolean)
+--- Whether to auto-detect launch configurations
+---@param opts.settings_file_pattern: (string)
+--- File name or pattern to search for. Defaults to 'launch.json'
+ht.dap.discover_configurations(bufnr, opts)
 ```
 
 ## Troubleshooting

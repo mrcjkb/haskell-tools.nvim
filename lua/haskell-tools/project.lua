@@ -1,7 +1,7 @@
 ---@mod haskell-tools.project haskell-tools Project module
 
 local ht = require('haskell-tools')
-local project_util = require('haskell-tools.project-util')
+local project_util = require('haskell-tools.project.util')
 local deps = require('haskell-tools.deps')
 
 ---@brief [[

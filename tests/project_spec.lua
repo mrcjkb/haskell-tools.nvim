@@ -1,4 +1,5 @@
 local ht = require('haskell-tools')
+local Path = require('plenary.path')
 
 local cwd = vim.fn.getcwd()
 local cabal_project_root = cwd .. '/tests/fixtures/cabal/multi-package'
@@ -31,7 +32,7 @@ describe('Project API', function()
 end)
 
 describe('Internal project utils:', function()
-  local project_util = require('haskell-tools.project-util')
+  local project_util = require('haskell-tools.project.util')
   describe('Cabal:', function()
     it('Can find project root.', function()
       local project_root = project_util.match_project_root(cabal_project_root .. '/sub1/src/Lib.hs')
@@ -109,5 +110,97 @@ describe('Internal project utils:', function()
   end)
   describe('Non-project (invalid path):', function()
     test_non_project(invalid_project_path)
+  end)
+
+  describe('Cabal project', function()
+    it('Can parse multiple package paths', function()
+      local project_file = Path:new('tests/fixtures/cabal/multi-package/cabal.project').filename
+      local package_paths = project_util.parse_package_paths(project_file)
+      assert.equals(2, #package_paths)
+      for _, path in pairs(package_paths) do
+        assert(vim.fn.isdirectory(path) == 1)
+      end
+    end)
+    it('Can parse single package path', function()
+      local project_file = Path:new('tests/fixtures/cabal/single-package/cabal.project').filename
+      local package_paths = project_util.parse_package_paths(project_file)
+      assert.equals(1, #package_paths)
+      for _, path in pairs(package_paths) do
+        assert(vim.fn.isdirectory(path) == 1)
+      end
+    end)
+
+    local expected_entry_points = {
+      {
+        package_name = 'sub1',
+        package_dir = 'tests/fixtures/cabal/multi-package/sub1',
+        exe_name = 'app',
+        main = 'Main.hs',
+        source_dir = 'app',
+      },
+      {
+        package_name = 'sub1',
+        package_dir = 'tests/fixtures/cabal/multi-package/sub1',
+        exe_name = 'tests',
+        main = 'Spec.hs',
+        source_dir = 'test',
+      },
+    }
+    it('Can parse package entry points.', function()
+      local package_dir = Path:new('tests/fixtures/cabal/multi-package/sub1').filename
+      local entry_points = project_util.parse_package_entrypoints(package_dir)
+      assert.same(expected_entry_points, entry_points)
+    end)
+    it('Can parse project entry points.', function()
+      local project_dir = Path:new('tests/fixtures/cabal/multi-package').filename
+      local entry_points = project_util.parse_project_entrypoints(project_dir)
+      assert.same(expected_entry_points, entry_points)
+    end)
+  end)
+
+  describe('Stack project', function()
+    it('Can parse multi package paths', function()
+      local project_file = Path:new('tests/fixtures/stack/multi-package/stack.yaml').filename
+      local package_paths = project_util.parse_package_paths(project_file)
+      assert.equals(2, #package_paths)
+      for _, path in pairs(package_paths) do
+        assert(vim.fn.isdirectory(path) == 1)
+      end
+    end)
+    it('Can parse single package path', function()
+      local project_file = Path:new('tests/fixtures/stack/single-package/stack.yaml').filename
+      local package_paths = project_util.parse_package_paths(project_file)
+      assert.equals(1, #package_paths)
+      for _, path in pairs(package_paths) do
+        assert(vim.fn.isdirectory(path) == 1)
+      end
+    end)
+
+    local expected_entry_points = {
+      {
+        package_name = 'sub1',
+        package_dir = 'tests/fixtures/stack/multi-package/sub1',
+        exe_name = 'sub1',
+        main = 'Main.hs',
+        source_dir = 'app',
+      },
+      {
+        package_name = 'sub1',
+        package_dir = 'tests/fixtures/stack/multi-package/sub1',
+        exe_name = 'sub1-spec',
+        main = 'Spec.hs',
+        source_dir = 'test',
+      },
+    }
+    it('Can parse package entry points.', function()
+      local package_dir = Path:new('tests/fixtures/stack/multi-package/sub1').filename
+      local entry_points = project_util.parse_package_entrypoints(package_dir)
+      assert.same(expected_entry_points, entry_points)
+    end)
+    it('Can parse project entry points.', function()
+      local project_dir = Path:new('tests/fixtures/stack/multi-package').filename
+      local entry_points = project_util.parse_project_entrypoints(project_dir)
+      assert.same(expected_entry_points, entry_points)
+    end)
   end)
 end)

@@ -4,6 +4,25 @@ name:           sub1
 version:        0.1.0.0
 build-type:     Simple
 
+executable app
+  main-is:
+    Main.hs
+  hs-source-dirs:
+      app
+    , src
+  build-depends:
+      base >=4.7 && <5
+    , sub1
+
+test-suite tests
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  build-depends:
+      base >=4.7 && <5
+    , sub1
+
 library
   exposed-modules:
       Lib

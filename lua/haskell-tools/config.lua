@@ -3,6 +3,7 @@
 ---@class HTOpts
 ---@field tools ToolsOpts haskell-tools plugin options
 ---@field hls HaskellLspClientOpts haskell-language-server client options
+---@field dap HTDapOpts haskell-debug-adapter client options
 
 ---@class ToolsOpts
 ---@field codeLens CodeLensOpts LSP client codeLens options
@@ -65,6 +66,11 @@
 ---@field default_settings table The default server config that will be used if no settings are specified or found
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html.
 ---@comment To print all options that are available for your haskell-language-server version, run `haskell-language-server-wrapper generate-default-config`
+
+---@class HTDapOpts
+---@field cmd string[] The command to start haskell-debug-adapter with.
+---@field logFile string Log file path for detected configurations.
+---@field logLevel 'Debug' | 'Info' | 'Warning' | 'Error' The log level for detected configurations.
 
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
@@ -240,6 +246,12 @@ config.defaults = {
         },
       },
     },
+  },
+  ---@type HTDapOpts
+  dap = {
+    cmd = { 'haskell-debug-adapter' },
+    logFile = vim.fn.stdpath('data') .. '/haskell-dap.log',
+    logLevel = 'Warning',
   },
 }
 

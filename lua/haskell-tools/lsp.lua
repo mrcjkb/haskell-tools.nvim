@@ -84,7 +84,7 @@ function lsp.load_hls_settings(project_root, opts)
   if not success then
     local msg = 'Could not decode ' .. settings_json .. '. Falling back to default settings.'
     ht.log.warn { msg, error }
-    vim.notify('haskell-tools: ' .. msg, vim.log.levels.WARN)
+    vim.notify('haskell-tools.lsp: ' .. msg, vim.log.levels.WARN)
     return default_settings
   end
   ht.log.debug { 'hls settings', settings }

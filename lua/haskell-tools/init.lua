@@ -29,6 +29,7 @@ local ht = {
   repl = nil,
   project = nil,
   tags = nil,
+  dap = nil,
 }
 
 ---Starts or attaches an LSP client to the current buffer and sets up the plugin if necessary.
@@ -114,6 +115,8 @@ function ht.setup(opts)
   ht.project = project
   local tags = require('haskell-tools.tags')
   ht.tags = tags
+  local dap = require('haskell-tools.dap')
+  ht.dap = dap
 
   config.setup(opts)
   log.setup()
@@ -123,6 +126,7 @@ function ht.setup(opts)
   repl.setup()
   project.setup()
   tags.setup()
+  dap.setup()
 
   _state._has_been_setup = true
 end

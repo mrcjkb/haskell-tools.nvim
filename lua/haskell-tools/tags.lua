@@ -2,7 +2,7 @@
 
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
-local project_util = require('haskell-tools.project-util')
+local project_util = require('haskell-tools.project.util')
 
 local tags = {}
 

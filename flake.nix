@@ -135,7 +135,7 @@
       formatting = pre-commit-check-for system;
       inherit
         (checkPkgs)
-        lints
+        typecheck
         haskell-tools-test
         haskell-tools-test-no-hls
         haskell-tools-test-no-telescope
