@@ -49,4 +49,8 @@ function M.require_plenary(modname)
   return M.require_or_err(modname, 'nvim-lua/plenary.nvim')
 end
 
+function M.require_lspconfig(modname)
+  return M.require_or_err(modname, 'neovim/nvim-lspconfig')
+end
+
 return M
