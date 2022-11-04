@@ -1,6 +1,6 @@
-# haskell-tools.nvim
-
 ![](./nvim-haskell.svg)
+
+`haskell-tools.nvim`
 
 Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 
