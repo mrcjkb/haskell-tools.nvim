@@ -130,10 +130,6 @@ local defaults = {
       },
     },
   },
-  dap = {
-    hackageVersion = '0.0.33.0',
-    logFile = vim.fn.stdpath('data') .. '/haskell-dap.log',
-  },
 }
 
 M.options = {
