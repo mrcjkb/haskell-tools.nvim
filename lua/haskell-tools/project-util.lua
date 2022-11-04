@@ -1,6 +1,7 @@
 local deps = require('haskell-tools.deps')
 
--- Utility functions for analysing a project
+-- Utility functions for analysing a project.
+-- This module is not public API.
 local M = {}
 
 local function root_pattern(...)
@@ -47,6 +48,13 @@ end
 function M.is_stack_project(path)
   path = path or vim.fn.expand('%')
   return M.match_stack_project_root(path) ~= nil
+end
+
+-- Get the package name for a path
+-- @return string | nil
+function M.get_package_name(path)
+  local package_path = M.match_package_root(path)
+  return package_path and vim.fn.fnamemodify(package_path, ':t')
 end
 
 return M
