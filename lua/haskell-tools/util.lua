@@ -1,7 +1,7 @@
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 
--- General utility funcitons that may need to be moded somewhere else
+-- General utility functions that may need to be moded somewhere else
 local M = {}
 
 function M.tbl_merge(...)
