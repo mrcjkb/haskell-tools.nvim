@@ -58,12 +58,11 @@ To get started quickly with the default setup, add the following to your neovim 
 
 ```lua
 local ht = require('haskell-tools')
-
-local opts = { noremap = true, silent = true, buffer = bufnr }
 ht.setup {
   hls = {
     -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
-    on_attach = function(client, bufnr)
+    on_attach = function(client, bufnr)    
+      local opts = { noremap = true, silent = true, buffer = bufnr }
       -- haskell-language-server relies heavily on codeLenses,
       -- so auto-refresh (see advanced configuration) is enabled by default
       vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
