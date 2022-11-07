@@ -58,11 +58,12 @@ To get started quickly with the default setup, add the following to your neovim 
 
 ```lua
 local ht = require('haskell-tools')
+local def_opts = { noremap = true, silent = true, }
 ht.setup {
   hls = {
     -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
     on_attach = function(client, bufnr)    
-      local opts = { noremap = true, silent = true, buffer = bufnr }
+      local opts = vim.tbl_extend('keep', def_opts, { buffer = bufnr, })
       -- haskell-language-server relies heavily on codeLenses,
       -- so auto-refresh (see advanced configuration) is enabled by default
       vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
@@ -71,6 +72,14 @@ ht.setup {
     end,
   },
 }
+-- Suggested keymaps that do not depend on haskell-language-server
+-- Toggle a GHCi repl for the current package
+vim.keymap.set('n', '<leader>rr', ht.repl.toggle, def_opts)
+-- Toggle a GHCi repl for the current buffer
+vim.keymap.set('n', '<leader>rf', funciton()
+  ht.repl.toggle(vim.api.nvim_buf_get_name(0))
+end, def_opts)
+vim.keymap.set('n', '<leader>rq', ht.repl.quit, def_opts)
 ```
 
 If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
@@ -126,6 +135,17 @@ With the `<C-r>` keymap, the Hoogle search telescope integration can be used to 
 
 [![asciicast](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw.svg)](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw?t=0:04)
 
+#### GHCi repl
+
+Start a GHCi repl for the current project / buffer.
+
+* Automagically detects the appropriate command (`cabal new-repl`, `stack ghci` or `ghci`) for your project.
+* Choose between a builtin handler or [`toggleterm.nvim`](https://github.com/akinsho/toggleterm.nvim).
+* Dynamically create a repl command for [`iron.nvim`](https://github.com/hkupty/iron.nvim) (see [advanced configuration](#advanced-configuration)).
+* Interact with the repl from any buffer using a lua API.
+
+[![asciicast](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV.svg)](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV)
+
 ### Planned
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
@@ -149,6 +169,17 @@ require('haskell-tools').setup {
       -- 'telescope-web': The online version (depends on curl).
       -- 'browser': Open hoogle search in the default browser.
       mode = 'auto', 
+    },
+    repl = {
+      -- 'builtin': Use the simple builtin repl
+      -- 'toggleterm': Use akinsho/toggleterm.nvim
+      handler = 'builtin',
+      builtin = {
+        create_repl_window = function(view)
+          -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win
+          return view.create_repl_split { size = vim.o.lines / 3 }
+        end
+      },
     },
   },
   hls = { -- LSP client options
@@ -200,6 +231,49 @@ hls = {
     },
   },
 },
+```
+
+### Set up [`iron.nvim`](https://github.com/hkupty/iron.nvim) to use `haskell-tools.nvim`
+
+Depends on [iron.nvim/#300](https://github.com/hkupty/iron.nvim/pull/300).
+
+```lua
+local iron = require("iron.core")
+iron.setup {
+  config = {
+    repl_definition = {
+      haskell = {
+        command = function(meta)
+          local file = vim.api.nvim_buf_get_name(meta.current_bufnr)
+          -- call `require` in case iron is set up before haskell-tools
+          return require('haskell-tools').repl.mk_repl_cmd(file)
+        end,
+      },
+    },
+  },
+}
+```
+
+### Available functions
+
+```lua
+local ht = require('haskell-tools')
+
+-- Run a hoogle signature for the value under the cursor
+ht.hoogle.hoogle_signature()
+
+-- Toggle a GHCi repl
+ht.repl.toggle()
+-- Toggle a GHCi repl for `file`
+ht.repl.toggle(file)
+-- Quit the repl
+ht.repl.quit()
+-- Paste a command to the repl from register `reg`. (`reg` defaults to '"')
+ht.repl.paste(reg)
+-- Query the repl for the type of register `reg`. (`reg` defaults to '"')
+ht.repl.paste_type(reg)
+-- Query the repl for the type of word under the cursor
+ht.repl.cword_type()
 ```
 
 ## Troubleshooting

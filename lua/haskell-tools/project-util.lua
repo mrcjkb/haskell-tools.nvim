@@ -32,26 +32,21 @@ function M.get_root_dir(path)
   local lspconfig = deps.require_lspconfig('lspconfig')
   return lspconfig.hls.get_root_dir(path)
 end
-
 -- Is `path` part of a cabal project?
--- @param string?: path to check for
--- @return boolean
+-- @param string: path to check for
+-- @return boolean | nil if `path` is not a writable file
 function M.is_cabal_project(path)
-  path = path or vim.fn.expand('%')
   local get_root = root_pattern('*.cabal', 'cabal.project') 
   return get_root(path) ~= nil
 end
 
 -- Is `path` part of a stack project?
--- @param string?: path to check for
--- @return boolean
+-- @param string: path to check for
+-- @return boolean | nil if `path` is not a writable file
 function M.is_stack_project(path)
-  path = path or vim.fn.expand('%')
   return M.match_stack_project_root(path) ~= nil
 end
 
--- Get the package name for a path
--- @return string | nil
 function M.get_package_name(path)
   local package_path = M.match_package_root(path)
   return package_path and vim.fn.fnamemodify(package_path, ':t')

@@ -35,6 +35,17 @@ local defaults = {
       -- -- TODO: Fall back to a hoogle search if goToDefinition fails
       -- goToDefinitionFallback = false, 
     },
+    repl = {
+      -- 'builtin': Use the simple builtin repl
+      -- 'toggleterm': Use akinsho/toggleterm.nvim
+      handler = 'builtin',
+      builtin = {
+        create_repl_window = function(view)
+          -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win
+          return view.create_repl_split { size = vim.o.lines / 3 }
+        end
+      },
+    },
   },
   hls = {
     on_attach = function(...) end,
