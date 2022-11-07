@@ -32,16 +32,20 @@ function M.get_root_dir(path)
   return lspconfig.hls.get_root_dir(path)
 end
 
--- Is the current buffer part of a cabal project?
+-- Is `path` part of a cabal project?
+-- @param string?: path to check for
 -- @return boolean
 function M.is_cabal_project(path)
+  path = path or vim.fn.expand('%')
   local get_root = root_pattern('*.cabal', 'cabal.project') 
   return get_root(path) ~= nil
 end
 
--- Is the current buffer part of a stack project?
+-- Is `path` part of a stack project?
+-- @param string?: path to check for
 -- @return boolean
 function M.is_stack_project(path)
+  path = path or vim.fn.expand('%')
   return M.match_stack_project_root(path) ~= nil
 end
 
