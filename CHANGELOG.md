@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Do not close Hoogle Telescope prompt on `<C-b>` (open hackage docs in browser).
+### Fixed
+- Auto-refresh code lenses only for Haskell files
 
 ## [1.1.0] - 2022-10-29
 ### Added
