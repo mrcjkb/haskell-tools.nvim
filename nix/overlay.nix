@@ -42,7 +42,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   haskell-tools-test = mkPlenaryTest { name = "haskell-tools.nvim"; };
 
