@@ -2,6 +2,7 @@ local M = {
   config = nil,
   lsp = nil,
   hoogle = nil,
+  repl = nil,
 }
 
 function M.setup(opts)
@@ -11,10 +12,13 @@ function M.setup(opts)
   M.lsp = lsp
   local hoogle = require('haskell-tools.hoogle')
   M.hoogle = hoogle
+  local repl = require('haskell-tools.repl')
+  M.repl = repl
 
   config.setup(opts)
   lsp.setup()
   hoogle.setup()
+  repl.setup()
 end
 
 return M

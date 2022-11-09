@@ -53,4 +53,12 @@ function M.require_lspconfig(modname)
   return M.require_or_err(modname, 'neovim/nvim-lspconfig')
 end
 
+function M.require_toggleterm(modname)
+  return M.require_or_err(modname, 'akinsho/toggleterm')
+end
+
+function M.require_iron(modname)
+  return M.require_or_err(modname, 'hkupty/iron.nvim')
+end
+
 return M
