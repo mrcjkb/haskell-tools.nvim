@@ -19,7 +19,7 @@ local function setup_telescope_search()
   local finders = deps.require_telescope('telescope.finders')
   local previewers = deps.require_telescope('telescope.previewers')
   local config = deps.require_telescope('telescope.config').values
-  local telescope_util = require('haskell-tools.telescope-util')
+  local hoogle_util = require('haskell-tools.hoogle.util')
   local Job = deps.require_plenary('plenary.job')
 
   function M.telescope_search(search_term, opts)
@@ -27,7 +27,7 @@ local function setup_telescope_search()
       layout_strategy = 'horizontal',
       layout_config = { preview_width = 80 },
     })
-    opts.entry_maker = opts.entry_maker or telescope_util.mk_hoogle_entry
+    opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
     Job:new({
       command = 'hoogle',
       args = mk_hoogle_args(search_term, opts),
@@ -45,10 +45,10 @@ local function setup_telescope_search()
             sorter = config.generic_sorter(opts),
             finder = finders.new_table {
               results = vim.json.decode(output),
-              entry_maker = telescope_util.mk_hoogle_entry
+              entry_maker = hoogle_util.mk_hoogle_entry
             },
             previewer = previewers.display_content.new(opts),
-            attach_mappings = telescope_util.hoogle_attach_mappings,
+            attach_mappings = hoogle_util.hoogle_attach_mappings,
           }):find()
         end)
       end
