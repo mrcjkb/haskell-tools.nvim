@@ -9,6 +9,14 @@ local function root_pattern(...)
   return lspconfig_util.root_pattern(...)
 end
 
+local function escape_glob_wildcards(path)
+  return path:gsub('([%[%]%?%*])', '\\%1')
+end
+
+local function path_join(...)
+  return table.concat(vim.tbl_flatten { ... }, '/')
+end
+
 -- Get the root of the cabal project for a path
 -- @return string | nil
 M.match_cabal_project_root = root_pattern('cabal.project')
@@ -20,6 +28,30 @@ M.match_stack_project_root = root_pattern('stack.yaml')
 -- Get the root of the package for a path
 -- @return string | nil
 M.match_package_root = root_pattern('*.cabal', 'package.yaml')
+
+-- Get the package.yaml for a given path
+-- @return string | nil
+function M.get_package_yaml(path)
+  local match = root_pattern('package.yaml')
+  local dir = match(path)
+  return dir and dir .. '/package.yaml'
+end
+
+-- Get the *.cabal for a given path
+-- @return string | nil
+function M.get_package_cabal(path)
+  local match = root_pattern('*.cabal')
+  local dir = match(path)
+  if not dir then
+    return nil
+  end
+  dir = escape_glob_wildcards(dir)
+  for _, pattern in ipairs(vim.fn.glob(path_join(dir, '*.cabal'), true, true)) do
+    if pattern then
+      return pattern
+    end
+  end
+end
 
 -- Get the root directory for a given path
 -- @return string | nil

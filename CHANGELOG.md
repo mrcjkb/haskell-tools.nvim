@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - GHCi repl integration: Automagically detect the command to start GHCi and load the current buffer.
 - Interact with the GHCi repl from any buffer using lua functions.
+- `:HsProjectFile`, `:HsPackageYaml` and `:HsPackageCabal` commands to open project/package files for the current buffer.
 ### Changed
 - Do not close Hoogle Telescope prompt on `<C-b>` (open hackage docs in browser).
 ### Fixed
