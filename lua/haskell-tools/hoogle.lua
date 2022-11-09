@@ -1,6 +1,6 @@
 local ht = require('haskell-tools')
-local hoogle_web = require('haskell-tools.hoogle-web')
-local hoogle_local = require('haskell-tools.hoogle-local')
+local hoogle_web = require('haskell-tools.hoogle.web')
+local hoogle_local = require('haskell-tools.hoogle.local')
 local deps = require('haskell-tools.deps')
 local lsp_util = vim.lsp.util
 
