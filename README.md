@@ -146,6 +146,10 @@ Start a GHCi repl for the current project / buffer.
 
 [![asciicast](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV.svg)](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV)
 
+#### Open project/package files for the current buffer
+
+[![asciicast](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr.svg)](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr)
+
 ### Planned
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
@@ -274,6 +278,19 @@ ht.repl.paste(reg)
 ht.repl.paste_type(reg)
 -- Query the repl for the type of word under the cursor
 ht.repl.cword_type()
+```
+
+### Available commands
+
+```vimscript
+" Open the project file for the current buffer (cabal.project or stack.yaml)
+:HsProjectFile 
+
+" Open the package.yaml file for the current buffer 
+:HsPackageYaml
+
+" Open the *.cabal file for the current buffer 
+:HsPackageCabal
 ```
 
 ## Troubleshooting
