@@ -1,0 +1,98 @@
+{
+    "gitignore": {
+        "branch": "master",
+        "description": "Nix functions for filtering local git sources",
+        "homepage": "",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "rev": "a20de23b925fd8264fd7fad6454652e142fd7f73",
+        "sha256": "07vg2i9va38zbld9abs9lzqblz193vc5wvqd6h7amkmwf66ljcgh",
+        "type": "tarball",
+        "url": "https://github.com/hercules-ci/gitignore.nix/archive/a20de23b925fd8264fd7fad6454652e142fd7f73.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "351d8bc316bf901a81885bab5f52687ec8ccab6e",
+        "sha256": "1yzhz7ihkh6p2sxhp3amqfbmm2yqzaadqqii1xijymvl8alw5rrr",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/351d8bc316bf901a81885bab5f52687ec8ccab6e.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "release-22.05",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fa842715565307b7e05cdb187b08c05f16ed08f1",
+        "sha256": "0qnkskqa6b8kby5d0262kg20rfflld4c07nfxr7651h0w8bnx04a",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/fa842715565307b7e05cdb187b08c05f16ed08f1.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nvim-lspconfig": {
+        "branch": "master",
+        "description": "Configs for the Nvim LSP client",
+        "homepage": "",
+        "owner": "neovim",
+        "repo": "nvim-lspconfig",
+        "rev": "7429f810f0998688b50cd304a0d25e846513dfc0",
+        "sha256": "06h88bmag9ldqzhdhw5iv00rj7il1ryzpwkbd34byrjbqhvi26xc",
+        "type": "tarball",
+        "url": "https://github.com/neovim/nvim-lspconfig/archive/7429f810f0998688b50cd304a0d25e846513dfc0.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "packer-nvim": {
+        "branch": "master",
+        "description": "Plugin/package management for Neovim.",
+        "homepage": "",
+        "owner": "wbthomason",
+        "repo": "packer.nvim",
+        "rev": "6afb67460283f0e990d35d229fd38fdc04063e0a",
+        "sha256": "1wx7wm4c6i1qnvc08b0jzjfaf95cnnxrnkscggzs90w5ncdyy80a",
+        "type": "tarball",
+        "url": "https://github.com/wbthomason/packer.nvim/archive/6afb67460283f0e990d35d229fd38fdc04063e0a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "plenary-nvim": {
+        "branch": "master",
+        "description": "All the lua functions I don't want to write twice.",
+        "homepage": "",
+        "owner": "nvim-lua",
+        "repo": "plenary.nvim",
+        "rev": "4b7e52044bbb84242158d977a50c4cbcd85070c7",
+        "sha256": "11815h0h2mf5ym282ghk7xav90635r88qbgaflpgbyk2banl31wl",
+        "type": "tarball",
+        "url": "https://github.com/nvim-lua/plenary.nvim/archive/4b7e52044bbb84242158d977a50c4cbcd85070c7.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "pre-commit-hooks": {
+        "branch": "master",
+        "description": "Seamless integration of https://pre-commit.com git hooks with Nix.",
+        "homepage": "",
+        "owner": "cachix",
+        "repo": "pre-commit-hooks.nix",
+        "rev": "ebcbfe09d2bd6d15f68de3a0ebb1e4dcb5cd324b",
+        "sha256": "1h964g6y90jprbxnpiyq575i9fjb78c0g6f02idgk5p5ikrfqjgh",
+        "type": "tarball",
+        "url": "https://github.com/cachix/pre-commit-hooks.nix/archive/ebcbfe09d2bd6d15f68de3a0ebb1e4dcb5cd324b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "telescope-nvim": {
+        "branch": "master",
+        "description": "Gaze deeply into unknown regions using the power of the moon.",
+        "homepage": "",
+        "owner": "nvim-telescope",
+        "repo": "telescope.nvim",
+        "rev": "cc77713294892c5bbce26adee665114250624e6b",
+        "sha256": "15570726pdndzagpp2g4w83wrgj0sifbbmirpc9d3fwdnys5gxqz",
+        "type": "tarball",
+        "url": "https://github.com/nvim-telescope/telescope.nvim/archive/cc77713294892c5bbce26adee665114250624e6b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
