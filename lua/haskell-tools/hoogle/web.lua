@@ -31,7 +31,7 @@ local function setup_telescope_search()
   local finders = deps.require_telescope('telescope.finders')
   local previewers = deps.require_telescope('telescope.previewers')
   local config = deps.require_telescope('telescope.config').values
-  local telescope_util = require('haskell-tools.telescope-util')
+  local hoogle_util = require('haskell-tools.hoogle.util')
   local async = deps.require_plenary('plenary.async')
 
   local curl = deps.require_plenary('plenary.curl')
@@ -56,11 +56,11 @@ local function setup_telescope_search()
         prompt_title = 'Hoogle: ' .. search_term,
         finder = finders.new_table {
           results = results,
-          entry_maker = telescope_util.mk_hoogle_entry
+          entry_maker = hoogle_util.mk_hoogle_entry
         },
         sorter = config.generic_sorter(opts),
         previewer = previewers.display_content.new(opts),
-        attach_mappings = telescope_util.hoogle_attach_mappings,
+        attach_mappings = hoogle_util.hoogle_attach_mappings,
       }):find()
     end)
   end
