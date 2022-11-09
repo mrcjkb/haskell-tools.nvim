@@ -21,11 +21,6 @@ M.match_stack_project_root = root_pattern('stack.yaml')
 -- @return string | nil
 M.match_package_root = root_pattern('*.cabal', 'package.yaml')
 
--- Get the currently open file
-local function get_current_file()
-  return vim.fn.expand('%')
-end
-
 -- Get the root directory for a given path
 -- @return string | nil
 function M.get_root_dir(path)
