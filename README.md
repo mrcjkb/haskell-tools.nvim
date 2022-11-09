@@ -15,6 +15,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Advanced configuration](#advanced-configuration)
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
+- [Contributing](./CONTRIBUTING.md)
 
 ## Prerequisites
 
@@ -45,7 +46,7 @@ use {
   -- tag = 'x.y.z' -- [^1]
 }
 ```
-[^1] It is suggested to use the [latest release tag](./CHANGELOG.md) 
+[^1] It is suggested to use the [latest release tag](./CHANGELOG.md)
      and to update it manually, if you would like to avoid breaking changes.
 
 ## Quick Setup
@@ -62,7 +63,7 @@ local def_opts = { noremap = true, silent = true, }
 ht.setup {
   hls = {
     -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
-    on_attach = function(client, bufnr)    
+    on_attach = function(client, bufnr)
       local opts = vim.tbl_extend('keep', def_opts, { buffer = bufnr, })
       -- haskell-language-server relies heavily on codeLenses,
       -- so auto-refresh (see advanced configuration) is enabled by default
@@ -172,7 +173,7 @@ require('haskell-tools').setup {
       -- 'telescope-local': Force use of a local installation.
       -- 'telescope-web': The online version (depends on curl).
       -- 'browser': Open hoogle search in the default browser.
-      mode = 'auto', 
+      mode = 'auto',
     },
     repl = {
       -- 'builtin': Use the simple builtin repl
@@ -189,7 +190,7 @@ require('haskell-tools').setup {
   hls = { -- LSP client options
     -- ...
     haskell = { -- haskell-language-server options
-      formattingProvider = 'ormolu', 
+      formattingProvider = 'ormolu',
       checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
       -- ...
     }
@@ -284,12 +285,12 @@ ht.repl.cword_type()
 
 ```vimscript
 " Open the project file for the current buffer (cabal.project or stack.yaml)
-:HsProjectFile 
+:HsProjectFile
 
-" Open the package.yaml file for the current buffer 
+" Open the package.yaml file for the current buffer
 :HsPackageYaml
 
-" Open the *.cabal file for the current buffer 
+" Open the *.cabal file for the current buffer
 :HsPackageCabal
 ```
 
@@ -309,5 +310,3 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
 * [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large mono repos).
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
-
-
