@@ -108,11 +108,11 @@ function M.setup()
     end
     local lines = vim.split(data, '\n')
     if #lines > 1 then
-      local tmpfile = vim.fn.tempname() .. '.hs'
-      lines = vim.list_extend({'module HaskellToolsNvimPaste where'}, lines)
-      vim.pretty_print(lines)
-      vim.fn.writefile(lines, tmpfile)
-      M.load_file(tmpfile)
+      handler.send_cmd(':{')
+      for _, line in ipairs(lines) do
+        handler.send_cmd(line)
+      end
+      handler.send_cmd(':}')
     else
       handler.send_cmd(data)
     end
