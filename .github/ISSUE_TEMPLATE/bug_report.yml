@@ -39,13 +39,13 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: "Expected behavior"
+      label: "Expected behaviour"
       description: "Describe the behavior you expect. May include logs, images, or videos."
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "Actual behavior"
+      label: "Actual behaviour"
     validations:
       required: true
   - type: input
