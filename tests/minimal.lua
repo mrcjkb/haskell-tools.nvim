@@ -28,7 +28,7 @@ local packer_install_path = data_path .. '/site/pack/packer/start/packer.nvim'
 local install_plugins = false
 
 if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
-  vim.cmd('!git clone git@github.com:wbthomason/packer.nvim.git ' .. packer_install_path)
+  vim.cmd('!git clone git@github.com:wbthomason/packer.nvim ' .. packer_install_path)
   vim.cmd('packadd packer.nvim')
   install_plugins = true
 else
@@ -47,7 +47,7 @@ packer.init({
 packer.startup(function(use)
   use 'wbthomason/packer.nvim'
   use {
-    'MrcJkb/haksell-tools.nvim',
+    'MrcJkb/haskell-tools.nvim',
     requires = {
       'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
