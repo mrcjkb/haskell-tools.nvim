@@ -1,4 +1,4 @@
-###### Descriptionh of changes
+###### Description of changes
 
 ###### Things done
 
