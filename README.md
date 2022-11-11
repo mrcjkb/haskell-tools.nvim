@@ -261,12 +261,18 @@ iron.setup {
 
 ### Available functions
 
+#### Hoogle
+
 ```lua
 local ht = require('haskell-tools')
-
 -- Run a hoogle signature for the value under the cursor
 ht.hoogle.hoogle_signature()
+```
 
+#### Repl
+
+```lua
+local ht = require('haskell-tools')
 -- Toggle a GHCi repl
 ht.repl.toggle()
 -- Toggle a GHCi repl for `file`
@@ -279,11 +285,19 @@ ht.repl.paste(reg)
 ht.repl.paste_type(reg)
 -- Query the repl for the type of word under the cursor
 ht.repl.cword_type()
+-- Query the repl for info on register `reg`. (`reg` defaults to '"')
+ht.repl.paste_info(reg)
+-- Query the repl for info on the word under the cursor
+ht.repl.cword_info()
 -- Load a file into the repl
 ht.repl.load_file(file)
+-- Reload the repl
+ht.repl.reload()
 ```
 
 ### Available commands
+
+#### Project
 
 ```vimscript
 " Open the project file for the current buffer (cabal.project or stack.yaml)

@@ -118,11 +118,39 @@ function M.setup()
     end
   end
 
+  local function handle_reg(cmd, reg)
+    local data = vim.fn.getreg(reg or '"')
+    handler.send_cmd(cmd .. ' ' .. data)
+  end
+
+  local function handle_cword(cmd)
+    local cword = vim.fn.expand('<cword>')
+    handler.send_cmd(cmd .. ' ' .. cword)
+  end
+
+
   -- Query the repl for the type of register `reg`
   -- @param string?: register (defaults to '"')
   function M.paste_type(reg)
-    local data = vim.fn.getreg(reg or '"')
-    handler.send_cmd(':t ' .. data)
+    handle_reg(':t', reg)
+  end
+
+  -- Query the repl for the type of word under the cursor
+  -- @param string?: register (defaults to '"')
+  function M.cword_type()
+    handle_cword(':t')
+  end
+
+  -- Query the repl for info on register `reg`
+  -- @param string?: register (defaults to '"')
+  function M.paste_info(reg)
+    handle_reg(':i', reg)
+  end
+
+  -- Query the repl for the type of word under the cursor
+  -- @param string?: register (defaults to '"')
+  function M.cword_info()
+    handle_cword(':i')
   end
 
   -- Load a file into the repl
@@ -134,11 +162,9 @@ function M.setup()
     handler.send_cmd(':l ' .. file)
   end
 
-  -- Query the repl for the type of word under the cursor
-  -- @param string?: register (defaults to '"')
-  function M.cword_type()
-    local cword = vim.fn.expand('<cword>')
-    handler.send_cmd(':t ' .. cword)
+  -- Reload the repl
+  function M.reload()
+    handler.send_cmd(':r')
   end
 
 end
