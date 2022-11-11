@@ -303,7 +303,7 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 
 #### Minimal config
 
-To troubleshoot this plugin with a minimal config in a temporary directory, use [misnimal.lua](./tests/minimal.lua).
+To troubleshoot this plugin with a minimal config in a temporary directory, use [minimal.lua](./tests/minimal.lua).
 
 With `bash` or `zsh`, call:
 ```bash
