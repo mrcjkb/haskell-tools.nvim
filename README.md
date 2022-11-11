@@ -166,6 +166,7 @@ require('haskell-tools').setup {
   tools = { -- haskell-tools options
     codeLens = {
       -- Whether to automatically display/refresh codeLenses
+      -- (explicitly set to false to disable)
       autoRefresh = true,
     },
     hoogle = {
