@@ -40,7 +40,7 @@ body:
   - type: textarea
     attributes:
       label: "Expected behaviour"
-      description: "Describe the behavior you expect. May include logs, images, or videos."
+      description: "Describe the behaviour you expect. May include logs, images, or videos."
     validations:
       required: true
   - type: textarea
