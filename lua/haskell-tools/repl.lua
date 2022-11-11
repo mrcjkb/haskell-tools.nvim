@@ -103,7 +103,19 @@ function M.setup()
   -- @param string?: register (defaults to '"')
   function M.paste(reg)
     local data = vim.fn.getreg(reg or '"')
-    handler.send_cmd(data)
+    if vim.endswith(data, '\n') then
+      data = data:sub(1, #data - 1)
+    end
+    local lines = vim.split(data, '\n')
+    if #lines > 1 then
+      local tmpfile = vim.fn.tempname() .. '.hs'
+      lines = vim.list_extend({'module HaskellToolsNvimPaste where'}, lines)
+      vim.pretty_print(lines)
+      vim.fn.writefile(lines, tmpfile)
+      M.load_file(tmpfile)
+    else
+      handler.send_cmd(data)
+    end
   end
 
   -- Query the repl for the type of register `reg`
@@ -111,6 +123,15 @@ function M.setup()
   function M.paste_type(reg)
     local data = vim.fn.getreg(reg or '"')
     handler.send_cmd(':t ' .. data)
+  end
+
+  -- Load a file into the repl
+  -- @param string: absolute file path
+  function M.load_file(file)
+    if vim.fn.filereadable(file) == 0 then
+      vim.notify('File: ' .. file .. ' does not exist or is not readable.', vim.log.levels.ERROR)
+    end
+    handler.send_cmd(':l ' .. file)
   end
 
   -- Query the repl for the type of word under the cursor

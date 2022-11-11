@@ -279,6 +279,8 @@ ht.repl.paste(reg)
 ht.repl.paste_type(reg)
 -- Query the repl for the type of word under the cursor
 ht.repl.cword_type()
+-- Load a file into the repl
+ht.repl.load_file(file)
 ```
 
 ### Available commands
