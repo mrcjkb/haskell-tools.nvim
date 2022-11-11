@@ -1,6 +1,6 @@
 -- Minimal nvim config with packer
 -- Assumes a directory in $NVIM_DATA_MINIMAL
--- Start with nvim -u <path-to-this-config>
+-- Start with $NVIM_DATA_MINIMAL=$(mktemp -d) nvim -u minimal.lua
 -- Then exit out of neovim and start again.
 
 -- Ignore default config
@@ -23,9 +23,19 @@ vim.opt.runtimepath:append(data_path)
 vim.opt.runtimepath:append(data_path .. '/site/pack/packer/start/plenary.nvim')
 vim.opt.packpath:append(data_path .. '/site')
 
-vim.cmd('packadd packer.nvim')
-vim.cmd('packadd plenary.nvim')
-vim.cmd('runtime! plugin/plenary.vim')
+-- bootstrap packer
+local packer_install_path = data_path .. '/site/pack/packer/start/packer.nvim'
+local install_plugins = false
+
+if vim.fn.empty(vim.fn.glob(packer_install_path)) > 0 then
+  vim.cmd('!git clone git@github.com:wbthomason/packer.nvim.git ' .. packer_install_path)
+  vim.cmd('packadd packer.nvim')
+  install_plugins = true
+else
+  vim.cmd('packadd packer.nvim')
+  vim.cmd('packadd plenary.nvim')
+  vim.cmd('runtime! plugin/plenary.vim')
+end
 
 local packer = require('packer')
 
@@ -43,8 +53,13 @@ packer.startup(function(use)
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
     },
+    config = function()
+      local ht = require('haskell-tools')
+      ht.setup {}
+    end
   }
-end)
 
-local ht = require('haskell-tools')
-ht.setup()
+  if install_plugins then
+    packer.sync()
+  end
+end)

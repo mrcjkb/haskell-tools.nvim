@@ -301,6 +301,19 @@ Check which version of GHC you are using (`:LspInfo`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
 You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
+#### Minimal config
+
+To troubleshoot this plugin with a minimal config in a temporary directory, use [misnimal.lua](./tests/minimal.lua).
+
+With `bash` or `zsh`, call:
+```bash
+NVIM_DATA_MINIMAL=$(mktemp -d) nvim -u minimal.lua
+```
+
+With `fish`, call:
+```fish
+NVIM_DATA_MINIMAL=(mktemp -d) nvim -u minimal.lua
+```
 ## Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
