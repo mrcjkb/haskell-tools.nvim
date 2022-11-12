@@ -103,21 +103,68 @@ function M.setup()
   -- @param string?: register (defaults to '"')
   function M.paste(reg)
     local data = vim.fn.getreg(reg or '"')
-    handler.send_cmd(data)
+    if vim.endswith(data, '\n') then
+      data = data:sub(1, #data - 1)
+    end
+    local lines = vim.split(data, '\n')
+    if #lines > 1 then
+      handler.send_cmd(':{')
+      for _, line in ipairs(lines) do
+        handler.send_cmd(line)
+      end
+      handler.send_cmd(':}')
+    else
+      handler.send_cmd(data)
+    end
   end
+
+  local function handle_reg(cmd, reg)
+    local data = vim.fn.getreg(reg or '"')
+    handler.send_cmd(cmd .. ' ' .. data)
+  end
+
+  local function handle_cword(cmd)
+    local cword = vim.fn.expand('<cword>')
+    handler.send_cmd(cmd .. ' ' .. cword)
+  end
+
 
   -- Query the repl for the type of register `reg`
   -- @param string?: register (defaults to '"')
   function M.paste_type(reg)
-    local data = vim.fn.getreg(reg or '"')
-    handler.send_cmd(':t ' .. data)
+    handle_reg(':t', reg)
   end
 
   -- Query the repl for the type of word under the cursor
   -- @param string?: register (defaults to '"')
   function M.cword_type()
-    local cword = vim.fn.expand('<cword>')
-    handler.send_cmd(':t ' .. cword)
+    handle_cword(':t')
+  end
+
+  -- Query the repl for info on register `reg`
+  -- @param string?: register (defaults to '"')
+  function M.paste_info(reg)
+    handle_reg(':i', reg)
+  end
+
+  -- Query the repl for the type of word under the cursor
+  -- @param string?: register (defaults to '"')
+  function M.cword_info()
+    handle_cword(':i')
+  end
+
+  -- Load a file into the repl
+  -- @param string: absolute file path
+  function M.load_file(file)
+    if vim.fn.filereadable(file) == 0 then
+      vim.notify('File: ' .. file .. ' does not exist or is not readable.', vim.log.levels.ERROR)
+    end
+    handler.send_cmd(':l ' .. file)
+  end
+
+  -- Reload the repl
+  function M.reload()
+    handler.send_cmd(':r')
   end
 
 end
