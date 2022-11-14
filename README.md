@@ -13,6 +13,9 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Quick Setup](#quick-setup)
 - [Features](#features)
 - [Advanced configuration](#advanced-configuration)
+  - [Available functions](#available-functions)
+  - [Available commands](#available-commands)
+  - [Telescope extension](#telescope-extension)
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
 - [Contributing](./CONTRIBUTING.md)
@@ -266,7 +269,7 @@ iron.setup {
 
 ```lua
 local ht = require('haskell-tools')
--- Run a hoogle signature for the value under the cursor
+-- Run a hoogle signature search for the value under the cursor
 ht.hoogle.hoogle_signature()
 ```
 
@@ -276,39 +279,79 @@ ht.hoogle.hoogle_signature()
 local ht = require('haskell-tools')
 -- Toggle a GHCi repl
 ht.repl.toggle()
+
 -- Toggle a GHCi repl for `file`
 ht.repl.toggle(file)
+
 -- Quit the repl
 ht.repl.quit()
+
 -- Paste a command to the repl from register `reg`. (`reg` defaults to '"')
 ht.repl.paste(reg)
+
 -- Query the repl for the type of register `reg`. (`reg` defaults to '"')
 ht.repl.paste_type(reg)
+
 -- Query the repl for the type of word under the cursor
 ht.repl.cword_type()
+
 -- Query the repl for info on register `reg`. (`reg` defaults to '"')
 ht.repl.paste_info(reg)
+
 -- Query the repl for info on the word under the cursor
 ht.repl.cword_info()
+
 -- Load a file into the repl
 ht.repl.load_file(file)
+
 -- Reload the repl
 ht.repl.reload()
+```
+
+#### Project
+
+```lua
+local ht = require('haskell-tools')
+-- Open the project file for the current buffer (cabal.project or stack.yaml)
+ht.project.open_project_file()
+
+-- Open the package.yaml file for the current buffer
+ht.project.open_package_yaml()
+
+-- Open the *.cabal file for the current buffer
+ht.project.open_package_cabal()
+
+-- Search for files within the current (sub)package
+-- `opts`: Optional telescope.nvim find_files options
+ht.project.telescope_package_files(opts)
+-- Live grep within the current (sub)package
+-- `opts`: Optional telescope.nvim live_grep options
+ht.project.telescope_package_grep(opts)
 ```
 
 ### Available commands
 
 #### Project
 
-```vimscript
-" Open the project file for the current buffer (cabal.project or stack.yaml)
-:HsProjectFile
+* `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
+* `:HsPackageYaml` - Open the package.yaml file for the current buffer.
+* `:HsPackageCabal` - Open the *.cabal file for the current buffer.
 
-" Open the package.yaml file for the current buffer
-:HsPackageYaml
+### Telescope extension
 
-" Open the *.cabal file for the current buffer
-:HsPackageCabal
+If [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is installed, `haskell-tools.nvim` will register the `ht` extenstion
+with the following commands:
+
+* `:Telescope ht package_files` - Search for files within the current (sub)package.
+* `:Telescope ht package_hsfiles` - Search for Haskell files within the current (sub)package.
+* `:Telescope ht package_grep` - Live grep within the current (sub)package.
+* `:Telescope ht package_hsgrep` - Live grep Haskell files within the current (sub)package.
+* `:Telescope ht hoogle_signature` - Run a Hoogle search for the type signature under the cursor.
+
+To load the extension, call
+
+```lua
+require('telescope').load_extension('ht')
 ```
 
 ## Troubleshooting
@@ -331,6 +374,7 @@ With `fish`, call:
 ```fish
 NVIM_DATA_MINIMAL=(mktemp -d) nvim -u minimal.lua
 ```
+
 ## Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:

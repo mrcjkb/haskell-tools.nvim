@@ -61,15 +61,15 @@ function M.get_root_dir(path)
 end
 -- Is `path` part of a cabal project?
 -- @param string: path to check for
--- @return boolean | nil if `path` is not a writable file
+-- @return boolean
 function M.is_cabal_project(path)
-  local get_root = root_pattern('*.cabal', 'cabal.project') 
+  local get_root = root_pattern('*.cabal', 'cabal.project')
   return get_root(path) ~= nil
 end
 
 -- Is `path` part of a stack project?
 -- @param string: path to check for
--- @return boolean | nil if `path` is not a writable file
+-- @return boolean
 function M.is_stack_project(path)
   return M.match_stack_project_root(path) ~= nil
 end
