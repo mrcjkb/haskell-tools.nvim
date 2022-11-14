@@ -13,7 +13,9 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Quick Setup](#quick-setup)
 - [Features](#features)
 - [Advanced configuration](#advanced-configuration)
-- [Telescope extension](#telescope-extension)
+  - [Available functions](#available-functions)
+  - [Available commands](#available-commands)
+  - [Telescope extension](#telescope-extension)
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
 - [Contributing](./CONTRIBUTING.md)
@@ -372,6 +374,7 @@ With `fish`, call:
 ```fish
 NVIM_DATA_MINIMAL=(mktemp -d) nvim -u minimal.lua
 ```
+
 ## Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
