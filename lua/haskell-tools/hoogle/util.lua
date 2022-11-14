@@ -1,10 +1,11 @@
 local deps = require('haskell-tools.deps')
+local util = require('haskell-tools.util')
 local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
--- This module provides hoogle search capabilities for telescope.nvim, 
--- The telescope search is mostly inspired by telescope_hoogle by Luc Tielen, 
+-- This module provides hoogle search capabilities for telescope.nvim,
+-- The telescope search is mostly inspired by telescope_hoogle by Luc Tielen,
 -- but has been redesigned for searching for individual terms.
 -- https://github.com/luc-tielen/telescope_hoogle
 local M = {}
@@ -67,7 +68,7 @@ local function make_display(entry)
 end
 
 local function get_type_sig(item)
-  local name = item:match('<span class=name><s0>(.*)</s0></span>') 
+  local name = item:match('<span class=name><s0>(.*)</s0></span>')
   local sig = item:match(':: (.*)')
   if name and sig then
     return name .. ' :: ' .. format_html(sig)

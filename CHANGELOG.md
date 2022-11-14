@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command for loading files into the repl.
 - Ability to paste multiple valid Haskell lines into the repl.
 - `repl.paste_info` and `repl.cword_info` functions.
+### Fixed
+- Fix broken `<C-b>` keymap to open Hoogle entry in the browser
 
 ## [1.2.0] - 2022-11-09
 ### Added
