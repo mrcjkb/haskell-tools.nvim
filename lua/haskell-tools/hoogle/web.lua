@@ -20,10 +20,10 @@ end
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
-  return 'https://hoogle.haskell.org/?hoogle=' 
+  return vim.fn.fnameescape('https://hoogle.haskell.org/?hoogle='
     .. urlencode(search_term)
-    .. scope_param 
-    .. (hoogle_opts.json and '&mode=json' or '')
+    .. scope_param
+    .. (hoogle_opts.json and '&mode=json' or ''))
 end
 
 local function setup_telescope_search()

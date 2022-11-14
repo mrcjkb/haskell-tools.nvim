@@ -34,17 +34,25 @@ local function setup_telescope_search()
       on_exit = function(j, return_val)
         vim.schedule(function()
           if (return_val ~= 0) then
-            error('haskell-toos: hoogle search failed. Return value: ' .. return_val)
+            vim.notify('haskell-toos: hoogle search failed. Return value: ' .. return_val, vim.log.levels.ERROR)
           end
           local output = j:result()[1]
           if #output < 1 then
+            return
+          elseif output == "No results found" then
+            vim.notify('Hoogle: No results found.', vim.log.levels.WARN)
+            return
+          end
+          local success, results = pcall(vim.json.decode, output)
+          if not success then
+            vim.notify('Hoogle: Could not process result - ' .. vim.inspect(output), vim.log.levels.ERROR)
             return
           end
           pickers.new(opts, {
             prompt_title = 'Hoogle: ' .. search_term,
             sorter = config.generic_sorter(opts),
             finder = finders.new_table {
-              results = vim.json.decode(output),
+              results = results,
               entry_maker = hoogle_util.mk_hoogle_entry
             },
             previewer = previewers.display_content.new(opts),

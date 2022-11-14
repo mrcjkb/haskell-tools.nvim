@@ -2,6 +2,7 @@ local ht = require('haskell-tools')
 local hoogle_web = require('haskell-tools.hoogle.web')
 local hoogle_local = require('haskell-tools.hoogle.local')
 local deps = require('haskell-tools.deps')
+local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
 local M = {
@@ -30,21 +31,12 @@ local function setup_goto_definition_fallback()
   -- TODO
 end
 
-local function get_signature_from_markdown(docs)
-  local func_name = vim.fn.expand('<cword>')
-  local full_sig = docs:match('```haskell\n' .. func_name .. ' :: ([^```]*)')
-  return full_sig 
-    and full_sig:gsub('\n', ' ') -- join lines
-        :gsub('forall .*%.%s', '') -- hoogle cannot search for `forall a.`
-    or func_name -- Fall back to value under cursor
-end
-
 local function on_lsp_hoogle_signature(_, result, _, _)
   if not (result and result.contents) then
     vim.notify('hoogle: No information available')
     return
   end
-  local signature = get_signature_from_markdown(result.contents.value)
+  local signature = ht_util.get_signature_from_markdown(result.contents.value)
   if signature and signature ~= '' then
     ht.hoogle.handler(signature)
   end
@@ -55,7 +47,13 @@ local function lsp_hoogle_signature(options)
   return vim.lsp.buf_request(0, 'textDocument/hover', params, on_lsp_hoogle_signature)
 end
 
+-- @param table
+-- @field string?: search_term - an optional search_term to search for
 function M.hoogle_signature(options)
+  if options.search_term then
+    ht.hoogle.handler(options.search_term)
+    return
+  end
   local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
   if #clients > 0 then
     lsp_hoogle_signature(options)

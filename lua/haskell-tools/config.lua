@@ -4,10 +4,10 @@ local M = {}
 
 local ht_capabilities = {}
 local cmp_capabilities = deps.if_available(
-  'cmp_nvim_lsp', 
+  'cmp_nvim_lsp',
   function(cmp_nvim_lsp)
-    return cmp_nvim_lsp.default_capabilities() 
-  end, 
+    return cmp_nvim_lsp.default_capabilities()
+  end,
   {}
 )
 local selection_range_capabilities = deps.if_available(
@@ -31,9 +31,31 @@ local defaults = {
       -- 'telescope-local': Force use of a local installation.
       -- 'telescope-web': The online version (depends on curl).
       -- 'browser': Open hoogle search in the default browser.
-      mode = 'auto', 
+      mode = 'auto',
       -- -- TODO: Fall back to a hoogle search if goToDefinition fails
-      -- goToDefinitionFallback = false, 
+      -- goToDefinitionFallback = false,
+    },
+    -- Hover with actions
+    hover = {
+      -- Whether to disable haskell-tools hover and use the builtin lsp's default handler
+      disable = false,
+      -- Set to nil to disable
+      border = {
+        { '╭', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '╮', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+        { '╯', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '╰', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+      },
+      -- Stylize markdown (the builtin lsp's default behaviour).
+      -- Setting this option to false sets the file type to markdown and enables
+      -- Treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
+      stylize_markdown = false,
+      -- Whether to automatically switch to the hover window
+      auto_focus = false,
     },
     repl = {
       -- 'builtin': Use the simple builtin repl
@@ -55,11 +77,11 @@ local defaults = {
       formattingProvider = 'ormolu',
       -- Maximum number of completions sent to the LSP client.
       maxCompletions = 40,
-      -- Whether to typecheck the entire project on initial load. 
+      -- Whether to typecheck the entire project on initial load.
       -- Could drive to bad performance in large projects, if set to true.
       checkProject = true,
-      -- When to typecheck reverse dependencies of a file; 
-      -- one of NeverCheck, CheckOnSave (means dependent/parent modules will only be checked when you save), 
+      -- When to typecheck reverse dependencies of a file;
+      -- one of NeverCheck, CheckOnSave (means dependent/parent modules will only be checked when you save),
       -- or AlwaysCheck (means re-typechecking them on every change).
       checkParents = 'CheckOnSave',
       plugin = {
