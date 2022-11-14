@@ -154,6 +154,21 @@ Start a GHCi repl for the current project / buffer.
 
 [![asciicast](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr.svg)](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr)
 
+#### Hover actions
+
+Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim), this plugin adds the following hover actions (if available):
+
+* Hoogle search for signature.
+* Open documentation in browser.
+* Open source in browser.
+* Go to definition.
+* Find references.
+
+Additionally, the default behaviour of stylizing markdown is disabled. And the hover buffer's filetype is set to markdown,
+so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) users can benefit from syntax highliting of code snippets.
+
+[![asciicast](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy.svg)](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy)
+
 ### Planned
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
@@ -178,6 +193,27 @@ require('haskell-tools').setup {
       -- 'telescope-web': The online version (depends on curl).
       -- 'browser': Open hoogle search in the default browser.
       mode = 'auto',
+    },
+    hover = {
+      -- Whether to disable haskell-tools hover and use the builtin lsp's default handler
+      disable = false,
+      -- Set to nil to disable
+      border = {
+        { '╭', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '╮', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+        { '╯', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '╰', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+      },
+      -- Stylize markdown (the builtin lsp's default behaviour).
+      -- Setting this option to false sets the file type to markdown and enables
+      -- Treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
+      stylize_markdown = false,
+      -- Whether to automatically switch to the hover window
+      auto_focus = false,
     },
     repl = {
       -- 'builtin': Use the simple builtin repl
