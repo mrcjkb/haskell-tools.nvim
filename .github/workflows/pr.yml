@@ -3,6 +3,7 @@ on: pull_request
 
 jobs:
   conventional:
+    if: ${{ false }} # disable for now
     name: Conventional PR
     runs-on: ubuntu-latest
     steps:
