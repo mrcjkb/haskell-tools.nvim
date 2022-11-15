@@ -57,6 +57,11 @@ local defaults = {
       -- Whether to automatically switch to the hover window
       auto_focus = false,
     },
+    definition = {
+      -- Configure vim.lsp.definition to fall back to hoogle search
+      -- (does not affect vim.lsp.tagfunc)
+      hoogle_signature_fallback = false,
+    },
     repl = {
       -- 'builtin': Use the simple builtin repl
       -- 'toggleterm': Use akinsho/toggleterm.nvim

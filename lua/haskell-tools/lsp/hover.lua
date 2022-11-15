@@ -1,5 +1,6 @@
 -- Inspired by rust-tools.nvim's hover_actions
 local ht = require('haskell-tools')
+local ht_definition = require('haskell-tools.lsp.definition')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
 local M = {}
@@ -46,38 +47,56 @@ local function on_hover(_, result, ctx, config)
   _state.commands = {}
   local signature = ht_util.get_signature_from_markdown(result.contents.value)
   if signature and signature ~= '' then
-    table.insert(actions, 1, string.format('%d. Hoogle search: %s', #actions + 1, signature))
+    table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, signature))
     table.insert(_state.commands, function()
       ht.hoogle.hoogle_signature({ search_term = signature })
     end)
   end
+  local cword = vim.fn.expand('<cword>')
+  if cword ~= signature then
+    table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, cword))
+    table.insert(_state.commands, function()
+      ht.hoogle.hoogle_signature({ search_term = cword })
+    end)
+  end
   local params = lsp_util.make_position_params()
+  local found_location = false
+  local found_documentation = false
+  local found_source = false
   for i, value in ipairs(markdown_lines) do
-    if vim.startswith(value, '[Documentation]') then
+    if vim.startswith(value, '[Documentation]') and not found_documentation then
+      found_documentation = true
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. Open documentation in browser.', #actions + 1))
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
       table.insert(_state.commands, function()
         ht_util.open_browser(uri)
       end)
-    elseif vim.startswith(value, '[Source]') then
+    elseif vim.startswith(value, '[Source]') and not found_source then
+      found_source = true
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. View source in browser.', #actions + 1))
       local uri = string.match(value, '%[Source%]%((.+)%)')
       table.insert(_state.commands, function()
         ht_util.open_browser(uri)
       end)
-    elseif vim.startswith(value, '*Defined at') then
-      table.insert(to_remove, 1, i)
-      table.insert(actions, 1, string.format('%d. Go to definition.', #actions + 1))
-      table.insert(_state.commands, function()
-        vim.lsp.buf_request(0, 'textDocument/definition', params)
-      end)
     end
-    if vim.startswith(value, '*Defined at') or vim.startswith(value, '*Defined in') then
+    local location = string.match(value, '*Defined [ia][nt] (.+)')
+    if location and not found_location then
+      found_location = true
+      table.insert(to_remove, 1, i)
+      local package = location:match('‘(.+)’')
+      local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
+      table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
+      table.insert(_state.commands, function()
+        -- We don't call vim.lsp.buf.definition() because the location params may have changed
+        local search_term = package and package .. '.' .. cword or cword
+        vim.lsp.buf_request(0, 'textDocument/definition', params, ht_definition.mk_hoogle_fallback_definition_handler({ search_term = search_term }))
+      end)
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
       table.insert(_state.commands, function()
+        -- We don't call vim.lsp.buf.references() because the location params may have changed
         vim.lsp.buf_request(0, 'textDocument/references', reference_params)
       end)
     end
@@ -135,7 +154,6 @@ local function on_hover(_, result, ctx, config)
 end
 
 M.setup = function()
-  M.orig_handler = vim.lsp.handlers['textDocument/hover']
   local orig_buf_hover = vim.lsp.buf.hover;
   vim.lsp.buf.hover = function()
     local clients = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })
