@@ -59,15 +59,20 @@ local function on_hover(_, result, ctx, config)
     end)
   end
   local params = lsp_util.make_position_params()
+  local found_location = false
+  local found_documentation = false
+  local found_source = false
   for i, value in ipairs(markdown_lines) do
-    if vim.startswith(value, '[Documentation]') then
+    if vim.startswith(value, '[Documentation]') and not found_documentation then
+      found_documentation = true
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. Open documentation in browser.', #actions + 1))
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
       table.insert(_state.commands, function()
         ht_util.open_browser(uri)
       end)
-    elseif vim.startswith(value, '[Source]') then
+    elseif vim.startswith(value, '[Source]') and not found_source then
+      found_source = true
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. View source in browser.', #actions + 1))
       local uri = string.match(value, '%[Source%]%((.+)%)')
@@ -76,7 +81,8 @@ local function on_hover(_, result, ctx, config)
       end)
     end
     local location = string.match(value, '*Defined [ia][nt] (.+)')
-    if location then
+    if location and not found_location then
+      found_location = true
       table.insert(to_remove, 1, i)
       local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
       table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
