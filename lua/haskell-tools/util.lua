@@ -37,6 +37,7 @@ function M.get_signature_from_markdown(docs)
   return full_sig
     and full_sig:gsub('\n', ' ') -- join lines
         :gsub('forall .*%.%s', '') -- hoogle cannot search for `forall a.`
+        :gsub('^%s*(.-)%s*$', '%1') -- trim
     or func_name -- Fall back to value under cursor
 end
 
