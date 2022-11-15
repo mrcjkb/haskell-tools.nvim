@@ -85,11 +85,13 @@ local function on_hover(_, result, ctx, config)
     if location and not found_location then
       found_location = true
       table.insert(to_remove, 1, i)
+      local package = location:match('‘(.+)’')
       local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
       table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
       table.insert(_state.commands, function()
         -- We don't call vim.lsp.buf.definition() because the location params may have changed
-        vim.lsp.buf_request(0, 'textDocument/definition', params, ht_definition.mk_hoogle_fallback_definition_handler({ search_term = signature }))
+        local search_term = package and package .. '.' .. cword or cword
+        vim.lsp.buf_request(0, 'textDocument/definition', params, ht_definition.mk_hoogle_fallback_definition_handler({ search_term = search_term }))
       end)
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
