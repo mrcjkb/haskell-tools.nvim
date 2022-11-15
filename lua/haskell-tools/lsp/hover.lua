@@ -1,5 +1,6 @@
 -- Inspired by rust-tools.nvim's hover_actions
 local ht = require('haskell-tools')
+local ht_definition = require('haskell-tools.lsp.definition')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
 local M = {}
@@ -87,11 +88,13 @@ local function on_hover(_, result, ctx, config)
       local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
       table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
       table.insert(_state.commands, function()
-        vim.lsp.buf_request(0, 'textDocument/definition', params)
+        -- We don't call vim.lsp.buf.definition() because the location params may have changed
+        vim.lsp.buf_request(0, 'textDocument/definition', params, ht_definition.mk_hoogle_fallback_definition_handler({ search_term = signature }))
       end)
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
       table.insert(_state.commands, function()
+        -- We don't call vim.lsp.buf.references() because the location params may have changed
         vim.lsp.buf_request(0, 'textDocument/references', reference_params)
       end)
     end

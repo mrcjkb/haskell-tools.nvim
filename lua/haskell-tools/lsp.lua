@@ -42,6 +42,11 @@ local function setup_lsp()
   lspconfig.hls.setup(hls_opts)
 end
 
+local function setup_definition()
+  local opts = ht.config.options.tools.definition
+  require('haskell-tools.lsp.definition').setup(opts or {})
+end
+
 local function setup_hover()
   local opts = ht.config.options.tools.hover
   if opts.disable then
@@ -52,6 +57,7 @@ end
 
 function M.setup()
   setup_lsp()
+  setup_definition()
   setup_hover()
 end
 
