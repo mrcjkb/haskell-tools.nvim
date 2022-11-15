@@ -51,6 +51,13 @@ local function on_hover(_, result, ctx, config)
       ht.hoogle.hoogle_signature({ search_term = signature })
     end)
   end
+  local cword = vim.fn.expand('<cword>')
+  if cword ~= signature then
+    table.insert(actions, 1, string.format('%d. Hoogle search: %s', #actions + 1, cword))
+    table.insert(_state.commands, function()
+      ht.hoogle.hoogle_signature({ search_term = cword })
+    end)
+  end
   local params = lsp_util.make_position_params()
   for i, value in ipairs(markdown_lines) do
     if vim.startswith(value, '[Documentation]') then
