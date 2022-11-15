@@ -74,14 +74,15 @@ local function on_hover(_, result, ctx, config)
       table.insert(_state.commands, function()
         ht_util.open_browser(uri)
       end)
-    elseif vim.startswith(value, '*Defined at') then
+    end
+    local location = string.match(value, '*Defined [ia][nt] (.+)')
+    if location then
       table.insert(to_remove, 1, i)
-      table.insert(actions, 1, string.format('%d. Go to definition.', #actions + 1))
+      local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
+      table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
       table.insert(_state.commands, function()
         vim.lsp.buf_request(0, 'textDocument/definition', params)
       end)
-    end
-    if vim.startswith(value, '*Defined at') or vim.startswith(value, '*Defined in') then
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
       table.insert(_state.commands, function()
