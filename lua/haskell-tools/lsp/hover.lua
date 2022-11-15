@@ -149,7 +149,6 @@ local function on_hover(_, result, ctx, config)
 end
 
 M.setup = function()
-  M.orig_handler = vim.lsp.handlers['textDocument/hover']
   local orig_buf_hover = vim.lsp.buf.hover;
   vim.lsp.buf.hover = function()
     local clients = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })
