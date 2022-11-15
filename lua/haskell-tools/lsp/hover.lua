@@ -46,14 +46,14 @@ local function on_hover(_, result, ctx, config)
   _state.commands = {}
   local signature = ht_util.get_signature_from_markdown(result.contents.value)
   if signature and signature ~= '' then
-    table.insert(actions, 1, string.format('%d. Hoogle search: %s', #actions + 1, signature))
+    table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))
     table.insert(_state.commands, function()
       ht.hoogle.hoogle_signature({ search_term = signature })
     end)
   end
   local cword = vim.fn.expand('<cword>')
   if cword ~= signature then
-    table.insert(actions, 1, string.format('%d. Hoogle search: %s', #actions + 1, cword))
+    table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, cword))
     table.insert(_state.commands, function()
       ht.hoogle.hoogle_signature({ search_term = cword })
     end)
