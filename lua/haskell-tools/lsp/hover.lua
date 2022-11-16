@@ -87,12 +87,16 @@ local function on_hover(_, result, ctx, config)
       table.insert(to_remove, 1, i)
       local package = location:match('‘(.+)’')
       local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
-      table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
-      table.insert(_state.commands, function()
-        -- We don't call vim.lsp.buf.definition() because the location params may have changed
-        local search_term = package and package .. '.' .. cword or cword
-        vim.lsp.buf_request(0, 'textDocument/definition', params, ht_definition.mk_hoogle_fallback_definition_handler({ search_term = search_term }))
-      end)
+      local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
+      vim.pretty_print(results)
+      if not err and results and #results > 0 and results[1].result and #results[1].result > 0 then
+        table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
+        table.insert(_state.commands, function()
+          -- We don't call vim.lsp.buf.definition() because the location params may have changed
+          local search_term = package and package .. '.' .. cword or cword
+          vim.lsp.handlers['textDocument/definition'](_, results, { method = 'textDocument/definition' })
+        end)
+      end
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
       table.insert(_state.commands, function()
