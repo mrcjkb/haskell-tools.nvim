@@ -85,16 +85,31 @@ local function on_hover(_, result, ctx, config)
     if location and not found_location then
       found_location = true
       table.insert(to_remove, 1, i)
-      local package = location:match('‘(.+)’')
       local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
       local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
-      vim.pretty_print(results)
-      if not err and results and #results > 0 and results[1].result and #results[1].result > 0 then
-        table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
+      local can_go_to_definition = false
+      if not err and results and #results > 0 then -- Can go to definition
+        local definition_results = results[1].result or {}
+        if #definition_results > 0 then
+          can_go_to_definition = true
+          local definition_result = definition_results[1]
+          table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
+          table.insert(_state.commands, function()
+            -- We don't call vim.lsp.buf.definition() because the location params may have changed
+            local definition_ctx = {
+              method = 'textDocument/definition',
+              client_id = ctx.client_id
+            }
+            vim.lsp.handlers['textDocument/definition'](_, definition_result, definition_ctx)
+          end)
+        end
+      end
+      if not can_go_to_definition then -- Display Hoogle search instead
+        local package = location:match('‘(.+)’')
+        local search_term = package and package .. '.' .. cword or cword
+        table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, search_term))
         table.insert(_state.commands, function()
-          -- We don't call vim.lsp.buf.definition() because the location params may have changed
-          local search_term = package and package .. '.' .. cword or cword
-          vim.lsp.handlers['textDocument/definition'](_, results, { method = 'textDocument/definition' })
+          ht.hoogle.hoogle_signature({ search_term = search_term })
         end)
       end
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })

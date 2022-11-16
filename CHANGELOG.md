@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Hover actions improvements:
   - Always show 'Go to definition' if location is found
-  - Fall back to hoogle search if 'Go to definition' fails
+  - Offer Hoogle search for package <> name if location is not found
 
 ## [1.3.0] - 2022-11-14
 ### Added
