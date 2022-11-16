@@ -71,7 +71,8 @@ local function get_type_sig(item)
   local name = item:match('<span class=name><s0>(.*)</s0></span>')
   local sig = item:match(':: (.*)')
   if name and sig then
-    return name .. ' :: ' .. format_html(sig)
+    local name_with_type = name .. ' :: ' .. format_html(sig)
+    return name_with_type:gsub("%s+", " ") -- trim duplicate whitespace
   end
   return item
 end
