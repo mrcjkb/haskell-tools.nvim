@@ -50,6 +50,7 @@ end
 -- @param table
 -- @field string?: search_term - an optional search_term to search for
 function M.hoogle_signature(options)
+  options = options or {}
   if options.search_term then
     ht.hoogle.handler(options.search_term)
     return
