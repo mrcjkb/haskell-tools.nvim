@@ -56,8 +56,8 @@ use {
 [^1] It is suggested to use the [latest release tag](./CHANGELOG.md)
      and to update it manually, if you would like to avoid breaking changes.
 
-This project provides flake outputs in the form of a package and an overlay; use it as you wish in your nixos or 
-home-manager configuration.
+For NixOS users with flakes enabled, this project provides outputs in the form of a package and an overlay; use it as you wish in your nixos or home-manager configuration.
+It is also available on `nixpkgs`.
 
 ## Quick Setup
 
