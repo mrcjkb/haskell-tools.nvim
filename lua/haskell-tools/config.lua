@@ -73,6 +73,13 @@ local defaults = {
         end
       },
     },
+    -- Set up autocmds to generate tags (using fast-tags)
+    -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
+    tags = {
+      enable = vim.fn.executable('fast-tags') == 1,
+      -- Events to trigger package tag generation
+      package_events = { 'BufWritePost' },
+    },
   },
   hls = {
     on_attach = function(...) end,

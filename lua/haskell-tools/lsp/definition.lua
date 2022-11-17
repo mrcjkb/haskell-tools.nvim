@@ -6,7 +6,7 @@ local M = {}
 M.setup = function(config)
 
   local orig_handler = vim.lsp.handlers['textDocument/definition']
-  function M.mk_hoogle_fallback_definition_handler(opts)
+  local function mk_hoogle_fallback_definition_handler(opts)
     return function(_, result, ...)
       if #result > 0 then
         return orig_handler(_, result, ...)
@@ -24,7 +24,7 @@ M.setup = function(config)
       local client = clients[1]
       if client.name == 'hls' then
         local params = lsp_util.make_position_params()
-        vim.lsp.buf_request(0, 'textDocument/definition', params, M.mk_hoogle_fallback_definition_handler(opts))
+        vim.lsp.buf_request(0, 'textDocument/definition', params, mk_hoogle_fallback_definition_handler(opts))
       else
         orig_buf_definition(opts)
       end
