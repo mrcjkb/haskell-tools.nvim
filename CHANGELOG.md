@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Always show 'Go to definition' if location is found.
   - Offer Hoogle search for package <> name if location is not found.
 - Hoogle search: Replace multiple whitespace with single space.
+- CodeLens: Only auto-refresh on buffer the LSP client has attached to.
 
 ## [1.3.0] - 2022-11-14
 ### Added

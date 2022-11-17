@@ -17,12 +17,12 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   })
 end
 
-local function setup_codeLens(opts)
+local function setup_codeLens(opts, bufnr)
   if opts.autoRefresh then
-    vim.api.nvim_create_autocmd({'FileType', 'BufEnter', 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged'}, {
-      pattern = 'haskell',
+    vim.api.nvim_create_autocmd({'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged'}, {
       group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
       callback = vim.lsp.codelens.refresh,
+      buffer = bufnr
     })
     vim.lsp.codelens.refresh()
   end
@@ -35,7 +35,7 @@ local function setup_lsp()
   local function on_attach(client, bufnr)
     orig_on_attach(client, bufnr)
     ensure_clean_exit_on_quit(client, bufnr)
-    setup_codeLens(opts.tools.codeLens)
+    setup_codeLens(opts.tools.codeLens, bufnr)
   end
   hls_opts.on_attach = on_attach
   local lspconfig = deps.require_or_err('lspconfig', 'neovim/nvim-lspconfig')
