@@ -55,7 +55,7 @@
           pkgs = pkgsFor system;
         in
         pkgs.vimUtils.buildVimPluginFrom2Nix {
-          name = "haskell-tools-nvim";
+          name = "haskell-tools";
           src = ./.;
         };
 
