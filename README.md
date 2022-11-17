@@ -406,7 +406,9 @@ local ht = require('haskell-tools')
 
 -- Generate tags for the whole project
 -- `path`: An optional file path, defaults to the current buffer
-ht.tags.generate_project_tags(path)
+-- `opts`: Optional options:
+-- `opts.refresh`: Whether to refresh tags if they have already been generated for a project
+ht.tags.generate_project_tags(path, opts)
 
 -- Generate tags for the whole project
 -- `path`: An optional file path, defaults to the current buffer

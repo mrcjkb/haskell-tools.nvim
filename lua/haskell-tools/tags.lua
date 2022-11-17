@@ -22,7 +22,7 @@ local function setup_fast_tags(config)
     opts = opts or {}
     opts.refresh = opts.refresh or true
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
-    if _state.projects[project_root] then
+    if opts.refresh or _state.projects[project_root] then
       -- project tags already generated
       return
     end
