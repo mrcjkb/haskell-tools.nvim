@@ -27,10 +27,6 @@ local function setup_handler(opts)
   end
 end
 
-local function setup_goto_definition_fallback()
-  -- TODO
-end
-
 local function on_lsp_hoogle_signature(_, result, _, _)
   if not (result and result.contents) then
     vim.notify('hoogle: No information available')
@@ -69,9 +65,6 @@ function M.setup()
   hoogle_local.setup()
   local opts = ht.config.options.tools.hoogle
   setup_handler(opts)
-  if opts.goToDefinitionFallback then
-    setup_goto_definition_fallback()
-  end
 end
 
 return M

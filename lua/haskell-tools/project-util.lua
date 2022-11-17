@@ -18,14 +18,22 @@ local function path_join(...)
 end
 
 -- Get the root of the cabal project for a path
+-- @param string: path
 -- @return string | nil
 M.match_cabal_project_root = root_pattern('cabal.project')
 
 -- Get the root of the stack project for a path
+-- @param string path
 -- @return string | nil
 M.match_stack_project_root = root_pattern('stack.yaml')
 
+-- Get the root of the project for a path
+-- @param string path
+-- @return string | nil
+M.match_project_root = root_pattern('cabal.project', 'stack.yaml')
+
 -- Get the root of the package for a path
+-- @param string path
 -- @return string | nil
 M.match_package_root = root_pattern('*.cabal', 'package.yaml')
 
@@ -54,6 +62,7 @@ function M.get_package_cabal(path)
 end
 
 -- Get the root directory for a given path
+-- @param string: path
 -- @return string | nil
 function M.get_root_dir(path)
   local lspconfig = deps.require_lspconfig('lspconfig')
