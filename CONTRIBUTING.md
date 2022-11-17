@@ -16,13 +16,37 @@ I use [`nix`](https://nixos.org/download.html#download-nix) for development and 
 To run tests locally:
 
 ```console
-nix-build ci.nix -A haskell-tools-test
+nix-build -A haskell-tools-test
+```
+
+or (with flakes enabled)
+
+```console
+nix build .#checks.<your-system>.haskell-tools-test
 ```
 
 For formatting:
 
 ```console
-nix-build ci.nix -A pre-commit-check
+nix-build -A formatting
+```
+
+or (with flakes enabled)
+
+```console
+nix build .#checks.<your-system>.formatting
+```
+
+To apply formatting, while in a devShell, run 
+
+```console 
+pre-commit run --all
+```
+
+If you have flakes enabled and just want to run all checks that are available, run: 
+
+```console
+nix flake check
 ```
 
 To enter a development shell:
@@ -30,3 +54,10 @@ To enter a development shell:
 ```console
 nix-shell
 ```
+or (with flakes enabled)
+
+```console
+nix develop
+```
+
+if you use direnv, just run `direnv allow` and you will be dropped in this devShell.
