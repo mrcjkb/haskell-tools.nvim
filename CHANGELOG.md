@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Configuration for falling back to hoogle search if 'vim.lsp.definition' fails.
+- flake setup
 ### Fixed
 - Hover actions improvements:
   - Always show 'Go to definition' if location is found.

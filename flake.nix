@@ -48,6 +48,16 @@
       pkgsFor = system: import nixpkgs { inherit system; };
 
       test-overlay = import ./nix/test-overlay.nix { inherit (inputs) packer-nvim plenary-nvim telescope-nvim nvim-lspconfig; };
+      haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix { self = ./.; };
+
+      haskell-tools-nvim-for = system:
+        let
+          pkgs = pkgsFor system;
+        in
+        pkgs.vimUtils.buildVimPluginFrom2Nix {
+          name = "haskell-tools-nvim";
+          src = ./.;
+        };
 
       pre-commit-check-for = system: pre-commit-hooks.lib.${system}.run {
         src = ./.;
@@ -72,12 +82,18 @@
     in
     {
       overlays = {
-        inherit test-overlay;
+        inherit test-overlay haskell-tooling-overlay;
+        default = haskell-tooling-overlay;
       };
 
       devShells = perSystem (system: rec {
         default = haskell-tools;
         haskell-tools = shellFor system;
+      });
+
+      packages = perSystem (system: rec {
+        default = haskell-tools-nvim;
+        haskell-tools-nvim = haskell-tools-nvim-for system;
       });
 
       checks = perSystem (system:
