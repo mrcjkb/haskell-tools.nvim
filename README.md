@@ -401,6 +401,8 @@ ht.project.telescope_package_grep(opts)
 
 #### Tags
 
+The following functions depend on [`fast-tags`](https://github.com/elaforge/fast-tags).
+
 ```lua
 local ht = require('haskell-tools')
 
