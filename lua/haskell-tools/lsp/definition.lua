@@ -30,7 +30,6 @@ M.setup = function(config)
       end
     end
   end
-
 end
 
 return M

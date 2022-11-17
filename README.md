@@ -8,6 +8,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 ![Lua](https://img.shields.io/badge/lua-%232C2D72.svg?style=for-the-badge&logo=lua&logoColor=white)
 ![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 
+
 ## Quick Links
 - [Installation](#installation)
 - [Quick Setup](#quick-setup)
@@ -19,6 +20,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
 - [Contributing](./CONTRIBUTING.md)
+
 
 ## Prerequisites
 
@@ -33,6 +35,8 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 
 * [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
 * A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation (recommended for better hoogle search performance)
+* [`fast-tags`](https://github.com/elaforge/fast-tags) (for automatic tag generation as a fallback for `vim.lsp.tagfunc`).
+
 
 ## Installation
 
@@ -51,6 +55,7 @@ use {
 ```
 [^1] It is suggested to use the [latest release tag](./CHANGELOG.md)
      and to update it manually, if you would like to avoid breaking changes.
+
 
 ## Quick Setup
 
@@ -88,6 +93,7 @@ vim.keymap.set('n', '<leader>rq', ht.repl.quit, def_opts)
 
 If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
+
 
 ## Features
 
@@ -171,6 +177,20 @@ so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) us
 [![](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy.svg)](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy)
 
 
+#### Automatically generate tags
+
+On attaching, Neovim's LSP client will set up `tagfunc` (`:h tagfunc`) to query the language server for locations to jump to.
+If no location is found, it will fall back to a `tags` file.
+
+If [`fast-tags`](https://github.com/elaforge/fast-tags) is installed,
+this plugin will set up `autocmd`s to automatically generate tags:
+
+* For the whole project, when starting a session.
+* For the current (sub)package, when writing a file.
+
+This feature can be tweaked or disabled in the [advanced configuration](#advanced-configuration).
+
+
 ### Planned
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
@@ -232,6 +252,13 @@ require('haskell-tools').setup {
           return view.create_repl_split { size = vim.o.lines / 3 }
         end
       },
+    },
+    -- Set up autocmds to generate tags (using fast-tags)
+    -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
+    tags = {
+      enable = vim.fn.executable('fast-tags') == 1,
+      -- Events to trigger package tag generation
+      package_events = { 'BufWritePost' },
     },
   },
   hls = { -- LSP client options
@@ -371,6 +398,21 @@ ht.project.telescope_package_files(opts)
 -- `opts`: Optional telescope.nvim live_grep options
 ht.project.telescope_package_grep(opts)
 ```
+
+#### Tags
+
+```lua
+local ht = require('haskell-tools')
+
+-- Generate tags for the whole project
+-- `path`: An optional file path, defaults to the current buffer
+ht.tags.generate_project_tags(path)
+
+-- Generate tags for the whole project
+-- `path`: An optional file path, defaults to the current buffer
+ht.tags.generate_package_tags(path)
+```
+
 
 ### Available commands
 

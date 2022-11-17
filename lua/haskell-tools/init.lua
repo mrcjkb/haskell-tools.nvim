@@ -4,6 +4,7 @@ local M = {
   hoogle = nil,
   repl = nil,
   project = nil,
+  tags = nil,
 }
 
 function M.setup(opts)
@@ -17,12 +18,15 @@ function M.setup(opts)
   M.repl = repl
   local project = require('haskell-tools.project')
   M.project = project
+  local tags = require('haskell-tools.tags')
+  M.tags = tags
 
   config.setup(opts)
   lsp.setup()
   hoogle.setup()
   repl.setup()
   project.setup()
+  tags.setup()
 
 end
 

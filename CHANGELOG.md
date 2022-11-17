@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Automatically generate project & package tags if [`fast-tags`](https://github.com/elaforge/fast-tags) is installed.
 - Configuration for falling back to hoogle search if 'vim.lsp.definition' fails.
 ### Fixed
 - Hover actions improvements:
