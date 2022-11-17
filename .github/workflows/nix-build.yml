@@ -2,10 +2,8 @@ name: "Nix build"
 on:
   pull_request:
   push:
-    branches:
-      - master
 jobs:
-  hooks:
+  checks:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3.0.2
@@ -14,7 +12,7 @@ jobs:
       with:
         name: mrcjkb
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix-build ci.nix -A pre-commit-check
+    - run: nix flake check
 
   shell:
     runs-on: ubuntu-latest
@@ -25,15 +23,4 @@ jobs:
       with:
         name: mrcjkb
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix-build ci.nix -A shell
-
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3.0.2
-    - uses: cachix/install-nix-action@v17
-    - uses: cachix/cachix-action@v10
-      with:
-        name: mrcjkb
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix-build ci.nix -A haskell-tools-test
+    - run: nix build .#devShells.x86_64-linux.default

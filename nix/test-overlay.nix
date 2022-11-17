@@ -1,15 +1,9 @@
-final: previous:
+{ packer-nvim, plenary-nvim, nvim-lspconfig, telescope-nvim }:
+final: prev:
 with final.lib;
 with final.stdenv;
 
 let
-
-  sources = import ./sources.nix;
-  packer-nvim = sources.packer-nvim;
-  plenary-nvim = sources.plenary-nvim;
-  nvim-lspconfig = sources.nvim-lspconfig;
-  telescope-nvim = sources.telescope-nvim;
-
   mkPlenaryTest = { nvim ? final.neovim, name }: mkDerivation {
     inherit name;
 
