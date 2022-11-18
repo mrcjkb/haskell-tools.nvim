@@ -20,6 +20,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
 - [Contributing](./CONTRIBUTING.md)
+- [Contributors](#contributors)
 
 
 ## Prerequisites
@@ -475,3 +476,10 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [MrcJkb/telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
 * [mfussenegger/nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large mono repos).
 * [aloussase/scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
+
+
+## Contributors
+
+Thanks for your awesome contributions!
+
+[![](https://opencollective.com/html-react-parser/contributors.svg?width=890&button=false)](https://github.com/MrcJkb/haskell-tools.nvim/graphs/contributors)
