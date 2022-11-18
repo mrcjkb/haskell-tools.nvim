@@ -19,10 +19,10 @@ local function setup_fast_tags(config)
   -- for the project (default: true)
   function M.generate_project_tags(path, opts)
     path = path or vim.api.nvim_buf_get_name(0)
-    opts = opts or {}
-    opts.refresh = opts.refresh or true
+    vim.tbl_extend('force', { refresh = true, }, opts or {})
+    vim.pretty_print(opts)
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
-    if opts.refresh or _state.projects[project_root] then
+    if opts.refresh == false and _state.projects[project_root] then
       -- project tags already generated
       return
     end
