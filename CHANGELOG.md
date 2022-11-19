@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.0] - 2022-11-18
 ### Added
 - Automatically generate project & package tags if [`fast-tags`](https://github.com/elaforge/fast-tags) is installed.
-- Configuration for falling back to hoogle search if 'vim.lsp.definition' fails.
+- Configuration for falling back to hoogle search if `vim.lsp.definition' fails.
 - Nix flake setup.
 ### Fixed
 - Hover actions improvements:
