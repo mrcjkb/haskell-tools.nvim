@@ -28,13 +28,15 @@ local function setup_fast_tags(config)
     _state.projects[project_root] = true
     _state.fast_tags_generating = true
     if project_root then
-      Job:new({
-        command = 'fast-tags',
-        args = {'-R', project_root },
-        on_exit = function(_)
-          _state.fast_tags_generating = false
-        end
-      }):start()
+      vim.schedule(function()
+        Job:new({
+          command = 'fast-tags',
+          args = {'-R', project_root },
+          on_exit = function(_)
+            _state.fast_tags_generating = false
+          end
+        }):start()
+      end)
     end
   end
 
@@ -48,13 +50,15 @@ local function setup_fast_tags(config)
     local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
     if package_root and project_root then
-      Job:new({
-        command = 'fast-tags',
-        args = {'-R', package_root, project_root },
-        on_exit = function(_)
-          _state.fast_tags_generating = false
-        end
-      }):start()
+      vim.schedule(function()
+        Job:new({
+          command = 'fast-tags',
+          args = {'-R', package_root, project_root },
+          on_exit = function(_)
+            _state.fast_tags_generating = false
+          end
+        }):start()
+      end)
     end
   end
 
