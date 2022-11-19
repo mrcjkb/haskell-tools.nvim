@@ -5,8 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     pre-commit-hooks = {
-      # url = "github:cachix/pre-commit-hooks.nix";
-      url = "github:MrcJkb/pre-commit-hooks.nix";
+      url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -65,9 +64,6 @@
         hooks = {
           nixpkgs-fmt.enable = true;
           stylua.enable = true;
-        };
-        settings = {
-          stylua.configPath = "${./.stylua.toml}";
         };
       };
 
