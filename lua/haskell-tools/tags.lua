@@ -41,7 +41,11 @@ local function setup_fast_tags(config)
   function M.generate_package_tags(path)
     path = path or vim.api.nvim_buf_get_name(0)
     _state.fast_tags_generating = true
-    local package_root = vim.fn.getcwd() .. '/' .. project_util.match_package_root(path)
+    local rel_package_root = project_util.match_package_root(path)
+    if not rel_package_root then
+      return
+    end
+    local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
     if package_root and project_root then
       Job:new({
