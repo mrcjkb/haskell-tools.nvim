@@ -18,13 +18,16 @@ local function ensure_clean_exit_on_quit(client, bufnr)
 end
 
 local function setup_codeLens(opts, bufnr)
+  local function refresh_codeLens()
+    vim.schedule(vim.lsp.codelens.refresh)
+  end
   if opts.autoRefresh then
     vim.api.nvim_create_autocmd({'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged'}, {
       group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
-      callback = vim.lsp.codelens.refresh,
+      callback = refresh_codeLens,
       buffer = bufnr
     })
-    vim.lsp.codelens.refresh()
+    refresh_codeLens()
   end
 end
 
