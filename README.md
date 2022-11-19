@@ -292,28 +292,30 @@ Individual code lenses can be turned off by disabling them in the respective plu
 
 ```lua
 hls = {
-  haskell = {
-    plugin = {
-      class = { -- missing class methods
-        codeLensOn = false,
-      },
-      importLens = { -- make import lists fully explicit
-        codeLensOn = false,
-      },
-      refineImports = { -- refine imports
-        codeLensOn = false,
-      },
-      tactics = { -- wingman
-        codeLensOn = false,
-      },
-      moduleName = { -- fix module names
-        globalOn = false,
-      },
-      eval = { -- evaluate code snippets
-        globalOn = false,
-      },
-      ['ghcide-type-lenses'] = { -- show/add missing type signatures
-        globalOn = false,
+  settings = {
+    haskell = {
+      plugin = {
+        class = { -- missing class methods
+          codeLensOn = false,
+        },
+        importLens = { -- make import lists fully explicit
+          codeLensOn = false,
+        },
+        refineImports = { -- refine imports
+          codeLensOn = false,
+        },
+        tactics = { -- wingman
+          codeLensOn = false,
+        },
+        moduleName = { -- fix module names
+          globalOn = false,
+        },
+        eval = { -- evaluate code snippets
+          globalOn = false,
+        },
+        ['ghcide-type-lenses'] = { -- show/add missing type signatures
+          globalOn = false,
+        },
       },
     },
   },
