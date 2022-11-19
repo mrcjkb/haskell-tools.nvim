@@ -269,10 +269,12 @@ require('haskell-tools').setup {
   },
   hls = { -- LSP client options
     -- ...
-    haskell = { -- haskell-language-server options
-      formattingProvider = 'ormolu',
-      checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
-      -- ...
+    settings = {
+      haskell = { -- haskell-language-server options
+        formattingProvider = 'ormolu',
+        checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
+        -- ...
+      }
     }
   }
 }
