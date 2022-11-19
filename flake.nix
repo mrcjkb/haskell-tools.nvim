@@ -5,7 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+      # url = "github:cachix/pre-commit-hooks.nix";
+      url = "github:MrcJkb/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -14,7 +15,7 @@
       flake = false;
     };
 
-    # inputs for tests 
+    # inputs for tests
     packer-nvim = {
       url = "github:wbthomason/packer.nvim";
       flake = false;
@@ -63,7 +64,10 @@
         src = ./.;
         hooks = {
           nixpkgs-fmt.enable = true;
-          sytlua.enable = false;
+          stylua.enable = true;
+        };
+        settings = {
+          stylua.configPath = "${./.stylua.toml}";
         };
       };
 

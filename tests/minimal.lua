@@ -39,13 +39,13 @@ end
 
 local packer = require('packer')
 
-packer.init({
+packer.init {
   package_root = data_path .. '/pack',
-  compile_path = data_path .. '/plugin/packer_compiled.lua'
-})
+  compile_path = data_path .. '/plugin/packer_compiled.lua',
+}
 
 packer.startup(function(use)
-  use 'wbthomason/packer.nvim'
+  use('wbthomason/packer.nvim')
   use {
     'MrcJkb/haskell-tools.nvim',
     requires = {
@@ -56,7 +56,7 @@ packer.startup(function(use)
     config = function()
       local ht = require('haskell-tools')
       ht.setup {}
-    end
+    end,
   }
 
   if install_plugins then
