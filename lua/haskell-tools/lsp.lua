@@ -9,7 +9,7 @@ local M = {}
 -- @param client the LSP client
 local function ensure_clean_exit_on_quit(client, bufnr)
   vim.api.nvim_create_autocmd('VimLeavePre', {
-    group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true} ),
+    group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true }),
     callback = function()
       vim.lsp.stop_client(client, false)
     end,
@@ -22,10 +22,10 @@ local function setup_codeLens(opts, bufnr)
     vim.schedule(vim.lsp.codelens.refresh)
   end
   if opts.autoRefresh then
-    vim.api.nvim_create_autocmd({'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged'}, {
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
       group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
       callback = refresh_codeLens,
-      buffer = bufnr
+      buffer = bufnr,
     })
     refresh_codeLens()
   end

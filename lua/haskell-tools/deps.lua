@@ -14,19 +14,19 @@ function M.if_available(modname, on_available, on_not_available)
   if not on_not_available then
     return nil
   end
-  if type(on_not_available) == 'function' 
-    then return on_not_available() 
+  if type(on_not_available) == 'function' then
+    return on_not_available()
   end
   return on_not_available
 end
 
 --@return unknown
 function M.require_or_err(modname, plugin_name)
-  return M.if_available(
-    modname,
-    function(mod) return mod end,
-    function() error('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.') end
-  )
+  return M.if_available(modname, function(mod)
+    return mod
+  end, function()
+    error('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.')
+  end)
 end
 
 --@return boolean

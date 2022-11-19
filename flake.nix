@@ -79,8 +79,9 @@
         pkgs.mkShell {
           name = "haskell-tools.nvim-shell";
           inherit (pre-commit-check) shellHook;
-          buildInputs = [
-            pkgs.zlib
+          buildInputs = with pkgs; [
+            zlib
+            stylua
           ];
         };
     in

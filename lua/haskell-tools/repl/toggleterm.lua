@@ -28,7 +28,7 @@ function M.setup(mk_repl_cmd)
     if is_new_cmd(cmd) then
       M.quit()
     end
-    M.terminal = M.terminal or Terminal:new({ cmd = cmd, hidden = true, close_on_exit = true, })
+    M.terminal = M.terminal or Terminal:new { cmd = cmd, hidden = true, close_on_exit = true }
     M.terminal:toggle()
     last_cmd = cmd
   end
@@ -40,12 +40,12 @@ function M.setup(mk_repl_cmd)
       M.terminal = nil
     end
   end
-  
+
   -- Send a command to the repl, followed by <cr>
   -- @param string
   -- @param table?
   function M.send_cmd(txt, opts)
-    vim.tbl_extend('force', { 
+    vim.tbl_extend('force', {
       go_back = false,
     }, opts)
     if M.terminal ~= nil then

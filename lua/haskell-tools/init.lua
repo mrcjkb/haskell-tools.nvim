@@ -27,7 +27,6 @@ function M.setup(opts)
   repl.setup()
   project.setup()
   tags.setup()
-
 end
 
 return M

@@ -6,7 +6,7 @@ local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
 local M = {
-  handler = nil
+  handler = nil,
 }
 
 local function setup_handler(opts)

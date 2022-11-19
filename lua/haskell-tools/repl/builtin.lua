@@ -9,8 +9,8 @@ local repl = nil
 
 -- Check if a repl is loaded
 local function repl_is_loaded()
-  return repl ~= nil 
-    and repl.bufnr ~= nil 
+  return repl ~= nil
+    and repl.bufnr ~= nil
     and repl.job_id ~= nil
     and repl.cmd ~= nil
     and vim.api.nvim_buf_is_loaded(repl.bufnr)
@@ -18,9 +18,7 @@ end
 
 -- @param table?
 local function is_new_cmd(cmd)
-  return repl ~= nil
-    and repl.cmd ~= nil
-    and table.concat(repl.cmd) ~= table.concat(cmd or {})
+  return repl ~= nil and repl.cmd ~= nil and table.concat(repl.cmd) ~= table.concat(cmd or {})
 end
 
 -- Creates a repl on buffer with id `bufnr`.
@@ -36,11 +34,11 @@ local function buf_create_repl(bufnr, cmd, opts)
     opts.on_exit = function()
       local winid = vim.fn.bufwinid(bufnr)
       vim.api.nvim_win_close(winid, true)
-      vim.api.nvim_buf_delete(bufnr, {force = true,})
+      vim.api.nvim_buf_delete(bufnr, { force = true })
     end
   end
   local job_id = vim.fn.termopen(cmd, opts)
-  repl = { 
+  repl = {
     bufnr = bufnr,
     job_id = job_id,
     cmd = cmd,
@@ -50,9 +48,7 @@ end
 -- Create a split
 -- @param function? | number?
 local function create_split(size)
-  size = size 
-    and (type(size) == 'function' and size() or size)
-    or vim.o.lines / 3
+  size = size and (type(size) == 'function' and size() or size) or vim.o.lines / 3
   local args = vim.empty_dict()
   table.insert(args, size)
   table.insert(args, 'split')
@@ -62,9 +58,7 @@ end
 -- Create a vertical split
 -- @param function? | number?
 local function create_vsplit(size)
-  size = size
-    and (type(size) == 'function' and size() or size)
-    or vim.o.columns / 2
+  size = size and (type(size) == 'function' and size() or size) or vim.o.columns / 2
   local args = vim.empty_dict()
   table.insert(args, size)
   table.insert(args, 'vsplit')
@@ -93,7 +87,7 @@ local function create_or_toggle(create_win, mk_cmd, opts)
     M.quit()
   end
   if repl_is_loaded() then
-    local winid = vim.fn.bufwinid(repl.bufnr) 
+    local winid = vim.fn.bufwinid(repl.bufnr)
     if winid ~= -1 then
       vim.api.nvim_win_hide(winid)
     else
@@ -188,7 +182,7 @@ function M.setup(mk_repl_cmd, opts)
     if winid ~= -1 then
       vim.api.nvim_win_close(winid, true)
     end
-    vim.api.nvim_buf_delete(repl.bufnr, {force = true,})
+    vim.api.nvim_buf_delete(repl.bufnr, { force = true })
   end
 
   -- Send a command to the repl, followed by <cr>
@@ -199,7 +193,7 @@ function M.setup(mk_repl_cmd, opts)
     end
     local cr = '\13'
     local function repl_set_cursor()
-      local winid = vim.fn.bufwinid(repl.bufnr) 
+      local winid = vim.fn.bufwinid(repl.bufnr)
       if winid ~= -1 then
         vim.api.nvim_win_set_cursor(winid, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
       end

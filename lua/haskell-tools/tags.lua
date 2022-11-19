@@ -19,7 +19,7 @@ local function setup_fast_tags(config)
   -- for the project (default: true)
   function M.generate_project_tags(path, opts)
     path = path or vim.api.nvim_buf_get_name(0)
-    vim.tbl_extend('force', { refresh = true, }, opts or {})
+    vim.tbl_extend('force', { refresh = true }, opts or {})
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
     if opts.refresh == false and _state.projects[project_root] then
       -- project tags already generated
@@ -31,10 +31,10 @@ local function setup_fast_tags(config)
       vim.schedule(function()
         Job:new({
           command = 'fast-tags',
-          args = {'-R', project_root },
+          args = { '-R', project_root },
           on_exit = function(_)
             _state.fast_tags_generating = false
-          end
+          end,
         }):start()
       end)
     end
@@ -53,10 +53,10 @@ local function setup_fast_tags(config)
       vim.schedule(function()
         Job:new({
           command = 'fast-tags',
-          args = {'-R', package_root, project_root },
+          args = { '-R', package_root, project_root },
           on_exit = function(_)
             _state.fast_tags_generating = false
-          end
+          end,
         }):start()
       end)
     end
@@ -70,9 +70,9 @@ local function setup_fast_tags(config)
     group = vim.api.nvim_create_augroup('haskell-tools-generate-project-tags', {}),
     pattern = { 'haskell' },
     callback = function(meta)
-      M.generate_project_tags(meta.file, { refresh = false, })
+      M.generate_project_tags(meta.file, { refresh = false })
     end,
-  });
+  })
   vim.api.nvim_create_autocmd(config.package_events, {
     group = vim.api.nvim_create_augroup('haskell-tools-generate-package-tags', {}),
     pattern = { 'haskell', '*.hs' },
@@ -81,10 +81,9 @@ local function setup_fast_tags(config)
         return
       end
       M.generate_package_tags(meta.file)
-    end
-  });
+    end,
+  })
 end
-
 
 function M.setup()
   local config = ht.config.options.tools.tags
