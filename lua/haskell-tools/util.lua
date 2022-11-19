@@ -23,7 +23,7 @@ function M.open_browser(url)
   if browser_cmd then
     Job:new({
       command = browser_cmd,
-      args = {url},
+      args = { url },
     }):start()
   end
 end
@@ -35,7 +35,8 @@ function M.get_signature_from_markdown(docs)
   local func_name = vim.fn.expand('<cword>')
   local full_sig = docs:match('```haskell\n' .. func_name .. ' :: ([^```]*)')
   return full_sig
-    and full_sig:gsub('\n', ' ') -- join lines
+      and full_sig
+        :gsub('\n', ' ') -- join lines
         :gsub('forall .*%.%s', '') -- hoogle cannot search for `forall a.`
         :gsub('^%s*(.-)%s*$', '%1') -- trim
     or func_name -- Fall back to value under cursor

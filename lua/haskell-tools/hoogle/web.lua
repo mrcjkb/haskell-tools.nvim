@@ -4,26 +4,28 @@ local util = require('haskell-tools.util')
 local M = {}
 
 local char_to_hex = function(c)
-  return string.format("%%%02X", string.byte(c))
+  return string.format('%%%02X', string.byte(c))
 end
 
 local function urlencode(url)
   if url == nil then
     return
   end
-  url = url:gsub("\n", "\r\n")
-  url = url:gsub("([^%w ])", char_to_hex)
-  url = url:gsub(" ", "+")
+  url = url:gsub('\n', '\r\n')
+  url = url:gsub('([^%w ])', char_to_hex)
+  url = url:gsub(' ', '+')
   return url
 end
 
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
-  return vim.fn.fnameescape('https://hoogle.haskell.org/?hoogle='
-    .. urlencode(search_term)
-    .. scope_param
-    .. (hoogle_opts.json and '&mode=json' or ''))
+  return vim.fn.fnameescape(
+    'https://hoogle.haskell.org/?hoogle='
+      .. urlencode(search_term)
+      .. scope_param
+      .. (hoogle_opts.json and '&mode=json' or '')
+  )
 end
 
 local function setup_telescope_search()
@@ -52,16 +54,18 @@ local function setup_telescope_search()
         accept = 'application/json',
       }
       local results = vim.json.decode(response.body)
-      pickers.new(opts, {
-        prompt_title = 'Hoogle: ' .. search_term,
-        finder = finders.new_table {
-          results = results,
-          entry_maker = hoogle_util.mk_hoogle_entry
-        },
-        sorter = config.generic_sorter(opts),
-        previewer = previewers.display_content.new(opts),
-        attach_mappings = hoogle_util.hoogle_attach_mappings,
-      }):find()
+      pickers
+        .new(opts, {
+          prompt_title = 'Hoogle: ' .. search_term,
+          finder = finders.new_table {
+            results = results,
+            entry_maker = hoogle_util.mk_hoogle_entry,
+          },
+          sorter = config.generic_sorter(opts),
+          previewer = previewers.display_content.new(opts),
+          attach_mappings = hoogle_util.hoogle_attach_mappings,
+        })
+        :find()
     end)
   end
 end

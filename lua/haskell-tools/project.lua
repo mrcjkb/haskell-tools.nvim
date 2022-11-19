@@ -12,7 +12,7 @@ local function telescope_package_search(callback, opts)
   end
   opts = vim.tbl_deep_extend('keep', {
     cwd = package_root,
-    prompt_title = (opts.prompt_title_prefix or 'Package') .. ': ' .. vim.fn.fnamemodify(package_root, ':t')
+    prompt_title = (opts.prompt_title_prefix or 'Package') .. ': ' .. vim.fn.fnamemodify(package_root, ':t'),
   }, opts or {})
   callback(opts)
 end
@@ -20,25 +20,36 @@ end
 local M = {}
 
 local commands = {
-  { 'HsPackageYaml', function()
+  {
+    'HsPackageYaml',
+    function()
       M.open_package_yaml()
-  end, {} },
-  { 'HsPackageCabal', function()
+    end,
+    {},
+  },
+  {
+    'HsPackageCabal',
+    function()
       M.open_package_cabal()
-  end, {} },
-  { 'HsProjectFile', function()
+    end,
+    {},
+  },
+  {
+    'HsProjectFile',
+    function()
       M.open_project_file()
-  end, {} },
+    end,
+    {},
+  },
 }
 
 function M.setup()
-
   function M.open_package_yaml()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       local result = project_util.get_package_yaml(file)
       if not result then
-        vim.notify("HsPackageYaml: Cannot find package.yaml info for: " .. file, vim.log.levels.ERROR)
+        vim.notify('HsPackageYaml: Cannot find package.yaml info for: ' .. file, vim.log.levels.ERROR)
         return
       end
       vim.cmd('e ' .. result)
@@ -49,12 +60,12 @@ function M.setup()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       if vim.fn.filewritable(file) ~= 0 and project_util.is_cabal_project(file) == nil then
-        vim.notify("HsPackageCabal: Not a cabal project?", vim.log.levels.ERROR)
+        vim.notify('HsPackageCabal: Not a cabal project?', vim.log.levels.ERROR)
       end
       local result = project_util.get_package_cabal(file)
-      vim.pretty_print("result: " ..result)
+      vim.pretty_print('result: ' .. result)
       if not result then
-        vim.notify("HsPackageCabal: Cannot find package.yaml info for: " .. file, vim.log.levels.ERROR)
+        vim.notify('HsPackageCabal: Cannot find package.yaml info for: ' .. file, vim.log.levels.ERROR)
         return
       end
       vim.cmd('e ' .. result)
@@ -74,17 +85,17 @@ function M.setup()
         vim.cmd('e ' .. project_root .. '/stack.yaml')
         return
       end
-      vim.notify("HsProjectFile: Cannot find project file from: " .. file, vim.log.levels.ERROR)
+      vim.notify('HsProjectFile: Cannot find project file from: ' .. file, vim.log.levels.ERROR)
     end)
   end
 
   deps.if_available('telescope.builtin', function(t)
     function M.telescope_package_grep(opts)
-      opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package live grep', }, opts or {});
+      opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package live grep' }, opts or {})
       telescope_package_search(t.live_grep, opts)
     end
     function M.telescope_package_files(opts)
-      opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package file search', }, opts or {});
+      opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package file search' }, opts or {})
       telescope_package_search(t.find_files, opts)
     end
   end)

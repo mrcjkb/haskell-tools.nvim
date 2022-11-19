@@ -2,8 +2,7 @@ local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
 
 -- Tools for interaction with a ghci repl
-local M = {
-}
+local M = {}
 
 -- Extend a repl command for `file`.
 -- If `file` is `nil`, create a repl the nearest package.
@@ -12,7 +11,9 @@ local M = {
 -- @param on_no_package: function(table) | nil: handler in case no package is found
 -- @return table | nil
 local function extend_repl_cmd(cmd, file, on_no_package)
-  on_no_package = on_no_package or function(_) return nil end
+  on_no_package = on_no_package or function(_)
+    return nil
+  end
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
     local pkg = project.get_package_name(file)
@@ -24,7 +25,9 @@ local function extend_repl_cmd(cmd, file, on_no_package)
     end
   end
   local pkg = project.get_package_name(file)
-  if not pkg then return on_no_package(cmd) end
+  if not pkg then
+    return on_no_package(cmd)
+  end
   if vim.endswith(file, '.hs') then
     table.insert(cmd, file)
   else
@@ -38,7 +41,7 @@ end
 -- @param string | nil: file
 -- @return table | nil
 local function mk_cabal_repl_cmd(file)
-  return extend_repl_cmd({ 'cabal', 'new-repl', }, file)
+  return extend_repl_cmd({ 'cabal', 'new-repl' }, file)
 end
 
 -- Create a stack repl command for `file`.
@@ -46,7 +49,9 @@ end
 -- @param string | nil: file
 -- @return table | nil
 local function mk_stack_repl_cmd(file)
-  return extend_repl_cmd({ 'stack', 'ghci', }, file, function(cmd) return cmd end)
+  return extend_repl_cmd({ 'stack', 'ghci' }, file, function(cmd)
+    return cmd
+  end)
 end
 
 -- Create the command to create a repl for a file.
@@ -68,7 +73,7 @@ function M.mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    return vim.tbl_flatten { 'ghci', file and { file } or {}}
+    return vim.tbl_flatten { 'ghci', file and { file } or {} }
   end
   return nil
 end
@@ -128,7 +133,6 @@ function M.setup()
     handler.send_cmd(cmd .. ' ' .. cword)
   end
 
-
   -- Query the repl for the type of register `reg`
   -- @param string?: register (defaults to '"')
   function M.paste_type(reg)
@@ -166,7 +170,6 @@ function M.setup()
   function M.reload()
     handler.send_cmd(':r')
   end
-
 end
 
 return M

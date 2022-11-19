@@ -26,7 +26,7 @@ function M.hoogle_attach_mappings(buf, map)
   map('i', '<C-r>', function()
     -- Replace word under cursor
     local entry = actions_state.get_selected_entry()
-    local func_name = entry.type_sig:match("([^%s]*)%s::")
+    local func_name = entry.type_sig:match('([^%s]*)%s::')
     actions.close(buf)
     vim.cmd('normal! ciw' .. func_name)
   end)
@@ -34,10 +34,7 @@ function M.hoogle_attach_mappings(buf, map)
 end
 
 local function format_html(doc)
-  return doc and doc:gsub('&lt;', '<')
-  :gsub('&gt;', '>')
-  :gsub('&amp', '&')
-  or ''
+  return doc and doc:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&amp', '&') or ''
 end
 
 local function show_preview(entry, buf)
@@ -62,9 +59,9 @@ local function make_display(entry)
     items = {
       { width = module and #module + 1 or 0 },
       { remaining = true },
-    }
+    },
   }
-  return displayer { {module, "Structure"}, {entry.type_sig, "Type"} }
+  return displayer { { module, 'Structure' }, { entry.type_sig, 'Type' } }
 end
 
 local function get_type_sig(item)
@@ -72,7 +69,7 @@ local function get_type_sig(item)
   local sig = item:match(':: (.*)')
   if name and sig then
     local name_with_type = name .. ' :: ' .. format_html(sig)
-    return name_with_type:gsub("%s+", " ") -- trim duplicate whitespace
+    return name_with_type:gsub('%s+', ' ') -- trim duplicate whitespace
   end
   return item
 end
@@ -92,7 +89,7 @@ function M.mk_hoogle_entry(data)
     docs = data.docs,
     display = make_display,
     ordinal = data.item .. data.url,
-    preview_command = show_preview
+    preview_command = show_preview,
   }
 end
 

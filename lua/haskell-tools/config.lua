@@ -1,24 +1,16 @@
 local deps = require('haskell-tools.deps')
 
 local M = {
-  hls_log = vim.fn.stdpath('data') .. '/' .. 'haskell-language-server.log'
+  hls_log = vim.fn.stdpath('data') .. '/' .. 'haskell-language-server.log',
 }
 
 local ht_capabilities = {}
-local cmp_capabilities = deps.if_available(
-  'cmp_nvim_lsp',
-  function(cmp_nvim_lsp)
-    return cmp_nvim_lsp.default_capabilities()
-  end,
-  {}
-)
-local selection_range_capabilities = deps.if_available(
-  'lsp-selection-range',
-  function(lsp_selection_range)
-    return lsp_selection_range.update_capabilities({})
-  end,
-  {}
-)
+local cmp_capabilities = deps.if_available('cmp_nvim_lsp', function(cmp_nvim_lsp)
+  return cmp_nvim_lsp.default_capabilities()
+end, {})
+local selection_range_capabilities = deps.if_available('lsp-selection-range', function(lsp_selection_range)
+  return lsp_selection_range.update_capabilities {}
+end, {})
 local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities, selection_range_capabilities)
 
 local defaults = {
@@ -72,7 +64,7 @@ local defaults = {
         create_repl_window = function(view)
           -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win
           return view.create_repl_split { size = vim.o.lines / 3 }
-        end
+        end,
       },
     },
     -- Set up autocmds to generate tags (using fast-tags)
@@ -102,9 +94,9 @@ local defaults = {
         -- or AlwaysCheck (means re-typechecking them on every change).
         checkParents = 'CheckOnSave',
         plugin = {
-          alternateNumberFormat = {globalOn = true,},
-          callHierarchy = {globalOn = true,},
-          changeTypeSignature = {globalOn = true,},
+          alternateNumberFormat = { globalOn = true },
+          callHierarchy = { globalOn = true },
+          changeTypeSignature = { globalOn = true },
           class = {
             codeActionsOn = true,
             codeLensOn = true,
@@ -116,12 +108,12 @@ local defaults = {
               exception = true,
             },
           },
-          excplicitFixity = {globalOn = true,},
-          gadt = {globalOn = true,},
-          ['ghcide-code-actions-bindings'] = {globalOn = true,},
-          ['ghcide-code-actions-fill-holes'] = {globalOn = true,},
-          ['ghcide-code-actions-imports-exports'] = {globalOn = true,},
-          ['ghcide-code-actions-type-signatures'] = {globalOn = true,},
+          excplicitFixity = { globalOn = true },
+          gadt = { globalOn = true },
+          ['ghcide-code-actions-bindings'] = { globalOn = true },
+          ['ghcide-code-actions-fill-holes'] = { globalOn = true },
+          ['ghcide-code-actions-imports-exports'] = { globalOn = true },
+          ['ghcide-code-actions-type-signatures'] = { globalOn = true },
           ['ghcide-completions'] = {
             globalOn = true,
             config = {
@@ -139,7 +131,7 @@ local defaults = {
               mode = 'always',
             },
           },
-          haddockComments = {globalOn = true,},
+          haddockComments = { globalOn = true },
           hlint = {
             codeActionsOn = true,
             diagnosticsOn = true,
@@ -149,22 +141,22 @@ local defaults = {
             codeActionsOn = true,
             codeLensOn = true,
           },
-          moduleName = {globalOn = true,},
+          moduleName = { globalOn = true },
           pragmas = {
             codeActionsOn = true,
             completionOn = true,
           },
-          qualifyImportedNames = {globalOn = true,},
+          qualifyImportedNames = { globalOn = true },
           refineImports = {
             codeActionsOn = true,
             codeLensOn = true,
           },
           rename = {
             globalOn = true,
-            config = {crossModule = true,},
+            config = { crossModule = true },
           },
-          retrie = {globalOn = true,},
-          splice = {globalOn = true,},
+          retrie = { globalOn = true },
+          splice = { globalOn = true },
           tactics = {
             codeActionsOn = true,
             codeLensOn = true,

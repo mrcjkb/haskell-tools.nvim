@@ -49,14 +49,14 @@ local function on_hover(_, result, ctx, config)
   if signature and signature ~= '' then
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, signature))
     table.insert(_state.commands, function()
-      ht.hoogle.hoogle_signature({ search_term = signature })
+      ht.hoogle.hoogle_signature { search_term = signature }
     end)
   end
   local cword = vim.fn.expand('<cword>')
   if cword ~= signature then
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, cword))
     table.insert(_state.commands, function()
-      ht.hoogle.hoogle_signature({ search_term = cword })
+      ht.hoogle.hoogle_signature { search_term = cword }
     end)
   end
   local params = lsp_util.make_position_params()
@@ -98,7 +98,7 @@ local function on_hover(_, result, ctx, config)
             -- We don't call vim.lsp.buf.definition() because the location params may have changed
             local definition_ctx = {
               method = 'textDocument/definition',
-              client_id = ctx.client_id
+              client_id = ctx.client_id,
             }
             vim.lsp.handlers['textDocument/definition'](_, definition_result, definition_ctx)
           end)
@@ -109,10 +109,10 @@ local function on_hover(_, result, ctx, config)
         local search_term = package and package .. '.' .. cword or cword
         table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, search_term))
         table.insert(_state.commands, function()
-          ht.hoogle.hoogle_signature({ search_term = search_term })
+          ht.hoogle.hoogle_signature { search_term = search_term }
         end)
       end
-      local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true, } })
+      local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
       table.insert(_state.commands, function()
         -- We don't call vim.lsp.buf.references() because the location params may have changed
@@ -136,7 +136,7 @@ local function on_hover(_, result, ctx, config)
     stylize_markdown = opts.stylize_markdown,
     focusable = true,
     focus_id = 'haskell-tools-hover',
-    close_events = { "CursorMoved", "BufHidden", "InsertCharPre" },
+    close_events = { 'CursorMoved', 'BufHidden', 'InsertCharPre' },
   }, config or {})
   local bufnr, winnr = lsp_util.open_floating_preview(markdown_lines, 'markdown', config)
   if opts.stylize_markdown == false then
@@ -151,7 +151,7 @@ local function on_hover(_, result, ctx, config)
   end
 
   _state.winnr = winnr
-  vim.keymap.set('n', '<Esc>', close_hover, { buffer = bufnr, noremap = true, silent = true, })
+  vim.keymap.set('n', '<Esc>', close_hover, { buffer = bufnr, noremap = true, silent = true })
   vim.api.nvim_buf_attach(bufnr, false, {
     on_detach = function()
       _state.winnr = nil
@@ -173,10 +173,12 @@ local function on_hover(_, result, ctx, config)
 end
 
 M.setup = function()
-  local orig_buf_hover = vim.lsp.buf.hover;
+  local orig_buf_hover = vim.lsp.buf.hover
   vim.lsp.buf.hover = function()
-    local clients = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })
-    if #clients < 1 then return end
+    local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
+    if #clients < 1 then
+      return
+    end
     local client = clients[1]
     if client.name == 'hls' then
       local params = lsp_util.make_position_params()
