@@ -13,7 +13,7 @@ local data_path = fn.stdpath('data')
 local pack_path = data_path .. '/site'
 vim.opt.packpath:remove(pack_path)
 
--- append temporary config and pack dir
+--append temporary config and pack dir
 data_path = os.getenv('NVIM_DATA_MINIMAL')
 if not data_path then
   error('$NVIM_DATA_MINIMAL environment variable not set!')
@@ -54,8 +54,7 @@ packer.startup(function(use)
       'nvim-telescope/telescope.nvim',
     },
     config = function()
-      local ht = require('haskell-tools')
-      ht.setup {}
+      -- Paste setup here
     end,
   }
 

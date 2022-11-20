@@ -17,22 +17,26 @@ let
     buildInputs = with final; [
       nvim
       makeWrapper
+      gawk
+      ripgrep
+      bat
     ];
 
     buildPhase = ''
       mkdir -p $out
-      mkdir -p .config/nvim/site/pack/packer/start
-      ln -s ${packer-nvim} .config/nvim/site/pack/packer/start/packer.nvim
-      ln -s ${plenary-nvim} .config/nvim/site/pack/packer/start/plenary.nvim
-      ln -s ${nvim-lspconfig} .config/nvim/site/pack/packer/start/nvim-lspconfig
-      ln -s ${telescope-nvim} .config/nvim/site/pack/packer/start/telescope.nvim
-      ln -s ${./..} .config/nvim/site/pack/packer/start/${name}
+      mkdir -p $out/.config/nvim/site/pack/packer/start
+      ln -s ${packer-nvim} $out/.config/nvim/site/pack/packer/start/packer.nvim
+      ln -s ${plenary-nvim} $out/.config/nvim/site/pack/packer/start/plenary.nvim
+      ln -s ${nvim-lspconfig} $out/.config/nvim/site/pack/packer/start/nvim-lspconfig
+      ln -s ${telescope-nvim} $out/.config/nvim/site/pack/packer/start/telescope.nvim
+      ln -s ${./..} $out/.config/nvim/site/pack/packer/start/${name}
     '';
 
     checkPhase = ''
-      export NVIM_DATA_MINIMAL=$(realpath ./.config/nvim)
+      export NVIM_DATA_MINIMAL=$(realpath $out/.config/nvim)
       export HOME=$(realpath .)
-      nvim --headless --noplugin -u ${../tests/minimal.lua} -c "PlenaryBustedDirectory '${../tests}' {minimal_init = '${../tests/minimal.lua}'}"
+      cd ${./..}
+      nvim --headless --noplugin -u ${../tests/minimal.lua} -c "PlenaryBustedDirectory tests {minimal_init = '${../tests/minimal.lua}'}"
     '';
   };
 
