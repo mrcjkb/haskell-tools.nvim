@@ -17,9 +17,6 @@ let
     buildInputs = with final; [
       nvim
       makeWrapper
-      gawk
-      ripgrep
-      bat
     ];
 
     buildPhase = ''
