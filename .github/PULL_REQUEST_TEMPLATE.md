@@ -4,5 +4,6 @@
 
 - [ ] Tested, as applicable:
   - [ ] Manually
-- [ ] Updated [CHANGELOG.md](../CHANGELOG.md) (if applicable).
+  - [ ] Added plenary specs
+- [ ] Updated [CHANGELOG.md](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/CHANGELOG.md) (if applicable).
 - [ ] Fits [CONTRIBUTING.md](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/CONTRIBUTING.md)
