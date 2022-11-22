@@ -89,7 +89,7 @@ local function on_hover(_, result, ctx, config)
       local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
       local can_go_to_definition = false
       if not err and results and #results > 0 then -- Can go to definition
-        local definition_results = results[1].result or {}
+        local definition_results = results[1] and results[1].result or {}
         if #definition_results > 0 then
           can_go_to_definition = true
           local definition_result = definition_results[1]
