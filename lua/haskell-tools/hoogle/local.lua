@@ -9,8 +9,7 @@ end
 
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
-  local cmd = vim.tbl_flatten { '--json', '--count=' .. count, search_term }
-  return cmd
+  return vim.tbl_flatten { '--json', '--count=' .. count, search_term }
 end
 
 local function setup_telescope_search()
