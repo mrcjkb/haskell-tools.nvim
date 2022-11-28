@@ -33,7 +33,7 @@ local function setup_telescope_search()
       on_exit = function(j, return_val)
         vim.schedule(function()
           if return_val ~= 0 then
-            vim.notify('haskell-toos: hoogle search failed. Return value: ' .. return_val, vim.log.levels.ERROR)
+            vim.notify('haskell-tools: hoogle search failed. Return value: ' .. return_val, vim.log.levels.ERROR)
           end
           local output = j:result()[1]
           if #output < 1 then
