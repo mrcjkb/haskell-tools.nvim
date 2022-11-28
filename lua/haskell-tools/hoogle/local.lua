@@ -29,10 +29,11 @@ local function setup_telescope_search()
     Job:new({
       command = 'hoogle',
       args = mk_hoogle_args(search_term, opts),
-      on_exit = function(j, return_val)
+      on_exit = function(j, exit_code)
         vim.schedule(function()
-          if return_val ~= 0 then
-            vim.notify('haskell-tools: hoogle search failed. Return value: ' .. return_val, vim.log.levels.ERROR)
+          if exit_code ~= 0 then
+            vim.notify('haskell-tools: hoogle search failed. Exit code: ' .. exit_code, vim.log.levels.ERROR)
+            return
           end
           local output = j:result()[1]
           if #output < 1 then
