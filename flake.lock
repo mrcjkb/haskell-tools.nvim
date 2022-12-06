@@ -119,11 +119,11 @@
     "packer-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1670217193,
-        "narHash": "sha256-6zNFg0NrolW1rufZv1euH+oPNm3kc5JpC85REVLBnpI=",
+        "lastModified": 1670357129,
+        "narHash": "sha256-vfPXgE6kckY3W0Dnz3DcGYk3LkfSK4ndhf5AAi3GnQU=",
         "owner": "wbthomason",
         "repo": "packer.nvim",
-        "rev": "502a89f72ee5db3907dd0c7ee36287d49cfa56a0",
+        "rev": "4e0cc242b868950e6eae6f9b29f5ad7375aa5a30",
         "type": "github"
       },
       "original": {
