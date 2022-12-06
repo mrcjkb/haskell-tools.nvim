@@ -19,7 +19,7 @@ jobs:
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@v12
         with:
-          pr-title: "chore: udate flake.lock" # Title of PR to be created
+          pr-title: "chore: update flake.lock" # Title of PR to be created
           pr-labels: |                  # Labels to be set on the PR
             dependencies
             automated
