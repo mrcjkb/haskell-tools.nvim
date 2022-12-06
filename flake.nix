@@ -103,7 +103,10 @@
         in
         {
           formatting = pre-commit-check-for system;
-          inherit (checkPkgs) haskell-tools-test;
+          inherit (checkPkgs)
+            haskell-tools-test
+            haskell-tools-test-no-telescope
+            haskell-tools-test-no-telescope-with-hoogle;
         });
     };
 }

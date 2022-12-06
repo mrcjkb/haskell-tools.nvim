@@ -51,7 +51,6 @@ packer.startup(function(use)
     requires = {
       'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
     },
     config = function()
       -- Paste setup here

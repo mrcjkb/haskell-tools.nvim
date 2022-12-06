@@ -66,7 +66,7 @@ local function setup_telescope_search()
 end
 
 function M.setup()
-  if M.has_hoogle() then
+  if M.has_hoogle() and deps.has_telescope() then
     setup_telescope_search()
   end
 end
