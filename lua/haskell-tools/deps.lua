@@ -25,7 +25,7 @@ function M.require_or_err(modname, plugin_name)
   return M.if_available(modname, function(mod)
     return mod
   end, function()
-    error('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.')
+    vim.notify_once('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.', vim.log.levels.ERROR)
   end)
 end
 
