@@ -42,10 +42,10 @@ let
 in
 {
 
-  haskell-tools-test = mkPlenaryTest { name = "haskell-tools.nvim"; };
+  haskell-tools-test = mkPlenaryTest { name = "haskell-tools"; };
 
-  haskell-tools-test-no-telescope = mkPlenaryTest { name = "haskell-tools.nvim"; withTelescope = false; };
+  haskell-tools-test-no-telescope = mkPlenaryTest { name = "haskell-tools-no-telescope"; withTelescope = false; };
 
-  haskell-tools-test-no-telescope-with-hoogle = mkPlenaryTest { name = "haskell-tools.nvim"; withTelescope = false; extraPkgs = [ final.pkgs.haskellPackages.hoogle ]; };
+  haskell-tools-test-no-telescope-with-hoogle = mkPlenaryTest { name = "haskell-tools-no-telescope-local-hoogle"; withTelescope = false; extraPkgs = [ final.pkgs.haskellPackages.hoogle ]; };
 
 }
