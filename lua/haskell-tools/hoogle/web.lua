@@ -44,11 +44,7 @@ local function setup_telescope_search()
         error("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.")
         return
       end
-      opts = util.tbl_merge(opts or {}, {
-        layout_strategy = 'horizontal',
-        layout_config = { preview_width = 80 },
-        hoogle = { json = true },
-      })
+      opts = hoogle_util.merge_telescope_opts(opts, true)
       local response = curl.get {
         url = mk_hoogle_request(search_term, opts),
         accept = 'application/json',

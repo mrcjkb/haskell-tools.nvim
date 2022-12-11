@@ -93,4 +93,16 @@ function M.mk_hoogle_entry(data)
   }
 end
 
+function M.merge_telescope_opts(opts, hoogle_json)
+  local default_layout = {
+    layout_strategy = 'horizontal',
+    layout_config = { preview_width = 80 },
+  }
+  local merged_opts = vim.tbl_extend('force', default_layout, opts or {})
+  if hoogle_json then
+    merged_opts['hoogle'] = { json = true }
+  end
+  return merged_opts
+end
+
 return M
