@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4] - 2022-12-11
+### Fixed
+- Pass the custom options to hoogle telescope, it supports to custom telescope
+  theme by users.
+
 ## [1.4.3] - 2022-12-06
 ### Fixed
 - Error message shown if hoogle is installed, but telescope is missing
