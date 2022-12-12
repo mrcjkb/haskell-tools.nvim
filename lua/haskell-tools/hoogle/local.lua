@@ -21,10 +21,7 @@ local function setup_telescope_search()
   local Job = deps.require_plenary('plenary.job')
 
   function M.telescope_search(search_term, opts)
-    opts = util.tbl_merge(opts or {}, {
-      layout_strategy = 'horizontal',
-      layout_config = { preview_width = 80 },
-    })
+    opts = hoogle_util.merge_telescope_opts(opts)
     opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
     Job:new({
       command = 'hoogle',

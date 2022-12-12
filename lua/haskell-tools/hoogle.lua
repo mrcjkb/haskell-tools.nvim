@@ -27,20 +27,22 @@ local function setup_handler(opts)
   end
 end
 
-local function on_lsp_hoogle_signature(_, result, _, _)
-  if not (result and result.contents) then
-    vim.notify('hoogle: No information available')
-    return
-  end
-  local signature = ht_util.get_signature_from_markdown(result.contents.value)
-  if signature and signature ~= '' then
-    ht.hoogle.handler(signature)
+local function mk_lsp_hoogle_signature_handler(options)
+  return function(_, result, _, _)
+    if not (result and result.contents) then
+      vim.notify('hoogle: No information available')
+      return
+    end
+    local signature = ht_util.get_signature_from_markdown(result.contents.value)
+    if signature and signature ~= '' then
+      ht.hoogle.handler(signature, options)
+    end
   end
 end
 
 local function lsp_hoogle_signature(options)
   local params = lsp_util.make_position_params()
-  return vim.lsp.buf_request(0, 'textDocument/hover', params, on_lsp_hoogle_signature)
+  return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
 -- @param table
@@ -56,7 +58,7 @@ function M.hoogle_signature(options)
     lsp_hoogle_signature(options)
   else
     local cword = vim.fn.expand('<cword>')
-    ht.hoogle.handler(cword)
+    ht.hoogle.handler(cword, options)
   end
 end
 
