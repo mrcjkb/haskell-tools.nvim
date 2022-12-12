@@ -27,7 +27,7 @@ local function setup_handler(opts)
   end
 end
 
-local function on_lsp_hoogle_signature(options)
+local function mk_lsp_hoogle_signature_handler(options)
   return function(_, result, _, _)
     if not (result and result.contents) then
       vim.notify('hoogle: No information available')
@@ -40,10 +40,9 @@ local function on_lsp_hoogle_signature(options)
   end
 end
 
-
 local function lsp_hoogle_signature(options)
   local params = lsp_util.make_position_params()
-  return vim.lsp.buf_request(0, 'textDocument/hover', params, on_lsp_hoogle_signature(options))
+  return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
 -- @param table
