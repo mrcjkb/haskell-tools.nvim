@@ -5,6 +5,8 @@ with final.lib.strings;
 with final.stdenv;
 
 let
+  nvim-nightly = final.neovim-nightly;
+
   mkPlenaryTest = { name, nvim ? final.neovim, withTelescope ? true, extraPkgs ? [ ] }: mkDerivation {
     inherit name;
 
@@ -48,4 +50,9 @@ in
 
   haskell-tools-test-no-telescope-with-hoogle = mkPlenaryTest { name = "haskell-tools-no-telescope-local-hoogle"; withTelescope = false; extraPkgs = [ final.pkgs.haskellPackages.hoogle ]; };
 
+  haskell-tools-test-nightly = mkPlenaryTest { nvim = nvim-nightly; name = "haskell-tools-nightly"; };
+
+  haskell-tools-test-no-telescope-nightly = mkPlenaryTest { nvim = nvim-nightly; name = "haskell-tools-no-telescope-nightly"; withTelescope = false; };
+
+  haskell-tools-test-no-telescope-with-hoogle-nightly = mkPlenaryTest { nvim = nvim-nightly; name = "haskell-tools-no-telescope-local-hoogle-nightly"; withTelescope = false; extraPkgs = [ final.pkgs.haskellPackages.hoogle ]; };
 }

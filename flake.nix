@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,7 +38,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, pre-commit-hooks, ... }:
+  outputs = inputs@{ self, nixpkgs, neovim-nightly-overlay, pre-commit-hooks, ... }:
     let
       supportedSystems = [
         "aarch64-linux"
@@ -47,7 +49,14 @@
       perSystem = nixpkgs.lib.genAttrs supportedSystems;
       pkgsFor = system: import nixpkgs { inherit system; };
 
-      test-overlay = import ./nix/test-overlay.nix { inherit (inputs) packer-nvim plenary-nvim telescope-nvim nvim-lspconfig; };
+      test-overlay = import ./nix/test-overlay.nix {
+        inherit (inputs)
+          packer-nvim
+          plenary-nvim
+          telescope-nvim
+          nvim-lspconfig;
+      };
+
       haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix { self = ./.; };
 
       haskell-tools-nvim-for = system:
@@ -99,14 +108,22 @@
 
       checks = perSystem (system:
         let
-          checkPkgs = import nixpkgs { inherit system; overlays = [ test-overlay ]; };
+          checkPkgs = import nixpkgs {
+            inherit system; overlays = [
+            test-overlay
+            neovim-nightly-overlay.overlay
+          ];
+          };
         in
         {
           formatting = pre-commit-check-for system;
           inherit (checkPkgs)
             haskell-tools-test
             haskell-tools-test-no-telescope
-            haskell-tools-test-no-telescope-with-hoogle;
+            haskell-tools-test-no-telescope-with-hoogle
+            haskell-tools-test-nightly
+            haskell-tools-test-no-telescope-nightly
+            haskell-tools-test-no-telescope-with-hoogle-nightly;
         });
     };
 }
