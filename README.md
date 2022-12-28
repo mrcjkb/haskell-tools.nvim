@@ -9,6 +9,7 @@ Supercharge your Haskell experience in [neovim](https://neovim.io/)!
 ![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 ![Nix](https://img.shields.io/badge/nix-0175C2?style=for-the-badge&logo=NixOS&logoColor=white)
 
+[![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-grey.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
