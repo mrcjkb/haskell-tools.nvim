@@ -23,5 +23,3 @@ jobs:
           pr-labels: |                  # Labels to be set on the PR
             dependencies
             automated
-      - name: build
-        uses: ./.github/workflows/nix-build.yml
