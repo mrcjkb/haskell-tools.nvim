@@ -79,6 +79,7 @@ local defaults = {
     debug = false,
     on_attach = function(...) end,
     cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', M.hls_log },
+    filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = capabilities,
     settings = {
       haskell = {
