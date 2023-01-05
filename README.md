@@ -69,7 +69,7 @@ It is also available on `nixpkgs`.
 This plugin automatically configures the `haskell-language-server` neovim client and integrates with other haskell tools.
 See the [Features](#features) section for more info.
 
-:warning: __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
+> :warning: __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
 
 To get started quickly with the default setup, add the following to your neovim config:
 
@@ -78,7 +78,6 @@ local ht = require('haskell-tools')
 local def_opts = { noremap = true, silent = true, }
 ht.setup {
   hls = {
-    -- See nvim-lspconfig's  suggested configuration for keymaps, etc.
     on_attach = function(client, bufnr)
       local opts = vim.tbl_extend('keep', def_opts, { buffer = bufnr, })
       -- haskell-language-server relies heavily on codeLenses,
@@ -99,7 +98,9 @@ end, def_opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, def_opts)
 ```
 
-If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
+> :information_source:
+> * For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
+> * If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
 
 
@@ -147,7 +148,7 @@ require('haskell-tools').hoogle.hoogle_signature()
 
 [![](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R.svg)](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R)
 
-#### Use Hoogle search to fill holes
+#### Hole-driven development powered by Hoogle
 
 With the `<C-r>` keymap, the Hoogle search telescope integration can be used to fill holes.
 
