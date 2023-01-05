@@ -64,19 +64,19 @@
         ;
     };
 
-    haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix {self = ./.;};
+    haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix {inherit self;};
 
     haskell-tools-nvim-for = system: let
       pkgs = pkgsFor system;
     in
       pkgs.vimUtils.buildVimPluginFrom2Nix {
         name = "haskell-tools";
-        src = ./.;
+        src = self;
       };
 
     pre-commit-check-for = system:
       pre-commit-hooks.lib.${system}.run {
-        src = ./.;
+        src = self;
         hooks = {
           alejandra.enable = true;
           stylua.enable = true;
