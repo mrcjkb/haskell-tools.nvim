@@ -69,7 +69,9 @@ It is also available on `nixpkgs`.
 This plugin automatically configures the `haskell-language-server` neovim client and integrates with other haskell tools.
 See the [Features](#features) section for more info.
 
-> :warning: __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
+> :warning:
+>
+> __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
 
 To get started quickly with the default setup, add the following to your neovim config:
 
