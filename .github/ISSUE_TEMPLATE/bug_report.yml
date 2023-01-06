@@ -30,7 +30,6 @@ body:
       label: "How to reproduce the issue"
       description: |
         Steps to reproduce using a [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
-        If possible, please also upload a copy of your minimal config and any other relevant files by dragging them into this issue.
       placeholder: |
         mkdir -p /tmp/minimal
         NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
@@ -60,3 +59,12 @@ body:
         - Upload `lsp.log` before and after the problem in a [secret gist](https://gist.github.com/). Paste the URL to the gist.
         - You can set the log level by adding `vim.lsp.set_log_level("debug")` after setting up LSP in your config.
         - You can find the location of the log with `:lua print(vim.lsp.get_log_path())`
+  - type: textarea
+    attributes:
+      label: "The [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua) used to reproduce this issue."
+      placeholder: |
+        ```lua
+
+        ```
+    validations:
+      required: true
