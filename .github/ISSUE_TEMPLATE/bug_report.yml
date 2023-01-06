@@ -7,7 +7,6 @@ body:
     attributes:
       value: |
         _Before reporting:_ search [existing issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Abug).
-        To reproduce the issue with a minimal config with haskell-tools.nvim, see [minimal.lua](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
         See also: [Troubleshooting section of README.md](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/README.md#minimal-config).
 
   - type: input
@@ -30,11 +29,16 @@ body:
     attributes:
       label: "How to reproduce the issue"
       description: |
-        - Steps to reproduce using `NVIM_DATA_MINIMAL=$(mktemp -d) -u minimal.lua` (minimal config).
+        Steps to reproduce using a [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
+        If possible, please also upload a copy of your minimal config and any other relevant files by dragging them into this issue.
       placeholder: |
-        NVIM_DATA_MINIMAL=$(mktemp -d) -u ./tests/minimal.lua
+        mkdir -p /tmp/minimal
+        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
+        :q
+        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
         :edit foo.hs
-        yiwp
+        4j
+        :lua require('haskell-tools').hoogle_signature()
     validations:
       required: true
   - type: textarea
