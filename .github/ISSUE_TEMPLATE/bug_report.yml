@@ -61,10 +61,12 @@ body:
         - You can find the location of the log with `:lua print(vim.lsp.get_log_path())`
   - type: textarea
     attributes:
-      label: "The [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua) used to reproduce this issue."
+      label: "The minimal config used to reproduce this issue."
+      description: |
+        See [this example](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
       placeholder: |
         ```lua
-
+          -- paste your minimal config here
         ```
     validations:
       required: true
