@@ -508,8 +508,8 @@ You can find the log files by calling
 or open them by calling
 
 ```
-:lua require('haskell-tools').nvim_open_logfile()
-:lua require('haskell-tools').nvim_open_hls_logfile()
+:lua require('haskell-tools').log.nvim_open_logfile()
+:lua require('haskell-tools').log.nvim_open_hls_logfile()
 ```
 
 ## Recommendations
