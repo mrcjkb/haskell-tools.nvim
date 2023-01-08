@@ -33,11 +33,25 @@ local function buf_create_repl(bufnr, cmd, opts)
   vim.api.nvim_win_set_buf(0, bufnr)
   opts = vim.tbl_extend('force', vim.empty_dict(), opts or {})
   if opts.delete_buffer_on_exit then
-    opts.on_exit = function()
+    opts.on_exit = function(_, exit_code, _)
+      ht.log.debug('repl.builtin: exit')
+      if exit_code ~= 0 then
+        local msg = 'repl.builtin: non-zero exit code: ' .. exit_code
+        ht.log.warn(msg)
+        vim.notify(msg, vim.log.levels.WARN)
+      end
       local winid = vim.fn.bufwinid(bufnr)
       vim.api.nvim_win_close(winid, true)
       vim.api.nvim_buf_delete(bufnr, { force = true })
     end
+    local repl_log = function(logger)
+      return function(_, data, name)
+        logger { 'repl.builtin', data, name }
+      end
+    end
+    opts.on_stdout = repl_log(ht.log.debug)
+    opts.on_stderr = repl_log(ht.log.warn)
+    opts.on_stdin = repl_log(ht.log.debug)
   end
   ht.log.debug { 'repl.builtin: Opening terminal', cmd, opts }
   local job_id = vim.fn.termopen(cmd, opts)
