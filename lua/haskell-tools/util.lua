@@ -45,4 +45,11 @@ function util.get_signature_from_markdown(docs)
     or func_name -- Fall back to value under cursor
 end
 
+-- Quote a string
+-- @param string
+-- @return (string) the quoted string
+function util.quote(str)
+  return '"' .. str .. '"'
+end
+
 return util

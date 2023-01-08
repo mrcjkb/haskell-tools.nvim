@@ -1,5 +1,6 @@
 local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
+local ht_util = require('haskell-tools.util')
 
 -- Tools for interaction with a ghci repl
 local repl = {}
@@ -34,7 +35,7 @@ local function extend_repl_cmd(cmd, file, on_no_package)
     return on_no_package(cmd)
   end
   if vim.endswith(file, '.hs') then
-    table.insert(cmd, file)
+    table.insert(cmd, ht_util.quote(file))
   else
     ht.log.debug('extend_repl_cmd: Not a Haskell file.')
     table.insert(cmd, pkg)
@@ -56,7 +57,7 @@ end
 -- @param string | nil: file
 -- @return table | nil
 local function mk_stack_repl_cmd(file)
-  return extend_repl_cmd({ 'stack', 'ghci' }, file, function(cmd)
+  return extend_repl_cmd({ 'stack', 'ghci' }, ht_util.quote(file), function(cmd)
     return cmd
   end)
 end
