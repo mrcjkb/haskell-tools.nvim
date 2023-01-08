@@ -1,3 +1,4 @@
+local ht = require('haskell-tools')
 local project_util = require('haskell-tools.project-util')
 local deps = require('haskell-tools.deps')
 
@@ -6,10 +7,16 @@ local project = {}
 local function telescope_package_search(callback, opts)
   local file = vim.api.nvim_buf_get_name(0)
   if vim.fn.filewritable(file) == 0 then
+    local err_msg = 'Telescope package search: File not found: ' .. file
+    ht.log.error(err_msg)
+    vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
   local package_root = project_util.match_package_root(file)
   if not package_root then
+    local err_msg = 'Telescope package search: No package root found for file ' .. file
+    ht.log.error(err_msg)
+    vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
   opts = vim.tbl_deep_extend('keep', {
@@ -44,12 +51,15 @@ local commands = {
 }
 
 function project.setup()
+  ht.log.debug('project.setup')
   function project.open_package_yaml()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       local result = project_util.get_package_yaml(file)
       if not result then
-        vim.notify('HsPackageYaml: Cannot find package.yaml info for: ' .. file, vim.log.levels.ERROR)
+        local err_msg = 'HsPackageYaml: Cannot find package.yaml file for: ' .. file
+        vim.log.error(err_msg)
+        vim.notify(err_msg, vim.log.levels.ERROR)
         return
       end
       vim.cmd('e ' .. result)
@@ -63,9 +73,10 @@ function project.setup()
         vim.notify('HsPackageCabal: Not a cabal project?', vim.log.levels.ERROR)
       end
       local result = project_util.get_package_cabal(file)
-      vim.pretty_print('result: ' .. result)
       if not result then
-        vim.notify('HsPackageCabal: Cannot find package.yaml info for: ' .. file, vim.log.levels.ERROR)
+        local err_msg = 'HsPackageCabal: Cannot find *.cabal file for: ' .. file
+        vim.log.error(err_msg)
+        vim.notify(err_msg, vim.log.levels.ERROR)
         return
       end
       vim.cmd('e ' .. result)
@@ -85,7 +96,9 @@ function project.setup()
         vim.cmd('e ' .. project_root .. '/stack.yaml')
         return
       end
-      vim.notify('HsProjectFile: Cannot find project file from: ' .. file, vim.log.levels.ERROR)
+      local err_msg = 'HsProjectFile: Cannot find project file from: ' .. file
+      ht.log.error(err_msg)
+      vim.notify(err_msg, vim.log.levels.ERROR)
     end)
   end
 

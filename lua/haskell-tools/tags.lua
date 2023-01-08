@@ -22,12 +22,13 @@ local function setup_fast_tags(config)
     opts = vim.tbl_extend('force', { refresh = true }, opts or {})
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
     if opts.refresh == false and _state.projects[project_root] then
-      -- project tags already generated
+      ht.log.debug('Project tags already generated. Skipping.')
       return
     end
     _state.projects[project_root] = true
     _state.fast_tags_generating = true
     if project_root then
+      ht.log.debug('Generating project tags for' .. project_root)
       vim.schedule(function()
         Job:new({
           command = 'fast-tags',
@@ -37,6 +38,8 @@ local function setup_fast_tags(config)
           end,
         }):start()
       end)
+    else
+      ht.log.warn('generate_project_tags: No project root found.')
     end
   end
 
@@ -45,25 +48,34 @@ local function setup_fast_tags(config)
     _state.fast_tags_generating = true
     local rel_package_root = project_util.match_package_root(path)
     if not rel_package_root then
+      ht.log.warn('generate_package_tags: No rel_package root found.')
       return
     end
     local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
-    if package_root and project_root then
-      vim.schedule(function()
-        Job:new({
-          command = 'fast-tags',
-          args = { '-R', package_root, project_root },
-          on_exit = function(_)
-            _state.fast_tags_generating = false
-          end,
-        }):start()
-      end)
+    if not package_root then
+      ht.log.warn('generate_package_tags: No package root found.')
+      return
     end
+    if not project_root then
+      ht.log.warn('generate_package_tags: No project root found.')
+      return
+    end
+    vim.schedule(function()
+      Job:new({
+        command = 'fast-tags',
+        args = { '-R', package_root, project_root },
+        on_exit = function(_)
+          _state.fast_tags_generating = false
+        end,
+      }):start()
+    end)
   end
 
   if vim.fn.executable('fast-tags') ~= 1 then
-    vim.notify('haskell-tools: fast-tags fallback configured, but fast-tags executable not found', vim.log.levels.ERROR)
+    local err_msg = 'haskell-tools: fast-tags fallback configured, but fast-tags executable not found'
+    ht.log.error(err_msg)
+    vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
   vim.api.nvim_create_autocmd('FileType', {
@@ -86,6 +98,7 @@ local function setup_fast_tags(config)
 end
 
 function tags.setup()
+  ht.log.debug('tags.setup')
   local config = ht.config.options.tools.tags
   if config.enable == true then
     setup_fast_tags(config)

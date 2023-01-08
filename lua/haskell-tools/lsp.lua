@@ -11,6 +11,7 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   vim.api.nvim_create_autocmd('VimLeavePre', {
     group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true }),
     callback = function()
+      ht.log.debug('Stopping LSP client...')
       vim.lsp.stop_client(client, false)
     end,
     buffer = bufnr,
@@ -32,10 +33,12 @@ local function setup_codeLens(opts, bufnr)
 end
 
 local function setup_lsp()
+  ht.log.debug('Setting up the LSP client...')
   local opts = ht.config.options
   local hls_opts = opts.hls
   local orig_on_attach = hls_opts.on_attach
   local function on_attach(client, bufnr)
+    ht.log.debug('LSP attach')
     orig_on_attach(client, bufnr)
     ensure_clean_exit_on_quit(client, bufnr)
     setup_codeLens(opts.tools.codeLens, bufnr)

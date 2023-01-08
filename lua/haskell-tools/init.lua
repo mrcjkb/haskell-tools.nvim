@@ -1,5 +1,6 @@
 local ht = {
   config = nil,
+  log = nil,
   lsp = nil,
   hoogle = nil,
   repl = nil,
@@ -10,6 +11,8 @@ local ht = {
 function ht.setup(opts)
   local config = require('haskell-tools.config')
   ht.config = config
+  local log = require('haskell-tools.log')
+  ht.log = log
   local lsp = require('haskell-tools.lsp')
   ht.lsp = lsp
   local hoogle = require('haskell-tools.hoogle')
@@ -22,6 +25,8 @@ function ht.setup(opts)
   ht.tags = tags
 
   config.setup(opts)
+  log.setup()
+  log.debug { 'Config', config.options }
   lsp.setup()
   hoogle.setup()
   repl.setup()

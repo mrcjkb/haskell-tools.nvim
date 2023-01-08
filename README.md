@@ -477,6 +477,35 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 ```
 
+#### Logs
+
+To enable debug logging, set the log level to `DEBUG` (`:h vim.log.levels`):
+
+```lua
+require('haskell-tools').setup {
+  tools = { -- haskell-tools options
+    log = {
+      level = vim.log.levels.DEBUG,
+    },
+  },
+}
+```
+
+You can find the log files by calling
+
+```
+-- haskell-tools.nvim log
+:lua print(require('haskell-tools').log.get_logfile())
+-- haskell-language-server logs
+:lua print(require('haskell-tools').log.get_hls_logfile())
+```
+or open them by calling
+
+```
+:lua require('haskell-tools').nvim_open_logfile()
+:lua require('haskell-tools').nvim_open_hls_logfile()
+```
+
 ## Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
