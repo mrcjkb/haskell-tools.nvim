@@ -16,23 +16,30 @@ local function extend_repl_cmd(cmd, file, on_no_package)
   end
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
+    ht.log.debug('extend_repl_cmd: No file specified. Using current buffer: ' .. file)
     local pkg = project.get_package_name(file)
     if pkg then
       table.insert(cmd, pkg)
+      ht.log.debug { 'extend_repl_cmd: Extended cmd with package.', cmd }
       return cmd
     else
+      ht.log.debug { 'extend_repl_cmd: No package found.', cmd }
       return on_no_package(cmd)
     end
   end
+  ht.log.debug('extend_repl_cmd: File: ' .. file)
   local pkg = project.get_package_name(file)
   if not pkg then
+    ht.log.debug { 'extend_repl_cmd: No package found.', cmd }
     return on_no_package(cmd)
   end
   if vim.endswith(file, '.hs') then
     table.insert(cmd, file)
   else
+    ht.log.debug('extend_repl_cmd: Not a Haskell file.')
     table.insert(cmd, pkg)
   end
+  ht.log.debug { 'extend_repl_cmd', cmd }
   return cmd
 end
 
@@ -63,6 +70,9 @@ function repl.mk_repl_cmd(file)
   if not chk_path then
     chk_path = vim.api.nvim_buf_get_name(0)
     if vim.fn.filewritable(chk_path) == 0 then
+      local err_msg = 'haskell-tools.repl: File not found. Has it been saved? ' .. chk_path
+      ht.log.error(err_msg)
+      vim.notify(err_msg, vim.log.levels.ERROR)
       return nil
     end
   end
@@ -73,8 +83,13 @@ function repl.mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    return vim.tbl_flatten { 'ghci', file and { file } or {} }
+    local cmd = vim.tbl_flatten { 'ghci', file and { file } or {} }
+    ht.log.debug { 'mk_repl_cmd', cmd }
+    return cmd
   end
+  local err_msg = 'haskell-tools.repl: No ghci executable found.'
+  ht.log.error(err_msg)
+  vim.notify(err_msg, vim.log.levels.ERROR)
   return nil
 end
 
@@ -89,10 +104,12 @@ function repl.setup()
   local opts = ht.config.options.tools.repl
   local handler = {}
   if opts.handler == 'toggleterm' then
+    ht.log.info('repl.handler = toggleterm')
     local toggleterm = require('haskell-tools.repl.toggleterm')
     toggleterm.setup(repl.mk_repl_cmd)
     handler = toggleterm
   else
+    ht.log.info('repl.handler = builtin')
     local builtin = require('haskell-tools.repl.builtin')
     builtin.setup(repl.mk_repl_cmd, opts.builtin)
     handler = builtin
@@ -161,7 +178,9 @@ function repl.setup()
   -- @param string: absolute file path
   function repl.load_file(file)
     if vim.fn.filereadable(file) == 0 then
-      vim.notify('File: ' .. file .. ' does not exist or is not readable.', vim.log.levels.ERROR)
+      local err_msg = 'File: ' .. file .. ' does not exist or is not readable.'
+      ht.log.error(err_msg)
+      vim.notify(err_msg, vim.log.levels.ERROR)
     end
     handler.send_cmd(':l ' .. file)
   end

@@ -1,3 +1,4 @@
+local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
 -- Utility functions for analysing a project.
@@ -66,21 +67,31 @@ end
 -- @return string | nil
 function project_util.get_root_dir(path)
   local lspconfig = deps.require_lspconfig('lspconfig')
-  return lspconfig.hls.get_root_dir(path)
+  local root_dir = lspconfig.hls.get_root_dir(path)
+  ht.log.debug('Project root:' .. root_dir)
+  return root_dir
 end
 -- Is `path` part of a cabal project?
 -- @param string: path to check for
 -- @return boolean
 function project_util.is_cabal_project(path)
   local get_root = root_pattern('*.cabal', 'cabal.project')
-  return get_root(path) ~= nil
+  if get_root(path) ~= nil then
+    ht.log.debug('Detected cabal project.')
+    return true
+  end
+  return false
 end
 
 -- Is `path` part of a stack project?
 -- @param string: path to check for
 -- @return boolean
 function project_util.is_stack_project(path)
-  return project_util.match_stack_project_root(path) ~= nil
+  if project_util.match_stack_project_root(path) ~= nil then
+    ht.log.debug('Detected stack project.')
+    return true
+  end
+  return false
 end
 
 function project_util.get_package_name(path)

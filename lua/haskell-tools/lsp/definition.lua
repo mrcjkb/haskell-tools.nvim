@@ -4,12 +4,14 @@ local lsp_util = vim.lsp.util
 local definition = {}
 
 definition.setup = function(config)
+  ht.log.debug { 'Definition setup', config }
   local orig_handler = vim.lsp.handlers['textDocument/definition']
   local function mk_hoogle_fallback_definition_handler(opts)
     return function(_, result, ...)
       if #result > 0 then
         return orig_handler(_, result, ...)
       end
+      ht.log.debug('Definition not found. Falling back to Hoogle search.')
       vim.notify('Definition not found. Falling back to Hoogle search...', vim.log.levels.WARN)
       ht.hoogle.hoogle_signature(opts or {})
     end
@@ -17,6 +19,7 @@ definition.setup = function(config)
 
   if config.hoogle_signature_fallback == true then
     local orig_buf_definition = vim.lsp.buf.definition
+    ht.log.debug('Overriding vim.lsp.buf.definition with Hoogle signature fallback.')
     vim.lsp.buf.definition = function(opts)
       local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
       if #clients < 1 then

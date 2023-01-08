@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Support for `hls-cabal-plugin` and `hls-cabal-fmt` plugins.
+- Add logging
 ### Fixed
 - Packer init in minimal config for reproducing issues locally.
 

@@ -1,7 +1,7 @@
 local deps = require('haskell-tools.deps')
 
 local config = {
-  hls_log = vim.fn.stdpath('data') .. '/' .. 'haskell-language-server.log',
+  hls_log = vim.fn.stdpath('log') .. '/' .. 'haskell-language-server.log',
 }
 
 local ht_capabilities = {}
@@ -73,6 +73,9 @@ local defaults = {
       enable = vim.fn.executable('fast-tags') == 1,
       -- Events to trigger package tag generation
       package_events = { 'BufWritePost' },
+    },
+    log = {
+      level = vim.log.levels.DEBUG,
     },
   },
   hls = {

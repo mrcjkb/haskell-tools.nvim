@@ -9,20 +9,35 @@ local hoogle = {
   handler = nil,
 }
 
+local function set_web_handler()
+  hoogle.handler = hoogle_web.telescope_search
+  ht.log.debug('hoogle.handler = telescope-web')
+end
+
+local function set_local_handler()
+  hoogle.handler = hoogle_local.telescope_search
+  ht.log.debug('hoogle.handler = telescope-local')
+end
+
+local function set_browser_handler()
+  hoogle.handler = hoogle_web.browser_search
+  ht.log.debug('hoogle.handler = browser')
+end
+
 local function setup_handler(opts)
   if opts.mode == 'telescope-web' then
-    hoogle.handler = hoogle_web.telescope_search
+    set_web_handler()
   elseif opts.mode == 'telescope-local' then
-    hoogle.handler = hoogle_local.telescope_search
+    set_local_handler()
   elseif opts.mode == 'browser' then
-    hoogle.handler = hoogle_web.browser_search
+    set_browser_handler()
   elseif opts.mode == 'auto' then
     if not deps.has_telescope() then
-      hoogle.handler = hoogle_web.browser_search
+      set_browser_handler()
     elseif hoogle_local.has_hoogle() then
-      hoogle.handler = hoogle_local.telescope_search
+      set_local_handler()
     else
-      hoogle.handler = hoogle_web.telescope_search
+      set_web_handler()
     end
   end
 end
@@ -34,6 +49,7 @@ local function mk_lsp_hoogle_signature_handler(options)
       return
     end
     local signature = ht_util.get_signature_from_markdown(result.contents.value)
+    ht.log.debug { 'Hoogle LSP signature search', signature }
     if signature and signature ~= '' then
       ht.hoogle.handler(signature, options)
     end
@@ -49,6 +65,7 @@ end
 -- @field string?: search_term - an optional search_term to search for
 function hoogle.hoogle_signature(options)
   options = options or {}
+  ht.log.debug { 'Hoogle signature search options', options }
   if options.search_term then
     ht.hoogle.handler(options.search_term)
     return
@@ -57,12 +74,14 @@ function hoogle.hoogle_signature(options)
   if #clients > 0 then
     lsp_hoogle_signature(options)
   else
+    ht.log.debug('Hoogle signature search: No clients attached. Falling back to <cword>.')
     local cword = vim.fn.expand('<cword>')
     ht.hoogle.handler(cword, options)
   end
 end
 
 function hoogle.setup()
+  ht.log.debug('Hoogle setup...')
   hoogle_web.setup()
   hoogle_local.setup()
   local opts = ht.config.options.tools.hoogle

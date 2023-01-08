@@ -1,3 +1,4 @@
+local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
@@ -20,12 +21,14 @@ end
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
-  return vim.fn.fnameescape(
+  local hoogle_request = vim.fn.fnameescape(
     'https://hoogle.haskell.org/?hoogle='
       .. urlencode(search_term)
       .. scope_param
       .. (hoogle_opts.json and '&mode=json' or '')
   )
+  ht.log.debug { 'Hoogle web request', hoogle_request }
+  return hoogle_request
 end
 
 local function setup_telescope_search()
@@ -41,6 +44,7 @@ local function setup_telescope_search()
   function hoogle_web.telescope_search(search_term, opts)
     async.run(function()
       if vim.fn.executable('curl') == 0 then
+        ht.log.error('curl executable not found.')
         error("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.")
         return
       end
@@ -52,6 +56,7 @@ local function setup_telescope_search()
         url = mk_hoogle_request(search_term, opts),
         accept = 'application/json',
       }
+      ht.log.debug { 'Hoogle web response', response }
       local results = vim.json.decode(response.body)
       pickers
         .new(opts, {

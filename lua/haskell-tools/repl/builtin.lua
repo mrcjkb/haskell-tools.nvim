@@ -1,3 +1,5 @@
+local ht = require('haskell-tools')
+
 -- Utility functions for the ghci repl module.
 -- Not part of the public API.
 local builtin = {}
@@ -37,12 +39,14 @@ local function buf_create_repl(bufnr, cmd, opts)
       vim.api.nvim_buf_delete(bufnr, { force = true })
     end
   end
+  ht.log.debug { 'repl.builtin: Opening terminal', cmd, opts }
   local job_id = vim.fn.termopen(cmd, opts)
   repl = {
     bufnr = bufnr,
     job_id = job_id,
     cmd = cmd,
   }
+  ht.log.debug { 'repl.builtin: Created repl.', repl }
 end
 
 -- Create a split
@@ -80,29 +84,37 @@ end
 local function create_or_toggle(create_win, mk_cmd, opts)
   local cmd = mk_cmd()
   if cmd == nil then
-    vim.notify('haskell-tools.repl.builtin: Could not create a repl command.', vim.log.levels.DEBUG)
+    local err_msg = 'haskell-tools.repl.builtin: Could not create a repl command.'
+    ht.log.error(err_msg)
+    vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
   if is_new_cmd(cmd) then
+    ht.log.debug { 'repl.builtin: New command', cmd }
     builtin.quit()
   end
   if repl_is_loaded() then
+    ht.log.debug('repl.builtin: is loaded')
     local winid = vim.fn.bufwinid(repl.bufnr)
     if winid ~= -1 then
+      ht.log.debug('repl.builtin: Hiding window ' .. winid)
       vim.api.nvim_win_hide(winid)
     else
       create_win()
       vim.api.nvim_set_current_buf(repl.bufnr)
       winid = vim.fn.bufwinid(repl.bufnr)
+      ht.log.debug('repl.builtin: Created window ' .. winid)
       vim.api.nvim_set_current_win(winid)
     end
     return
   end
+  ht.log.debug('repl.builtin: is not loaded')
   opts = opts or vim.empty_dict()
   local bufnr = vim.api.nvim_create_buf(true, true)
   create_win()
   vim.api.nvim_set_current_buf(bufnr)
   local winid = vim.fn.bufwinid(bufnr)
+  ht.log.debug('repl.builtin: Created window ' .. winid)
   vim.api.nvim_set_current_win(winid)
   buf_create_repl(bufnr, cmd, opts)
 end
@@ -156,10 +168,14 @@ end
 -- @param function(string?)
 -- @param table
 function builtin.setup(mk_repl_cmd, opts)
+  ht.log.debug { 'repl.builtin setup', opts }
   -- @param string?: Optional path of the file to load into the repl
   function builtin.toggle(file)
     local cur_win = vim.api.nvim_get_current_win()
     if file and not vim.endswith(file, '.hs') then
+      local err_msg = 'haskell-tools.repl.builtin: Not a Haskell file: ' .. file
+      ht.log.error(err_msg)
+      vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
     local function mk_repl_cmd_wrapped()

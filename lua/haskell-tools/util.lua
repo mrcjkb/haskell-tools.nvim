@@ -1,3 +1,4 @@
+local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 
@@ -21,10 +22,12 @@ function util.open_browser(url)
     browser_cmd = 'open'
   end
   if browser_cmd then
-    Job:new({
+    local job_opts = {
       command = browser_cmd,
       args = { url },
-    }):start()
+    }
+    ht.log.debug { 'Opening browser', job_opts }
+    Job:new(job_opts):start()
   end
 end
 
