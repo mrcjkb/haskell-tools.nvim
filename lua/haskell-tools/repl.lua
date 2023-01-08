@@ -2,7 +2,7 @@ local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
 
 -- Tools for interaction with a ghci repl
-local M = {}
+local repl = {}
 
 -- Extend a repl command for `file`.
 -- If `file` is `nil`, create a repl the nearest package.
@@ -58,7 +58,7 @@ end
 -- If `file` is `nil`, create a repl the nearest package.
 -- @param string | nil: file
 -- @return table | nil
-function M.mk_repl_cmd(file)
+function repl.mk_repl_cmd(file)
   local chk_path = file
   if not chk_path then
     chk_path = vim.api.nvim_buf_get_name(0)
@@ -80,33 +80,33 @@ end
 
 -- Create the command to create a repl for the current buffer.
 -- @return table | nil
-function M.buf_mk_repl_cmd()
+function repl.buf_mk_repl_cmd()
   local file = vim.api.nvim_buf_get_name(0)
-  return M.mk_repl_cmd(file)
+  return repl.mk_repl_cmd(file)
 end
 
-function M.setup()
+function repl.setup()
   local opts = ht.config.options.tools.repl
   local handler = {}
   if opts.handler == 'toggleterm' then
     local toggleterm = require('haskell-tools.repl.toggleterm')
-    toggleterm.setup(M.mk_repl_cmd)
+    toggleterm.setup(repl.mk_repl_cmd)
     handler = toggleterm
   else
     local builtin = require('haskell-tools.repl.builtin')
-    builtin.setup(M.mk_repl_cmd, opts.builtin)
+    builtin.setup(repl.mk_repl_cmd, opts.builtin)
     handler = builtin
   end
   -- Toggle a GHCi repl
   -- @param string?: optional file path
-  M.toggle = handler.toggle
+  repl.toggle = handler.toggle
 
   -- Quit the repl
-  M.quit = handler.quit
+  repl.quit = handler.quit
 
   -- Paste from register `reg` to the repl
   -- @param string?: register (defaults to '"')
-  function M.paste(reg)
+  function repl.paste(reg)
     local data = vim.fn.getreg(reg or '"')
     if vim.endswith(data, '\n') then
       data = data:sub(1, #data - 1)
@@ -135,31 +135,31 @@ function M.setup()
 
   -- Query the repl for the type of register `reg`
   -- @param string?: register (defaults to '"')
-  function M.paste_type(reg)
+  function repl.paste_type(reg)
     handle_reg(':t', reg)
   end
 
   -- Query the repl for the type of word under the cursor
   -- @param string?: register (defaults to '"')
-  function M.cword_type()
+  function repl.cword_type()
     handle_cword(':t')
   end
 
   -- Query the repl for info on register `reg`
   -- @param string?: register (defaults to '"')
-  function M.paste_info(reg)
+  function repl.paste_info(reg)
     handle_reg(':i', reg)
   end
 
   -- Query the repl for the type of word under the cursor
   -- @param string?: register (defaults to '"')
-  function M.cword_info()
+  function repl.cword_info()
     handle_cword(':i')
   end
 
   -- Load a file into the repl
   -- @param string: absolute file path
-  function M.load_file(file)
+  function repl.load_file(file)
     if vim.fn.filereadable(file) == 0 then
       vim.notify('File: ' .. file .. ' does not exist or is not readable.', vim.log.levels.ERROR)
     end
@@ -167,9 +167,9 @@ function M.setup()
   end
 
   -- Reload the repl
-  function M.reload()
+  function repl.reload()
     handler.send_cmd(':r')
   end
 end
 
-return M
+return repl

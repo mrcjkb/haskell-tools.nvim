@@ -1,6 +1,6 @@
 -- Utility functions for the ghci repl module.
 -- Not part of the public API.
-local M = {}
+local builtin = {}
 
 local view = {}
 
@@ -84,7 +84,7 @@ local function create_or_toggle(create_win, mk_cmd, opts)
     return
   end
   if is_new_cmd(cmd) then
-    M.quit()
+    builtin.quit()
   end
   if repl_is_loaded() then
     local winid = vim.fn.bufwinid(repl.bufnr)
@@ -155,9 +155,9 @@ end
 
 -- @param function(string?)
 -- @param table
-function M.setup(mk_repl_cmd, opts)
+function builtin.setup(mk_repl_cmd, opts)
   -- @param string?: Optional path of the file to load into the repl
-  function M.toggle(file)
+  function builtin.toggle(file)
     local cur_win = vim.api.nvim_get_current_win()
     if file and not vim.endswith(file, '.hs') then
       return
@@ -173,11 +173,11 @@ function M.setup(mk_repl_cmd, opts)
   end
 
   -- Quit the repl
-  function M.quit()
+  function builtin.quit()
     if not repl_is_loaded() then
       return
     end
-    M.send_cmd(':q')
+    builtin.send_cmd(':q')
     local winid = vim.fn.bufwinid(repl.bufnr)
     if winid ~= -1 then
       vim.api.nvim_win_close(winid, true)
@@ -187,7 +187,7 @@ function M.setup(mk_repl_cmd, opts)
 
   -- Send a command to the repl, followed by <cr>
   -- @param string
-  function M.send_cmd(txt)
+  function builtin.send_cmd(txt)
     if not repl_is_loaded() then
       return
     end
@@ -204,4 +204,4 @@ function M.setup(mk_repl_cmd, opts)
   end
 end
 
-return M
+return builtin

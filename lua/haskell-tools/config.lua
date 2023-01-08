@@ -1,6 +1,6 @@
 local deps = require('haskell-tools.deps')
 
-local M = {
+local config = {
   hls_log = vim.fn.stdpath('data') .. '/' .. 'haskell-language-server.log',
 }
 
@@ -78,7 +78,7 @@ local defaults = {
   hls = {
     debug = false,
     on_attach = function(...) end,
-    cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', M.hls_log },
+    cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', config.hls_log },
     filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = capabilities,
     settings = {
@@ -176,15 +176,15 @@ local defaults = {
   },
 }
 
-M.options = {
+config.options = {
   hls = {},
 }
 
-function M.setup(opts)
-  M.options = vim.tbl_deep_extend('force', {}, defaults, opts or {})
-  if M.options.hls.debug then
-    table.insert(M.option.hls.cmd, '--debug')
+function config.setup(opts)
+  config.options = vim.tbl_deep_extend('force', {}, defaults, opts or {})
+  if config.options.hls.debug then
+    table.insert(config.option.hls.cmd, '--debug')
   end
 end
 
-return M
+return config

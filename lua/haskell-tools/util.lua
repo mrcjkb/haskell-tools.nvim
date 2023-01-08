@@ -2,13 +2,13 @@ local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 
 -- General utility functions that may need to be moded somewhere else
-local M = {}
+local util = {}
 
-function M.tbl_merge(...)
+function util.tbl_merge(...)
   return vim.tbl_deep_extend('keep', ...)
 end
 
-function M.open_browser(url)
+function util.open_browser(url)
   local browser_cmd
   if vim.fn.has('unix') == 1 then
     if vim.fn.executable('sensible-browser') == 1 then
@@ -31,7 +31,7 @@ end
 -- Get the type signature of the word under the cursor from markdown
 -- @param string: markdown docs
 -- @return the type signature, or the word under the cursor if none was found
-function M.get_signature_from_markdown(docs)
+function util.get_signature_from_markdown(docs)
   local func_name = vim.fn.expand('<cword>')
   local full_sig = docs:match('```haskell\n' .. func_name .. ' :: ([^```]*)')
   return full_sig
@@ -42,4 +42,4 @@ function M.get_signature_from_markdown(docs)
     or func_name -- Fall back to value under cursor
 end
 
-return M
+return util

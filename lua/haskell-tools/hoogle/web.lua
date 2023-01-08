@@ -1,7 +1,7 @@
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
-local M = {}
+local hoogle_web = {}
 
 local char_to_hex = function(c)
   return string.format('%%%02X', string.byte(c))
@@ -38,7 +38,7 @@ local function setup_telescope_search()
 
   local curl = deps.require_plenary('plenary.curl')
 
-  function M.telescope_search(search_term, opts)
+  function hoogle_web.telescope_search(search_term, opts)
     async.run(function()
       if vim.fn.executable('curl') == 0 then
         error("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.")
@@ -70,7 +70,7 @@ local function setup_telescope_search()
 end
 
 local function setup_browser_search()
-  function M.browser_search(search_term, opts)
+  function hoogle_web.browser_search(search_term, opts)
     opts = util.tbl_merge(opts or {}, {
       hoogle = { json = false },
     })
@@ -78,11 +78,11 @@ local function setup_browser_search()
   end
 end
 
-function M.setup()
+function hoogle_web.setup()
   if deps.has_telescope() then
     setup_telescope_search()
   end
   setup_browser_search()
 end
 
-return M
+return hoogle_web

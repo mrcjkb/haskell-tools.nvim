@@ -1,9 +1,9 @@
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
-local M = {}
+local hoogle_local = {}
 
-function M.has_hoogle()
+function hoogle_local.has_hoogle()
   return vim.fn.executable('hoogle') == 1
 end
 
@@ -20,7 +20,7 @@ local function setup_telescope_search()
   local hoogle_util = require('haskell-tools.hoogle.util')
   local Job = deps.require_plenary('plenary.job')
 
-  function M.telescope_search(search_term, opts)
+  function hoogle_local.telescope_search(search_term, opts)
     opts = hoogle_util.merge_telescope_opts(opts)
     opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
     Job:new({
@@ -62,10 +62,10 @@ local function setup_telescope_search()
   end
 end
 
-function M.setup()
-  if M.has_hoogle() and deps.has_telescope() then
+function hoogle_local.setup()
+  if hoogle_local.has_hoogle() and deps.has_telescope() then
     setup_telescope_search()
   end
 end
 
-return M
+return hoogle_local

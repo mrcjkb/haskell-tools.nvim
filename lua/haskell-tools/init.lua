@@ -1,4 +1,4 @@
-local M = {
+local ht = {
   config = nil,
   lsp = nil,
   hoogle = nil,
@@ -7,19 +7,19 @@ local M = {
   tags = nil,
 }
 
-function M.setup(opts)
+function ht.setup(opts)
   local config = require('haskell-tools.config')
-  M.config = config
+  ht.config = config
   local lsp = require('haskell-tools.lsp')
-  M.lsp = lsp
+  ht.lsp = lsp
   local hoogle = require('haskell-tools.hoogle')
-  M.hoogle = hoogle
+  ht.hoogle = hoogle
   local repl = require('haskell-tools.repl')
-  M.repl = repl
+  ht.repl = repl
   local project = require('haskell-tools.project')
-  M.project = project
+  ht.project = project
   local tags = require('haskell-tools.tags')
-  M.tags = tags
+  ht.tags = tags
 
   config.setup(opts)
   lsp.setup()
@@ -29,4 +29,4 @@ function M.setup(opts)
   tags.setup()
 end
 
-return M
+return ht

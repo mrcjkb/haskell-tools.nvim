@@ -1,9 +1,9 @@
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 
-local M = {}
+local definition = {}
 
-M.setup = function(config)
+definition.setup = function(config)
   local orig_handler = vim.lsp.handlers['textDocument/definition']
   local function mk_hoogle_fallback_definition_handler(opts)
     return function(_, result, ...)
@@ -33,4 +33,4 @@ M.setup = function(config)
   end
 end
 
-return M
+return definition

@@ -1,6 +1,8 @@
 local project_util = require('haskell-tools.project-util')
 local deps = require('haskell-tools.deps')
 
+local project = {}
+
 local function telescope_package_search(callback, opts)
   local file = vim.api.nvim_buf_get_name(0)
   if vim.fn.filewritable(file) == 0 then
@@ -17,34 +19,32 @@ local function telescope_package_search(callback, opts)
   callback(opts)
 end
 
-local M = {}
-
 local commands = {
   {
     'HsPackageYaml',
     function()
-      M.open_package_yaml()
+      project.open_package_yaml()
     end,
     {},
   },
   {
     'HsPackageCabal',
     function()
-      M.open_package_cabal()
+      project.open_package_cabal()
     end,
     {},
   },
   {
     'HsProjectFile',
     function()
-      M.open_project_file()
+      project.open_project_file()
     end,
     {},
   },
 }
 
-function M.setup()
-  function M.open_package_yaml()
+function project.setup()
+  function project.open_package_yaml()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       local result = project_util.get_package_yaml(file)
@@ -56,7 +56,7 @@ function M.setup()
     end)
   end
 
-  function M.open_package_cabal()
+  function project.open_package_cabal()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       if vim.fn.filewritable(file) ~= 0 and project_util.is_cabal_project(file) == nil then
@@ -72,7 +72,7 @@ function M.setup()
     end)
   end
 
-  function M.open_project_file()
+  function project.open_project_file()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
       local project_root = project_util.match_cabal_project_root(file)
@@ -90,11 +90,11 @@ function M.setup()
   end
 
   deps.if_available('telescope.builtin', function(t)
-    function M.telescope_package_grep(opts)
+    function project.telescope_package_grep(opts)
       opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package live grep' }, opts or {})
       telescope_package_search(t.live_grep, opts)
     end
-    function M.telescope_package_files(opts)
+    function project.telescope_package_files(opts)
       opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package file search' }, opts or {})
       telescope_package_search(t.find_files, opts)
     end
@@ -105,4 +105,4 @@ function M.setup()
   end
 end
 
-return M
+return project

@@ -1,7 +1,7 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
-local M = {}
+local lsp = {}
 
 -- GHC can leave behind corrupted files if it does not exit cleanly.
 -- (https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
@@ -58,10 +58,10 @@ local function setup_hover()
   require('haskell-tools.lsp.hover').setup()
 end
 
-function M.setup()
+function lsp.setup()
   setup_lsp()
   setup_definition()
   setup_hover()
 end
 
-return M
+return lsp

@@ -1,6 +1,6 @@
 local deps = require('haskell-tools.deps')
 
-local M = {
+local toggleterm = {
   terminal = nil,
 }
 
@@ -12,11 +12,11 @@ local function is_new_cmd(cmd)
 end
 
 -- @param function(string?): Function for building the repl (string?: file path)
-function M.setup(mk_repl_cmd)
+function toggleterm.setup(mk_repl_cmd)
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
   -- @param string?: Optional path of the file to load into the repl
-  function M.toggle(file)
+  function toggleterm.toggle(file)
     if file and not vim.endswith(file, '.hs') then
       return
     end
@@ -26,31 +26,31 @@ function M.setup(mk_repl_cmd)
       return
     end
     if is_new_cmd(cmd) then
-      M.quit()
+      toggleterm.quit()
     end
-    M.terminal = M.terminal or Terminal:new { cmd = cmd, hidden = true, close_on_exit = true }
-    M.terminal:toggle()
+    toggleterm.terminal = toggleterm.terminal or Terminal:new { cmd = cmd, hidden = true, close_on_exit = true }
+    toggleterm.terminal:toggle()
     last_cmd = cmd
   end
 
   -- Quit the repl
-  function M.quit()
-    if M.terminal ~= nil then
-      M.send_cmd(':q')
-      M.terminal = nil
+  function toggleterm.quit()
+    if toggleterm.terminal ~= nil then
+      toggleterm.send_cmd(':q')
+      toggleterm.terminal = nil
     end
   end
 
   -- Send a command to the repl, followed by <cr>
   -- @param string
   -- @param table?
-  function M.send_cmd(txt, opts)
+  function toggleterm.send_cmd(txt, opts)
     vim.tbl_extend('force', {
       go_back = false,
     }, opts)
-    if M.terminal ~= nil then
-      M.terminal:send(txt, opts.go_back)
+    if toggleterm.terminal ~= nil then
+      toggleterm.terminal:send(txt, opts.go_back)
     end
   end
 end
-return M
+return toggleterm

@@ -3,7 +3,7 @@ local ht = require('haskell-tools')
 local ht_definition = require('haskell-tools.lsp.definition')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
-local M = {}
+local hover = {}
 
 local _state = {
   winnr = nil,
@@ -172,7 +172,7 @@ local function on_hover(_, result, ctx, config)
   return bufnr, winnr
 end
 
-M.setup = function()
+hover.setup = function()
   local orig_buf_hover = vim.lsp.buf.hover
   vim.lsp.buf.hover = function()
     local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
@@ -189,4 +189,4 @@ M.setup = function()
   end
 end
 
-return M
+return hover

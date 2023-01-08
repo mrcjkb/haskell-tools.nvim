@@ -5,24 +5,24 @@ local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
-local M = {
+local hoogle = {
   handler = nil,
 }
 
 local function setup_handler(opts)
   if opts.mode == 'telescope-web' then
-    M.handler = hoogle_web.telescope_search
+    hoogle.handler = hoogle_web.telescope_search
   elseif opts.mode == 'telescope-local' then
-    M.handler = hoogle_local.telescope_search
+    hoogle.handler = hoogle_local.telescope_search
   elseif opts.mode == 'browser' then
-    M.handler = hoogle_web.browser_search
+    hoogle.handler = hoogle_web.browser_search
   elseif opts.mode == 'auto' then
     if not deps.has_telescope() then
-      M.handler = hoogle_web.browser_search
+      hoogle.handler = hoogle_web.browser_search
     elseif hoogle_local.has_hoogle() then
-      M.handler = hoogle_local.telescope_search
+      hoogle.handler = hoogle_local.telescope_search
     else
-      M.handler = hoogle_web.telescope_search
+      hoogle.handler = hoogle_web.telescope_search
     end
   end
 end
@@ -47,7 +47,7 @@ end
 
 -- @param table
 -- @field string?: search_term - an optional search_term to search for
-function M.hoogle_signature(options)
+function hoogle.hoogle_signature(options)
   options = options or {}
   if options.search_term then
     ht.hoogle.handler(options.search_term)
@@ -62,11 +62,11 @@ function M.hoogle_signature(options)
   end
 end
 
-function M.setup()
+function hoogle.setup()
   hoogle_web.setup()
   hoogle_local.setup()
   local opts = ht.config.options.tools.hoogle
   setup_handler(opts)
 end
 
-return M
+return hoogle

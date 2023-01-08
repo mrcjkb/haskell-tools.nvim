@@ -2,7 +2,7 @@ local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local project_util = require('haskell-tools.project-util')
 
-local M = {}
+local tags = {}
 
 local _state = {
   fast_tags_generating = false,
@@ -17,7 +17,7 @@ local function setup_fast_tags(config)
   -- @param opts table?
   -- @field refresh boolean: whether to regenerate the tags if they have already been generated
   -- for the project (default: true)
-  function M.generate_project_tags(path, opts)
+  function tags.generate_project_tags(path, opts)
     path = path or vim.api.nvim_buf_get_name(0)
     opts = vim.tbl_extend('force', { refresh = true }, opts or {})
     local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
@@ -40,7 +40,7 @@ local function setup_fast_tags(config)
     end
   end
 
-  function M.generate_package_tags(path)
+  function tags.generate_package_tags(path)
     path = path or vim.api.nvim_buf_get_name(0)
     _state.fast_tags_generating = true
     local rel_package_root = project_util.match_package_root(path)
@@ -70,7 +70,7 @@ local function setup_fast_tags(config)
     group = vim.api.nvim_create_augroup('haskell-tools-generate-project-tags', {}),
     pattern = { 'haskell' },
     callback = function(meta)
-      M.generate_project_tags(meta.file, { refresh = false })
+      tags.generate_project_tags(meta.file, { refresh = false })
     end,
   })
   vim.api.nvim_create_autocmd(config.package_events, {
@@ -80,16 +80,16 @@ local function setup_fast_tags(config)
       if _state.fast_tags_generating then
         return
       end
-      M.generate_package_tags(meta.file)
+      tags.generate_package_tags(meta.file)
     end,
   })
 end
 
-function M.setup()
+function tags.setup()
   local config = ht.config.options.tools.tags
   if config.enable == true then
     setup_fast_tags(config)
   end
 end
 
-return M
+return tags

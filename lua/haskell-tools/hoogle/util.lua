@@ -8,9 +8,9 @@ local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 -- The telescope search is mostly inspired by telescope_hoogle by Luc Tielen,
 -- but has been redesigned for searching for individual terms.
 -- https://github.com/luc-tielen/telescope_hoogle
-local M = {}
+local hoogle_util = {}
 
-function M.hoogle_attach_mappings(buf, map)
+function hoogle_util.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     -- Copy type signature to clipboard
     local entry = actions_state.get_selected_entry()
@@ -74,7 +74,7 @@ local function get_type_sig(item)
   return item
 end
 
-function M.mk_hoogle_entry(data)
+function hoogle_util.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''
   if not module_name or not type_sig then
@@ -93,7 +93,7 @@ function M.mk_hoogle_entry(data)
   }
 end
 
-function M.merge_telescope_opts(opts)
+function hoogle_util.merge_telescope_opts(opts)
   local default_layout = {
     layout_strategy = 'horizontal',
     layout_config = { preview_width = 80 },
@@ -101,4 +101,4 @@ function M.merge_telescope_opts(opts)
   return vim.tbl_extend('force', default_layout, opts or {})
 end
 
-return M
+return hoogle_util
