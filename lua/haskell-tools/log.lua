@@ -66,28 +66,33 @@ function log.setup()
     return hls_log
   end
 
+  -- Open the haskell-language-server log file
   function log.nvim_open_hls_logfile()
     vim.cmd('e ' .. log.get_hls_logfile())
   end
 
-  local log_levels = vim.deepcopy(vim.log.levels)
-  vim.tbl_add_reverse_lookup(log_levels)
-  if type(opts.level) == 'string' then
-    log.level =
-      assert(log_levels[opts.level:upper()], string.format('haskell-tools: Invalid log level: %q', opts.level))
-  else
-    assert(log_levels[opts.level], string.format('haskell-tools: Invalid log level: %d', opts.level))
-    log.level = opts.level
-  end
-  vim.lsp.set_log_level(log.level)
-  if log.level == vim.log.levels.OFF then
-    return false
-  end
-  for level, levelnr in pairs(vim.log.levels) do
-    if not open_logfile() then
-      return false
+  -- Set the log level
+  -- @param (string | int) the log level
+  -- @see vim.log.levels
+  function log.set_level(level)
+    local log_levels = vim.deepcopy(vim.log.levels)
+    vim.tbl_add_reverse_lookup(log_levels)
+    if type(level) == 'string' then
+      log.level = assert(log_levels[opts.level:upper()], string.format('haskell-tools: Invalid log level: %q', level))
+    else
+      assert(log_levels[opts.level], string.format('haskell-tools: Invalid log level: %d', level))
+      log.level = level
     end
+    vim.lsp.set_log_level(log.level)
+  end
+
+  log.set_level(opts.level)
+
+  for level, levelnr in pairs(vim.log.levels) do
     log[level:lower()] = function(...)
+      if log.level == vim.log.levels.OFF or not open_logfile() then
+        return false
+      end
       local argc = select('#', ...)
       if levelnr < log.level then
         return false
