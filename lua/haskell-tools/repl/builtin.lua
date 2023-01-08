@@ -193,7 +193,11 @@ function builtin.setup(mk_repl_cmd, opts)
     if not repl_is_loaded() then
       return
     end
-    builtin.send_cmd(':q')
+    ht.log.debug('repl.builtin: sending quit to repl.')
+    local success, result = pcall(builtin.send_cmd, ':q')
+    if not success then
+      ht.log.warn { 'repl.builtin: Could not send quit command', result }
+    end
     local winid = vim.fn.bufwinid(repl.bufnr)
     if winid ~= -1 then
       vim.api.nvim_win_close(winid, true)

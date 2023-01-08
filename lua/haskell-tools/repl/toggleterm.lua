@@ -17,6 +17,12 @@ function toggleterm.setup(mk_repl_cmd)
   ht.log.debug('repl.toggleterm setup')
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
+  local function mk_new_terminal(cmd)
+    local opts = { cmd = cmd, hidden = true, close_on_exit = true }
+    ht.log.debug { 'Creating new terminal', opts }
+    return Terminal:new(opts)
+  end
+
   -- @param string?: Optional path of the file to load into the repl
   function toggleterm.toggle(file)
     if file and not vim.endswith(file, '.hs') then
@@ -36,15 +42,25 @@ function toggleterm.setup(mk_repl_cmd)
       ht.log.debug { 'repl.toggleterm: New command', cmd }
       toggleterm.quit()
     end
-    toggleterm.terminal = toggleterm.terminal or Terminal:new { cmd = cmd, hidden = true, close_on_exit = true }
-    toggleterm.terminal:toggle()
+    toggleterm.terminal = toggleterm.terminal or mk_new_terminal(cmd)
+    local function toggle()
+      toggleterm.terminal:toggle()
+    end
+    local success, result = pcall(toggle)
+    if not success then
+      ht.log.error { 'repl.toggleterm: toggle failed', result }
+    end
     last_cmd = cmd
   end
 
   -- Quit the repl
   function toggleterm.quit()
     if toggleterm.terminal ~= nil then
-      toggleterm.send_cmd(':q')
+      ht.log.debug('repl.toggleterm: sending quit to repl.')
+      local success, result = pcall(toggleterm.send_cmd, ':q')
+      if not success then
+        ht.log.warn { 'repl.toggleterm: Could not send quit command', result }
+      end
       toggleterm.terminal = nil
     end
   end
@@ -53,6 +69,7 @@ function toggleterm.setup(mk_repl_cmd)
   -- @param string
   -- @param table?
   function toggleterm.send_cmd(txt, opts)
+    opts = opts or vim.empty_dict()
     vim.tbl_extend('force', {
       go_back = false,
     }, opts)
