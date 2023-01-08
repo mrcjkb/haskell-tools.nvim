@@ -75,7 +75,7 @@ local defaults = {
       package_events = { 'BufWritePost' },
     },
     log = {
-      level = vim.log.levels.DEBUG,
+      level = vim.log.levels.WARN,
     },
   },
   hls = {
