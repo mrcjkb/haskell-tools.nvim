@@ -163,7 +163,7 @@ Start a GHCi repl for the current project / buffer.
 * Automagically detects the appropriate command (`cabal new-repl`, `stack ghci` or `ghci`) for your project.
 * Choose between a builtin handler or [`toggleterm.nvim`](https://github.com/akinsho/toggleterm.nvim).
 * Dynamically create a repl command for [`iron.nvim`](https://github.com/hkupty/iron.nvim) (see [advanced configuration](#advanced-configuration)).
-* Interact with the repl from any buffer using a lua API.
+* Interact with the repl from within Haskell files using a lua API.
 
 [![](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV.svg)](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV)
 
@@ -362,10 +362,10 @@ ht.hoogle.hoogle_signature()
 
 ```lua
 local ht = require('haskell-tools')
--- Toggle a GHCi repl
+-- Toggle a GHCi repl for the current project
 ht.repl.toggle()
 
--- Toggle a GHCi repl for `file`
+-- Toggle a GHCi repl for `file` (must be a Haskell file)
 ht.repl.toggle(file)
 
 -- Quit the repl
