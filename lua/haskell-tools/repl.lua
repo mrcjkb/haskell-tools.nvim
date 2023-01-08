@@ -107,12 +107,12 @@ function repl.setup()
   if opts.handler == 'toggleterm' then
     ht.log.info('repl.handler = toggleterm')
     local toggleterm = require('haskell-tools.repl.toggleterm')
-    toggleterm.setup(repl.mk_repl_cmd)
+    toggleterm.setup(repl.mk_repl_cmd, opts)
     handler = toggleterm
   else
     ht.log.info('repl.handler = builtin')
     local builtin = require('haskell-tools.repl.builtin')
-    builtin.setup(repl.mk_repl_cmd, opts.builtin)
+    builtin.setup(repl.mk_repl_cmd, opts)
     handler = builtin
   end
   -- Toggle a GHCi repl

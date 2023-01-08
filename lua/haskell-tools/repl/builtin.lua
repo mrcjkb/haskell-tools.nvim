@@ -181,10 +181,12 @@ end
 
 -- @param function(string?)
 -- @param table
-function builtin.setup(mk_repl_cmd, opts)
-  ht.log.debug { 'repl.builtin setup', opts }
+function builtin.setup(mk_repl_cmd, options)
+  ht.log.debug { 'repl.builtin setup', options }
+  builtin.go_back = options.auto_focus ~= true
   -- @param string?: Optional path of the file to load into the repl
-  function builtin.toggle(file)
+  function builtin.toggle(file, opts)
+    opts = opts or vim.empty_dict()
     local cur_win = vim.api.nvim_get_current_win()
     if file and not vim.endswith(file, '.hs') then
       local err_msg = 'haskell-tools.repl.builtin: Not a Haskell file: ' .. file
@@ -195,10 +197,12 @@ function builtin.setup(mk_repl_cmd, opts)
     local function mk_repl_cmd_wrapped()
       return mk_repl_cmd(file)
     end
-    local create_or_toggle_callback = opts.create_repl_window(view)
+    local create_or_toggle_callback = options.builtin.create_repl_window(view)
     create_or_toggle_callback(mk_repl_cmd_wrapped)
-    if cur_win ~= -1 then
+    if cur_win ~= -1 and builtin.go_back then
       vim.api.nvim_set_current_win(cur_win)
+    else
+      vim.cmd('startinsert')
     end
   end
 
@@ -226,15 +230,19 @@ function builtin.setup(mk_repl_cmd, opts)
       return
     end
     local cr = '\13'
+    local repl_winid = vim.fn.bufwinid(repl.bufnr)
     local function repl_set_cursor()
-      local winid = vim.fn.bufwinid(repl.bufnr)
-      if winid ~= -1 then
-        vim.api.nvim_win_set_cursor(winid, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
+      if repl_winid ~= -1 then
+        vim.api.nvim_win_set_cursor(repl_winid, { vim.api.nvim_buf_line_count(repl.bufnr), 0 })
       end
     end
     repl_set_cursor()
     vim.api.nvim_chan_send(repl.job_id, txt .. cr)
     repl_set_cursor()
+    if not builtin.go_back then
+      vim.api.nvim_set_current_win(repl_winid)
+      vim.cmd('startinsert')
+    end
   end
 end
 
