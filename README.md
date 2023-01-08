@@ -491,6 +491,12 @@ require('haskell-tools').setup {
 }
 ```
 
+You can also temporarily set the log level by calling
+
+```
+:lua require('haskell-tools').log.set_level(vim.log.levels.DEBUG)
+```
+
 You can find the log files by calling
 
 ```
