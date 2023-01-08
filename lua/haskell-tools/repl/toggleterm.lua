@@ -18,7 +18,20 @@ function toggleterm.setup(mk_repl_cmd)
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
   local function mk_new_terminal(cmd)
-    local opts = { cmd = cmd, hidden = true, close_on_exit = true }
+    local opts = {
+      cmd = cmd,
+      hidden = true,
+      close_on_exit = true,
+      on_stdout = function(_, job, data, name)
+        ht.log.debug { 'Job ' .. job .. ' - stdout', data, name }
+      end,
+      on_stderr = function(_, job, data, name)
+        ht.log.warn { 'Job ' .. job .. ' - stderr', data, name }
+      end,
+      on_exit = function(_, job, exit_code, name)
+        ht.log.debug { 'Job ' .. job .. ' - exit code ' .. exit_code, name }
+      end,
+    }
     ht.log.debug { 'Creating new terminal', opts }
     return Terminal:new(opts)
   end
