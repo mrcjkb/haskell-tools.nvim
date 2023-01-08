@@ -14,7 +14,7 @@ end
 
 -- @param function(string?): Function for building the repl (string?: file path)
 function toggleterm.setup(mk_repl_cmd)
-  ht.debug('repl.toggleterm setup')
+  ht.log.debug('repl.toggleterm setup')
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
   -- @param string?: Optional path of the file to load into the repl
