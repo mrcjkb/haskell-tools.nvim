@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
--- Ability to temporarily set the log level via `ht.log.set_level(level)`.
+- Ability to temporarily set the log level via `ht.log.set_level(level)`.
+### Fixed
+- repl.toggleterm: Do not close on failure.
 
 ## [1.5.1] - 2023-01-08
 ### Fixed
