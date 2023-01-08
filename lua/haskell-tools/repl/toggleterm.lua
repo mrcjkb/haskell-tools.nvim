@@ -21,7 +21,7 @@ function toggleterm.setup(mk_repl_cmd)
     local opts = {
       cmd = cmd,
       hidden = true,
-      close_on_exit = true,
+      close_on_exit = false,
       on_stdout = function(_, job, data, name)
         ht.log.debug { 'Job ' .. job .. ' - stdout', data, name }
       end,
@@ -74,6 +74,7 @@ function toggleterm.setup(mk_repl_cmd)
       if not success then
         ht.log.warn { 'repl.toggleterm: Could not send quit command', result }
       end
+      toggleterm.terminal:close()
       toggleterm.terminal = nil
     end
   end
