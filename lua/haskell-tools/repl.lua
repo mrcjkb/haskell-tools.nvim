@@ -84,7 +84,7 @@ function repl.mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    local cmd = vim.tbl_flatten { 'ghci', file and { file } or {} }
+    local cmd = vim.tbl_flatten { 'ghci', file and { ht_util.quote(file) } or {} }
     ht.log.debug { 'mk_repl_cmd', cmd }
     return cmd
   end
