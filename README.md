@@ -49,7 +49,7 @@ Example using [`packer.nvim`](https://github.com/wbthomason/packer.nvim):
 
 ```lua
 use {
-  'MrcJkb/haskell-tools.nvim',
+  'mrcjkb/haskell-tools.nvim',
   requires = {
     'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',
