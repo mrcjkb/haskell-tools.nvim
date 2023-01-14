@@ -66,6 +66,8 @@ local defaults = {
           return view.create_repl_split { size = vim.o.lines / 3 }
         end,
       },
+      -- Can be overriden to either `true` or `false`. The default behaviour depends on the handler.
+      auto_focus = nil,
     },
     -- Set up autocmds to generate tags (using fast-tags)
     -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags

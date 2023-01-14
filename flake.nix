@@ -36,6 +36,11 @@
       url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
+
+    toggleterm = {
+      url = "github:akinsho/toggleterm.nvim";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {
@@ -61,6 +66,7 @@
         plenary-nvim
         telescope-nvim
         nvim-lspconfig
+        toggleterm
         ;
     };
 

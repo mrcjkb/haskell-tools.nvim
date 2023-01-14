@@ -272,7 +272,8 @@
         "packer-nvim": "packer-nvim",
         "plenary-nvim": "plenary-nvim",
         "pre-commit-hooks": "pre-commit-hooks",
-        "telescope-nvim": "telescope-nvim"
+        "telescope-nvim": "telescope-nvim",
+        "toggleterm": "toggleterm"
       }
     },
     "telescope-nvim": {
@@ -288,6 +289,22 @@
       "original": {
         "owner": "nvim-telescope",
         "repo": "telescope.nvim",
+        "type": "github"
+      }
+    },
+    "toggleterm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673603637,
+        "narHash": "sha256-qsEtCDEy/EsMChZ9Ysv0Z5knKp4sISb2BnSrfWsECR8=",
+        "owner": "akinsho",
+        "repo": "toggleterm.nvim",
+        "rev": "a54e6c471ce1cd8ef8357e34598a28a955297131",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akinsho",
+        "repo": "toggleterm.nvim",
         "type": "github"
       }
     }
