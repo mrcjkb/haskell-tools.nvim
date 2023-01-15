@@ -12,8 +12,8 @@
 
 ---@mod haskell-tools The haskell-tools module
 
----@class ht
----@field config HaskellToolsConfig? The configuration
+---@class HaskellTools
+---@field config HaskellToolsConfig? The configuration module
 ---@field log HaskellToolsLogger? The logging module
 ---@field lsp HaskellToolsLspClient? The LSP module
 ---@field hoogle HaskellToolsHoogle? The Hoogle module
@@ -22,8 +22,7 @@
 ---@field tags HaskellToolsTags? The tags module
 
 ---Entry-point into this plugin's public API.
----
----@type ht
+---@type HaskellTools
 local ht = {
   config = nil,
   log = nil,

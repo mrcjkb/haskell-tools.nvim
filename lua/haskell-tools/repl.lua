@@ -1,10 +1,14 @@
 ---@mod haskell-tools.repl haskell-tools GHCi REPL module
 
+---@bruief [[
+---Tools for interaction with a GHCi REPL
+---@bruief ]]
+
 local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
 local ht_util = require('haskell-tools.util')
 
----@class HaskellToolsRepl Tools for interaction with a GHCi REPL
+---@class HaskellToolsRepl
 ---@field mk_repl_cmd function
 ---@field buf_mk_repl_cmd function
 ---@field setup function
