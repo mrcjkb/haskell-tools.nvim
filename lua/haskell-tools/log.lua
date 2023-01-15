@@ -7,9 +7,11 @@ local ht = require('haskell-tools')
 ---@field info function Log an info message
 ---@field warn function Log a warning message
 ---@field error function Log an error message
----@field set_level function
----@field get_logfile function
----@field nvim_open_logfile function
+---@field set_level function Set the log level
+---@field get_logfile function Get the haskell-tools log file
+---@field nvim_open_logfile function Open the haskell-tools log file
+---@field get_hls_logfile function Get the haskell-language-server log file
+---@field nvim_open_hls_logfile function Open the haskell-language-server log file
 ---@field setup function
 
 ---@type HaskellToolsLogger
@@ -79,6 +81,8 @@ function log.setup()
   local opts = config.options.tools.log
 
   local hls_log = config.hls_log
+
+  --- Get the haskell-language-server log file
   function log.get_hls_logfile()
     return hls_log
   end
