@@ -4,13 +4,13 @@ local ht = require('haskell-tools')
 local project_util = require('haskell-tools.project-util')
 local deps = require('haskell-tools.deps')
 
----@brief[[
+---@brief [[
 --- The following commands are available:
 ---
 --- * `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
 --- * `:HsPackageYaml` - Open the package.yaml file for the current buffer.
 --- * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
----@brief]]
+---@brief ]]
 
 ---@class HaskellToolsProject
 ---@field setup function
