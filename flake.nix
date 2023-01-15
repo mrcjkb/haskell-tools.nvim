@@ -118,9 +118,13 @@
       haskell-tools = shellFor system;
     });
 
-    packages = perSystem (system: rec {
-      default = haskell-tools-nvim;
+    packages = perSystem (system: let
+      pkgs = pkgsFor system;
       haskell-tools-nvim = haskell-tools-nvim-for system;
+      docgen = pkgs.callPackage ./nix/docgen.nix {};
+    in {
+      default = haskell-tools-nvim;
+      inherit docgen haskell-tools-nvim;
     });
 
     checks = perSystem (system: let

@@ -1,8 +1,29 @@
+---@mod haskell-tools.repl haskell-tools GHCi REPL module
+
+---@bruief [[
+---Tools for interaction with a GHCi REPL
+---@bruief ]]
+
 local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
 local ht_util = require('haskell-tools.util')
 
--- Tools for interaction with a ghci repl
+---@class HaskellToolsRepl
+---@field mk_repl_cmd function
+---@field buf_mk_repl_cmd function
+---@field setup function
+---@field handler unknown The internal repl handler
+---@field toggle function
+---@field quit function
+---@field paste function
+---@field paste_type function
+---@field cword_type function
+---@field paste_info function
+---@field cword_info function
+---@field load_file function
+---@field reload function
+
+---@type HaskellToolsRepl
 local repl = {}
 
 -- Extend a repl command for `file`.
@@ -62,10 +83,10 @@ local function mk_stack_repl_cmd(file)
   end)
 end
 
--- Create the command to create a repl for a file.
--- If `file` is `nil`, create a repl the nearest package.
--- @param string | nil: file
--- @return table | nil
+--- Create the command to create a repl for a file.
+--- If `file` is `nil`, create a repl the nearest package.
+--- @param file string? The file to create the repl for
+--- @return table? command
 function repl.mk_repl_cmd(file)
   local chk_path = file
   if not chk_path then
@@ -94,13 +115,14 @@ function repl.mk_repl_cmd(file)
   return nil
 end
 
--- Create the command to create a repl for the current buffer.
--- @return table | nil
+--- Create the command to create a repl for the current buffer.
+--- @return table? command
 function repl.buf_mk_repl_cmd()
   local file = vim.api.nvim_buf_get_name(0)
   return repl.mk_repl_cmd(file)
 end
 
+--- Set up this module. Called by the haskell-tools setup.
 function repl.setup()
   local opts = ht.config.options.tools.repl
   local handler = {}
@@ -115,15 +137,16 @@ function repl.setup()
     builtin.setup(repl.mk_repl_cmd, opts)
     handler = builtin
   end
-  -- Toggle a GHCi repl
-  -- @param string?: optional file path
+
+  --- Toggle a GHCi REPL
+  --- @param filepath string?: optional file path
   repl.toggle = handler.toggle
 
-  -- Quit the repl
+  --- Quit the REPL
   repl.quit = handler.quit
 
-  -- Paste from register `reg` to the repl
-  -- @param string?: register (defaults to '"')
+  --- Paste from register `reg` to the REPL
+  --- @param reg string?: register (defaults to '"')
   function repl.paste(reg)
     local data = vim.fn.getreg(reg or '"')
     if vim.endswith(data, '\n') then
@@ -151,42 +174,40 @@ function repl.setup()
     handler.send_cmd(cmd .. ' ' .. cword)
   end
 
-  -- Query the repl for the type of register `reg`
-  -- @param string?: register (defaults to '"')
+  --- Query the REPL for the type of register `reg`
+  --- @param reg string? register (defaults to '"')
   function repl.paste_type(reg)
     handle_reg(':t', reg)
   end
 
-  -- Query the repl for the type of word under the cursor
-  -- @param string?: register (defaults to '"')
+  --- Query the REPL for the type of word under the cursor
   function repl.cword_type()
     handle_cword(':t')
   end
 
-  -- Query the repl for info on register `reg`
-  -- @param string?: register (defaults to '"')
+  --- Query the REPL for info on register `reg`
+  --- @param reg string? register (defaults to '"')
   function repl.paste_info(reg)
     handle_reg(':i', reg)
   end
 
-  -- Query the repl for the type of word under the cursor
-  -- @param string?: register (defaults to '"')
+  --- Query the REPL for the type of word under the cursor
   function repl.cword_info()
     handle_cword(':i')
   end
 
-  -- Load a file into the repl
-  -- @param string: absolute file path
-  function repl.load_file(file)
-    if vim.fn.filereadable(file) == 0 then
-      local err_msg = 'File: ' .. file .. ' does not exist or is not readable.'
+  --- Load a file into the REPL
+  --- @param filepath string The absolute file path
+  function repl.load_file(filepath)
+    if vim.fn.filereadable(filepath) == 0 then
+      local err_msg = 'File: ' .. filepath .. ' does not exist or is not readable.'
       ht.log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
     end
-    handler.send_cmd(':l ' .. file)
+    handler.send_cmd(':l ' .. filepath)
   end
 
-  -- Reload the repl
+  --- Reload the repl
   function repl.reload()
     handler.send_cmd(':r')
   end

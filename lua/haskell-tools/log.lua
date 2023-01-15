@@ -1,5 +1,20 @@
+---@mod haskell-tools.log haskell-tools Logging
+
 local ht = require('haskell-tools')
 
+---@class HaskellToolsLogger
+---@field debug function Log a debug message
+---@field info function Log an info message
+---@field warn function Log a warning message
+---@field error function Log an error message
+---@field set_level function Set the log level
+---@field get_logfile function Get the haskell-tools log file
+---@field nvim_open_logfile function Open the haskell-tools log file
+---@field get_hls_logfile function Get the haskell-language-server log file
+---@field nvim_open_hls_logfile function Open the haskell-language-server log file
+---@field setup function
+
+---@type HaskellToolsLogger
 local log = {}
 
 local LARGE = 1e9
@@ -14,21 +29,21 @@ local logpath = vim.fn.stdpath('log')
 vim.fn.mkdir(logpath, 'p')
 local logfilename = logpath .. '/haskell-toolls.log'
 
--- Get the haskell-tools.nvim log filename.
--- @return string
+---Get the haskell-tools.nvim log file path.
+---@return string filepath
 function log.get_logfile()
   return logfilename
 end
 
--- Open the haskell-tools.nvim log file.
+---Open the haskell-tools.nvim log file.
 function log.nvim_open_logfile()
   vim.cmd('e ' .. log.get_logfile())
 end
 
 local logfile, openerr
--- @private
--- Opens log file. Returns true if file is open, false on error
--- @return boolean
+--- @private
+--- Opens log file. Returns true if file is open, false on error
+--- @return boolean
 local function open_logfile()
   -- Try to open file only once
   if logfile then
@@ -57,11 +72,17 @@ local function open_logfile()
   return true
 end
 
+---Set up the log module. Called by the haskell-tools setup.
 function log.setup()
   local config = ht.config
+  if not config then
+    error('haskell-tools.setup() has not been called.')
+  end
   local opts = config.options.tools.log
 
   local hls_log = config.hls_log
+
+  --- Get the haskell-language-server log file
   function log.get_hls_logfile()
     return hls_log
   end
@@ -71,9 +92,9 @@ function log.setup()
     vim.cmd('e ' .. log.get_hls_logfile())
   end
 
-  -- Set the log level
-  -- @param (string | int) the log level
-  -- @see vim.log.levels
+  --- Set the log level
+  --- @param level (string|integer) The log level
+  --- @see vim.log.levels
   function log.set_level(level)
     local log_levels = vim.deepcopy(vim.log.levels)
     vim.tbl_add_reverse_lookup(log_levels)

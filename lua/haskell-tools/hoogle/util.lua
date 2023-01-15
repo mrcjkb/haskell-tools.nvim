@@ -1,3 +1,12 @@
+---@mod haskell-tools.hoogle.util
+
+---@brief [[
+
+---WARNING: This is not part of the public API.
+---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
+
+---@brief ]]
+
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 local actions = deps.require_telescope('telescope.actions')

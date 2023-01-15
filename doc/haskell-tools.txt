@@ -1,0 +1,386 @@
+==============================================================================
+Table of Contents                                       *haskell-tools.contents*
+
+Introduction ··························································· |intro|
+The haskell-tools module ······································· |haskell-tools|
+haskell-tools configuration ····························· |haskell-tools.config|
+haskell-tools LSP client setup ····························· |haskell-tools.lsp|
+haskell-tools Hoogle search ····························· |haskell-tools.hoogle|
+haskell-tools GHCi REPL module ···························· |haskell-tools.repl|
+haskell-tools Project module ··························· |haskell-tools.project|
+haskell-tools fast-tags module ···························· |haskell-tools.tags|
+haskell-tools Logging ······································ |haskell-tools.log|
+
+==============================================================================
+Introduction                                                             *intro*
+
+This plugin automatically configures the `haskell-language-server` builtin LSP client
+and integrates with other haskell tools.
+
+Warning:
+Do not call the `lspconfig.hls` setup or set up the lsp manually,
+as doing so may cause conflicts.
+
+
+==============================================================================
+The haskell-tools module                                         *haskell-tools*
+
+HaskellTools                                                      *HaskellTools*
+
+    Fields: ~
+        {config}  (HaskellToolsConfig)
+
+
+ht.setup()                                                            *ht.setup*
+
+    See: ~
+        |haskell-tools.config for the default configuration.|
+        |lspconfig-keybindings for suggested keybindings by `nvim-lspconfig`.|
+
+
+==============================================================================
+haskell-tools configuration                               *haskell-tools.config*
+
+HaskellToolsConfig                                          *HaskellToolsConfig*
+
+    Fields: ~
+        {hls_log}   (string)    The path to the haskell-language-server log file
+        {defaults}  (HTOpts)    The default configuration options
+        {options}   (HTOpts)    The configuration options as applied by `setup()`
+        {setup}     (function)
+
+
+HTOpts                                                                  *HTOpts*
+
+    Fields: ~
+        {tools}  (ToolsOpts)             haskell-tools plugin options
+        {hls}    (HaskellLspClientOpts)  haskell-language-server client options
+
+
+ToolsOpts                                                            *ToolsOpts*
+
+    Fields: ~
+        {codeLens}    (CodeLensOpts)    LSP client codeLens options
+        {hoogle}      (HoogleOpts)      Hoogle options
+        {hover}       (HoverOpts)       LSP client hover options
+        {definition}  (DefinitionOpts)  LSP client definition options
+        {repl}        (ReplOpts)        GHCi REPL options
+        {tags}        (FastTagsOpts)    Options for generating tags using fast-tags
+        {log}         (HTLogOpts)       Logging options
+
+
+CodeLensOpts                                                      *CodeLensOpts*
+
+    Fields: ~
+        {autoRefresh}  (boolean)  (default: `true`) Whether to auto-refresh code-lenses
+
+
+HoogleOpts                                                          *HoogleOpts*
+
+    Fields: ~
+        {mode}  (string)  'auto', 'telescope-local', 'telescope-web' or 'browser'
+
+
+HoverOpts                                                            *HoverOpts*
+
+    Fields: ~
+        {disable}  (boolean)  (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+        {border}   (table)
+
+
+DefinitionOpts                                                  *DefinitionOpts*
+
+    Fields: ~
+        {hoogle_signature_fallback}  (boolean)  (default:`false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
+
+
+ReplOpts                                                              *ReplOpts*
+
+    Fields: ~
+        {handler}     (string)   'builtin': Use the simple builtin repl. 'toggleterm': Use akinsho/toggleterm.nvim
+        {builtin}     (table)    Configuration for the builtin repl
+        {auto_focus}  (boolean)  @field builtin.create_repl_window function<ReplView> How to create the repl window
+
+
+ReplView                                                              *ReplView*
+
+    Fields: ~
+        {create_repl_split}    (function)  Create the REPL in a horizontally split window
+        {create_repl_vsplit}   (function)  Create the REPL in a vertically split window
+        {create_repl_tabnew}   (function)  Create the REPL in a new tab
+        {create_repl_cur_win}  (function)  Create the REPL in the current window
+
+
+FastTagsOpts                                                      *FastTagsOpts*
+
+    Fields: ~
+        {enable}          (boolean)  Enabled by default if the `fast-tags` executable is found
+        {package_events}  (table)    autocmd Events to trigger package tag generation
+
+
+HTLogOpts                                                            *HTLogOpts*
+
+    Fields: ~
+        {level}  (integer|string)  The log level
+
+    See: ~
+        |vim.log.levels|
+
+
+HaskellLspClientOpts                                      *HaskellLspClientOpts*
+
+    Fields: ~
+        {debug}         (boolean)   Whether to enable debug logging
+        {on_attach}     (function)  Callback to execute when the client attaches to a buffer
+        {cmd}           (table)     The command to start the server with
+        {filetypes}     (table)     List of file types to attach the client to
+        {capabilities}  (table)     LSP client capabilities
+        {settings}      (table)     The server config
+
+    See: ~
+        |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
+
+
+config.defaults                                                *config.defaults*
+
+    Type: ~
+        (HTOpts)
+
+
+config.options                                                  *config.options*
+
+    Type: ~
+        (HTOpts)
+
+
+config.setup()                                                    *config.setup*
+
+
+==============================================================================
+haskell-tools LSP client setup                               *haskell-tools.lsp*
+
+HaskellToolsLspClient                                    *HaskellToolsLspClient*
+
+    Fields: ~
+        {setup}  (function)
+
+
+lsp.setup()                                                          *lsp.setup*
+     Setup the LSP client. Called by the haskell-tools setup.
+
+
+==============================================================================
+haskell-tools Hoogle search                               *haskell-tools.hoogle*
+
+HaskellToolsHoogle                                          *HaskellToolsHoogle*
+
+    Fields: ~
+        {hoogle_signature}  (function)  Hoogle search for a symbol's type signature
+        {setup}             (function)
+        {handler}           (unknown)   The internal handler
+
+
+hoogle.hoogle_signature()                              *hoogle.hoogle_signature*
+     @param options table? Includes the `search_term` and options to pass to the telescope picker (if available)
+
+
+hoogle.setup()                                                    *hoogle.setup*
+     Setup the Hoogle module. Called by the haskell-tools setup.
+
+
+==============================================================================
+haskell-tools GHCi REPL module                              *haskell-tools.repl*
+
+HaskellToolsRepl                                              *HaskellToolsRepl*
+
+    Fields: ~
+        {mk_repl_cmd}      (function)
+        {buf_mk_repl_cmd}  (function)
+        {setup}            (function)
+        {handler}          (unknown)   The internal repl handler
+        {toggle}           (function)
+        {quit}             (function)
+        {paste}            (function)
+        {paste_type}       (function)
+        {cword_type}       (function)
+        {paste_info}       (function)
+        {cword_info}       (function)
+        {load_file}        (function)
+        {reload}           (function)
+
+
+repl.mk_repl_cmd()                                            *repl.mk_repl_cmd*
+     Create the command to create a repl for a file.
+     If `file` is `nil`, create a repl the nearest package.
+     @param file string? The file to create the repl for
+     @return table? command
+
+
+repl.buf_mk_repl_cmd()                                    *repl.buf_mk_repl_cmd*
+     Create the command to create a repl for the current buffer.
+     @return table? command
+
+
+repl.setup()                                                        *repl.setup*
+     Set up this module. Called by the haskell-tools setup.
+
+
+repl.paste()                                                        *repl.paste*
+     Paste from register `reg` to the REPL
+     @param reg string?: register (defaults to '"')
+
+
+repl.paste_type()                                              *repl.paste_type*
+     Query the REPL for the type of register `reg`
+     @param reg string? register (defaults to '"')
+
+
+repl.cword_type()                                              *repl.cword_type*
+     Query the REPL for the type of word under the cursor
+
+
+repl.paste_info()                                              *repl.paste_info*
+     Query the REPL for info on register `reg`
+     @param reg string? register (defaults to '"')
+
+
+repl.cword_info()                                              *repl.cword_info*
+     Query the REPL for the type of word under the cursor
+
+
+repl.load_file()                                                *repl.load_file*
+     Load a file into the REPL
+     @param filepath string The absolute file path
+
+
+repl.reload()                                                      *repl.reload*
+     Reload the repl
+
+
+==============================================================================
+haskell-tools Project module                             *haskell-tools.project*
+
+ The following commands are available:
+
+ * `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
+ * `:HsPackageYaml` - Open the package.yaml file for the current buffer.
+ * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
+
+HaskellToolsProject                                        *HaskellToolsProject*
+
+    Fields: ~
+        {setup}                   (function)
+        {open_package_yaml}       (function)
+        {open_package_cabal}      (function)
+        {open_project_file}       (function)
+        {telescope_package_grep}  (function)
+
+
+project.setup()                                                  *project.setup*
+     Set up this module. Called by the haskell-tools setup.
+
+
+project.open_package_yaml()                          *project.open_package_yaml*
+     Open the package.yaml of the package containing the current buffer.
+
+
+project.open_package_cabal()                        *project.open_package_cabal*
+     Open the *.cabal file of the package containing the current buffer.
+
+
+project.open_project_file()                          *project.open_project_file*
+     Open the current buffer's project file (cabal.project or stack.yaml).
+
+
+project.telescope_package_grep({opts})          *project.telescope_package_grep*
+     Live grep the current package with Telescope.
+     Available if nvim-telescope/telescope.nvim is installed.
+
+    Parameters: ~
+        {opts}  (table)  Telescope options
+
+
+project.telescope_package_files({opts})        *project.telescope_package_files*
+     Find file in the current package with Telescope
+     Available if nvim-telescope/telescope.nvim is installed.
+
+    Parameters: ~
+        {opts}  (table)  Telescope options
+
+
+==============================================================================
+haskell-tools fast-tags module                              *haskell-tools.tags*
+
+HaskellToolsTags                                              *HaskellToolsTags*
+
+    Fields: ~
+        {generate_project_tags}  (function)
+
+
+GenerateProjectTagsOpts                                *GenerateProjectTagsOpts*
+
+    Fields: ~
+        {refresh}  (boolean)  Whether to refresh the tags if they have already been generated
+
+
+tags.generate_project_tags()                        *tags.generate_project_tags*
+     for the project (default: true)
+     Generates tags for the current project
+     @param path string? File path
+     @param opts GenerateProjectTagsOpts? Options
+
+
+tags.generate_package_tags()                        *tags.generate_package_tags*
+
+
+tags.setup()                                                        *tags.setup*
+     Setup the tags module. Called by the haskell-tools setup.
+
+
+==============================================================================
+haskell-tools Logging                                        *haskell-tools.log*
+
+HaskellToolsLogger                                          *HaskellToolsLogger*
+
+    Fields: ~
+        {debug}                  (function)  Log a debug message
+        {info}                   (function)  Log an info message
+        {warn}                   (function)  Log a warning message
+        {error}                  (function)  Log an error message
+        {set_level}              (function)  Set the log level
+        {get_logfile}            (function)  Get the haskell-tools log file
+        {nvim_open_logfile}      (function)  Open the haskell-tools log file
+        {get_hls_logfile}        (function)  Get the haskell-language-server log file
+        {nvim_open_hls_logfile}  (function)  Open the haskell-language-server log file
+        {setup}                  (function)
+
+
+log.get_logfile()                                              *log.get_logfile*
+    Get the haskell-tools.nvim log file path.
+
+    Returns: ~
+        (string)  filepath
+
+
+log.nvim_open_logfile()                                  *log.nvim_open_logfile*
+    Open the haskell-tools.nvim log file.
+
+
+log.setup()                                                          *log.setup*
+    Set up the log module. Called by the haskell-tools setup.
+
+
+log.get_hls_logfile()                                      *log.get_hls_logfile*
+     Get the haskell-language-server log file
+
+
+log.nvim_open_hls_logfile()                          *log.nvim_open_hls_logfile*
+
+
+log.set_level()                                                  *log.set_level*
+     Set the log level
+     @param level (string|integer) The log level
+     @see vim.log.levels
+
+
+vim:tw=78:ts=8:noet:ft=help:norl:

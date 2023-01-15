@@ -1,3 +1,5 @@
+---@mod haskell-tools.hoogle haskell-tools Hoogle search
+
 local ht = require('haskell-tools')
 local hoogle_web = require('haskell-tools.hoogle.web')
 local hoogle_local = require('haskell-tools.hoogle.local')
@@ -5,6 +7,12 @@ local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
+---@class HaskellToolsHoogle
+---@field hoogle_signature function Hoogle search for a symbol's type signature
+---@field setup function
+---@field handler unknown The internal handler
+
+---@type HaskellToolsHoogle
 local hoogle = {
   handler = nil,
 }
@@ -61,8 +69,7 @@ local function lsp_hoogle_signature(options)
   return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
--- @param table
--- @field string?: search_term - an optional search_term to search for
+--- @param options table? Includes the `search_term` and options to pass to the telescope picker (if available)
 function hoogle.hoogle_signature(options)
   options = options or {}
   ht.log.debug { 'Hoogle signature search options', options }
@@ -80,6 +87,7 @@ function hoogle.hoogle_signature(options)
   end
 end
 
+--- Setup the Hoogle module. Called by the haskell-tools setup.
 function hoogle.setup()
   ht.log.debug('Hoogle setup...')
   hoogle_web.setup()

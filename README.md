@@ -66,7 +66,7 @@ It is also available on `nixpkgs`.
 
 ## Quick Setup
 
-This plugin automatically configures the `haskell-language-server` neovim client and integrates with other haskell tools.
+This plugin automatically configures the `haskell-language-server` builtin LSP client and integrates with other haskell tools.
 See the [Features](#features) section for more info.
 
 > :warning:

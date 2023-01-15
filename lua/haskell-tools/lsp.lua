@@ -1,6 +1,12 @@
+---@mod haskell-tools.lsp haskell-tools LSP client setup
+
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
+---@class HaskellToolsLspClient
+---@field setup function
+
+---@type HaskellToolsLspClient
 local lsp = {}
 
 -- GHC can leave behind corrupted files if it does not exit cleanly.
@@ -61,6 +67,7 @@ local function setup_hover()
   require('haskell-tools.lsp.hover').setup()
 end
 
+--- Setup the LSP client. Called by the haskell-tools setup.
 function lsp.setup()
   setup_lsp()
   setup_definition()
