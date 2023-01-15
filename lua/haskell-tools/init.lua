@@ -12,7 +12,7 @@
 
 ---@mod haskell-tools The haskell-tools module
 
----@class haskell-tools
+---@class ht
 ---@field config HaskellToolsConfig? The configuration
 ---@field log HaskellToolsLogger? The logging module
 ---@field lsp HaskellToolsLspClient? The LSP module
@@ -23,7 +23,7 @@
 
 ---Entry-point into this plugin's public API.
 ---
----@type haskell-tools
+---@type ht
 local ht = {
   config = nil,
   log = nil,
