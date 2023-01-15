@@ -97,7 +97,6 @@
     shellFor = system: let
       pkgs = pkgsFor system;
       pre-commit-check = pre-commit-check-for system;
-      docgen = pkgs.callPackage ./nix/docgen.nix {};
     in
       pkgs.mkShell {
         name = "haskell-tools.nvim-shell";
@@ -106,7 +105,6 @@
           zlib
           alejandra
           stylua
-          docgen
         ];
       };
   in {
@@ -120,9 +118,13 @@
       haskell-tools = shellFor system;
     });
 
-    packages = perSystem (system: rec {
-      default = haskell-tools-nvim;
+    packages = perSystem (system: let
+      pkgs = pkgsFor system;
       haskell-tools-nvim = haskell-tools-nvim-for system;
+      docgen = pkgs.callPackage ./nix/docgen.nix {};
+    in {
+      default = haskell-tools-nvim;
+      inherit docgen haskell-tools-nvim;
     });
 
     checks = perSystem (system: let
