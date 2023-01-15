@@ -10,7 +10,7 @@
 ---
 ---@brief ]]
 
----@mod mod.haskell-tools haskell-tools
+---@mod mod.haskell-tools The haskell-tools module
 
 ---@class haskell-tools
 ---@field config table? The configuration
@@ -37,7 +37,7 @@ local ht = {
 ---Sets up the plugin.
 ---Must be called before using this plugin's API.
 ---
----@param opts table? the plugin configuration.
+---@param opts HTOpts? the plugin configuration.
 ---@usage [[
 ---local ht = require('haskell-tools')
 ---local def_opts = { noremap = true, silent = true, }

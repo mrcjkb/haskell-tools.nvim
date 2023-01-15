@@ -1,8 +1,84 @@
----@mod mod.haskell-tools.config haskell-tools.config
+---@mod mod.haskell-tools.config haskell-tools configuration
+
+---@class HaskellToolsConfig
+---@field hls_log string The path to the haskell-language-server log file
+---@field defaults HTOpts The default configuration options
+---@field options HTOpts The configuration options as applied by `setup()`
+
+---@class HTOpts haskell-tools configuration options
+---@field tools ToolsOpts haskell-tools plugin options
+---@field hls HaskellLspClientOpts haskell-language-server client options
+
+---@class ToolsOpts haskell-tools plugin options
+---@field codeLens CodeLensOpts LSP client codeLens options
+---@field hoogle HoogleOpts Hoogle options
+---@field hover HoverOpts LSP client hover options
+---@field definition DefinitionOpts LSP client definition options
+---@field repl ReplOpts GHCi REPL options
+---@field tags FastTagsOpts Options for generating tags using fast-tags
+---@field log HTLogOpts Logging options
+
+---@class CodeLensOpts LSP client codeLens options
+---@field autoRefresh boolean (default: `true`) Whether to auto-refresh code-lenses
+
+---@class HoogleOpts Hoogle options
+---@field mode string
+--- 'auto': Choose a mode automatically, based on what is available.
+--- 'telescope-local': Force use of a local installation.
+--- 'telescope-web': The online version (depends on curl).
+--- 'browser': Open hoogle search in the default browser.
+
+---@class HoverOpts LSP client hover options
+---@field disable boolean (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+---@field border table? The hover window's border. Set to `nil` to disable.
+---@field stylize_markdown boolean (default: `false`)
+--- The builtin LSP client's default behaviour is to stylize markdown.
+--- Setting this option to false sets the file type to markdown and enables
+--- Treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
+---@field auto_focus boolean (default: `false`) Whether to automatically switch to the hover window
+
+---@class DefinitionOpts LSP client definition options
+---@field hoogle_signature_fallback boolean (default:`false`) Configure `vim.lsp.definition` to fall back to hoogle search
+--- (does not affect `vim.lsp.tagfunc`)
+
+---@class ReplOpts GHCi REPL options
+---@field handler string
+--- 'builtin': Use the simple builtin repl
+--- 'toggleterm': Use akinsho/toggleterm.nvim
+---@field builtin table Configuration for the builtin repl
+---@field builtin.create_repl_window function How to create the repl window.
+--- Options:
+--- `function(view) create_repl_split(view) end`
+--- `function(view) create_repl_vsplit(view) end`
+--- `function(view) create_repl_tabnew(view) end`
+--- `function(view) create_repl_cur_win(view) end`
+---@field auto_focus boolean? Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
+
+---@class FastTagsOpts Set up autocmds to generate tags (using fast-tags)
+--- so that `vim.lsp.tagfunc` can fall back to Haskell tags
+---@field enable boolean Enabled by default if the `fast-tags` executable is found
+---@field package_events table autocmd Events to trigger package tag generation
+
+---@class HTLogOpts Logging options
+---@field level integer|string The log level
+---@see vim.log.levels
+
+---@class HaskellLspClientOpts haskell-language-server client options
+---@field debug boolean Whether to enable debug logging
+---@field on_attach function Callback to execute when the client attaches to a buffer
+---@field cmd table The command to start the server with
+---@field filetypes table List of file types to attach the client to
+---@field capabilities table LSP client capabilities
+---@field settings table The server config
+---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
+---To print all options that are available for your haskell-language-server version,
+---run `haskell-language-server-wrapper generate-default-config`
 
 local deps = require('haskell-tools.deps')
 
+---@type HaskellToolsConfig
 local config = {
+  -- TODO: (breaking) Move to log options
   hls_log = vim.fn.stdpath('log') .. '/' .. 'haskell-language-server.log',
 }
 
@@ -15,27 +91,21 @@ local selection_range_capabilities = deps.if_available('lsp-selection-range', fu
 end, {})
 local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities, selection_range_capabilities)
 
+---@type HTOpts
 config.defaults = {
-  -- haskell-language-server config
+  ---@type ToolsOpts
   tools = {
+    ---@type CodeLensOpts
     codeLens = {
-      -- Whether to automatically display/refresh codeLenses
       autoRefresh = true,
     },
+    ---@type HoogleOpts
     hoogle = {
-      -- 'auto': Choose a mode automatically, based on what is available.
-      -- 'telescope-local': Force use of a local installation.
-      -- 'telescope-web': The online version (depends on curl).
-      -- 'browser': Open hoogle search in the default browser.
       mode = 'auto',
-      -- -- TODO: Fall back to a hoogle search if goToDefinition fails
-      -- goToDefinitionFallback = false,
     },
-    -- Hover with actions
+    ---@type HoverOpts
     hover = {
-      -- Whether to disable haskell-tools hover and use the builtin lsp's default handler
       disable = false,
-      -- Set to nil to disable
       border = {
         { '╭', 'FloatBorder' },
         { '─', 'FloatBorder' },
@@ -46,21 +116,15 @@ config.defaults = {
         { '╰', 'FloatBorder' },
         { '│', 'FloatBorder' },
       },
-      -- Stylize markdown (the builtin lsp's default behaviour).
-      -- Setting this option to false sets the file type to markdown and enables
-      -- Treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
       stylize_markdown = false,
-      -- Whether to automatically switch to the hover window
       auto_focus = false,
     },
+    ---@type DefinitionOpts
     definition = {
-      -- Configure vim.lsp.definition to fall back to hoogle search
-      -- (does not affect vim.lsp.tagfunc)
       hoogle_signature_fallback = false,
     },
+    ---@type ReplOpts
     repl = {
-      -- 'builtin': Use the simple builtin repl
-      -- 'toggleterm': Use akinsho/toggleterm.nvim
       handler = 'builtin',
       builtin = {
         create_repl_window = function(view)
@@ -68,20 +132,19 @@ config.defaults = {
           return view.create_repl_split { size = vim.o.lines / 3 }
         end,
       },
-      -- Can be overriden to either `true` or `false`. The default behaviour depends on the handler.
       auto_focus = nil,
     },
-    -- Set up autocmds to generate tags (using fast-tags)
-    -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
+    ---@type FastTagsOpts
     tags = {
       enable = vim.fn.executable('fast-tags') == 1,
-      -- Events to trigger package tag generation
       package_events = { 'BufWritePost' },
     },
+    ---@type HTLogOpts
     log = {
       level = vim.log.levels.WARN,
     },
   },
+  ---@type HaskellLspClientOpts
   hls = {
     debug = false,
     on_attach = function(...) end,
@@ -183,14 +246,16 @@ config.defaults = {
   },
 }
 
+---@type HTOpts
 config.options = {
   hls = {},
 }
 
+---@param opts HTOpts?
 function config.setup(opts)
   config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})
   if config.options.hls.debug then
-    table.insert(config.option.hls.cmd, '--debug')
+    table.insert(config.options.hls.cmd, '--debug')
   end
 end
 
