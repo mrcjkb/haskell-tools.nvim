@@ -13,7 +13,7 @@
 ---@mod haskell-tools The haskell-tools module
 
 ---@class haskell-tools
----@field config table? The configuration
+---@field config HaskellToolsConfig? The configuration
 ---@field log table? The logging module
 ---@field lsp table? The LSP module
 ---@field hoogle table? The Hoogle module
