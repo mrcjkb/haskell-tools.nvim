@@ -1,3 +1,5 @@
+---@toc haskell-tools.contents
+
 ---@mod intro Introduction
 
 ---@brief [[
