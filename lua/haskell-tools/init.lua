@@ -17,8 +17,8 @@
 ---@field log HaskellToolsLogger? The logging module
 ---@field lsp HaskellToolsLspClient? The LSP module
 ---@field hoogle HaskellToolsHoogle? The Hoogle module
----@field repl table? The GHCi repl module
----@field project table? The project module
+---@field repl HaskellToolsRepl? The GHCi repl module
+---@field project HaskellToolsProject? The project module
 ---@field tags table? The tags module
 
 ---Entry-point into this plugin's public API.

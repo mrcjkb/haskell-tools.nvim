@@ -193,18 +193,19 @@ end
 function builtin.setup(mk_repl_cmd, options)
   ht.log.debug { 'repl.builtin setup', options }
   builtin.go_back = options.auto_focus ~= true
-  -- @param string?: Optional path of the file to load into the repl
-  function builtin.toggle(file, opts)
+  ---@param filepath string path of the file to load into the repl
+  ---@param opts table?
+  function builtin.toggle(filepath, opts)
     opts = opts or vim.empty_dict()
     local cur_win = vim.api.nvim_get_current_win()
-    if file and not vim.endswith(file, '.hs') then
-      local err_msg = 'haskell-tools.repl.builtin: Not a Haskell file: ' .. file
+    if filepath and not vim.endswith(filepath, '.hs') then
+      local err_msg = 'haskell-tools.repl.builtin: Not a Haskell file: ' .. filepath
       ht.log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
     local function mk_repl_cmd_wrapped()
-      return mk_repl_cmd(file)
+      return mk_repl_cmd(filepath)
     end
     local create_or_toggle_callback = options.builtin.create_repl_window(view)
     create_or_toggle_callback(mk_repl_cmd_wrapped)

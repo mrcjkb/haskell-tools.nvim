@@ -51,16 +51,16 @@ function toggleterm.setup(mk_repl_cmd, opts)
     return Terminal:new(terminal_opts)
   end
 
-  -- @param string?: Optional path of the file to load into the repl
-  function toggleterm.toggle(file)
+  --- @param filepath string? Path of the file to load into the repl
+  function toggleterm.toggle(filepath, _)
     opts = opts or vim.empty_dict()
-    if file and not vim.endswith(file, '.hs') then
-      local err_msg = 'haskell-tools.repl.toggleterm: Not a Haskell file: ' .. file
+    if filepath and not vim.endswith(filepath, '.hs') then
+      local err_msg = 'haskell-tools.repl.toggleterm: Not a Haskell file: ' .. filepath
       ht.log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
-    local cmd = table.concat(mk_repl_cmd(file) or {}, ' ')
+    local cmd = table.concat(mk_repl_cmd(filepath) or {}, ' ')
     if cmd == '' then
       local err_msg = 'haskell-tools.repl.toggleterm: Could not create a repl command.'
       ht.log.error(err_msg)
