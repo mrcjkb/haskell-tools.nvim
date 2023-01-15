@@ -4,6 +4,7 @@
 ---@field hls_log string The path to the haskell-language-server log file
 ---@field defaults HTOpts The default configuration options
 ---@field options HTOpts The configuration options as applied by `setup()`
+---@field setup function
 
 ---@class HTOpts haskell-tools configuration options
 ---@field tools ToolsOpts haskell-tools plugin options
@@ -251,6 +252,7 @@ config.options = {
   hls = {},
 }
 
+---Set the options of this plugin
 ---@param opts HTOpts?
 function config.setup(opts)
   config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})
