@@ -1,3 +1,5 @@
+---@mod mod.haskell-tools.config haskell-tools.config
+
 local deps = require('haskell-tools.deps')
 
 local config = {
@@ -13,7 +15,7 @@ local selection_range_capabilities = deps.if_available('lsp-selection-range', fu
 end, {})
 local capabilities = vim.tbl_deep_extend('keep', ht_capabilities, cmp_capabilities, selection_range_capabilities)
 
-local defaults = {
+config.defaults = {
   -- haskell-language-server config
   tools = {
     codeLens = {
@@ -186,7 +188,7 @@ config.options = {
 }
 
 function config.setup(opts)
-  config.options = vim.tbl_deep_extend('force', {}, defaults, opts or {})
+  config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})
   if config.options.hls.debug then
     table.insert(config.option.hls.cmd, '--debug')
   end
