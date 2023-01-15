@@ -19,7 +19,7 @@
 ---@field hoogle HaskellToolsHoogle? The Hoogle module
 ---@field repl HaskellToolsRepl? The GHCi repl module
 ---@field project HaskellToolsProject? The project module
----@field tags table? The tags module
+---@field tags HaskellToolsTags? The tags module
 
 ---Entry-point into this plugin's public API.
 ---
