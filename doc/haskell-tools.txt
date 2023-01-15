@@ -12,7 +12,7 @@ as doing so may cause conflicts.
 ==============================================================================
 The haskell-tools module                                         *haskell-tools*
 
-ht                                                                          *ht*
+HaskellTools                                                      *HaskellTools*
 
     Fields: ~
         {config}  (HaskellToolsConfig)
@@ -39,23 +39,54 @@ HaskellToolsConfig                                          *HaskellToolsConfig*
 
 HTOpts                                                                  *HTOpts*
 
+    Fields: ~
+        {tools}  (ToolsOpts)             haskell-tools plugin options
+        {hls}    (HaskellLspClientOpts)  haskell-language-server client options
+
 
 ToolsOpts                                                            *ToolsOpts*
+
+    Fields: ~
+        {codeLens}    (CodeLensOpts)    LSP client codeLens options
+        {hoogle}      (HoogleOpts)      Hoogle options
+        {hover}       (HoverOpts)       LSP client hover options
+        {definition}  (DefinitionOpts)  LSP client definition options
+        {repl}        (ReplOpts)        GHCi REPL options
+        {tags}        (FastTagsOpts)    Options for generating tags using fast-tags
+        {log}         (HTLogOpts)       Logging options
 
 
 CodeLensOpts                                                      *CodeLensOpts*
 
+    Fields: ~
+        {autoRefresh}  (boolean)  (default: `true`) Whether to auto-refresh code-lenses
+
 
 HoogleOpts                                                          *HoogleOpts*
+
+    Fields: ~
+        {mode}  (string)  'auto', 'telescope-local', 'telescope-web' or 'browser'
 
 
 HoverOpts                                                            *HoverOpts*
 
+    Fields: ~
+        {disable}  (boolean)  (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+        {border}   (table)
+
 
 DefinitionOpts                                                  *DefinitionOpts*
 
+    Fields: ~
+        {hoogle_signature_fallback}  (boolean)  (default:`false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
+
 
 ReplOpts                                                              *ReplOpts*
+
+    Fields: ~
+        {handler}     (string)   'builtin': Use the simple builtin repl. 'toggleterm': Use akinsho/toggleterm.nvim
+        {builtin}     (table)    Configuration for the builtin repl
+        {auto_focus}  (boolean)  @field builtin.create_repl_window function<ReplView> How to create the repl window
 
 
 ReplView                                                              *ReplView*
@@ -69,11 +100,32 @@ ReplView                                                              *ReplView*
 
 FastTagsOpts                                                      *FastTagsOpts*
 
+    Fields: ~
+        {enable}          (boolean)  Enabled by default if the `fast-tags` executable is found
+        {package_events}  (table)    autocmd Events to trigger package tag generation
+
 
 HTLogOpts                                                            *HTLogOpts*
 
+    Fields: ~
+        {level}  (integer|string)  The log level
+
+    See: ~
+        |vim.log.levels|
+
 
 HaskellLspClientOpts                                      *HaskellLspClientOpts*
+
+    Fields: ~
+        {debug}         (boolean)   Whether to enable debug logging
+        {on_attach}     (function)  Callback to execute when the client attaches to a buffer
+        {cmd}           (table)     The command to start the server with
+        {filetypes}     (table)     List of file types to attach the client to
+        {capabilities}  (table)     LSP client capabilities
+        {settings}      (table)     The server config
+
+    See: ~
+        |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
 
 
 config.defaults                                                *config.defaults*
@@ -112,7 +164,7 @@ HaskellToolsHoogle                                          *HaskellToolsHoogle*
     Fields: ~
         {hoogle_signature}  (function)  Hoogle search for a symbol's type signature
         {setup}             (function)
-        {handler}           (unknown)   the internal handler
+        {handler}           (unknown)   The internal handler
 
 
 hoogle.hoogle_signature()                              *hoogle.hoogle_signature*
@@ -127,6 +179,21 @@ hoogle.setup()                                                    *hoogle.setup*
 haskell-tools GHCi REPL module                              *haskell-tools.repl*
 
 HaskellToolsRepl                                              *HaskellToolsRepl*
+
+    Fields: ~
+        {mk_repl_cmd}      (function)
+        {buf_mk_repl_cmd}  (function)
+        {setup}            (function)
+        {handler}          (unknown)   The internal repl handler
+        {toggle}           (function)
+        {quit}             (function)
+        {paste}            (function)
+        {paste_type}       (function)
+        {cword_type}       (function)
+        {paste_info}       (function)
+        {cword_info}       (function)
+        {load_file}        (function)
+        {reload}           (function)
 
 
 repl.mk_repl_cmd()                                            *repl.mk_repl_cmd*
