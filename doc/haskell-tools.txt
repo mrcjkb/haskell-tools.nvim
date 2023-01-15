@@ -1,4 +1,17 @@
 ==============================================================================
+Table of Contents                                       *haskell-tools.contents*
+
+Introduction ··························································· |intro|
+The haskell-tools module ······································· |haskell-tools|
+haskell-tools configuration ····························· |haskell-tools.config|
+haskell-tools LSP client setup ····························· |haskell-tools.lsp|
+haskell-tools Hoogle search ····························· |haskell-tools.hoogle|
+haskell-tools GHCi REPL module ···························· |haskell-tools.repl|
+haskell-tools Project module ··························· |haskell-tools.project|
+haskell-tools fast-tags module ···························· |haskell-tools.tags|
+haskell-tools Logging ······································ |haskell-tools.log|
+
+==============================================================================
 Introduction                                                             *intro*
 
 This plugin automatically configures the `haskell-language-server` builtin LSP client
