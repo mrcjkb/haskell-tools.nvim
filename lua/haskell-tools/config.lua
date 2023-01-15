@@ -1,4 +1,4 @@
----@mod mod.haskell-tools.config haskell-tools configuration
+---@mod haskell-tools.config haskell-tools configuration
 
 ---@class HaskellToolsConfig
 ---@field hls_log string The path to the haskell-language-server log file

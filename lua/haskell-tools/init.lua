@@ -1,4 +1,4 @@
----@mod mod.into Introduction
+---@mod intro Introduction
 
 ---@brief [[
 ---This plugin automatically configures the `haskell-language-server` builtin LSP client
@@ -10,7 +10,7 @@
 ---
 ---@brief ]]
 
----@mod mod.haskell-tools The haskell-tools module
+---@mod haskell-tools The haskell-tools module
 
 ---@class haskell-tools
 ---@field config table? The configuration

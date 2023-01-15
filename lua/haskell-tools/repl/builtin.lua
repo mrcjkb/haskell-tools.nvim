@@ -1,3 +1,12 @@
+---@mod haskell-tools.repl.builtin
+
+---@brief [[
+
+---WARNING: This is not part of the public API.
+---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
+
+---@brief ]]
+
 local ht = require('haskell-tools')
 
 -- Utility functions for the ghci repl module.
