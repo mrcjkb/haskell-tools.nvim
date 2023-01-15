@@ -1,3 +1,29 @@
+---@mod mod.into Introduction
+
+---@brief [[
+---This plugin automatically configures the `haskell-language-server` builtin LSP client
+---and integrates with other haskell tools.
+---
+---Warning:
+---Do not call the `lspconfig.hls` setup or set up the lsp manually,
+---as doing so may cause conflicts.
+---
+---@brief ]]
+
+---@mod mod.haskell-tools haskell-tools
+
+---@class haskell-tools
+---@field config table? The configuration
+---@field log table? The logging module
+---@field lsp table? The LSP module
+---@field hoogle table? The Hoogle module
+---@field repl table? The GHCi repl module
+---@field project table? The project module
+---@field tags table? The tags module
+
+---Entry-point into this plugin's public API.
+---
+---@type haskell-tools
 local ht = {
   config = nil,
   log = nil,
@@ -8,6 +34,23 @@ local ht = {
   tags = nil,
 }
 
+---Sets up the plugin.
+---Must be called before using this plugin's API.
+---
+---@param opts table? the plugin configuration.
+---@usage [[
+---local ht = require('haskell-tools')
+---local def_opts = { noremap = true, silent = true, }
+---ht.setup {
+---   hls = {
+---     on_attach = function(client, bufnr)
+---       --- Set keybindings, etc. here.
+---     end,
+---   },
+--- }
+---@usage ]]
+---@see haskell-tools.config for the default configuration.
+---@see lspconfig-keybindings for suggested keybindings by `nvim-lspconfig`.
 function ht.setup(opts)
   local config = require('haskell-tools.config')
   ht.config = config
