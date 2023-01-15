@@ -16,7 +16,7 @@
 ---@field config HaskellToolsConfig? The configuration
 ---@field log HaskellToolsLogger? The logging module
 ---@field lsp HaskellToolsLspClient? The LSP module
----@field hoogle table? The Hoogle module
+---@field hoogle HaskellToolsHoogle? The Hoogle module
 ---@field repl table? The GHCi repl module
 ---@field project table? The project module
 ---@field tags table? The tags module

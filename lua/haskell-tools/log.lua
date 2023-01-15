@@ -70,7 +70,7 @@ local function open_logfile()
   return true
 end
 
----Set up the log module
+---Set up the log module. Called by the haskell-tools setup.
 function log.setup()
   local config = ht.config
   if not config then

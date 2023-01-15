@@ -252,7 +252,7 @@ config.options = {
   hls = {},
 }
 
----Set the options of this plugin
+---Set the options of this plugin. Called by the haskell-tools setup.
 ---@param opts HTOpts?
 function config.setup(opts)
   config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})

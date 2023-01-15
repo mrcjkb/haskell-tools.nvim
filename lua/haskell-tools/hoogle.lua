@@ -10,6 +10,7 @@ local lsp_util = vim.lsp.util
 ---@class HaskellToolsHoogle
 ---@field hoogle_signature function Hoogle search for a symbol's type signature
 ---@field setup function
+---@field handler unknown the internal handler
 
 ---@type HaskellToolsHoogle
 local hoogle = {
@@ -86,7 +87,7 @@ function hoogle.hoogle_signature(options)
   end
 end
 
---- Setup the Hoogle module
+--- Setup the Hoogle module. Called by the haskell-tools setup.
 function hoogle.setup()
   ht.log.debug('Hoogle setup...')
   hoogle_web.setup()

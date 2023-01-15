@@ -1,7 +1,18 @@
+---@mod haskell-tools.project haskell-tools Project module
+
 local ht = require('haskell-tools')
 local project_util = require('haskell-tools.project-util')
 local deps = require('haskell-tools.deps')
 
+---@class HaskellToolsProject
+---@field setup function
+---@field open_package_yaml function
+---@field open_package_cabal function
+---@field open_project_file function
+---@field telescope_package_grep function?
+---@field telescope_package_files function?
+
+---@type HaskellToolsProject
 local project = {}
 
 local function telescope_package_search(callback, opts)
@@ -50,8 +61,11 @@ local commands = {
   },
 }
 
+--- Set up this module. Called by the haskell-tools setup.
 function project.setup()
   ht.log.debug('project.setup')
+
+  --- Open the package.yaml of the package containing the current buffer.
   function project.open_package_yaml()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
@@ -66,6 +80,7 @@ function project.setup()
     end)
   end
 
+  --- Open the *.cabal file of the package containing the current buffer.
   function project.open_package_cabal()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
@@ -83,6 +98,7 @@ function project.setup()
     end)
   end
 
+  --- Open the current buffer's project file (cabal.project or stack.yaml).
   function project.open_project_file()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
@@ -103,16 +119,23 @@ function project.setup()
   end
 
   deps.if_available('telescope.builtin', function(t)
+    --- Live grep the current package with Telescope.
+    --- Available if nvim-telescope/telescope.nvim is installed.
+    ---@param opts table Telescope options
     function project.telescope_package_grep(opts)
       opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package live grep' }, opts or {})
       telescope_package_search(t.live_grep, opts)
     end
+    --- Find file in the current package with Telescope
+    --- Available if nvim-telescope/telescope.nvim is installed.
+    ---@param opts table Telescope options
     function project.telescope_package_files(opts)
       opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'Package file search' }, opts or {})
       telescope_package_search(t.find_files, opts)
     end
   end)
 
+  --- Available if nvim-telescope/telescope.nvim is installed.
   for _, command in ipairs(commands) do
     vim.api.nvim_create_user_command(unpack(command))
   end

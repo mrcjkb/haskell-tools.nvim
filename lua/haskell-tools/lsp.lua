@@ -67,7 +67,7 @@ local function setup_hover()
   require('haskell-tools.lsp.hover').setup()
 end
 
---- Setup the LSP client
+--- Setup the LSP client. Called by the haskell-tools setup.
 function lsp.setup()
   setup_lsp()
   setup_definition()
