@@ -177,7 +177,6 @@ HaskellToolsHoogle                                          *HaskellToolsHoogle*
     Fields: ~
         {hoogle_signature}  (function)  Hoogle search for a symbol's type signature
         {setup}             (function)
-        {handler}           (unknown)   The internal handler
 
 
 hoogle.hoogle_signature()                              *hoogle.hoogle_signature*
@@ -197,7 +196,6 @@ HaskellToolsRepl                                              *HaskellToolsRepl*
         {mk_repl_cmd}      (function)
         {buf_mk_repl_cmd}  (function)
         {setup}            (function)
-        {handler}          (unknown)   The internal repl handler
         {toggle}           (function)
         {quit}             (function)
         {paste}            (function)
