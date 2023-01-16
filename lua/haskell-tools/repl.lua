@@ -12,7 +12,6 @@ local ht_util = require('haskell-tools.util')
 ---@field mk_repl_cmd function
 ---@field buf_mk_repl_cmd function
 ---@field setup function
----@field handler unknown The internal repl handler
 ---@field toggle function
 ---@field quit function
 ---@field paste function
@@ -127,12 +126,12 @@ function repl.setup()
   local opts = ht.config.options.tools.repl
   local handler = {}
   if opts.handler == 'toggleterm' then
-    ht.log.info('repl.handler = toggleterm')
+    ht.log.info('handler = toggleterm')
     local toggleterm = require('haskell-tools.repl.toggleterm')
     toggleterm.setup(repl.mk_repl_cmd, opts)
     handler = toggleterm
   else
-    ht.log.info('repl.handler = builtin')
+    ht.log.info('handler = builtin')
     local builtin = require('haskell-tools.repl.builtin')
     builtin.setup(repl.mk_repl_cmd, opts)
     handler = builtin
