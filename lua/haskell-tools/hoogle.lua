@@ -10,26 +10,25 @@ local lsp_util = vim.lsp.util
 ---@class HaskellToolsHoogle
 ---@field hoogle_signature function Hoogle search for a symbol's type signature
 ---@field setup function
----@field handler unknown The internal handler
+
+local handler = function(...) end
 
 ---@type HaskellToolsHoogle
-local hoogle = {
-  handler = nil,
-}
+local hoogle = {}
 
 local function set_web_handler()
-  hoogle.handler = hoogle_web.telescope_search
-  ht.log.debug('hoogle.handler = telescope-web')
+  handler = hoogle_web.telescope_search
+  ht.log.debug('handler = telescope-web')
 end
 
 local function set_local_handler()
-  hoogle.handler = hoogle_local.telescope_search
-  ht.log.debug('hoogle.handler = telescope-local')
+  handler = hoogle_local.telescope_search
+  ht.log.debug('handler = telescope-local')
 end
 
 local function set_browser_handler()
-  hoogle.handler = hoogle_web.browser_search
-  ht.log.debug('hoogle.handler = browser')
+  handler = hoogle_web.browser_search
+  ht.log.debug('handler = browser')
 end
 
 local function setup_handler(opts)
@@ -59,7 +58,7 @@ local function mk_lsp_hoogle_signature_handler(options)
     local signature = ht_util.get_signature_from_markdown(result.contents.value)
     ht.log.debug { 'Hoogle LSP signature search', signature }
     if signature and signature ~= '' then
-      ht.hoogle.handler(signature, options)
+      handler(signature, options)
     end
   end
 end
@@ -74,7 +73,7 @@ function hoogle.hoogle_signature(options)
   options = options or {}
   ht.log.debug { 'Hoogle signature search options', options }
   if options.search_term then
-    ht.hoogle.handler(options.search_term)
+    handler(options.search_term)
     return
   end
   local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
@@ -83,7 +82,7 @@ function hoogle.hoogle_signature(options)
   else
     ht.log.debug('Hoogle signature search: No clients attached. Falling back to <cword>.')
     local cword = vim.fn.expand('<cword>')
-    ht.hoogle.handler(cword, options)
+    handler(cword, options)
   end
 end
 
