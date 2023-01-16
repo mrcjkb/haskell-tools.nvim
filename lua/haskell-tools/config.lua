@@ -137,7 +137,7 @@ config.defaults = {
   ---@type HaskellLspClientOpts
   hls = {
     debug = false,
-    on_attach = function(...) end,
+    on_attach = function(_, _) end,
     cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', config.hls_log },
     filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = capabilities,

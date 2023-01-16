@@ -67,6 +67,7 @@
     test-overlay = import ./nix/test-overlay.nix {
       inherit
         (inputs)
+        self
         packer-nvim
         plenary-nvim
         telescope-nvim
@@ -105,6 +106,7 @@
           zlib
           alejandra
           stylua
+          lua51Packages.luacheck
         ];
       };
   in {
@@ -139,6 +141,7 @@
       formatting = pre-commit-check-for system;
       inherit
         (checkPkgs)
+        lints
         haskell-tools-test
         haskell-tools-test-no-telescope
         haskell-tools-test-no-telescope-with-hoogle

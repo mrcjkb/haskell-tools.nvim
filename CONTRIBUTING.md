@@ -10,9 +10,11 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/en/
 
 ## Development
 
-I use [`nix`](https://nixos.org/download.html#download-nix) for development and testing.
+I use
 
-Formatting is done with [`stylua`](https://github.com/JohnnyMorganz/StyLua).
+* [`nix`](https://nixos.org/download.html#download-nix) for development and testing.
+* [`stylua`](https://github.com/JohnnyMorganz/StyLua) for formatting.
+* [`luacheck`](https://github.com/mpeterv/luacheck) and [`sumneko-lua-language-server`](https://github.com/sumneko/lua-language-server/wiki/Diagnosis-Report#create-a-report) for linting.
 
 To enter a development shell:
 
