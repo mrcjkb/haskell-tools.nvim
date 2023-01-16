@@ -223,6 +223,11 @@ repl.setup()                                                        *repl.setup*
      Set up this module. Called by the haskell-tools setup.
 
 
+repl.toggle()                                                      *repl.toggle*
+     Toggle a GHCi REPL
+     @param filepath string?: optional file path
+
+
 repl.paste()                                                        *repl.paste*
      Paste from register `reg` to the REPL
      @param reg string?: register (defaults to '"')
