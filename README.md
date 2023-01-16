@@ -522,7 +522,6 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 * [telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle): Live Hoogle search.
 * [telescope-manix](https://github.com/MrcJkb/telescope-manix): Nix search.
 * [nvim-lint](https://github.com/mfussenegger/nvim-lint): As a fallback in case there are problems with haskell-language-server (e.g. in large mono repos).
-* [scout](https://github.com/aloussase/scout): CLI for searching Hackage with telescope.nvim integration.
 * [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter): For syntax highlighting, and much more.
 * [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects): For TreeSitter-based textobjects.
 
