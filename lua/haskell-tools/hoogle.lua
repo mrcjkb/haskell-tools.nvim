@@ -11,7 +11,7 @@ local lsp_util = vim.lsp.util
 ---@field hoogle_signature function Hoogle search for a symbol's type signature
 ---@field setup function
 
-local handler = function(...) end
+local handler = function(_, _) end
 
 ---@type HaskellToolsHoogle
 local hoogle = {}

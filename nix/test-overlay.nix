@@ -1,4 +1,5 @@
 {
+  self,
   packer-nvim,
   plenary-nvim,
   nvim-lspconfig,
@@ -8,6 +9,48 @@
 with final.lib;
 with final.lib.strings;
 with final.stdenv; let
+  lints = mkDerivation {
+    name = "haskell-tools-lints";
+
+    src = self;
+
+    phases = [
+      "unpackPhase"
+      "buildPhase"
+      "checkPhase"
+    ];
+
+    doCheck = true;
+
+    buildInputs = with final; [
+      lua51Packages.luacheck
+      sumneko-lua-language-server
+    ];
+
+    buildPhase = ''
+      mkdir -p $out
+      cp -r lua $out/lua
+      cp -r tests $out/tests
+      cp .luacheckrc $out
+      cp .luarc.json $out
+    '';
+
+    checkPhase = ''
+      export HOME=$(realpath .)
+      cd $out
+      luacheck lua
+      luacheck tests
+      lua-language-server --check "$out/lua" \
+        --configpath "$out/.luarc.json" \
+        --logpath "$out" \
+        --checklevel="Warning"
+      if [[ -f $out/check.json ]]; then
+        cat $out/check.json
+        exit 1
+      fi
+    '';
+  };
+
   nvim-nightly = final.neovim-nightly;
 
   mkPlenaryTest = {
@@ -53,6 +96,8 @@ with final.stdenv; let
       '';
     };
 in {
+  inherit lints;
+
   haskell-tools-test = mkPlenaryTest {name = "haskell-tools";};
 
   haskell-tools-test-no-telescope = mkPlenaryTest {

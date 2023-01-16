@@ -124,7 +124,7 @@ end
 --- Set up this module. Called by the haskell-tools setup.
 function repl.setup()
   local opts = ht.config.options.tools.repl
-  local handler = {}
+  local handler
   if opts.handler == 'toggleterm' then
     ht.log.info('handler = toggleterm')
     local toggleterm = require('haskell-tools.repl.toggleterm')
@@ -139,7 +139,9 @@ function repl.setup()
 
   --- Toggle a GHCi REPL
   --- @param filepath string?: optional file path
-  repl.toggle = handler.toggle
+  function repl.toggle(filepath, ...)
+    handler.toggle(filepath, ...)
+  end
 
   --- Quit the REPL
   repl.quit = handler.quit
