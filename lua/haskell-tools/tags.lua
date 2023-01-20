@@ -1,8 +1,8 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
 ---@class HaskellToolsTags
----@field generate_project_tags function?
----@field generate_package_tags function?
+---@field generate_project_tags (fun(path:string?, opts:GenerateProjectTagsOpts?):nil)?
+---@field generate_package_tags (fun(path:string?):nil)?
 ---@field setup function?
 
 local ht = require('haskell-tools')
@@ -17,6 +17,7 @@ local _state = {
   projects = {},
 }
 
+---@param config FastTagsOpts
 local function setup_fast_tags(config)
   local Job = deps.require_plenary('plenary.job')
 
@@ -24,9 +25,9 @@ local function setup_fast_tags(config)
   ---@field refresh boolean Whether to refresh the tags if they have already been generated
   --- for the project (default: true)
 
-  --- Generates tags for the current project
-  --- @param path string? File path
-  --- @param opts GenerateProjectTagsOpts? Options
+  ---Generates tags for the current project
+  ---@param path string? File path
+  ---@param opts GenerateProjectTagsOpts? Options
   function tags.generate_project_tags(path, opts)
     path = path or vim.api.nvim_buf_get_name(0)
     opts = vim.tbl_extend('force', { refresh = true }, opts or {})
@@ -53,7 +54,7 @@ local function setup_fast_tags(config)
     end
   end
 
-  --- Generate tags for the package containing `path`
+  ---Generate tags for the package containing `path`
   ---@param path string? File path
   function tags.generate_package_tags(path)
     path = path or vim.api.nvim_buf_get_name(0)
@@ -109,7 +110,7 @@ local function setup_fast_tags(config)
   })
 end
 
---- Setup the tags module. Called by the haskell-tools setup.
+---Setup the tags module. Called by the haskell-tools setup.
 function tags.setup()
   ht.log.debug('tags.setup')
   local config = ht.config.options.tools.tags

@@ -4,7 +4,7 @@
 ---@field hls_log string The path to the haskell-language-server log file
 ---@field defaults HTOpts The default configuration options
 ---@field options HTOpts The configuration options as applied by `setup()`
----@field setup function<HTOpts?>
+---@field setup fun(HTOpts?):nil
 
 ---@class HTOpts
 ---@field tools ToolsOpts haskell-tools plugin options
@@ -37,14 +37,18 @@
 ---@class ReplOpts
 ---@field handler string 'builtin': Use the simple builtin repl. 'toggleterm': Use akinsho/toggleterm.nvim
 ---@field builtin table Configuration for the builtin repl
----@field builtin.create_repl_window function<ReplView> How to create the repl window
+---@field builtin.create_repl_window fun(ReplView):nil How to create the repl window
 ---@field auto_focus boolean? Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
 
 ---@class ReplView
----@field create_repl_split function Create the REPL in a horizontally split window
----@field create_repl_vsplit function Create the REPL in a vertically split window
----@field create_repl_tabnew function Create the REPL in a new tab
----@field create_repl_cur_win function Create the REPL in the current window
+---@field create_repl_split fun(opts:ReplViewOpts?):nil Create the REPL in a horizontally split window
+---@field create_repl_vsplit fun(opts:ReplViewOpts?):nil Create the REPL in a vertically split window
+---@field create_repl_tabnew fun(opts:ReplViewOpts?):nil Create the REPL in a new tab
+---@field create_repl_cur_win fun(opts:ReplViewOpts?):nil Create the REPL in the current window
+
+---@class ReplViewOpts
+---@field delete_buffer_on_exit boolean Whether to delete the buffer when the Repl quits
+---@field size function|number? The size of the window or a function that determines it
 
 ---@class FastTagsOpts
 ---@field enable boolean Enabled by default if the `fast-tags` executable is found
@@ -56,7 +60,7 @@
 
 ---@class HaskellLspClientOpts
 ---@field debug boolean Whether to enable debug logging
----@field on_attach function Callback to execute when the client attaches to a buffer
+---@field on_attach fun(client:number,bufnr:number) Callback to execute when the client attaches to a buffer
 ---@field cmd table The command to start the server with
 ---@field filetypes table List of file types to attach the client to
 ---@field capabilities table LSP client capabilities

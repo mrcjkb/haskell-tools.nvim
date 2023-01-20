@@ -9,28 +9,28 @@ local project = require('haskell-tools.project-util')
 local ht_util = require('haskell-tools.util')
 
 ---@class HaskellToolsRepl
----@field mk_repl_cmd function
----@field buf_mk_repl_cmd function
----@field setup function
----@field toggle function
----@field quit function
----@field paste function
----@field paste_type function
----@field cword_type function
----@field paste_info function
----@field cword_info function
----@field load_file function
----@field reload function
+---@field mk_repl_cmd fun(file:string?):(string[]?)
+---@field buf_mk_repl_cmd fun():(string[]?)
+---@field setup fun():nil
+---@field toggle fun(file:string?):nil
+---@field quit fun():nil
+---@field paste fun(reg:string?):nil
+---@field paste_type fun(reg:string?):nil
+---@field cword_type fun():nil
+---@field paste_info fun(reg:string?):nil
+---@field cword_info fun():nil
+---@field load_file fun(filepath:string?):nil
+---@field reload fun():nil
 
 ---@type HaskellToolsRepl
 local repl = {}
 
--- Extend a repl command for `file`.
--- If `file` is `nil`, create a repl the nearest package.
--- @param cmd: table: the command to extend
--- @param file: string | nil
--- @param on_no_package: function(table) | nil: handler in case no package is found
--- @return table | nil
+---Extend a repl command for `file`.
+---If `file` is `nil`, create a repl the nearest package.
+---@param cmd string[] The command to extend
+---@param file string? An optional project file
+---@param on_no_package (fun(cmd:string[]):nil)? handler in case no package is found
+---@return string[]?
 local function extend_repl_cmd(cmd, file, on_no_package)
   on_no_package = on_no_package or function(_)
     return nil
@@ -64,28 +64,28 @@ local function extend_repl_cmd(cmd, file, on_no_package)
   return cmd
 end
 
--- Create a cabal repl command for `file`.
--- If `file` is `nil`, create a repl the nearest package.
--- @param string | nil: file
--- @return table | nil
+---Create a cabal repl command for `file`.
+---If `file` is `nil`, create a repl the nearest package.
+---@param file string?
+---@return string[]?
 local function mk_cabal_repl_cmd(file)
   return extend_repl_cmd({ 'cabal', 'new-repl' }, file)
 end
 
--- Create a stack repl command for `file`.
--- If `file` is `nil`, create a repl the nearest package.
--- @param string | nil: file
--- @return table | nil
+---Create a stack repl command for `file`.
+---If `file` is `nil`, create a repl the nearest package.
+---@param file string?
+---@return string[]?
 local function mk_stack_repl_cmd(file)
   return extend_repl_cmd({ 'stack', 'ghci' }, ht_util.quote(file), function(cmd)
     return cmd
   end)
 end
 
---- Create the command to create a repl for a file.
---- If `file` is `nil`, create a repl the nearest package.
---- @param file string? The file to create the repl for
---- @return table? command
+---Create the command to create a repl for a file.
+---If `file` is `nil`, create a repl the nearest package.
+---@param file string? The file to create the repl for
+---@return table? command
 function repl.mk_repl_cmd(file)
   local chk_path = file
   if not chk_path then
@@ -114,14 +114,14 @@ function repl.mk_repl_cmd(file)
   return nil
 end
 
---- Create the command to create a repl for the current buffer.
---- @return table? command
+---Create the command to create a repl for the current buffer.
+---@return table? command
 function repl.buf_mk_repl_cmd()
   local file = vim.api.nvim_buf_get_name(0)
   return repl.mk_repl_cmd(file)
 end
 
---- Set up this module. Called by the haskell-tools setup.
+---Set up this module. Called by the haskell-tools setup.
 function repl.setup()
   local opts = ht.config.options.tools.repl
   local handler
@@ -137,17 +137,14 @@ function repl.setup()
     handler = builtin
   end
 
-  --- Toggle a GHCi REPL
-  --- @param filepath string?: optional file path
-  function repl.toggle(filepath, ...)
-    handler.toggle(filepath, ...)
-  end
+  ---Toggle a GHCi REPL
+  repl.toggle = handler.toggle
 
-  --- Quit the REPL
+  ---Quit the REPL
   repl.quit = handler.quit
 
-  --- Paste from register `reg` to the REPL
-  --- @param reg string?: register (defaults to '"')
+  ---Paste from register `reg` to the REPL
+  ---@param reg string?: register (defaults to '"')
   function repl.paste(reg)
     local data = vim.fn.getreg(reg or '"')
     if vim.endswith(data, '\n') then
@@ -175,30 +172,30 @@ function repl.setup()
     handler.send_cmd(cmd .. ' ' .. cword)
   end
 
-  --- Query the REPL for the type of register `reg`
-  --- @param reg string? register (defaults to '"')
+  ---Query the REPL for the type of register `reg`
+  ---@param reg string? register (defaults to '"')
   function repl.paste_type(reg)
     handle_reg(':t', reg)
   end
 
-  --- Query the REPL for the type of word under the cursor
+  ---Query the REPL for the type of word under the cursor
   function repl.cword_type()
     handle_cword(':t')
   end
 
-  --- Query the REPL for info on register `reg`
-  --- @param reg string? register (defaults to '"')
+  ---Query the REPL for info on register `reg`
+  ---@param reg string? register (defaults to '"')
   function repl.paste_info(reg)
     handle_reg(':i', reg)
   end
 
-  --- Query the REPL for the type of word under the cursor
+  ---Query the REPL for the type of word under the cursor
   function repl.cword_info()
     handle_cword(':i')
   end
 
-  --- Load a file into the REPL
-  --- @param filepath string The absolute file path
+  ---Load a file into the REPL
+  ---@param filepath string The absolute file path
   function repl.load_file(filepath)
     if vim.fn.filereadable(filepath) == 0 then
       local err_msg = 'File: ' .. filepath .. ' does not exist or is not readable.'
@@ -208,7 +205,7 @@ function repl.setup()
     handler.send_cmd(':l ' .. filepath)
   end
 
-  --- Reload the repl
+  ---Reload the repl
   function repl.reload()
     handler.send_cmd(':r')
   end

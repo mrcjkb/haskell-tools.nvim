@@ -4,15 +4,17 @@ local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
 ---@class HaskellToolsLspClient
----@field setup function
+---@field setup fun():nil The LSP client setup. Called by the haskell-tools main setup.
 
 ---@type HaskellToolsLspClient
 local lsp = {}
 
--- GHC can leave behind corrupted files if it does not exit cleanly.
--- (https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
--- To minimise the risk of this occurring, we attempt to shut down hls clnly before exiting neovim.
--- @param client the LSP client
+---GHC can leave behind corrupted files if it does not exit cleanly.
+---(https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
+---To minimise the risk of this occurring, we attempt to shut down hls clnly before exiting neovim.
+---@param client number The LSP client
+---@param bufnr number The buffer number
+---@return nil
 local function ensure_clean_exit_on_quit(client, bufnr)
   vim.api.nvim_create_autocmd('VimLeavePre', {
     group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true }),
@@ -24,6 +26,9 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   })
 end
 
+---@param opts CodeLensOpts
+---@param bufnr number The buffer number
+---@return nil
 local function setup_codeLens(opts, bufnr)
   local function refresh_codeLens()
     vim.schedule(vim.lsp.codelens.refresh)
@@ -38,6 +43,7 @@ local function setup_codeLens(opts, bufnr)
   end
 end
 
+---@return nil
 local function setup_lsp()
   ht.log.debug('Setting up the LSP client...')
   local opts = ht.config.options
@@ -54,11 +60,13 @@ local function setup_lsp()
   lspconfig.hls.setup(hls_opts)
 end
 
+---@return nil
 local function setup_definition()
   local opts = ht.config.options.tools.definition
   require('haskell-tools.lsp.definition').setup(opts or {})
 end
 
+---@return nil
 local function setup_hover()
   local opts = ht.config.options.tools.hover
   if opts.disable then
@@ -67,7 +75,8 @@ local function setup_hover()
   require('haskell-tools.lsp.hover').setup()
 end
 
---- Setup the LSP client. Called by the haskell-tools setup.
+---Setup the LSP client. Called by the haskell-tools setup.
+---@return nil
 function lsp.setup()
   setup_lsp()
   setup_definition()

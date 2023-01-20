@@ -8,29 +8,39 @@ local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
 ---@class HaskellToolsHoogle
----@field hoogle_signature function Hoogle search for a symbol's type signature
----@field setup function
+---@field hoogle_signature fun(opts:table<string,any>?):nil Hoogle search for a symbol's type signature
+---@field setup fun():nil
 
-local handler = function(_, _) end
+local handler = function(_, _)
+  ht.log.error('Hoogle search called without a handler.')
+end
 
 ---@type HaskellToolsHoogle
 local hoogle = {}
 
+---@return nil
 local function set_web_handler()
+  hoogle_web.setup()
   handler = hoogle_web.telescope_search
   ht.log.debug('handler = telescope-web')
 end
 
+---@return nil
 local function set_local_handler()
+  hoogle_local.setup()
   handler = hoogle_local.telescope_search
   ht.log.debug('handler = telescope-local')
 end
 
+---@return nil
 local function set_browser_handler()
+  hoogle_local.setup()
   handler = hoogle_web.browser_search
   ht.log.debug('handler = browser')
 end
 
+---@param opts HoogleOpts
+---@return nil
 local function setup_handler(opts)
   if opts.mode == 'telescope-web' then
     set_web_handler()
@@ -49,26 +59,30 @@ local function setup_handler(opts)
   end
 end
 
+---@param options table
+---@return nil
 local function mk_lsp_hoogle_signature_handler(options)
   return function(_, result, _, _)
     if not (result and result.contents) then
       vim.notify('hoogle: No information available')
       return
     end
-    local signature = ht_util.get_signature_from_markdown(result.contents.value)
+    local signature = ht_util.try_get_signature_from_markdown(result.contents.value)
     ht.log.debug { 'Hoogle LSP signature search', signature }
-    if signature and signature ~= '' then
+    if signature ~= '' then
       handler(signature, options)
     end
   end
 end
 
+---@param options table
 local function lsp_hoogle_signature(options)
   local params = lsp_util.make_position_params()
   return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
---- @param options table? Includes the `search_term` and options to pass to the telescope picker (if available)
+---@param options table<string,any>? Includes the `search_term` and options to pass to the telescope picker (if available)
+---@return nil
 function hoogle.hoogle_signature(options)
   options = options or {}
   ht.log.debug { 'Hoogle signature search options', options }
@@ -86,11 +100,10 @@ function hoogle.hoogle_signature(options)
   end
 end
 
---- Setup the Hoogle module. Called by the haskell-tools setup.
+---Setup the Hoogle module. Called by the haskell-tools setup.
+---@return nil
 function hoogle.setup()
   ht.log.debug('Hoogle setup...')
-  hoogle_web.setup()
-  hoogle_local.setup()
   local opts = ht.config.options.tools.hoogle
   setup_handler(opts)
 end

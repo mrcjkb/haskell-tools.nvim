@@ -1,21 +1,42 @@
--- Inspired by rust-tools.nvim's hover_actions
+---@brief [[
+
+---WARNING: This is not part of the public API.
+---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
+
+--- Inspired by rust-tools.nvim's hover_actions
+---@brief ]]
+
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
+
+---@class HtHoverModule
+
+---@type HtHoverModule
 local hover = {}
 
+---@class HtHoverState
+---@field winnr number? The hover window number
+---@field commands (fun():nil)[] List of hover actions
+
+---@type HtHoverState
 local _state = {
   winnr = nil,
   commands = {},
 }
 
+---@return nil
 local function close_hover()
   local winnr = _state.winnr
   if winnr ~= nil and vim.api.nvim_win_is_valid(winnr) then
     vim.api.nvim_win_close(winnr, true)
+    _state.winnr = nil
+    _state.commands = {}
   end
 end
 
+---Execute the command at the cursor position
+---@retrun nil
 local function run_command()
   local winnr = vim.api.nvim_get_current_win()
   local line = vim.api.nvim_win_get_cursor(winnr)[1]
@@ -28,6 +49,12 @@ local function run_command()
   action()
 end
 
+---LSP handler for textDocument/hover
+---@param result table
+---@param ctx table
+---@param config table?
+---@return number? bufnr
+---@return number? winnr
 local function on_hover(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
@@ -45,7 +72,7 @@ local function on_hover(_, result, ctx, config)
   local to_remove = {}
   local actions = {}
   _state.commands = {}
-  local signature = ht_util.get_signature_from_markdown(result.contents.value)
+  local signature = ht_util.try_get_signature_from_markdown(result.contents.value)
   if signature and signature ~= '' then
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`.', #actions + 1, signature))
     table.insert(_state.commands, function()
