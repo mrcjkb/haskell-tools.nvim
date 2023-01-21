@@ -109,9 +109,9 @@ DefinitionOpts                                                  *DefinitionOpts*
 ReplOpts                                                              *ReplOpts*
 
     Fields: ~
-        {handler}     (string)               `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
-        {builtin}     (BuiltinReplOpts|nil)  Configuration for the builtin repl
-        {auto_focus}  (boolean|nil)          Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
+        {handler}     (string)           `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
+        {builtin}     (BuiltinReplOpts)  Configuration for the builtin repl
+        {auto_focus}  (boolean|nil)      Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
 
 
 BuiltinReplOpts                                                *BuiltinReplOpts*
