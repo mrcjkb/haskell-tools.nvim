@@ -1,0 +1,27 @@
+name: "Release"
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  luarocks-release:
+    runs-on: ubuntu-latest
+    name: LuaRocks upload
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: LuaRocks Upload
+        uses: nvim-neorocks/luarocks-tag-release@v1.0.0
+        env:
+          LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+        with:
+          dependencies: |
+            plenary.nvim
+          copy_directories: |
+            doc
+          detailed_description: |
+            This plugin automatically configures the haskell-language-server builtin LSP client
+            and integrates with other Haskell tools. See the README's #features section
+            for more info.
+

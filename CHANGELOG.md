@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hover actions: Shorten locations relative to file, package or project.
 - Only show definition/typeDefinition hover actions if they are in different locations.
 ### Added
+- Rockspec for automatic dependency management by LoaRocks-compatible plugin managers.
+- LuaRocks tag release worflow.
 - `HlsStart`, `HlsStop` and `HlsRestart` commands.
 - Dynamically load `haskell-language-server` settings JSON from project root, if available.
 - Health checks, runnable with `:checkhealth haskell-tools`.
