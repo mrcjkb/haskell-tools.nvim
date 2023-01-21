@@ -107,6 +107,9 @@
           alejandra
           stylua
           lua51Packages.luacheck
+          luarocks-upload
+          lua51Packages.luarocks
+          lua51Packages.dkjson
         ];
       };
   in {
@@ -124,9 +127,10 @@
       pkgs = pkgsFor system;
       haskell-tools-nvim = haskell-tools-nvim-for system;
       docgen = pkgs.callPackage ./nix/docgen.nix {};
+      luarocks-upload = pkgs.callPackage ./nix/luarocks-upload.nix {inherit self;};
     in {
       default = haskell-tools-nvim;
-      inherit docgen haskell-tools-nvim;
+      inherit docgen luarocks-upload haskell-tools-nvim;
     });
 
     checks = perSystem (system: let

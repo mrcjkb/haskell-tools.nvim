@@ -1,0 +1,19 @@
+name: "Release"
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  luarocks-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3.0.2
+    - uses: cachix/install-nix-action@v17
+    - uses: cachix/cachix-action@v10
+      with:
+        name: mrcjkb
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Luarocks upload
+      env:
+        LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+      run: nix run ".#luarocks-upload"
