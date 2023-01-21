@@ -1,7 +1,4 @@
 ---@mod haskell-tools.telescope-extension haskell-tools Telescope extension
-
-local deps = require('haskell-tools.deps')
-
 ---@brief [[
 --- If `telescope.nvim` is installed, `haskell-tools` will register the `ht` extenstion
 --- with the following commands:
@@ -30,6 +27,8 @@ local deps = require('haskell-tools.deps')
 --- <
 ---
 ---@brief ]]
+
+local deps = require('haskell-tools.deps')
 
 return deps.if_available('telescope', function(telescope)
   local ht_extension = require('telescope._extensions.ht.extension')

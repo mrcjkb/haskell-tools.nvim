@@ -17,12 +17,6 @@ local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
----@class HoogleUtil
----@field hoogle_attach_mappings fun(buf:number, map:function): boolean
----@field merge_telescope_opts fun(opts:table):table
----@field mk_hoogle_entry fun(data:HoogleData):TelescopeHoogleEntry?
-
----@type HoogleUtil
 local hoogle_util = {}
 
 ---@param buf number the telescope buffebuffer numberr
@@ -63,8 +57,8 @@ end
 ---@field valid boolean
 ---@field type_sig string The entry's type signature
 ---@field module_name string The name of the module that contains the entry
----@field url string? The entry's Hackage URL
----@field docs string? The Hoogle entry's documentation
+---@field url string|nil The entry's Hackage URL
+---@field docs string|nil The Hoogle entry's documentation
 ---@field display fun(TelescopeHoogleEntry):TelescopeDisplay
 ---@field ordinal string
 ---@field preview_command fun(TelescopeHoogleEntry, number):nil
@@ -116,16 +110,16 @@ local function get_type_sig(hoogle_item)
 end
 
 ---@class HoogleData
----@field module HoogleModule?
----@field item string?
----@field url string?
----@field docs string?
+---@field module HoogleModule|nil
+---@field item string|nil
+---@field url string|nil
+---@field docs string|nil
 
 ---@class HoogleModule
 ---@field name string
 
 ---@param data HoogleData
----@return TelescopeHoogleEntry?
+---@return TelescopeHoogleEntry|nil
 function hoogle_util.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''

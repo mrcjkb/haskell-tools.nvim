@@ -3,10 +3,6 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
----@class HaskellToolsLspClient
----@field setup fun():nil The LSP client setup. Called by the haskell-tools main setup.
-
----@type HaskellToolsLspClient
 local lsp = {}
 
 ---GHC can leave behind corrupted files if it does not exit cleanly.

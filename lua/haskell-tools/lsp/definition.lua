@@ -10,10 +10,6 @@
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 
----@class HtLspDefinitionModule
----@field setup fun(config:DefinitionOpts):nil
-
----@type HtLspDefinitionModule
 local lsp_definition = {}
 
 ---@param config DefinitionOpts
@@ -21,7 +17,7 @@ lsp_definition.setup = function(config)
   ht.log.debug { 'Definition setup', config }
   local orig_handler = vim.lsp.handlers['textDocument/definition']
 
-  ---@param opts table<string,any>?
+  ---@param opts table<string,any>|nil
   ---@return nil
   local function mk_hoogle_fallback_definition_handler(opts)
     return function(_, result, ...)

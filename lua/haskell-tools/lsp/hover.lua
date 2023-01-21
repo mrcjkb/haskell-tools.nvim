@@ -10,13 +10,10 @@ local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
 
----@class HtHoverModule
-
----@type HtHoverModule
 local hover = {}
 
 ---@class HtHoverState
----@field winnr number? The hover window number
+---@field winnr number|nil The hover window number
 ---@field commands (fun():nil)[] List of hover actions
 
 ---@type HtHoverState
@@ -52,9 +49,9 @@ end
 ---LSP handler for textDocument/hover
 ---@param result table
 ---@param ctx table
----@param config table?
----@return number? bufnr
----@return number? winnr
+---@param config table<string,any>|nil
+---@return number|nil bufnr
+---@return number|nil winnr
 local function on_hover(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
@@ -206,6 +203,7 @@ local function on_hover(_, result, ctx, config)
   return bufnr, winnr
 end
 
+---@return nil
 hover.setup = function()
   local orig_buf_hover = vim.lsp.buf.hover
   vim.lsp.buf.hover = function()

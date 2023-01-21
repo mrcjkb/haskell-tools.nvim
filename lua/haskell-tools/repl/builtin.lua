@@ -10,14 +10,6 @@
 
 local ht = require('haskell-tools')
 
----@class BuiltinReplModule
----@field go_back boolean?
----@field toggle fun(filepath:string,_):nil?
----@field send_cmd fun(cmd:string):nil?
----@field quit fun():nil?
----@field setup fun(mk_repl_cmd:function, options:ReplOpts):nil?
-
----@type BuiltinReplModule
 local builtin = {}
 
 ---@type ReplView

@@ -1,15 +1,9 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
----@class HaskellToolsTags
----@field generate_project_tags (fun(path:string?, opts:GenerateProjectTagsOpts?):nil)?
----@field generate_package_tags (fun(path:string?):nil)?
----@field setup function?
-
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local project_util = require('haskell-tools.project-util')
 
----@type HaskellToolsTags
 local tags = {}
 
 local _state = {
@@ -26,8 +20,8 @@ local function setup_fast_tags(config)
   --- for the project (default: true)
 
   ---Generates tags for the current project
-  ---@param path string? File path
-  ---@param opts GenerateProjectTagsOpts? Options
+  ---@param path string|nil File path
+  ---@param opts GenerateProjectTagsOpts|nil Options
   function tags.generate_project_tags(path, opts)
     path = path or vim.api.nvim_buf_get_name(0)
     opts = vim.tbl_extend('force', { refresh = true }, opts or {})
@@ -55,7 +49,7 @@ local function setup_fast_tags(config)
   end
 
   ---Generate tags for the package containing `path`
-  ---@param path string? File path
+  ---@param path string|nil File path
   function tags.generate_package_tags(path)
     path = path or vim.api.nvim_buf_get_name(0)
     _state.fast_tags_generating = true

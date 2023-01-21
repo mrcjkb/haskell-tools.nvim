@@ -11,12 +11,6 @@ local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
----@class HoogleWeb
----@field browser_search fun(string,TelescopeHoogleWebOpts):nil
----@field telescope_search fun(string,TelescopeHoogleWebOpts):nil
----@field setup fun():nil
-
----@type HoogleWeb
 local hoogle_web = {}
 
 ---@param c string A single character
@@ -36,11 +30,11 @@ local function urlencode(url)
 end
 
 ---@class TelescopeHoogleWebOpts
----@field hoogle HoogleWebSearchOpts?
+---@field hoogle HoogleWebSearchOpts|nil
 
 ---@class HoogleWebSearchOpts
----@field scope string? The scope of the search
----@field json boolean? Whather to request JSON enocded results
+---@field scope string|nil The scope of the search
+---@field json boolean|nil Whather to request JSON enocded results
 
 ---Build a Hoogle request URL
 ---@param search_term string

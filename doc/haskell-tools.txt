@@ -25,30 +25,40 @@ as doing so may cause conflicts.
 ==============================================================================
 The haskell-tools module                                         *haskell-tools*
 
-HaskellTools                                                      *HaskellTools*
+Entry-point into this plugin's public API.
 
-    Fields: ~
-        {config}  (HaskellToolsConfig)
+ht.setup({opts})                                                      *ht.setup*
+    Sets up the plugin.
+    Must be called before using this plugin's API.
 
 
-ht.setup()                                                            *ht.setup*
+    Parameters: ~
+        {opts}  (HTOpts|nil)  The plugin configuration.
 
     See: ~
-        |haskell-tools.config for the default configuration.|
+        |haskell-tools.config for configuration options.|
         |lspconfig-keybindings for suggested keybindings by `nvim-lspconfig`.|
+
+    Usage: ~
+>lua
+        local ht = require('haskell-tools')
+        local def_opts = { noremap = true, silent = true, }
+        ht.setup {
+           tools = {
+           -- ...
+           },
+           hls = {
+             on_attach = function(client, bufnr)
+               -- Set keybindings, etc. here.
+             end,
+             -- ...
+           },
+         }
+<
 
 
 ==============================================================================
 haskell-tools configuration                               *haskell-tools.config*
-
-HaskellToolsConfig                                          *HaskellToolsConfig*
-
-    Fields: ~
-        {hls_log}   (string)                The path to the haskell-language-server log file
-        {defaults}  (HTOpts)                The default configuration options
-        {options}   (HTOpts)                The configuration options as applied by `setup()`
-        {setup}     (fun(HTOpts?:any):nil)
-
 
 HTOpts                                                                  *HTOpts*
 
@@ -78,48 +88,59 @@ CodeLensOpts                                                      *CodeLensOpts*
 HoogleOpts                                                          *HoogleOpts*
 
     Fields: ~
-        {mode}  (string)  'auto', 'telescope-local', 'telescope-web' or 'browser'
+        {mode}  (string)  `'auto'`, `'telescope-local'`, `'telescope-web'` or `'browser'`
 
 
 HoverOpts                                                            *HoverOpts*
 
     Fields: ~
-        {disable}  (boolean)  (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
-        {border}   (table)
+        {disable}           (boolean)    (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+        {border}            (table|nil)  The hover window's border. Set to `nil` to disable.
+        {stylize_markdown}  (boolean)    (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
+        {auto_focus}        (boolean)    (default: `false`) Whether to automatically switch to the hover window
 
 
 DefinitionOpts                                                  *DefinitionOpts*
 
     Fields: ~
-        {hoogle_signature_fallback}  (boolean)  (default:`false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
+        {hoogle_signature_fallback}  (boolean)  (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
 
 
 ReplOpts                                                              *ReplOpts*
 
     Fields: ~
-        {handler}     (string)   'builtin': Use the simple builtin repl. 'toggleterm': Use akinsho/toggleterm.nvim
-        {builtin}     (table)    Configuration for the builtin repl
-        {auto_focus}  (boolean)  @field builtin.create_repl_window fun(ReplView):nil How to create the repl window
+        {handler}     (string)               `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
+        {builtin}     (BuiltinReplOpts|nil)  Configuration for the builtin repl
+        {auto_focus}  (boolean|nil)          Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
+
+
+BuiltinReplOpts                                                *BuiltinReplOpts*
+
+    Fields: ~
+        {create_repl_window}  (fun(view:ReplView):nil)  How to create the repl window
 
 
 ReplView                                                              *ReplView*
 
     Fields: ~
-        {create_repl_split}  (fun)
+        {create_repl_split}    (fun(opts:ReplViewOpts):nil)  Create the REPL in a horizontally split window
+        {create_repl_vsplit}   (fun(opts:ReplViewOpts):nil)  Create the REPL in a vertically split window
+        {create_repl_tabnew}   (fun(opts:ReplViewOpts):nil)  Create the REPL in a new tab
+        {create_repl_cur_win}  (fun(opts:ReplViewOpts):nil)  Create the REPL in the current window
 
 
 ReplViewOpts                                                      *ReplViewOpts*
 
     Fields: ~
-        {delete_buffer_on_exit}  (boolean)          Whether to delete the buffer when the Repl quits
-        {size}                   (function|number)
+        {delete_buffer_on_exit}  (boolean)              Whether to delete the buffer when the Repl quits
+        {size}                   (function|number|nil)  The size of the window or a function that determines it
 
 
 FastTagsOpts                                                      *FastTagsOpts*
 
     Fields: ~
         {enable}          (boolean)  Enabled by default if the `fast-tags` executable is found
-        {package_events}  (table)    autocmd Events to trigger package tag generation
+        {package_events}  (table)    `autocmd` Events to trigger package tag generation
 
 
 HTLogOpts                                                            *HTLogOpts*
@@ -157,17 +178,15 @@ config.options                                                  *config.options*
         (HTOpts)
 
 
-config.setup()                                                    *config.setup*
+config.setup({opts})                                              *config.setup*
+    Set the options of this plugin. Called by the haskell-tools setup.
+
+    Parameters: ~
+        {opts}  (HTOpts|nil)
 
 
 ==============================================================================
 haskell-tools LSP client setup                               *haskell-tools.lsp*
-
-HaskellToolsLspClient                                    *HaskellToolsLspClient*
-
-    Fields: ~
-        {setup}  (fun():nil)  The LSP client setup. Called by the haskell-tools main setup.
-
 
 lsp.setup()                                                          *lsp.setup*
     Setup the LSP client. Called by the haskell-tools setup.
@@ -179,13 +198,10 @@ lsp.setup()                                                          *lsp.setup*
 ==============================================================================
 haskell-tools Hoogle search                               *haskell-tools.hoogle*
 
-HaskellToolsHoogle                                          *HaskellToolsHoogle*
+hoogle.hoogle_signature({options})                     *hoogle.hoogle_signature*
 
-    Fields: ~
-        {hoogle_signature}  (fun)
-
-
-hoogle.hoogle_signature()                              *hoogle.hoogle_signature*
+    Parameters: ~
+        {options}  (table<string,any>|nil)  Includes the `search_term` and options to pass to the telescope picker (if available)
 
     Returns: ~
         (nil)
@@ -201,36 +217,51 @@ hoogle.setup()                                                    *hoogle.setup*
 ==============================================================================
 haskell-tools GHCi REPL module                              *haskell-tools.repl*
 
-HaskellToolsRepl                                              *HaskellToolsRepl*
+repl.mk_repl_cmd({file})                                      *repl.mk_repl_cmd*
+    Create the command to create a repl for a file.
+    If `file` is `nil`, create a repl the nearest package.
 
-    Fields: ~
-        {mk_repl_cmd}  (fun)
+    Parameters: ~
+        {file}  (string|nil)
 
-
-repl.mk_repl_cmd()                                            *repl.mk_repl_cmd*
-    @return table? command
+    Returns: ~
+        (table|nil)  command
 
 
 repl.buf_mk_repl_cmd()                                    *repl.buf_mk_repl_cmd*
     Create the command to create a repl for the current buffer.
-    @return table? command
+
+    Returns: ~
+        (table|nil)  command
 
 
 repl.setup()                                                        *repl.setup*
     Set up this module. Called by the haskell-tools setup.
 
 
-repl.paste()                                                        *repl.paste*
+repl.paste({reg})                                                   *repl.paste*
+    Paste from register `reg` to the REPL
+
+    Parameters: ~
+        {reg}  (string|nil)  register (defaults to '"')
 
 
-repl.paste_type()                                              *repl.paste_type*
+repl.paste_type({reg})                                         *repl.paste_type*
+    Query the REPL for the type of register `reg`
+
+    Parameters: ~
+        {reg}  (string|nil)  register (defaults to '"')
 
 
 repl.cword_type()                                              *repl.cword_type*
     Query the REPL for the type of word under the cursor
 
 
-repl.paste_info()                                              *repl.paste_info*
+repl.paste_info({reg})                                         *repl.paste_info*
+    Query the REPL for info on register `reg`
+
+    Parameters: ~
+        {reg}  (string|nil)  register (defaults to '"')
 
 
 repl.cword_info()                                              *repl.cword_info*
@@ -256,16 +287,6 @@ haskell-tools Project module                             *haskell-tools.project*
  * `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
  * `:HsPackageYaml` - Open the package.yaml file for the current buffer.
  * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
-
-HaskellToolsProject                                        *HaskellToolsProject*
-
-    Fields: ~
-        {setup}                   (fun():nil)
-        {open_package_yaml}       (fun():nil)
-        {open_package_cabal}      (fun():nil)
-        {open_project_file}       (fun():nil)
-        {telescope_package_grep}  (fun(opts:table<string,any>):nil)
-
 
 project.setup()                                                  *project.setup*
     Set up this module. Called by the haskell-tools setup.
@@ -314,22 +335,27 @@ project.telescope_package_files({opts})        *project.telescope_package_files*
 ==============================================================================
 haskell-tools fast-tags module                              *haskell-tools.tags*
 
-HaskellToolsTags                                              *HaskellToolsTags*
-
-    Fields: ~
-        {generate_project_tags}  ()
-
-
 GenerateProjectTagsOpts                                *GenerateProjectTagsOpts*
 
     Fields: ~
         {refresh}  (boolean)  Whether to refresh the tags if they have already been generated
 
 
-tags.generate_project_tags()                        *tags.generate_project_tags*
+                                                    *tags.generate_project_tags*
+tags.generate_project_tags({path}, {opts})
+     for the project (default: true)
+    Generates tags for the current project
+
+    Parameters: ~
+        {path}  (string|nil)                   File path
+        {opts}  (GenerateProjectTagsOpts|nil)  Options
 
 
-tags.generate_package_tags()                        *tags.generate_package_tags*
+tags.generate_package_tags({path})                  *tags.generate_package_tags*
+    Generate tags for the package containing `path`
+
+    Parameters: ~
+        {path}  (string|nil)  File path
 
 
 tags.setup()                                                        *tags.setup*
@@ -338,12 +364,6 @@ tags.setup()                                                        *tags.setup*
 
 ==============================================================================
 haskell-tools Logging                                        *haskell-tools.log*
-
-HaskellToolsLogger                                          *HaskellToolsLogger*
-
-    Fields: ~
-        {debug}  (fun(log:table|string):nil)
-
 
 log.get_logfile()                                              *log.get_logfile*
     Get the haskell-tools.nvim log file path.

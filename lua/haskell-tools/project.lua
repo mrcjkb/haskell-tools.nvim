@@ -12,15 +12,6 @@ local deps = require('haskell-tools.deps')
 --- * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
 ---@brief ]]
 
----@class HaskellToolsProject
----@field setup fun():nil
----@field open_package_yaml fun():nil
----@field open_package_cabal fun():nil
----@field open_project_file fun():nil
----@field telescope_package_grep fun(opts:table<string,any>):nil?
----@field telescope_package_files fun(opts:table<string,any>):nil?
-
----@type HaskellToolsProject
 local project = {}
 
 ---@param callback fun(opts:table<string,any>):nil

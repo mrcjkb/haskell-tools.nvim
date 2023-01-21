@@ -11,16 +11,9 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
----@class ProjectUtil
----@field match_cabal_project_root fun(path:string):(string?)
----@field match_stack_project_root fun(path:string):(string?)
----@field match_project_root fun(path:string):(string?)
----@field match_package_root fun(path:string):(string?)
-
----@type ProjectUtil
 local project_util = {}
 
----@return fun(path:string):(string?)
+---@return fun(path:string):(string|nil)
 local function root_pattern(...)
   local lspconfig_util = deps.require_lspconfig('lspconfig.util')
   return lspconfig_util.root_pattern(...)
@@ -53,7 +46,7 @@ project_util.match_package_root = root_pattern('*.cabal', 'package.yaml')
 
 ---Get the package.yaml for a given path
 ---@param path string
----@return string? package_yaml_path
+---@return string|nil package_yaml_path
 function project_util.get_package_yaml(path)
   local match = root_pattern('package.yaml')
   local dir = match(path)
@@ -62,7 +55,7 @@ end
 
 ---Get the *.cabal for a given path
 ---@param path string
----@return string? cabal_file_path
+---@return string|nil cabal_file_path
 function project_util.get_package_cabal(path)
   local match = root_pattern('*.cabal')
   local dir = match(path)
@@ -79,7 +72,7 @@ end
 
 ---Get the root directory for a given path
 ---@param path string
----@return string? project_root
+---@return string|nil project_root
 function project_util.get_root_dir(path)
   local lspconfig = deps.require_lspconfig('lspconfig')
   local root_dir = lspconfig.hls.get_root_dir(path)
@@ -112,7 +105,7 @@ end
 
 ---Get the package name for a given path
 ---@param path string
----@return string? package_name
+---@return string|nil package_name
 function project_util.get_package_name(path)
   local package_path = project_util.match_package_root(path)
   return package_path and vim.fn.fnamemodify(package_path, ':t')

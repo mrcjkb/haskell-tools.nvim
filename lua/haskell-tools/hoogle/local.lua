@@ -10,12 +10,6 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
----@class LocalHoogleHandler
----@field setup fun():nil
----@field has_hoogle fun():boolean?
----@field telescope_search fun(search_term:string, opts:LocalHoogleOpts):nil?
-
----@type LocalHoogleHandler
 local hoogle_local = {}
 
 ---@return boolean has_hoogle `true` if the `hoogle` executable exists
@@ -29,8 +23,8 @@ function hoogle_local.has_hoogle()
 end
 
 ---@class LocalHoogleOpts
----@field entry_maker function? telescope entry maker
----@field count number? number of results to display
+---@field entry_maker function|nil telescope entry maker
+---@field count number|nil number of results to display
 
 ---Construct the hoogle cli arguments
 ---@param search_term string The Hoogle search term

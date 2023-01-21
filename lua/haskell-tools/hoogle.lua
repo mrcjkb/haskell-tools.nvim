@@ -7,15 +7,10 @@ local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
 
----@class HaskellToolsHoogle
----@field hoogle_signature fun(opts:table<string,any>?):nil Hoogle search for a symbol's type signature
----@field setup fun():nil
-
 local handler = function(_, _)
   ht.log.error('Hoogle search called without a handler.')
 end
 
----@type HaskellToolsHoogle
 local hoogle = {}
 
 ---@return nil
@@ -81,7 +76,7 @@ local function lsp_hoogle_signature(options)
   return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
----@param options table<string,any>? Includes the `search_term` and options to pass to the telescope picker (if available)
+---@param options table<string,any>|nil Includes the `search_term` and options to pass to the telescope picker (if available)
 ---@return nil
 function hoogle.hoogle_signature(options)
   options = options or {}

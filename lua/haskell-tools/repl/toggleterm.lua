@@ -12,15 +12,6 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
----@class ToggleTermRepl
----@field go_back boolean?
----@field quit fun():nil?
----@field send_cmd fun(cmd:string):nil?
----@field setup fun(mk_repl_cmd:function, opts:ReplOpts):nil?
----@field terminal unknown?
----@field toggle fun(filepath:string?,_):nil?
-
----@type ToggleTermRepl
 local toggleterm = {
   terminal = nil,
 }
