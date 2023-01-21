@@ -5,42 +5,47 @@
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
+---Utility functions for the ghci repl module.
 ---@brief ]]
 
 local ht = require('haskell-tools')
 
--- Utility functions for the ghci repl module.
--- Not part of the public API.
 local builtin = {}
 
+---@type ReplView
 local view = {}
 
--- the repl
+---@class BuiltinRepl
+---@field bufnr number
+---@field job_id number
+---@field cmd string[]
+
+---@type BuiltinRepl
 local repl = nil
 
--- Check if a repl is loaded
+---@return boolean repl_is_loaded `true` if a repl is loaded
 local function repl_is_loaded()
-  return repl ~= nil
-    and repl.bufnr ~= nil
-    and repl.job_id ~= nil
-    and repl.cmd ~= nil
-    and vim.api.nvim_buf_is_loaded(repl.bufnr)
+  return repl ~= nil and vim.api.nvim_buf_is_loaded(repl.bufnr)
 end
 
--- @param table?
+--- @param cmd string[]?
 local function is_new_cmd(cmd)
-  return repl ~= nil and repl.cmd ~= nil and table.concat(repl.cmd) ~= table.concat(cmd or {})
+  return repl ~= nil and table.concat(repl.cmd) ~= table.concat(cmd or {})
 end
 
--- Creates a repl on buffer with id `bufnr`.
--- @param number: bufnr - buffer to be used.
--- @param function: cmd - command to start the repl
--- @param table?: opts {
---  delete_buffer_on_exit: bool
--- }
+---Creates a repl on buffer with id `bufnr`.
+---@param bufnr number Buffer to be used.
+---@param cmd string[] command to start the repl
+---@param opts ReplViewOpts?
+---@return nil
 local function buf_create_repl(bufnr, cmd, opts)
   vim.api.nvim_win_set_buf(0, bufnr)
   opts = vim.tbl_extend('force', vim.empty_dict(), opts or {})
+  local function delete_repl_buf()
+    local winid = vim.fn.bufwinid(bufnr)
+    vim.api.nvim_win_close(winid, true)
+    vim.api.nvim_buf_delete(bufnr, { force = true })
+  end
   if opts.delete_buffer_on_exit then
     opts.on_exit = function(_, exit_code, _)
       ht.log.debug('repl.builtin: exit')
@@ -49,9 +54,7 @@ local function buf_create_repl(bufnr, cmd, opts)
         ht.log.warn(msg)
         vim.notify(msg, vim.log.levels.WARN)
       end
-      local winid = vim.fn.bufwinid(bufnr)
-      vim.api.nvim_win_close(winid, true)
-      vim.api.nvim_buf_delete(bufnr, { force = true })
+      delete_repl_buf()
     end
     local repl_log = function(logger)
       return function(_, data, name)
@@ -64,6 +67,12 @@ local function buf_create_repl(bufnr, cmd, opts)
   end
   ht.log.debug { 'repl.builtin: Opening terminal', cmd, opts }
   local job_id = vim.fn.termopen(cmd, opts)
+  if not job_id then
+    ht.log.error('repl.builtin: Failed to open a terminal')
+    vim.notify('haskell-tools: Could not start the repl.', vim.log.levels.ERROR)
+    delete_repl_buf()
+    return
+  end
   repl = {
     bufnr = bufnr,
     job_id = job_id,
@@ -72,8 +81,8 @@ local function buf_create_repl(bufnr, cmd, opts)
   ht.log.debug { 'repl.builtin: Created repl.', repl }
 end
 
--- Create a split
--- @param function? | number?
+---Create a split
+---@param size function|number?
 local function create_split(size)
   size = size and (type(size) == 'function' and size() or size) or vim.o.lines / 3
   local args = vim.empty_dict()
@@ -82,8 +91,8 @@ local function create_split(size)
   vim.cmd(table.concat(args, ' '))
 end
 
--- Create a vertical split
--- @param function? | number?
+---Create a vertical split
+---@param size function|number?
 local function create_vsplit(size)
   size = size and (type(size) == 'function' and size() or size) or vim.o.columns / 2
   local args = vim.empty_dict()
@@ -92,18 +101,17 @@ local function create_vsplit(size)
   vim.cmd(table.concat(args, ' '))
 end
 
--- Create a new tab
+---Create a new tab
+---@param _ any
 local function create_tab(_)
   vim.cmd('tabnew')
 end
 
--- Create a new repl (or toggle its visibility)
--- @param function(function|number): create_win: function for creating the window
--- @param function: mk_cmd: function for creating the repl command
--- @param table?: opts = {
---  delete_buffer_on_exit: bool?
---  size: function? | number?
--- }
+---Create a new repl (or toggle its visibility)
+---@param create_win function|number Function for creating the window
+---@param mk_cmd function Function for creating the repl command
+---@param opts ReplViewOpts?
+---@return nil
 local function create_or_toggle(create_win, mk_cmd, opts)
   local cmd = mk_cmd()
   if cmd == nil then
@@ -142,57 +150,48 @@ local function create_or_toggle(create_win, mk_cmd, opts)
   buf_create_repl(bufnr, cmd, opts)
 end
 
--- Create a new repl in a horizontal split
--- @param table?: opts = {
---  delete_buffer_on_exit: bool?
---  size: function? | number?
--- }
--- @return function(table)
+---Create a new repl in a horizontal split
+---@param opts ReplViewOpts?
+---@return fun(function) create_repl
 function view.create_repl_split(opts)
   return function(mk_cmd)
     create_or_toggle(create_split, mk_cmd, opts)
   end
 end
 
--- Create a new repl in a vertical split
--- @param table?: opts = {
---  delete_buffer_on_exit: bool?
---  size: function? | number?
--- }
--- @return function(table)
+---Create a new repl in a vertical split
+---@param opts ReplViewOpts?
+---@return fun(function) create_repl
 function view.create_repl_vsplit(opts)
   return function(mk_cmd)
     create_or_toggle(create_vsplit, mk_cmd, opts)
   end
 end
 
--- Create a new repl in a new tab
--- @param table?: opts = {
---  delete_buffer_on_exit: bool?
--- }
--- @return function(table)
+---Create a new repl in a new tab
+---@param opts ReplViewOpts?
+---@return fun(function) create_repl
 function view.create_repl_tabnew(opts)
   return function(mk_cmd)
     create_or_toggle(create_tab, mk_cmd, opts)
   end
 end
 
--- Create a new repl in the current window
--- @param table?: opts = {
---  delete_buffer_on_exit: bool?
--- }
--- @return function(table)
+---Create a new repl in the current window
+---@param opts ReplViewOpts?
+---@return fun(function) create_repl
 function view.create_repl_cur_win(opts)
   return function(mk_cmd)
     create_or_toggle(function(_) end, mk_cmd, opts)
   end
 end
 
--- @param function(string?)
--- @param table
+---@param mk_repl_cmd fun(string):(string[]?)
+---@param options ReplOpts
 function builtin.setup(mk_repl_cmd, options)
   ht.log.debug { 'repl.builtin setup', options }
   builtin.go_back = options.auto_focus ~= true
+
   ---@param filepath string path of the file to load into the repl
   ---@param _ table?
   function builtin.toggle(filepath, _)
@@ -203,9 +202,12 @@ function builtin.setup(mk_repl_cmd, options)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
+
+    ---@return string[]?
     local function mk_repl_cmd_wrapped()
       return mk_repl_cmd(filepath)
     end
+
     local create_or_toggle_callback = options.builtin.create_repl_window(view)
     create_or_toggle_callback(mk_repl_cmd_wrapped)
     if cur_win ~= -1 and builtin.go_back then
@@ -215,7 +217,8 @@ function builtin.setup(mk_repl_cmd, options)
     end
   end
 
-  -- Quit the repl
+  ---Quit the repl
+  ---@return nil
   function builtin.quit()
     if not repl_is_loaded() then
       return
@@ -232,8 +235,9 @@ function builtin.setup(mk_repl_cmd, options)
     vim.api.nvim_buf_delete(repl.bufnr, { force = true })
   end
 
-  -- Send a command to the repl, followed by <cr>
-  -- @param string
+  ---Send a command to the repl, followed by <cr>
+  ---@param txt string The text to send
+  ---@return nil
   function builtin.send_cmd(txt)
     if not repl_is_loaded() then
       return

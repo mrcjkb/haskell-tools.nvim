@@ -12,17 +12,10 @@ local deps = require('haskell-tools.deps')
 --- * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
 ---@brief ]]
 
----@class HaskellToolsProject
----@field setup function
----@field open_package_yaml function
----@field open_package_cabal function
----@field open_project_file function
----@field telescope_package_grep function?
----@field telescope_package_files function?
-
----@type HaskellToolsProject
 local project = {}
 
+---@param callback fun(opts:table<string,any>):nil
+---@param opts table<string,any>
 local function telescope_package_search(callback, opts)
   local file = vim.api.nvim_buf_get_name(0)
   if vim.fn.filewritable(file) == 0 then
@@ -69,11 +62,13 @@ local commands = {
   },
 }
 
---- Set up this module. Called by the haskell-tools setup.
+---Set up this module. Called by the haskell-tools setup.
+---@return nil
 function project.setup()
   ht.log.debug('project.setup')
 
-  --- Open the package.yaml of the package containing the current buffer.
+  ---Open the package.yaml of the package containing the current buffer.
+  ---@return nil
   function project.open_package_yaml()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
@@ -88,7 +83,8 @@ function project.setup()
     end)
   end
 
-  --- Open the *.cabal file of the package containing the current buffer.
+  ---Open the *.cabal file of the package containing the current buffer.
+  ---@return nil
   function project.open_package_cabal()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
@@ -106,7 +102,8 @@ function project.setup()
     end)
   end
 
-  --- Open the current buffer's project file (cabal.project or stack.yaml).
+  ---Open the current buffer's project file (cabal.project or stack.yaml).
+  ---@return nil
   function project.open_project_file()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)

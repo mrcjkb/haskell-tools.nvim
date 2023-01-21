@@ -5,6 +5,10 @@
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
+--- This module provides hoogle search capabilities for telescope.nvim,
+--- The telescope search is mostly inspired by telescope_hoogle by Luc Tielen,
+--- but has been redesigned for searching for individual terms.
+--- https://github.com/luc-tielen/telescope_hoogle
 ---@brief ]]
 
 local deps = require('haskell-tools.deps')
@@ -13,12 +17,11 @@ local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
--- This module provides hoogle search capabilities for telescope.nvim,
--- The telescope search is mostly inspired by telescope_hoogle by Luc Tielen,
--- but has been redesigned for searching for individual terms.
--- https://github.com/luc-tielen/telescope_hoogle
 local hoogle_util = {}
 
+---@param buf number the telescope buffebuffer numberr
+---@param map fun(mode:string,keys:string,action:function) callback for creating telescope keymaps
+---@return boolean
 function hoogle_util.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     -- Copy type signature to clipboard
@@ -42,10 +45,27 @@ function hoogle_util.hoogle_attach_mappings(buf, map)
   return true
 end
 
-local function format_html(doc)
-  return doc and doc:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&amp', '&') or ''
+---Format an html string to be displayed by Neovim
+---@param html string
+---@return string nvim_str
+local function format_html(html)
+  return html and html:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&amp', '&') or ''
 end
 
+---@class TelescopeHoogleEntry
+---@field value string
+---@field valid boolean
+---@field type_sig string The entry's type signature
+---@field module_name string The name of the module that contains the entry
+---@field url string|nil The entry's Hackage URL
+---@field docs string|nil The Hoogle entry's documentation
+---@field display fun(TelescopeHoogleEntry):TelescopeDisplay
+---@field ordinal string
+---@field preview_command fun(TelescopeHoogleEntry, number):nil
+
+---Show a preview in the Telescope previewer
+---@param entry TelescopeHoogleEntry
+---@param buf number the Telescope preview buffer
 local function show_preview(entry, buf)
   local docs = format_html(entry.docs)
   local lines = vim.split(docs, '\n')
@@ -60,6 +80,10 @@ local function show_preview(entry, buf)
   end)
 end
 
+---@class TelescopeDisplay
+
+---@param entry TelescopeHoogleEntry
+---@return TelescopeDisplay
 local function make_display(entry)
   local module = entry.module_name
 
@@ -73,16 +97,29 @@ local function make_display(entry)
   return displayer { { module, 'Structure' }, { entry.type_sig, 'Type' } }
 end
 
-local function get_type_sig(item)
-  local name = item:match('<span class=name><s0>(.*)</s0></span>')
-  local sig = item:match(':: (.*)')
+---@param hoogle_item string
+---@return string type_signature
+local function get_type_sig(hoogle_item)
+  local name = hoogle_item:match('<span class=name><s0>(.*)</s0></span>')
+  local sig = hoogle_item:match(':: (.*)')
   if name and sig then
-    local name_with_type = name .. ' :: ' .. format_html(sig)
-    return name_with_type:gsub('%s+', ' ') -- trim duplicate whitespace
+    local name_with_type = (name .. ' :: ' .. format_html(sig)):gsub('%s+', ' ') -- trim duplicate whitespace
+    return name_with_type
   end
-  return item
+  return hoogle_item
 end
 
+---@class HoogleData
+---@field module HoogleModule|nil
+---@field item string|nil
+---@field url string|nil
+---@field docs string|nil
+
+---@class HoogleModule
+---@field name string
+
+---@param data HoogleData
+---@return TelescopeHoogleEntry|nil
 function hoogle_util.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''
@@ -102,6 +139,9 @@ function hoogle_util.mk_hoogle_entry(data)
   }
 end
 
+---Merge `opts` with the default layout
+---@param opts table<string,any>
+---@return table<string,any> merged_opts
 function hoogle_util.merge_telescope_opts(opts)
   local default_layout = {
     layout_strategy = 'horizontal',

@@ -7,12 +7,15 @@
 
 ---@brief ]]
 
+---@class Deps
+
+---@type Deps
 local deps = {}
 
---- @param modname string The name of the module
---- @param on_available any? Callback. Can be a function that takes the module name as an argument or a value.
---- @param on_not_available any? Callback to execute if the module is not available. Can be a function or a value.
---- @return any result Return value of on_available or on_not_available
+---@param modname string The name of the module
+---@param on_available any|nil Callback. Can be a function that takes the module name as an argument or a value.
+---@param on_not_available any|nil Callback to execute if the module is not available. Can be a function or a value.
+---@return any result Return value of on_available or on_not_available
 function deps.if_available(modname, on_available, on_not_available)
   local has_mod, mod = pcall(require, modname)
   if has_mod and type(on_available) == 'function' then

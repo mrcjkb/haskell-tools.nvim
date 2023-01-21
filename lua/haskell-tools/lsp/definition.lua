@@ -1,11 +1,24 @@
+---@mod haskell-tools.lsp.definition LSP textDocument/definition override
+
+---@brief [[
+
+---WARNING: This is not part of the public API.
+---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
+
+---@brief ]]
+
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 
-local definition = {}
+local lsp_definition = {}
 
-definition.setup = function(config)
+---@param config DefinitionOpts
+lsp_definition.setup = function(config)
   ht.log.debug { 'Definition setup', config }
   local orig_handler = vim.lsp.handlers['textDocument/definition']
+
+  ---@param opts table<string,any>|nil
+  ---@return nil
   local function mk_hoogle_fallback_definition_handler(opts)
     return function(_, result, ...)
       if #result > 0 then
@@ -36,4 +49,4 @@ definition.setup = function(config)
   end
 end
 
-return definition
+return lsp_definition

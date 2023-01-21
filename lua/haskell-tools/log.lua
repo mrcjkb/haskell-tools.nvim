@@ -2,19 +2,6 @@
 
 local ht = require('haskell-tools')
 
----@class HaskellToolsLogger
----@field debug function Log a debug message
----@field info function Log an info message
----@field warn function Log a warning message
----@field error function Log an error message
----@field set_level function Set the log level
----@field get_logfile function Get the haskell-tools log file
----@field nvim_open_logfile function Open the haskell-tools log file
----@field get_hls_logfile function Get the haskell-language-server log file
----@field nvim_open_hls_logfile function Open the haskell-language-server log file
----@field setup function
-
----@type HaskellToolsLogger
 local log = {}
 
 local LARGE = 1e9

@@ -12,14 +12,24 @@ local deps = require('haskell-tools.deps')
 
 local hoogle_local = {}
 
+---@return boolean has_hoogle `true` if the `hoogle` executable exists
 function hoogle_local.has_hoogle()
   if vim.fn.executable('hoogle') == 1 then
     ht.log.info('Local hoogle executable found.')
     return true
   end
+  ht.log.info('No local hoogle executable found.')
   return false
 end
 
+---@class LocalHoogleOpts
+---@field entry_maker function|nil telescope entry maker
+---@field count number|nil number of results to display
+
+---Construct the hoogle cli arguments
+---@param search_term string The Hoogle search term
+---@param opts LocalHoogleOpts
+---@return string[] hoogle_args
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
   local args = vim.tbl_flatten { '--json', '--count=' .. count, search_term }
@@ -27,6 +37,7 @@ local function mk_hoogle_args(search_term, opts)
   return args
 end
 
+---@return nil
 local function setup_telescope_search()
   local pickers = deps.require_telescope('telescope.pickers')
   local finders = deps.require_telescope('telescope.finders')
@@ -35,6 +46,9 @@ local function setup_telescope_search()
   local hoogle_util = require('haskell-tools.hoogle.util')
   local Job = deps.require_plenary('plenary.job')
 
+  ---@param search_term string The Hoogle search term
+  ---@param opts LocalHoogleOpts
+  ---@return nil
   function hoogle_local.telescope_search(search_term, opts)
     opts = hoogle_util.merge_telescope_opts(opts)
     opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
@@ -80,12 +94,11 @@ local function setup_telescope_search()
   end
 end
 
+---@return nil
 function hoogle_local.setup()
   if hoogle_local.has_hoogle() and deps.has_telescope() then
     ht.log.info('Setting up local hoogle telescope search.')
     setup_telescope_search()
-  else
-    ht.log.info('No local hoogle executable found.')
   end
 end
 

@@ -5,6 +5,8 @@
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
+---Wraps the toggleterm.nvim API to provide a GHIi repl.
+
 ---@brief ]]
 
 local ht = require('haskell-tools')
@@ -16,12 +18,14 @@ local toggleterm = {
 
 local last_cmd = ''
 
--- @param string?
+---@param cmd string?
 local function is_new_cmd(cmd)
   return last_cmd ~= (cmd or '')
 end
 
--- @param function(string?): Function for building the repl (string?: file path)
+---@param mk_repl_cmd fun(string?):string[]? Function for building the repl that takes an optional file path
+---@param opts ReplOpts
+---@return nil
 function toggleterm.setup(mk_repl_cmd, opts)
   opts = opts or vim.empty_dict()
   if opts.auto_focus == nil then
@@ -32,6 +36,8 @@ function toggleterm.setup(mk_repl_cmd, opts)
   ht.log.debug('repl.toggleterm setup')
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
+  ---@param cmd string The command to execute in the terminal
+  ---@return unknown
   local function mk_new_terminal(cmd)
     local terminal_opts = {
       cmd = cmd,
@@ -90,7 +96,8 @@ function toggleterm.setup(mk_repl_cmd, opts)
     last_cmd = cmd
   end
 
-  -- Quit the repl
+  ---Quit the repl
+  ---@retrun nil
   function toggleterm.quit()
     if toggleterm.terminal ~= nil then
       ht.log.debug('repl.toggleterm: sending quit to repl.')
@@ -103,9 +110,9 @@ function toggleterm.setup(mk_repl_cmd, opts)
     end
   end
 
-  -- Send a command to the repl, followed by <cr>
-  -- @param string
-  -- @param table?
+  ---Send a command to the repl, followed by <cr>
+  ---@param txt string the command text to send
+  ---@return nil
   function toggleterm.send_cmd(txt)
     opts = opts or vim.empty_dict()
     vim.tbl_extend('force', {

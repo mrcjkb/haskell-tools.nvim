@@ -13,20 +13,32 @@ local util = require('haskell-tools.util')
 
 local hoogle_web = {}
 
+---@param c string A single character
+---@return string The hex representation
 local char_to_hex = function(c)
-  return string.format('%%%02X', string.byte(c))
+  return string.format('%%%02X', c:byte())
 end
 
+---Encode a URL so it can be opened in a browser
+---@param url string
+---@return string encoded_url
 local function urlencode(url)
-  if url == nil then
-    return
-  end
   url = url:gsub('\n', '\r\n')
   url = url:gsub('([^%w ])', char_to_hex)
   url = url:gsub(' ', '+')
   return url
 end
 
+---@class TelescopeHoogleWebOpts
+---@field hoogle HoogleWebSearchOpts|nil
+
+---@class HoogleWebSearchOpts
+---@field scope string|nil The scope of the search
+---@field json boolean|nil Whather to request JSON enocded results
+
+---Build a Hoogle request URL
+---@param search_term string
+---@param opts TelescopeHoogleWebOpts
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
@@ -40,6 +52,7 @@ local function mk_hoogle_request(search_term, opts)
   return hoogle_request
 end
 
+---@return nil
 local function setup_telescope_search()
   local pickers = deps.require_telescope('telescope.pickers')
   local finders = deps.require_telescope('telescope.finders')
@@ -50,6 +63,9 @@ local function setup_telescope_search()
 
   local curl = deps.require_plenary('plenary.curl')
 
+  ---@param search_term string
+  ---@param opts TelescopeHoogleWebOpts
+  ---@return nil
   function hoogle_web.telescope_search(search_term, opts)
     async.run(function()
       if vim.fn.executable('curl') == 0 then
@@ -84,6 +100,9 @@ local function setup_telescope_search()
 end
 
 local function setup_browser_search()
+  ---@param search_term string
+  ---@param opts TelescopeHoogleWebOpts
+  ---@return nil
   function hoogle_web.browser_search(search_term, opts)
     opts = util.tbl_merge(opts or {}, {
       hoogle = { json = false },
@@ -92,6 +111,7 @@ local function setup_browser_search()
   end
 end
 
+---@return nil
 function hoogle_web.setup()
   if deps.has_telescope() then
     setup_telescope_search()

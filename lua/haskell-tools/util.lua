@@ -5,19 +5,33 @@
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
+--- General utility functions that may need to be moded somewhere else
 ---@brief ]]
 
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 
--- General utility functions that may need to be moded somewhere else
+---@class Util
+---@field get_signature_from_markdown fun(string):string
+---@field open_browser fun(string):nil
+---@field quote fun(string):string
+---@field tbl_merge function
+
+---@type Util
 local util = {}
 
+---Deep extend tables with the 'keep' behaviour
+---@generic T1: table
+---@generic T2: table
+---@param ... T2 Two or more map-like tables
+---@return T1|T2 The merged table
 function util.tbl_merge(...)
   return vim.tbl_deep_extend('keep', ...)
 end
 
+---@param url string
+---@return nil
 function util.open_browser(url)
   local browser_cmd
   if vim.fn.has('unix') == 1 then
@@ -40,10 +54,10 @@ function util.open_browser(url)
   end
 end
 
--- Get the type signature of the word under the cursor from markdown
--- @param string: markdown docs
--- @return the type signature, or the word under the cursor if none was found
-function util.get_signature_from_markdown(docs)
+--- Get the type signature of the word under the cursor from markdown
+--- @param docs string Markdown docs
+--- @return string result Type signature, or the word under the cursor if none was found
+function util.try_get_signature_from_markdown(docs)
   local func_name = vim.fn.expand('<cword>')
   local full_sig = docs:match('```haskell\n' .. func_name .. ' :: ([^```]*)')
   return full_sig
@@ -54,9 +68,9 @@ function util.get_signature_from_markdown(docs)
     or func_name -- Fall back to value under cursor
 end
 
--- Quote a string
--- @param string
--- @return (string) the quoted string
+--- Quote a string
+--- @param str string
+--- @return string quoted_string
 function util.quote(str)
   return '"' .. str .. '"'
 end
