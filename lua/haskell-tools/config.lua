@@ -34,13 +34,13 @@
 ---@field auto_focus boolean|nil Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
 
 ---@class BuiltinReplOpts
----@field create_repl_window fun(view:ReplView):nil How to create the repl window
+---@field create_repl_window fun(view:ReplView):function How to create the repl window
 
 ---@class ReplView
----@field create_repl_split fun(opts:ReplViewOpts):nil Create the REPL in a horizontally split window
----@field create_repl_vsplit fun(opts:ReplViewOpts):nil Create the REPL in a vertically split window
----@field create_repl_tabnew fun(opts:ReplViewOpts):nil Create the REPL in a new tab
----@field create_repl_cur_win fun(opts:ReplViewOpts):nil Create the REPL in the current window
+---@field create_repl_split fun(opts:ReplViewOpts):function Create the REPL in a horizontally split window
+---@field create_repl_vsplit fun(opts:ReplViewOpts):function Create the REPL in a vertically split window
+---@field create_repl_tabnew fun(opts:ReplViewOpts):function Create the REPL in a new tab
+---@field create_repl_cur_win fun(opts:ReplViewOpts):function Create the REPL in the current window
 
 ---@class ReplViewOpts
 ---@field delete_buffer_on_exit boolean Whether to delete the buffer when the Repl quits

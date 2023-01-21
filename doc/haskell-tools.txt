@@ -116,9 +116,6 @@ ReplOpts                                                              *ReplOpts*
 
 BuiltinReplOpts                                                *BuiltinReplOpts*
 
-    Fields: ~
-        {create_repl_window}  (fun(view:ReplView):nil)  How to create the repl window
-
 
 ReplView                                                              *ReplView*
 
@@ -127,6 +124,15 @@ ReplView                                                              *ReplView*
         {create_repl_vsplit}   (fun(opts:ReplViewOpts):nil)  Create the REPL in a vertically split window
         {create_repl_tabnew}   (fun(opts:ReplViewOpts):nil)  Create the REPL in a new tab
         {create_repl_cur_win}  (fun(opts:ReplViewOpts):nil)  Create the REPL in the current window
+
+
+ReplView                                                              *ReplView*
+
+    Fields: ~
+        {create_repl_split}    (fun(opts:ReplViewOpts):function)  Create the REPL in a horizontally split window
+        {create_repl_vsplit}   (fun(opts:ReplViewOpts):function)  Create the REPL in a vertically split window
+        {create_repl_tabnew}   (fun(opts:ReplViewOpts):function)  Create the REPL in a new tab
+        {create_repl_cur_win}  (fun(opts:ReplViewOpts):function)  Create the REPL in the current window
 
 
 ReplViewOpts                                                      *ReplViewOpts*
