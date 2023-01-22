@@ -2,13 +2,13 @@
   description = "haskell-tools.nvim - supercharge your haskell experience in neovim";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11";
 
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     pre-commit-hooks = {
@@ -51,6 +51,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
+    nixpkgs-unstable,
     neovim-nightly-overlay,
     pre-commit-hooks,
     ...
@@ -63,6 +64,7 @@
     ];
     perSystem = nixpkgs.lib.genAttrs supportedSystems;
     pkgsFor = system: import nixpkgs {inherit system;};
+    pkgsUnstableFor = system: import nixpkgs-unstable {inherit system;};
 
     test-overlay = import ./nix/test-overlay.nix {
       inherit
@@ -121,7 +123,7 @@
     });
 
     packages = perSystem (system: let
-      pkgs = pkgsFor system;
+      pkgs = pkgsUnstableFor system;
       haskell-tools-nvim = haskell-tools-nvim-for system;
       docgen = pkgs.callPackage ./nix/docgen.nix {};
     in {
