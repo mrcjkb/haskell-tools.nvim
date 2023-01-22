@@ -64,7 +64,7 @@ local function setup_telescope_search()
   local curl = deps.require_plenary('plenary.curl')
 
   ---@param search_term string
-  ---@param opts TelescopeHoogleWebOpts
+  ---@param opts TelescopeHoogleWebOpts|nil
   ---@return nil
   function hoogle_web.telescope_search(search_term, opts)
     async.run(function()
@@ -73,7 +73,7 @@ local function setup_telescope_search()
         error("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.")
         return
       end
-      opts = hoogle_util.merge_telescope_opts(opts)
+      opts = opts or {}
       opts.hoogle = opts.hoogle or {}
       opts.hoogle.json = true
 
