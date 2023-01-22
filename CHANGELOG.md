@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Do not set a default layout for telescope Hoogle search.
+
 ## [1.6.0] - 2023-01-21
 ### Added
 - Ability to temporarily set the log level via `ht.log.set_level(level)`.

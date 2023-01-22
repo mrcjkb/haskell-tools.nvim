@@ -139,15 +139,4 @@ function hoogle_util.mk_hoogle_entry(data)
   }
 end
 
----Merge `opts` with the default layout
----@param opts table<string,any>
----@return table<string,any> merged_opts
-function hoogle_util.merge_telescope_opts(opts)
-  local default_layout = {
-    layout_strategy = 'horizontal',
-    layout_config = { preview_width = 80 },
-  }
-  return vim.tbl_extend('force', default_layout, opts or {})
-end
-
 return hoogle_util

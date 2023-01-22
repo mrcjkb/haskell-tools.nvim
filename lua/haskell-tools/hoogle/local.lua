@@ -47,10 +47,10 @@ local function setup_telescope_search()
   local Job = deps.require_plenary('plenary.job')
 
   ---@param search_term string The Hoogle search term
-  ---@param opts LocalHoogleOpts
+  ---@param opts LocalHoogleOpts|nil
   ---@return nil
   function hoogle_local.telescope_search(search_term, opts)
-    opts = hoogle_util.merge_telescope_opts(opts)
+    opts = opts or {}
     opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
     Job:new({
       command = 'hoogle',
