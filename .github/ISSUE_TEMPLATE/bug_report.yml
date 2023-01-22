@@ -1,0 +1,71 @@
+name: Bug Report
+description: Report a problem with haskell-tools.nvim
+labels: [bug]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        _Before reporting:_ search [existing issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Abug).
+        See also: [Troubleshooting section of README.md](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/README.md#minimal-config).
+
+  - type: input
+    attributes:
+      label: "Neovim version (nvim -v)"
+      placeholder: "v0.8.0"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Operating system/version"
+      placeholder: "NixOS 22.05"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Output of `haskell-language-server --version`"
+      placeholder: "1.8.0.0 (GHC: 9.2.5)"
+  - type: textarea
+    attributes:
+      label: "How to reproduce the issue"
+      description: |
+        Steps to reproduce using a [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
+      placeholder: |
+        mkdir -p /tmp/minimal
+        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
+        :q
+        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
+        :edit foo.hs
+        4j
+        :lua require('haskell-tools').hoogle_signature()
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Expected behaviour"
+      description: "Describe the behaviour you expect. May include logs, images, or videos."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Actual behaviour"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Log files"
+      placeholder: "https://gist.github.com/MrcJkb/1b0a2c9849b2e1e912fb"
+      description: |
+        - Upload the log files before and after the problem in a [secret gist](https://gist.github.com/). Paste the URLs to the gist.
+        - See the [Troubleshooting section of the readme](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/README.md#logs) for information on how to retreive the log files.
+  - type: textarea
+    attributes:
+      label: "The minimal config used to reproduce this issue."
+      description: |
+        See [this example](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
+      placeholder: |
+        ```lua
+          -- paste your minimal config here
+        ```
+    validations:
+      required: true

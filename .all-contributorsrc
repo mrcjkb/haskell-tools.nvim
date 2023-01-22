@@ -1,0 +1,43 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "fabfianda",
+      "name": "fabfianda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/275653?v=4",
+      "profile": "https://github.com/fabfianda",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "MangoIV",
+      "name": "Mango The Fourth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40720523?v=4",
+      "profile": "https://github.com/MangoIV",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "yen3",
+      "name": "Yen3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/387292?v=4",
+      "profile": "https://github.com/yen3",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "haskell-tools.nvim",
+  "projectOwner": "MrcJkb"
+}
