@@ -55,12 +55,12 @@ use {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope.nvim', -- optional
   },
-  branch = '1.x.x', -- [^1]
+  branch = '1.x.x', -- recommended
 }
 ```
->:information_source:
+>**Note**
 >
->[^1] It is suggested to use the stable branch if you would like to avoid breaking changes.
+>It is suggested to use the stable branch if you would like to avoid breaking changes.
 
 For NixOS users with flakes enabled, this project provides outputs in the form of a package and an overlay; use it as you wish in your nixos or home-manager configuration.
 It is also available on `nixpkgs`.
@@ -70,9 +70,9 @@ It is also available on `nixpkgs`.
 This plugin automatically configures the `haskell-language-server` builtin LSP client and integrates with other haskell tools.
 See the [Features](#features) section for more info.
 
-> :warning:
+>**Warning**
 >
-> __Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.__
+> Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.
 
 To get started quickly with the default setup, add the following to your neovim config:
 
@@ -101,7 +101,8 @@ end, def_opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, def_opts)
 ```
 
-> :information_source:
+>**Note**
+>
 > * For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > * If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
