@@ -2,7 +2,6 @@
   self,
   packer-nvim,
   plenary-nvim,
-  nvim-lspconfig,
   telescope-nvim,
   toggleterm,
 }: final: prev:
@@ -73,6 +72,7 @@ with final.stdenv; let
         [
           nvim
           makeWrapper
+          haskell-language-server
         ]
         ++ extraPkgs;
 
@@ -81,7 +81,6 @@ with final.stdenv; let
         mkdir -p $out/.config/nvim/site/pack/packer/start
         ln -s ${packer-nvim} $out/.config/nvim/site/pack/packer/start/packer.nvim
         ln -s ${plenary-nvim} $out/.config/nvim/site/pack/packer/start/plenary.nvim
-        ln -s ${nvim-lspconfig} $out/.config/nvim/site/pack/packer/start/nvim-lspconfig
         ln -s ${toggleterm} $out/.config/nvim/site/pack/packer/start/toggleterm.nvim
         ${optionalString withTelescope "ln -s ${telescope-nvim} $out/.config/nvim/site/pack/packer/start/telescope.nvim"}
         ln -s ${./..} $out/.config/nvim/site/pack/packer/start/${name}

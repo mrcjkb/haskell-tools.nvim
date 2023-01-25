@@ -67,7 +67,6 @@
 local deps = require('haskell-tools.deps')
 
 local config = {
-  -- TODO: (breaking) Move to log options
   hls_log = vim.fn.stdpath('log') .. '/' .. 'haskell-language-server.log',
 }
 

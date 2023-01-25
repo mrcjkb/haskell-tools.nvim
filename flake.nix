@@ -37,11 +37,6 @@
       flake = false;
     };
 
-    nvim-lspconfig = {
-      url = "github:neovim/nvim-lspconfig";
-      flake = false;
-    };
-
     toggleterm = {
       url = "github:akinsho/toggleterm.nvim";
       flake = false;
@@ -73,7 +68,6 @@
         packer-nvim
         plenary-nvim
         telescope-nvim
-        nvim-lspconfig
         toggleterm
         ;
     };

@@ -188,11 +188,49 @@ config.setup({opts})                                              *config.setup*
 ==============================================================================
 haskell-tools LSP client setup                               *haskell-tools.lsp*
 
+ The following commands are available:
+
+ * `:HlsStart` - Start the LSP client.
+ * `:HlsStop` - Stop the LSP client.
+ * `:HlsRestart` - Restart the LSP client.
+
 lsp.setup()                                                          *lsp.setup*
     Setup the LSP client. Called by the haskell-tools setup.
 
     Returns: ~
         (nil)
+
+
+lsp.start({bufnr})                                                   *lsp.start*
+    Start or attach the LSP client.
+    Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (number|nil)  The LSP client ID
+
+
+lsp.stop({bufnr})                                                     *lsp.stop*
+    Stop the LSP client.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (table[])  A list of clients that will be stopped
+
+
+lsp.restart({bufnr})                                               *lsp.restart*
+    Restart the LSP client.
+    Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (number|nil)  The LSP client ID after restart
 
 
 ==============================================================================
@@ -293,6 +331,16 @@ project.setup()                                                  *project.setup*
 
     Returns: ~
         (nil)
+
+
+project.root_dir({project_file})                              *project.root_dir*
+    Get the project's root directory
+
+    Parameters: ~
+        {project_file}  (string)  The path to a project file
+
+    Returns: ~
+        (string|nil)
 
 
 project.open_package_yaml()                          *project.open_package_yaml*

@@ -67,6 +67,16 @@ local commands = {
 function project.setup()
   ht.log.debug('project.setup')
 
+  ---Get the project's root directory
+  ---@param project_file string The path to a project file
+  ---@return string|nil
+  function project.root_dir(project_file)
+    return project_util.match_cabal_project_root(project_file)
+      or project_util.match_stack_project_root(project_file)
+      or project_util.match_package_root(project_file)
+      or project_util.match_hie_yaml(project_file)
+  end
+
   ---Open the package.yaml of the package containing the current buffer.
   ---@return nil
   function project.open_package_yaml()
@@ -74,7 +84,12 @@ function project.setup()
       local file = vim.api.nvim_buf_get_name(0)
       local result = project_util.get_package_yaml(file)
       if not result then
-        local err_msg = 'HsPackageYaml: Cannot find package.yaml file for: ' .. file
+        local context = ''
+        if project_util.is_cabal_project(file) then
+          print('cabal')
+          context = ' cabal project file'
+        end
+        local err_msg = 'HsPackageYaml: Cannot find package.yaml file for' .. context .. ': ' .. file
         ht.log.error(err_msg)
         vim.notify(err_msg, vim.log.levels.ERROR)
         return
@@ -88,8 +103,9 @@ function project.setup()
   function project.open_package_cabal()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
-      if vim.fn.filewritable(file) ~= 0 and project_util.is_cabal_project(file) == nil then
+      if vim.fn.filewritable(file) ~= 0 and not project_util.is_cabal_project(file) then
         vim.notify('HsPackageCabal: Not a cabal project?', vim.log.levels.ERROR)
+        return
       end
       local result = project_util.get_package_cabal(file)
       if not result then

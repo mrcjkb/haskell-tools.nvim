@@ -49,7 +49,6 @@ packer.startup(function(use)
   use {
     'MrcJkb/haskell-tools.nvim',
     requires = {
-      'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
     },
     config = function()

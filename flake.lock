@@ -193,22 +193,6 @@
         "type": "github"
       }
     },
-    "nvim-lspconfig": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1674357856,
-        "narHash": "sha256-A/FT8hFrmDisjSlz+4jYf9iDuP+OZseJwag8lYnDDjo=",
-        "owner": "neovim",
-        "repo": "nvim-lspconfig",
-        "rev": "85cd2ecacd8805614efe3fb3a5146ac7d0f88a17",
-        "type": "github"
-      },
-      "original": {
-        "owner": "neovim",
-        "repo": "nvim-lspconfig",
-        "type": "github"
-      }
-    },
     "packer-nvim": {
       "flake": false,
       "locked": {
@@ -271,7 +255,6 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "nvim-lspconfig": "nvim-lspconfig",
         "packer-nvim": "packer-nvim",
         "plenary-nvim": "plenary-nvim",
         "pre-commit-hooks": "pre-commit-hooks",

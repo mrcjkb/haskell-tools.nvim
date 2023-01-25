@@ -52,7 +52,7 @@ end
 ---@param config table<string,any>|nil
 ---@return number|nil bufnr
 ---@return number|nil winnr
-local function on_hover(_, result, ctx, config)
+function hover.on_hover(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
   if not (result and result.contents) then
@@ -201,24 +201,6 @@ local function on_hover(_, result, ctx, config)
   end, { buffer = bufnr, noremap = true, silent = true })
 
   return bufnr, winnr
-end
-
----@return nil
-hover.setup = function()
-  local orig_buf_hover = vim.lsp.buf.hover
-  vim.lsp.buf.hover = function()
-    local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
-    if #clients < 1 then
-      return
-    end
-    local client = clients[1]
-    if client.name == 'hls' then
-      local params = lsp_util.make_position_params()
-      vim.lsp.buf_request(0, 'textDocument/hover', params, on_hover)
-    else
-      orig_buf_hover()
-    end
-  end
 end
 
 return hover
