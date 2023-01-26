@@ -497,21 +497,21 @@ require('haskell-tools').setup {
 
 You can also temporarily set the log level by calling
 
-```
+```lua
 :lua require('haskell-tools').log.set_level(vim.log.levels.DEBUG)
 ```
 
 You can find the log files by calling
 
-```
+```lua
 -- haskell-tools.nvim log
-:lua print(require('haskell-tools').log.get_logfile())
+:lua =require('haskell-tools').log.get_logfile()
 -- haskell-language-server logs
-:lua print(require('haskell-tools').log.get_hls_logfile())
+:lua =require('haskell-tools').log.get_hls_logfile()
 ```
 or open them by calling
 
-```
+```lua
 :lua require('haskell-tools').log.nvim_open_logfile()
 :lua require('haskell-tools').log.nvim_open_hls_logfile()
 ```
