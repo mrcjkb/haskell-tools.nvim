@@ -1,6 +1,9 @@
 ---@mod haskell-tools.lsp haskell-tools LSP client setup
 
 local ht = require('haskell-tools')
+local ht_util = require('haskell-tools.util')
+local deps = require('haskell-tools.deps')
+local Path = deps.require_plenary('plenary.path')
 
 local client_name = 'haskell-tools.nvim'
 
@@ -55,6 +58,40 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   })
 end
 
+---@class LoadHlsSettingsOpts
+---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
+
+---Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
+---Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
+---@param project_root string|nil The project root
+---@param opts LoadHlsSettingsOpts|nil
+---@return table hls_settings
+---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
+function lsp.load_hls_settings(project_root, opts)
+  local default_settings = ht.config.options.hls.default_settings
+  if not project_root then
+    return default_settings
+  end
+  local default_opts = { settings_file_pattern = 'hls.json' }
+  opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
+  local results = vim.fn.glob(Path:new(project_root, opts.settings_file_pattern).filename, true, true)
+  if #results == 0 then
+    ht.log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
+    return default_settings
+  end
+  local settings_json = results[1]
+  local content = ht_util.read_file(settings_json)
+  local success, settings = pcall(vim.json.decode, content)
+  if not success then
+    local msg = 'Could not decode ' .. settings_json .. '. Falling back to default settings.'
+    ht.log.warn { msg, error }
+    vim.notify('haskell-tools: ' .. msg, vim.log.levels.WARN)
+    return default_settings
+  end
+  ht.log.debug { 'hls settings', settings }
+  return settings or default_settings
+end
+
 ---Setup the LSP client. Called by the haskell-tools setup.
 ---@return nil
 function lsp.setup()
@@ -107,15 +144,15 @@ function lsp.setup()
       vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
       return
     end
-
+    local project_root = ht.project.root_dir(file)
+    local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
     local client_id = vim.lsp.start {
       name = client_name,
       cmd = cmd,
-      root_dir = ht.project.root_dir(file),
+      root_dir = project_root,
       capabilities = hls_opts.capabilities,
       handlers = handlers,
-      -- TODO: Add config to load settings from project json
-      settings = assert(hls_opts.settings, 'haskell-tools: hls settings not set'),
+      settings = hls_settings,
       on_attach = function(client_id, buf)
         ht.log.debug('LSP attach')
         hls_opts.on_attach(client_id, buf)

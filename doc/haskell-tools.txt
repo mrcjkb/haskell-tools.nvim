@@ -155,12 +155,13 @@ HTLogOpts                                                            *HTLogOpts*
 HaskellLspClientOpts                                      *HaskellLspClientOpts*
 
     Fields: ~
-        {debug}         (boolean)                          Whether to enable debug logging
-        {on_attach}     (fun(client:number,bufnr:number))  Callback to execute when the client attaches to a buffer
-        {cmd}           (table)                            The command to start the server with
-        {filetypes}     (table)                            List of file types to attach the client to
-        {capabilities}  (table)                            LSP client capabilities
-        {settings}      (table)                            The server config
+        {debug}             (boolean)                                   Whether to enable debug logging
+        {on_attach}         (fun(client:number,bufnr:number))           Callback to execute when the client attaches to a buffer
+        {cmd}               (table)                                     The command to start the server with
+        {filetypes}         (table)                                     List of file types to attach the client to
+        {capabilities}      (table)                                     LSP client capabilities
+        {settings}          (table|fun(project_root:string|nil):table)  The server config or a function that creates the server config
+        {default_settings}  (table)                                     The default server config that will be used if no settings are specified or found
 
     See: ~
         |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
@@ -193,6 +194,28 @@ haskell-tools LSP client setup                               *haskell-tools.lsp*
  * `:HlsStart` - Start the LSP client.
  * `:HlsStop` - Stop the LSP client.
  * `:HlsRestart` - Restart the LSP client.
+
+LoadHlsSettingsOpts                                        *LoadHlsSettingsOpts*
+
+    Fields: ~
+        {settings_file_pattern}  (string|nil)  File name or pattern to search for. Defaults to 'hls.json'
+
+
+                                                         *lsp.load_hls_settings*
+lsp.load_hls_settings({project_root}, {opts})
+    Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
+    Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
+
+    Parameters: ~
+        {project_root}  (string|nil)               The project root
+        {opts}          (LoadHlsSettingsOpts|nil)
+
+    Returns: ~
+        (table)  hls_settings
+
+    See: ~
+        |https://haskell-language-server.readthedocs.io/en/latest/configuration.html|
+
 
 lsp.setup()                                                          *lsp.setup*
     Setup the LSP client. Called by the haskell-tools setup.

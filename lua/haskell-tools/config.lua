@@ -60,10 +60,12 @@
 ---@field cmd table The command to start the server with
 ---@field filetypes table List of file types to attach the client to
 ---@field capabilities table LSP client capabilities
----@field settings table The server config
+---@field settings table|fun(project_root:string|nil):table The server config or a function that creates the server config
+---@field default_settings table The default server config that will be used if no settings are specified or found
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html.
 ---@comment To print all options that are available for your haskell-language-server version, run `haskell-language-server-wrapper generate-default-config`
 
+local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
 local config = {
@@ -140,7 +142,10 @@ config.defaults = {
     cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', config.hls_log },
     filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = capabilities,
-    settings = {
+    settings = function(project_root)
+      return ht.lsp.load_hls_settings(project_root)
+    end,
+    default_settings = {
       haskell = {
         -- The formatting provider.
         formattingProvider = 'fourmolu',

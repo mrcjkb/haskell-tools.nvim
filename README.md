@@ -275,7 +275,7 @@ require('haskell-tools').setup {
   },
   hls = { -- LSP client options
     -- ...
-    settings = {
+    default_settings = {
       haskell = { -- haskell-language-server options
         formattingProvider = 'ormolu',
         checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
@@ -289,6 +289,27 @@ require('haskell-tools').setup {
 * The full list of defaults [can be found here](./lua/haskell-tools/config.lua).
 * To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`.
 * For detailed descriptions of the configs, look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
+
+### How to dynamically load different `haskell-language-server` settings per project
+
+By default, this plugin will look for a `hls.json` file in the project root directory, and attempt to load it.
+If the file does not exist, or it can't be decoded, the `hls.default_settings` will be used.
+
+You can change the behaviour of the function:
+
+```lua
+local ht = require('haskell-tools')
+ht.setup {
+  -- ...
+  hls = {
+    settings = function(project_root)
+      ht.lsp.load_hls_settings(project_root, {
+        settings_file_pattern = 'hls.json'
+      })
+    end,
+  },
+}
+```
 
 ### How to disable individual code lenses
 
@@ -363,6 +384,9 @@ lsp.stop()
 
 ---Restart the LSP client.
 lsp.restart()
+
+---Callback for dynamically loading haskell-language-server settings
+lsp.load_hls_settnngs(project_root)
 ```
 
 #### Hoogle
