@@ -52,12 +52,10 @@ local function mk_hoogle_request(search_term, opts)
   return hoogle_request
 end
 
----@return nil
-local function setup_telescope_search()
+if deps.has_telescope() then
   local pickers = deps.require_telescope('telescope.pickers')
   local finders = deps.require_telescope('telescope.finders')
   local previewers = deps.require_telescope('telescope.previewers')
-  local config = deps.require_telescope('telescope.config').values
   local hoogle_util = require('haskell-tools.hoogle.util')
   local async = deps.require_plenary('plenary.async')
 
@@ -67,10 +65,18 @@ local function setup_telescope_search()
   ---@param opts TelescopeHoogleWebOpts|nil
   ---@return nil
   function hoogle_web.telescope_search(search_term, opts)
+    local config = deps.require_telescope('telescope.config').values
+    if not config then
+      local msg = 'telescope.nvim has not been setup. Falling back to browser search.'
+      ht.log.warning(msg)
+      vim.notify_once('haskell-tools.hoogle: ' .. msg, vim.log.levels.WARN)
+      hoogle_web.browser_search(search_term, opts)
+      return
+    end
     async.run(function()
       if vim.fn.executable('curl') == 0 then
         ht.log.error('curl executable not found.')
-        error("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.")
+        vim.notify("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.", vim.log.levels.ERROR)
         return
       end
       opts = opts or {}
@@ -99,24 +105,14 @@ local function setup_telescope_search()
   end
 end
 
-local function setup_browser_search()
-  ---@param search_term string
-  ---@param opts TelescopeHoogleWebOpts
-  ---@return nil
-  function hoogle_web.browser_search(search_term, opts)
-    opts = util.tbl_merge(opts or {}, {
-      hoogle = { json = false },
-    })
-    util.open_browser(mk_hoogle_request(search_term, opts))
-  end
-end
-
+---@param search_term string
+---@param opts TelescopeHoogleWebOpts|nil
 ---@return nil
-function hoogle_web.setup()
-  if deps.has_telescope() then
-    setup_telescope_search()
-  end
-  setup_browser_search()
+function hoogle_web.browser_search(search_term, opts)
+  opts = util.tbl_merge(opts or {}, {
+    hoogle = { json = false },
+  })
+  util.open_browser(mk_hoogle_request(search_term, opts))
 end
 
 return hoogle_web
