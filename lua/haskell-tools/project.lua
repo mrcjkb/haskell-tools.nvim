@@ -75,7 +75,7 @@ function project.setup()
       local result = project_util.get_package_yaml(file)
       if not result then
         local err_msg = 'HsPackageYaml: Cannot find package.yaml file for: ' .. file
-        vim.log.error(err_msg)
+        ht.log.error(err_msg)
         vim.notify(err_msg, vim.log.levels.ERROR)
         return
       end
@@ -94,7 +94,7 @@ function project.setup()
       local result = project_util.get_package_cabal(file)
       if not result then
         local err_msg = 'HsPackageCabal: Cannot find *.cabal file for: ' .. file
-        vim.log.error(err_msg)
+        ht.log.error(err_msg)
         vim.notify(err_msg, vim.log.levels.ERROR)
         return
       end
