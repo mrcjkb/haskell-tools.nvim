@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2023-01-27
+### Fixed
+- Fall back to hoogle browser search if telescope is not set up.
 ### Changed
 - Do not set a default layout for telescope Hoogle search.
 

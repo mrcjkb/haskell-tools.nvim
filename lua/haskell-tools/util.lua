@@ -44,14 +44,18 @@ function util.open_browser(url)
   if vim.fn.has('mac') == 1 then
     browser_cmd = 'open'
   end
-  if browser_cmd then
+  if browser_cmd and vim.fn.executable(browser_cmd) == 1 then
     local job_opts = {
       command = browser_cmd,
       args = { url },
     }
     ht.log.debug { 'Opening browser', job_opts }
     Job:new(job_opts):start()
+    return
   end
+  local msg = 'No executable found to open the browser.'
+  ht.log.error(msg)
+  vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
 end
 
 --- Get the type signature of the word under the cursor from markdown

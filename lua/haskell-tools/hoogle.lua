@@ -1,8 +1,6 @@
 ---@mod haskell-tools.hoogle haskell-tools Hoogle search
 
 local ht = require('haskell-tools')
-local hoogle_web = require('haskell-tools.hoogle.web')
-local hoogle_local = require('haskell-tools.hoogle.local')
 local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local lsp_util = vim.lsp.util
@@ -12,47 +10,6 @@ local handler = function(_, _)
 end
 
 local hoogle = {}
-
----@return nil
-local function set_web_handler()
-  hoogle_web.setup()
-  handler = hoogle_web.telescope_search
-  ht.log.debug('handler = telescope-web')
-end
-
----@return nil
-local function set_local_handler()
-  hoogle_local.setup()
-  handler = hoogle_local.telescope_search
-  ht.log.debug('handler = telescope-local')
-end
-
----@return nil
-local function set_browser_handler()
-  hoogle_local.setup()
-  handler = hoogle_web.browser_search
-  ht.log.debug('handler = browser')
-end
-
----@param opts HoogleOpts
----@return nil
-local function setup_handler(opts)
-  if opts.mode == 'telescope-web' then
-    set_web_handler()
-  elseif opts.mode == 'telescope-local' then
-    set_local_handler()
-  elseif opts.mode == 'browser' then
-    set_browser_handler()
-  elseif opts.mode == 'auto' then
-    if not deps.has_telescope() then
-      set_browser_handler()
-    elseif hoogle_local.has_hoogle() then
-      set_local_handler()
-    else
-      set_web_handler()
-    end
-  end
-end
 
 ---@param options table
 ---@return nil
@@ -100,7 +57,56 @@ end
 function hoogle.setup()
   ht.log.debug('Hoogle setup...')
   local opts = ht.config.options.tools.hoogle
-  setup_handler(opts)
+  local hoogle_web = require('haskell-tools.hoogle.web')
+  local hoogle_local = require('haskell-tools.hoogle.local')
+
+  ---@return nil
+  local function set_web_handler()
+    handler = hoogle_web.telescope_search
+    ht.log.debug('handler = telescope-web')
+  end
+
+  ---@return nil
+  local function set_local_handler()
+    handler = hoogle_local.telescope_search
+    ht.log.debug('handler = telescope-local')
+  end
+
+  ---@return nil
+  local function set_browser_handler()
+    handler = hoogle_web.browser_search
+    ht.log.debug('handler = browser')
+  end
+
+  if opts.mode == 'telescope-web' then
+    set_web_handler()
+  elseif opts.mode == 'telescope-local' then
+    if not hoogle_local.has_hoogle() then
+      local msg = 'handler set to "telescope-local" but no hoogle executable found.'
+      ht.log.error(msg)
+      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
+      set_web_handler()
+      return
+    end
+    if not deps.has_telescope() then
+      local msg = 'handler set to "telescope-local" but telescope.nvim is not installed.'
+      ht.log.error(msg)
+      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
+      set_web_handler()
+      return
+    end
+    set_local_handler()
+  elseif opts.mode == 'browser' then
+    set_browser_handler()
+  elseif opts.mode == 'auto' then
+    if not deps.has_telescope() then
+      set_browser_handler()
+    elseif hoogle_local.has_hoogle() then
+      set_local_handler()
+    else
+      set_web_handler()
+    end
+  end
 end
 
 return hoogle
