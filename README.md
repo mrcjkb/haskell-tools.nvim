@@ -52,6 +52,7 @@ use {
   requires = {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope.nvim', -- optional
+    'neovim/nvim-lspconfig', -- required on the 1.x.x branch
   },
   branch = '1.x.x', -- recommended
 }
