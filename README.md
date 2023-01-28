@@ -390,7 +390,7 @@ ht.lsp.stop()
 ht.lsp.restart()
 
 -- Callback for dynamically loading haskell-language-server settings
-ht.lsp.load_hls_settnngs(project_root)
+ht.lsp.load_hls_settings(project_root)
 ```
 
 #### Hoogle
