@@ -23,7 +23,7 @@
 ---@field disable boolean (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
 ---@field border table|nil The hover window's border. Set to `nil` to disable.
 ---@field stylize_markdown boolean (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
----@field auto_focus boolean (default: `false`) Whether to automatically switch to the hover window
+---@field auto_focus boolean|nil (default: `false`) Whether to automatically switch to the hover window
 
 ---@class DefinitionOpts
 ---@field hoogle_signature_fallback boolean (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
@@ -51,14 +51,14 @@
 ---@field package_events table `autocmd` Events to trigger package tag generation
 
 ---@class HTLogOpts
----@field level integer|string The log level
+---@field level number|string The log level
 ---@see vim.log.levels
 
 ---@class HaskellLspClientOpts
 ---@field debug boolean Whether to enable debug logging
 ---@field on_attach fun(client:number,bufnr:number) Callback to execute when the client attaches to a buffer
----@field cmd table The command to start the server with
----@field filetypes table List of file types to attach the client to
+---@field cmd string[] The command to start the server with
+---@field filetypes string[] List of file types to attach the client to
 ---@field capabilities table LSP client capabilities
 ---@field settings table|fun(project_root:string|nil):table The server config or a function that creates the server config
 ---@field default_settings table The default server config that will be used if no settings are specified or found
@@ -251,6 +251,11 @@ function config.setup(opts)
   config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})
   if config.options.hls.debug then
     table.insert(config.options.hls.cmd, '--debug')
+  end
+  local check = require('haskell-tools.config.check')
+  local ok, err = check.validate()
+  if not ok then
+    vim.notify('haskell-tools: ' .. err, vim.log.levels.ERROR)
   end
 end
 
