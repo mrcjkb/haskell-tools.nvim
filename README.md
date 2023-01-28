@@ -112,6 +112,7 @@ to generate a database.
 
 ### Beyond `nvim-lspconfig.hls`
 
+- [x] Dynamically load `haskell-language-server` settings per project from JSON files.
 - [x] Clean shutdown of language server on exit to prevent corrupted files ([see ghc #14533](https://gitlab.haskell.org/ghc/ghc/-/issues/14533)).
 - [x] Automatically adds capabilities for the following plugins, if loaded:
   * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (provides completion sources for [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)).
@@ -380,16 +381,16 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 ```lua
 local ht = require('haskell-tools')
 -- Start or attach the LSP client.
-lsp.start()
+ht.lsp.start()
 
 -- Stop the LSP client.
-lsp.stop()
+ht.lsp.stop()
 
 -- Restart the LSP client.
-lsp.restart()
+ht.lsp.restart()
 
 -- Callback for dynamically loading haskell-language-server settings
-lsp.load_hls_settnngs(project_root)
+ht.lsp.load_hls_settnngs(project_root)
 ```
 
 #### Hoogle
