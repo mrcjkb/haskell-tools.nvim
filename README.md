@@ -509,6 +509,8 @@ require('telescope').load_extension('ht')
 
 ## Troubleshooting
 
+For a health check, run `:checkhealth haskell-tools`
+
 #### LSP features not working
 Check which version of GHC you are using (`haskell-language-server-werapper --version`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.

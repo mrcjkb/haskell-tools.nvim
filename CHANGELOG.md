@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `HlsStart`, `HlsStop` and `HlsRestart` commands.
 - Dynamically load `haskell-language-server` settings JSON from project root, if available.
+- Health checks, runnable with `:checkhealth haskell-tools`.
+- Validate configs during setup.
 
 ## [1.7.0] - 2023-01-27
 ### Fixed

@@ -94,10 +94,10 @@ HoogleOpts                                                          *HoogleOpts*
 HoverOpts                                                            *HoverOpts*
 
     Fields: ~
-        {disable}           (boolean)    (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
-        {border}            (table|nil)  The hover window's border. Set to `nil` to disable.
-        {stylize_markdown}  (boolean)    (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
-        {auto_focus}        (boolean)    (default: `false`) Whether to automatically switch to the hover window
+        {disable}           (boolean)      (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+        {border}            (table|nil)    The hover window's border. Set to `nil` to disable.
+        {stylize_markdown}  (boolean)      (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
+        {auto_focus}        (boolean|nil)  (default: `false`) Whether to automatically switch to the hover window
 
 
 DefinitionOpts                                                  *DefinitionOpts*
@@ -146,7 +146,7 @@ FastTagsOpts                                                      *FastTagsOpts*
 HTLogOpts                                                            *HTLogOpts*
 
     Fields: ~
-        {level}  (integer|string)  The log level
+        {level}  (number|string)  The log level
 
     See: ~
         |vim.log.levels|
@@ -157,8 +157,8 @@ HaskellLspClientOpts                                      *HaskellLspClientOpts*
     Fields: ~
         {debug}             (boolean)                                   Whether to enable debug logging
         {on_attach}         (fun(client:number,bufnr:number))           Callback to execute when the client attaches to a buffer
-        {cmd}               (table)                                     The command to start the server with
-        {filetypes}         (table)                                     List of file types to attach the client to
+        {cmd}               (string[])                                  The command to start the server with
+        {filetypes}         (string[])                                  List of file types to attach the client to
         {capabilities}      (table)                                     LSP client capabilities
         {settings}          (table|fun(project_root:string|nil):table)  The server config or a function that creates the server config
         {default_settings}  (table)                                     The default server config that will be used if no settings are specified or found
