@@ -2,7 +2,6 @@
   self,
   packer-nvim,
   plenary-nvim,
-  nvim-lspconfig,
   telescope-nvim,
   toggleterm,
 }: final: prev:
@@ -62,7 +61,10 @@ with final.stdenv; let
     mkDerivation {
       inherit name;
 
+      src = self;
+
       phases = [
+        "unpackPhase"
         "buildPhase"
         "checkPhase"
       ];
@@ -73,6 +75,7 @@ with final.stdenv; let
         [
           nvim
           makeWrapper
+          haskell-language-server
         ]
         ++ extraPkgs;
 
@@ -81,18 +84,20 @@ with final.stdenv; let
         mkdir -p $out/.config/nvim/site/pack/packer/start
         ln -s ${packer-nvim} $out/.config/nvim/site/pack/packer/start/packer.nvim
         ln -s ${plenary-nvim} $out/.config/nvim/site/pack/packer/start/plenary.nvim
-        ln -s ${nvim-lspconfig} $out/.config/nvim/site/pack/packer/start/nvim-lspconfig
         ln -s ${toggleterm} $out/.config/nvim/site/pack/packer/start/toggleterm.nvim
         ${optionalString withTelescope "ln -s ${telescope-nvim} $out/.config/nvim/site/pack/packer/start/telescope.nvim"}
         ln -s ${./..} $out/.config/nvim/site/pack/packer/start/${name}
+        cp -r tests $out
+        # FIXME: Generating a config does not seem to be working. For now, there is a config saved in the tests directory.
+        # haskell-language-server-wrapper generate-default-config > $out/tests/hls.json
       '';
 
       checkPhase = ''
         export NVIM_DATA_MINIMAL=$(realpath $out/.config/nvim)
         export HOME=$(realpath .)
-        cd ${./..}
-        # TODO: split test directories by environment
-        nvim --headless --noplugin -u ${../tests/minimal.lua} -c "PlenaryBustedDirectory ${../tests} {minimal_init = '${../tests/minimal.lua}'}"
+        export TEST_CWD=$(realpath $out/tests)
+        cd $out
+        nvim --headless --noplugin -u ${../tests/minimal.lua} -c "PlenaryBustedDirectory tests {minimal_init = 'tests/minimal.lua'}"
       '';
     };
 in {

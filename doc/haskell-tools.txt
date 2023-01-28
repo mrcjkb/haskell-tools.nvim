@@ -155,12 +155,13 @@ HTLogOpts                                                            *HTLogOpts*
 HaskellLspClientOpts                                      *HaskellLspClientOpts*
 
     Fields: ~
-        {debug}         (boolean)                          Whether to enable debug logging
-        {on_attach}     (fun(client:number,bufnr:number))  Callback to execute when the client attaches to a buffer
-        {cmd}           (table)                            The command to start the server with
-        {filetypes}     (table)                            List of file types to attach the client to
-        {capabilities}  (table)                            LSP client capabilities
-        {settings}      (table)                            The server config
+        {debug}             (boolean)                                   Whether to enable debug logging
+        {on_attach}         (fun(client:number,bufnr:number))           Callback to execute when the client attaches to a buffer
+        {cmd}               (table)                                     The command to start the server with
+        {filetypes}         (table)                                     List of file types to attach the client to
+        {capabilities}      (table)                                     LSP client capabilities
+        {settings}          (table|fun(project_root:string|nil):table)  The server config or a function that creates the server config
+        {default_settings}  (table)                                     The default server config that will be used if no settings are specified or found
 
     See: ~
         |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
@@ -188,11 +189,71 @@ config.setup({opts})                                              *config.setup*
 ==============================================================================
 haskell-tools LSP client setup                               *haskell-tools.lsp*
 
+ The following commands are available:
+
+ * `:HlsStart` - Start the LSP client.
+ * `:HlsStop` - Stop the LSP client.
+ * `:HlsRestart` - Restart the LSP client.
+
+LoadHlsSettingsOpts                                        *LoadHlsSettingsOpts*
+
+    Fields: ~
+        {settings_file_pattern}  (string|nil)  File name or pattern to search for. Defaults to 'hls.json'
+
+
+                                                         *lsp.load_hls_settings*
+lsp.load_hls_settings({project_root}, {opts})
+    Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
+    Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
+
+    Parameters: ~
+        {project_root}  (string|nil)               The project root
+        {opts}          (LoadHlsSettingsOpts|nil)
+
+    Returns: ~
+        (table)  hls_settings
+
+    See: ~
+        |https://haskell-language-server.readthedocs.io/en/latest/configuration.html|
+
+
 lsp.setup()                                                          *lsp.setup*
     Setup the LSP client. Called by the haskell-tools setup.
 
     Returns: ~
         (nil)
+
+
+lsp.start({bufnr})                                                   *lsp.start*
+    Start or attach the LSP client.
+    Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (number|nil)  The LSP client ID
+
+
+lsp.stop({bufnr})                                                     *lsp.stop*
+    Stop the LSP client.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (table[])  A list of clients that will be stopped
+
+
+lsp.restart({bufnr})                                               *lsp.restart*
+    Restart the LSP client.
+    Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
+
+    Returns: ~
+        (number|nil)  The LSP client ID after restart
 
 
 ==============================================================================
@@ -293,6 +354,16 @@ project.setup()                                                  *project.setup*
 
     Returns: ~
         (nil)
+
+
+project.root_dir({project_file})                              *project.root_dir*
+    Get the project's root directory
+
+    Parameters: ~
+        {project_file}  (string)  The path to a project file
+
+    Returns: ~
+        (string|nil)
 
 
 project.open_package_yaml()                          *project.open_package_yaml*

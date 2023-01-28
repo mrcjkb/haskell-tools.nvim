@@ -1,13 +1,49 @@
 ---@mod haskell-tools.lsp haskell-tools LSP client setup
 
 local ht = require('haskell-tools')
+local ht_util = require('haskell-tools.util')
 local deps = require('haskell-tools.deps')
+local Path = deps.require_plenary('plenary.path')
+
+local client_name = 'haskell-tools.nvim'
 
 local lsp = {}
 
+---@brief [[
+--- The following commands are available:
+---
+--- * `:HlsStart` - Start the LSP client.
+--- * `:HlsStop` - Stop the LSP client.
+--- * `:HlsRestart` - Restart the LSP client.
+---@brief ]]
+
+local commands = {
+  {
+    'HlsStart',
+    function()
+      lsp.start()
+    end,
+    {},
+  },
+  {
+    'HlsStop',
+    function()
+      lsp.stop()
+    end,
+    {},
+  },
+  {
+    'HlsRestart',
+    function()
+      lsp.restart()
+    end,
+    {},
+  },
+}
+
 ---GHC can leave behind corrupted files if it does not exit cleanly.
 ---(https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
----To minimise the risk of this occurring, we attempt to shut down hls clnly before exiting neovim.
+---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.
 ---@param client number The LSP client
 ---@param bufnr number The buffer number
 ---@return nil
@@ -22,61 +58,166 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   })
 end
 
----@param opts CodeLensOpts
----@param bufnr number The buffer number
----@return nil
-local function setup_codeLens(opts, bufnr)
-  local function refresh_codeLens()
-    vim.schedule(vim.lsp.codelens.refresh)
-  end
-  if opts.autoRefresh then
-    vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
-      group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
-      callback = refresh_codeLens,
-      buffer = bufnr,
-    })
-    refresh_codeLens()
-  end
-end
+---@class LoadHlsSettingsOpts
+---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
----@return nil
-local function setup_lsp()
-  ht.log.debug('Setting up the LSP client...')
-  local opts = ht.config.options
-  local hls_opts = opts.hls
-  local orig_on_attach = hls_opts.on_attach
-  local function on_attach(client, bufnr)
-    ht.log.debug('LSP attach')
-    orig_on_attach(client, bufnr)
-    ensure_clean_exit_on_quit(client, bufnr)
-    setup_codeLens(opts.tools.codeLens, bufnr)
+---Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
+---Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
+---@param project_root string|nil The project root
+---@param opts LoadHlsSettingsOpts|nil
+---@return table hls_settings
+---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
+function lsp.load_hls_settings(project_root, opts)
+  local default_settings = ht.config.options.hls.default_settings
+  if not project_root then
+    return default_settings
   end
-  hls_opts.on_attach = on_attach
-  local lspconfig = deps.require_or_err('lspconfig', 'neovim/nvim-lspconfig')
-  lspconfig.hls.setup(hls_opts)
-end
-
----@return nil
-local function setup_definition()
-  local opts = ht.config.options.tools.definition
-  require('haskell-tools.lsp.definition').setup(opts or {})
-end
-
----@return nil
-local function setup_hover()
-  local opts = ht.config.options.tools.hover
-  if opts.disable then
-    return
+  local default_opts = { settings_file_pattern = 'hls.json' }
+  opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
+  local results = vim.fn.glob(Path:new(project_root, opts.settings_file_pattern).filename, true, true)
+  if #results == 0 then
+    ht.log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
+    return default_settings
   end
-  require('haskell-tools.lsp.hover').setup()
+  local settings_json = results[1]
+  local content = ht_util.read_file(settings_json)
+  local success, settings = pcall(vim.json.decode, content)
+  if not success then
+    local msg = 'Could not decode ' .. settings_json .. '. Falling back to default settings.'
+    ht.log.warn { msg, error }
+    vim.notify('haskell-tools: ' .. msg, vim.log.levels.WARN)
+    return default_settings
+  end
+  ht.log.debug { 'hls settings', settings }
+  return settings or default_settings
 end
 
 ---Setup the LSP client. Called by the haskell-tools setup.
 ---@return nil
 function lsp.setup()
-  setup_lsp()
-  setup_definition()
-  setup_hover()
+  ht.log.debug('Setting up the LSP client...')
+  local opts = ht.config.options
+  local hls_opts = assert(opts.hls, 'haskell-tools: hls options not set.')
+  local cmd = assert(hls_opts.cmd, 'haskell-tools: hls cmd not set.')
+  assert(#cmd > 1, 'haskell-tools: hls cmd table is empty.')
+  local hls_cmd = cmd[1]
+  if vim.fn.executable(hls_cmd) == 0 then
+    ht.log.warn('Command ' .. hls_cmd .. ' not found in PATH.')
+    return
+  end
+
+  local filetypes = assert(hls_opts.filetypes, 'haskell-tools: filetypes not set.')
+
+  local handlers = {}
+
+  local tools_opts = assert(opts.tools, 'haskell-tools: tools options not set.')
+  local defintion_opts = tools_opts.definition or {}
+
+  if defintion_opts.hoogle_signature_fallback == true then
+    local lsp_definition = require('haskell-tools.lsp.definition')
+    ht.log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
+    handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(defintion_opts)
+  end
+  local hover_opts = tools_opts.hover or {}
+  if not hover_opts.disable then
+    local hover = require('haskell-tools.lsp.hover')
+    handlers['textDocument/hover'] = hover.on_hover
+  end
+
+  ---Start or attach the LSP client.
+  ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+  ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
+  ---@return number|nil client_id The LSP client ID
+  function lsp.start(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local file = vim.api.nvim_buf_get_name(bufnr)
+    if not file or #file == 0 then
+      local msg = 'Could not determine the name of buffer ' .. bufnr .. '.'
+      ht.log.error('lsp.start: ' .. msg)
+      vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
+      return
+    end
+    local filetype = vim.bo[bufnr].filetype
+    if not vim.tbl_contains(filetypes, filetype) then
+      local msg = 'File type ' .. filetype .. ' not one of ' .. vim.inspect(filetypes)
+      ht.log.error('lsp.start: ' .. msg)
+      vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
+      return
+    end
+    local project_root = ht.project.root_dir(file)
+    local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
+    local client_id = vim.lsp.start {
+      name = client_name,
+      cmd = cmd,
+      root_dir = project_root,
+      capabilities = hls_opts.capabilities,
+      handlers = handlers,
+      settings = hls_settings,
+      on_attach = function(client_id, buf)
+        ht.log.debug('LSP attach')
+        hls_opts.on_attach(client_id, buf)
+        local function refresh_codeLens()
+          vim.schedule(vim.lsp.codelens.refresh)
+        end
+        local codeLensOpts = tools_opts.codeLens or {}
+        if codeLensOpts.autoRefresh then
+          vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
+            group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
+            callback = refresh_codeLens,
+            buffer = buf,
+          })
+          refresh_codeLens()
+        end
+      end,
+    }
+    if client_id then
+      ensure_clean_exit_on_quit(client_id, bufnr)
+    end
+    return client_id
+  end
+
+  ---Stop the LSP client.
+  ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
+  ---@return table[] clients A list of clients that will be stopped
+  function lsp.stop(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_active_clients { bufnr = bufnr, name = client_name }
+    for _, client in ipairs(clients) do
+      client:stop()
+    end
+    return clients
+  end
+
+  ---Restart the LSP client.
+  ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
+  ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
+  ---@return number|nil client_id The LSP client ID after restart
+  function lsp.restart(bufnr)
+    local clients = lsp.stop(bufnr)
+    local timer = vim.loop.new_timer()
+    timer:start(500, 500, function()
+      for _, client in ipairs(clients) do
+        if client:is_stopped() then
+          vim.schedule(function()
+            lsp.start(client.bufnr)
+          end)
+        end
+      end
+    end)
+  end
+
+  vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('haskell-tools-lsp', {}),
+    pattern = table.concat(filetypes, ','),
+    callback = function(opt)
+      lsp.start(opt.buf)
+    end,
+    desc = 'Start haskell-language-server or attach to an existing LSP client.',
+  })
+
+  for _, command in ipairs(commands) do
+    vim.api.nvim_create_user_command(unpack(command))
+  end
 end
 
 return lsp

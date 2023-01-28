@@ -79,4 +79,17 @@ function util.quote(str)
   return '"' .. str .. '"'
 end
 
+---Read the contents of a file
+---@param filename string
+---@return string|nil content
+function util.read_file(filename)
+  local content
+  local f = io.open(filename, 'r')
+  if f then
+    content = f:read('*a')
+    f:close()
+  end
+  return content
+end
+
 return util

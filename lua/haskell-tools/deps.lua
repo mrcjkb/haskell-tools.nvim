@@ -66,11 +66,6 @@ function deps.require_plenary(modname)
 end
 
 ---@return unknown
-function deps.require_lspconfig(modname)
-  return deps.require_or_err(modname, 'neovim/nvim-lspconfig')
-end
-
----@return unknown
 function deps.require_toggleterm(modname)
   return deps.require_or_err(modname, 'akinsho/toggleterm')
 end

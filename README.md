@@ -32,12 +32,11 @@
 ### Required
 
 * `neovim >= 0.8`
-* [`nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig)
 * [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim)
-* [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html)
 
 ### Optional
 
+* [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html) (recommended)
 * [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
 * A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation (recommended for better hoogle search performance)
 * [`fast-tags`](https://github.com/elaforge/fast-tags) (for automatic tag generation as a fallback for `vim.lsp.tagfunc`).
@@ -51,7 +50,6 @@ Example using [`packer.nvim`](https://github.com/wbthomason/packer.nvim):
 use {
   'mrcjkb/haskell-tools.nvim',
   requires = {
-    'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope.nvim', -- optional
   },
@@ -72,7 +70,7 @@ See the [Features](#features) section for more info.
 
 >**Warning**
 >
-> Do not call the `lspconfig.hls` setup or set up the lsp manually, as doing so may cause conflicts.
+> Do not call the [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig) setup or set up the lsp manually, as doing so may cause conflicts.
 
 To get started quickly with the default setup, add the following to your neovim config:
 
@@ -87,7 +85,6 @@ ht.setup {
       -- so auto-refresh (see advanced configuration) is enabled by default
       vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
       vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
-      -- default_on_attach(client, bufnr)  -- if defined, see nvim-lspconfig
     end,
   },
 }
@@ -278,7 +275,7 @@ require('haskell-tools').setup {
   },
   hls = { -- LSP client options
     -- ...
-    settings = {
+    default_settings = {
       haskell = { -- haskell-language-server options
         formattingProvider = 'ormolu',
         checkProject = true, -- Setting this to true could have a performance impact on large mono repos.
@@ -292,6 +289,27 @@ require('haskell-tools').setup {
 * The full list of defaults [can be found here](./lua/haskell-tools/config.lua).
 * To view all available language server settings (including those not set by this plugin), run `haskell-language-server generate-default-config`.
 * For detailed descriptions of the configs, look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
+
+### How to dynamically load different `haskell-language-server` settings per project
+
+By default, this plugin will look for a `hls.json` file in the project root directory, and attempt to load it.
+If the file does not exist, or it can't be decoded, the `hls.default_settings` will be used.
+
+You can change the behaviour of the function:
+
+```lua
+local ht = require('haskell-tools')
+ht.setup {
+  -- ...
+  hls = {
+    settings = function(project_root)
+      ht.lsp.load_hls_settings(project_root, {
+        settings_file_pattern = 'hls.json'
+      })
+    end,
+  },
+}
+```
 
 ### How to disable individual code lenses
 
@@ -353,6 +371,23 @@ iron.setup {
 ```
 
 ### Available functions
+
+#### LSP
+
+```lua
+local ht = require('haskell-tools')
+---Start or attach the LSP client.
+lsp.start()
+
+---Stop the LSP client.
+lsp.stop()
+
+---Restart the LSP client.
+lsp.restart()
+
+---Callback for dynamically loading haskell-language-server settings
+lsp.load_hls_settnngs(project_root)
+```
 
 #### Hoogle
 
@@ -439,6 +474,12 @@ ht.tags.generate_package_tags(path)
 
 ### Available commands
 
+#### LSP
+
+* `:HlsStart` - Start the LSP client.
+* `:HlsStop` - Stop the LSP client.
+* `:HlsRestart` - Restart the LSP client.
+
 #### Project
 
 * `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
@@ -465,7 +506,7 @@ require('telescope').load_extension('ht')
 ## Troubleshooting
 
 #### LSP features not working
-Check which version of GHC you are using (`:LspInfo`).
+Check which version of GHC you are using (`haskell-language-server-werapper --version`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
 You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 

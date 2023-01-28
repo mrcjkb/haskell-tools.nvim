@@ -23,8 +23,8 @@ body:
       required: true
   - type: input
     attributes:
-      label: "Output of `haskell-language-server --version`"
-      placeholder: "1.8.0.0 (GHC: 9.2.5)"
+      label: "Output of `haskell-language-server-wrapper --version`"
+      placeholder: "1.9.0.0 (GHC: 9.2.4)"
   - type: textarea
     attributes:
       label: "How to reproduce the issue"
