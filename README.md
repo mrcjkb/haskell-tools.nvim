@@ -372,20 +372,22 @@ iron.setup {
 
 ### Available functions
 
+For a complete overview, enter `:help haskell-tools` in Neovim.
+
 #### LSP
 
 ```lua
 local ht = require('haskell-tools')
----Start or attach the LSP client.
+-- Start or attach the LSP client.
 lsp.start()
 
----Stop the LSP client.
+-- Stop the LSP client.
 lsp.stop()
 
----Restart the LSP client.
+-- Restart the LSP client.
 lsp.restart()
 
----Callback for dynamically loading haskell-language-server settings
+-- Callback for dynamically loading haskell-language-server settings
 lsp.load_hls_settnngs(project_root)
 ```
 
