@@ -297,7 +297,7 @@ require('haskell-tools').setup {
 By default, this plugin will look for a `hls.json` file in the project root directory, and attempt to load it.
 If the file does not exist, or it can't be decoded, the `hls.default_settings` will be used.
 
-You can change the behaviour of the function:
+You can change this behaviour with the `hls.settings` config:
 
 ```lua
 local ht = require('haskell-tools')
@@ -305,7 +305,7 @@ ht.setup {
   -- ...
   hls = {
     settings = function(project_root)
-      ht.lsp.load_hls_settings(project_root, {
+      return ht.lsp.load_hls_settings(project_root, {
         settings_file_pattern = 'hls.json'
       })
     end,
