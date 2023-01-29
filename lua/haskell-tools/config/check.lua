@@ -29,7 +29,7 @@ local function validate(path, tbl)
   return ok or false, prefix .. mk_error_msg(path, err)
 end
 
----Validates the config and throws if the config is invalid.
+---Validates the config.
 ---@return boolean is_valid
 ---@return string|nil error_message
 function config_check.validate()
