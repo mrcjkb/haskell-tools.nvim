@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Set up LSP client without `nvim-lspconfig` (removes the dependency).
+- Hover actions: Show package/project relative locations.
 ### Added
 - `HlsStart`, `HlsStop` and `HlsRestart` commands.
 - Dynamically load `haskell-language-server` settings JSON from project root, if available.
 - Health checks, runnable with `:checkhealth haskell-tools`.
 - Validate configs during setup.
+- Hover action for `textDocument/typeDefinition`.
 
 ## [1.7.0] - 2023-01-27
 ### Fixed

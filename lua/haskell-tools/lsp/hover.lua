@@ -9,6 +9,7 @@
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
+local project_util = require('haskell-tools.project-util')
 
 local hover = {}
 
@@ -44,6 +45,26 @@ local function run_command()
   local action = _state.commands[line]
   close_hover()
   action()
+end
+
+---@param location string The location provided by LSP hover
+---@return string formatted_location
+local function format_location(location)
+  local formatted_location = ('%s'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
+  local file_location = formatted_location:match('(.*).hs:')
+  if not file_location then
+    return formatted_location
+  end
+  local path = file_location .. '.hs'
+  local package_path = project_util.match_package_root(path)
+  if package_path then
+    return formatted_location:sub(#package_path + 2) -- trim package path + first '/'
+  end
+  local project_path = project_util.match_project_root(path)
+  if project_path then
+    formatted_location = formatted_location:sub(#project_path + 2):gsub('/', ':', 1) -- trim project path + first '/'
+  end
+  return formatted_location
 end
 
 ---LSP handler for textDocument/hover
@@ -113,7 +134,7 @@ function hover.on_hover(_, result, ctx, config)
     if location and not found_location then
       found_location = true
       table.insert(to_remove, 1, i)
-      local location_suffix = (' in %s.'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
+      local location_suffix = (' in %s.'):format(format_location(location))
       local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
       local can_go_to_definition = false
       if not err and results and #results > 0 then -- Can go to definition
@@ -141,6 +162,26 @@ function hover.on_hover(_, result, ctx, config)
           ht.log.debug { 'Hover: Hoogle search for definition', search_term }
           ht.hoogle.hoogle_signature { search_term = search_term }
         end)
+      end
+      -- XXX: Reduce nesting
+      if location:match('.hs') then
+        results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
+        if not err and results and #results > 0 then -- Can go to definition
+          local type_definition_results = results[1] and results[1].result or {}
+          if #type_definition_results > 0 then
+            local type_definition_result = type_definition_results[1]
+            table.insert(actions, 1, string.format('%d. Go to type definition' .. location_suffix, #actions + 1))
+            table.insert(_state.commands, function()
+              -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
+              local type_definition_ctx = {
+                method = 'textDocument/typeDefinition',
+                client_id = ctx.client_id,
+              }
+              ht.log.debug { 'Hover: Go to type definition', type_definition_result }
+              vim.lsp.handlers['textDocument/typeDefinition'](_, type_definition_result, type_definition_ctx)
+            end)
+          end
+        end
       end
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
       table.insert(actions, 1, string.format('%d. Find references.', #actions + 1))
