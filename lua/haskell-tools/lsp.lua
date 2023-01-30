@@ -193,13 +193,14 @@ function lsp.setup()
   ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
   ---@return number|nil client_id The LSP client ID after restart
   function lsp.restart(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
     local clients = lsp.stop(bufnr)
     local timer = vim.loop.new_timer()
     timer:start(500, 500, function()
       for _, client in ipairs(clients) do
         if client:is_stopped() then
           vim.schedule(function()
-            lsp.start(client.bufnr)
+            lsp.start(bufnr)
           end)
         end
       end
