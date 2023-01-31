@@ -55,6 +55,11 @@ local function format_location(location)
   if not file_location then
     return formatted_location
   end
+  local current_buf = vim.api.nvim_buf_get_name(0)
+  local is_current_buf = formatted_location:find(current_buf, 1, true) == 1
+  if is_current_buf then
+    return formatted_location:sub(#current_buf + 2)
+  end
   local path = file_location .. '.hs'
   local package_path = project_util.match_package_root(path)
   if package_path then
@@ -65,6 +70,16 @@ local function format_location(location)
     formatted_location = formatted_location:sub(#project_path + 2):gsub('/', ':', 1) -- trim project path + first '/'
   end
   return formatted_location
+end
+
+---@param result table LSP result
+---@return string location string
+local function mk_location(result)
+  local range_start = result.range and result.range.start or {}
+  local line = range_start.line
+  local character = range_start.character
+  local uri = result.uri and result.uri:gsub('file://', '')
+  return line and character and uri and uri .. ':' .. tostring(line) .. ':' .. tostring(character) or ''
 end
 
 ---LSP handler for textDocument/hover
@@ -134,7 +149,7 @@ function hover.on_hover(_, result, ctx, config)
     if location and not found_location then
       found_location = true
       table.insert(to_remove, 1, i)
-      local location_suffix = (' in %s.'):format(format_location(location))
+      local location_suffix = ('%s.'):format(format_location(location))
       local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
       local can_go_to_definition = false
       if not err and results and #results > 0 then -- Can go to definition
@@ -142,7 +157,7 @@ function hover.on_hover(_, result, ctx, config)
         if #definition_results > 0 then
           can_go_to_definition = true
           local definition_result = definition_results[1]
-          table.insert(actions, 1, string.format('%d. Go to definition' .. location_suffix, #actions + 1))
+          table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
           table.insert(_state.commands, function()
             -- We don't call vim.lsp.buf.definition() because the location params may have changed
             local definition_ctx = {
@@ -170,7 +185,8 @@ function hover.on_hover(_, result, ctx, config)
           local type_definition_results = results[1] and results[1].result or {}
           if #type_definition_results > 0 then
             local type_definition_result = type_definition_results[1]
-            table.insert(actions, 1, string.format('%d. Go to type definition' .. location_suffix, #actions + 1))
+            local type_def_suffix = format_location(mk_location(type_definition_result))
+            table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
             table.insert(_state.commands, function()
               -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
               local type_definition_ctx = {
