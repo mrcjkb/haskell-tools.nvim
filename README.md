@@ -1,6 +1,6 @@
-![](./nvim-haskell.svg)
-
-## `haskell-tools.nvim`
+<h1 align="center">
+  <img src="./nvim-haskell.svg" alt="haskell-tools.nvim">
+</h1>
 
 🦥 Supercharge your Haskell experience in [Neovim](https://neovim.io/)!
 
