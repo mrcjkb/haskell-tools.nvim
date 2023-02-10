@@ -22,11 +22,6 @@
     };
 
     # inputs for tests
-    packer-nvim = {
-      url = "github:wbthomason/packer.nvim";
-      flake = false;
-    };
-
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
@@ -65,7 +60,6 @@
       inherit
         (inputs)
         self
-        packer-nvim
         plenary-nvim
         telescope-nvim
         toggleterm
@@ -130,6 +124,7 @@
         inherit system;
         overlays = [
           test-overlay
+          haskell-tooling-overlay
           neovim-nightly-overlay.overlay
         ];
       };
@@ -144,7 +139,6 @@
         haskell-tools-test-nightly
         haskell-tools-test-no-telescope-nightly
         haskell-tools-test-no-telescope-with-hoogle-nightly
-        haskell-tools-test-nvim-wrapped
         ;
     });
   };
