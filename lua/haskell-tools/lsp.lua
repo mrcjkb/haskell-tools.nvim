@@ -7,6 +7,11 @@ local Path = deps.require_plenary('plenary.path')
 
 local client_name = 'haskell-tools.nvim'
 
+---@param bufnr number the buffer to get clients for
+local function get_active_ht_clients(bufnr)
+  return vim.lsp.get_active_clients { bufnr = bufnr, name = client_name }
+end
+
 local lsp = {}
 
 ---@brief [[
@@ -156,17 +161,24 @@ function lsp.setup()
       on_attach = function(client_id, buf)
         ht.log.debug('LSP attach')
         hls_opts.on_attach(client_id, buf)
-        local function refresh_codeLens()
-          vim.schedule(vim.lsp.codelens.refresh)
+        local function buf_refresh_codeLens()
+          vim.schedule(function()
+            for _, client in pairs(get_active_ht_clients(bufnr)) do
+              if client.server_capabilities.codeLensProvider then
+                vim.lsp.codelens.refresh()
+                return
+              end
+            end
+          end)
         end
         local codeLensOpts = tools_opts.codeLens or {}
         if codeLensOpts.autoRefresh then
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
+          vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
             group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
-            callback = refresh_codeLens,
+            callback = buf_refresh_codeLens,
             buffer = buf,
           })
-          refresh_codeLens()
+          buf_refresh_codeLens()
         end
       end,
     }
@@ -181,7 +193,7 @@ function lsp.setup()
   ---@return table[] clients A list of clients that will be stopped
   function lsp.stop(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
-    local clients = vim.lsp.get_active_clients { bufnr = bufnr, name = client_name }
+    local clients = get_active_ht_clients(bufnr)
     for _, client in ipairs(clients) do
       client:stop()
     end
