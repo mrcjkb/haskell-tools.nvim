@@ -144,6 +144,7 @@
         haskell-tools-test-nightly
         haskell-tools-test-no-telescope-nightly
         haskell-tools-test-no-telescope-with-hoogle-nightly
+        haskell-tools-test-nvim-wrapped
         ;
     });
   };

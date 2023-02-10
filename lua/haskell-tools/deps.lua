@@ -70,6 +70,11 @@ function deps.require_toggleterm(modname)
   return deps.require_or_err(modname, 'akinsho/toggleterm')
 end
 
+---@return boolean
+function deps.has_toggleterm()
+  return deps.has('toggleterm')
+end
+
 ---@return unknown
 function deps.require_iron(modname)
   return deps.require_or_err(modname, 'hkupty/iron.nvim')

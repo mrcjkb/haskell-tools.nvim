@@ -52,6 +52,79 @@ with final.stdenv; let
 
   nvim-nightly = final.neovim-nightly;
 
+  haskell-tools-nvim = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "haskell-tools";
+    src = self;
+  };
+
+  # TODO: Remove this when plenary.nvim has published a new tag with
+  # https://github.com/nvim-lua/plenary.nvim/pull/449
+  nvim-test-runner = final.pkgs.wrapNeovim final.pkgs.neovim-unwrapped {
+    configure = {
+      customRC = ''
+        lua << EOF
+        vim.cmd('runtime! plugin/plenary.vim')
+        EOF
+      '';
+      packages.myVimPackage = {
+        start = [
+          haskell-tools-nvim
+          (final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+            name = "plenary.nvim";
+            src = plenary-nvim;
+          })
+        ];
+      };
+    };
+  };
+
+  nvim-wrapped = final.pkgs.wrapNeovim final.pkgs.neovim-unwrapped {
+    configure = {
+      customRC = ''
+        lua << EOF
+        vim.cmd('runtime! plugin/plenary.vim')
+        EOF
+      '';
+      packages.myVimPackage = {
+        start = [
+          haskell-tools-nvim
+          final.pkgs.vimPlugins.plenary-nvim
+          final.pkgs.vimPlugins.toggleterm-nvim
+        ];
+      };
+    };
+  };
+
+  haskell-tools-test-nvim-wrapped = mkDerivation {
+    name = "haskell-tools-test-nvim-wrapped";
+
+    src = self;
+
+    phases = [
+      "unpackPhase"
+      "buildPhase"
+      "checkPhase"
+    ];
+
+    doCheck = true;
+
+    buildInputs = [
+      nvim-wrapped
+    ];
+
+    buildPhase = ''
+      mkdir -p $out
+      cp -r tests $out
+    '';
+
+    checkPhase = ''
+      export HOME=$(realpath .)
+      export TEST_CWD=$(realpath $out/tests)
+      cd $out
+      ${nvim-test-runner}/bin/nvim --headless --noplugin -c "PlenaryBustedDirectory tests {nvim_cmd = '${nvim-wrapped}/bin/nvim'}"
+    '';
+  };
+
   mkPlenaryTest = {
     name,
     nvim ? final.neovim,
@@ -133,4 +206,6 @@ in {
     withTelescope = false;
     extraPkgs = [final.pkgs.haskellPackages.hoogle];
   };
+
+  inherit haskell-tools-test-nvim-wrapped;
 }
