@@ -10,7 +10,6 @@
 ![Nix](https://img.shields.io/badge/nix-0175C2?style=for-the-badge&logo=NixOS&logoColor=white)
 
 [![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
-[![LuaRocks](https://img.shields.io/luarocks/v/MrcJkb/haskell-tools.nvim?logo=lua&color=purple)](https://luarocks.org/modules/MrcJkb/haskell-tools.nvim)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-grey.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -45,7 +44,13 @@
 
 ## Installation
 
-Example using [`packer.nvim`](https://github.com/wbthomason/packer.nvim):
+This plugin is available on LuaRocks.
+
+[![LuaRocks](https://img.shields.io/luarocks/v/MrcJkb/haskell-tools.nvim?logo=lua&color=purple)](https://luarocks.org/modules/MrcJkb/haskell-tools.nvim)
+
+If you use a plugin manager that does not support LuaRocks, you have to declare the dependencies yourself.
+
+Example using `packer.nvim`:
 
 ```lua
 use {
