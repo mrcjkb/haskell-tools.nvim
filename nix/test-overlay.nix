@@ -1,6 +1,5 @@
 {
   self,
-  packer-nvim,
   plenary-nvim,
   telescope-nvim,
   toggleterm,
@@ -52,12 +51,50 @@ with final.stdenv; let
 
   nvim-nightly = final.neovim-nightly;
 
+  plenary-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "plenary.nvim";
+    src = plenary-nvim;
+  };
+
+  telescope-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "telescope.nvim";
+    src = telescope-nvim;
+  };
+
+  toggleterm-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "toggleterm";
+    src = toggleterm;
+  };
+
   mkPlenaryTest = {
     name,
-    nvim ? final.neovim,
+    nvim ? final.neovim-unwrapped,
     withTelescope ? true,
     extraPkgs ? [],
-  }:
+  }: let
+    nvim-wrapped = final.pkgs.wrapNeovim nvim {
+      configure = {
+        customRC = ''
+          lua << EOF
+          vim.cmd('runtime! plugin/plenary.vim')
+          EOF
+        '';
+        packages.myVimPackage = {
+          start =
+            [
+              final.haskell-tools-nvim-dev
+              plenary-plugin
+              toggleterm-plugin
+            ]
+            ++ (
+              if withTelescope
+              then [telescope-plugin]
+              else []
+            );
+        };
+      };
+    };
+  in
     mkDerivation {
       inherit name;
 
@@ -73,7 +110,7 @@ with final.stdenv; let
 
       buildInputs = with final;
         [
-          nvim
+          nvim-wrapped
           makeWrapper
           haskell-language-server
         ]
@@ -81,23 +118,16 @@ with final.stdenv; let
 
       buildPhase = ''
         mkdir -p $out
-        mkdir -p $out/.config/nvim/site/pack/packer/start
-        ln -s ${packer-nvim} $out/.config/nvim/site/pack/packer/start/packer.nvim
-        ln -s ${plenary-nvim} $out/.config/nvim/site/pack/packer/start/plenary.nvim
-        ln -s ${toggleterm} $out/.config/nvim/site/pack/packer/start/toggleterm.nvim
-        ${optionalString withTelescope "ln -s ${telescope-nvim} $out/.config/nvim/site/pack/packer/start/telescope.nvim"}
-        ln -s ${./..} $out/.config/nvim/site/pack/packer/start/${name}
         cp -r tests $out
-        # FIXME: Generating a config does not seem to be working. For now, there is a config saved in the tests directory.
+        # FIXME: Fore some reason, this doesn't work
         # haskell-language-server-wrapper generate-default-config > $out/tests/hls.json
       '';
 
       checkPhase = ''
-        export NVIM_DATA_MINIMAL=$(realpath $out/.config/nvim)
         export HOME=$(realpath .)
         export TEST_CWD=$(realpath $out/tests)
         cd $out
-        nvim --headless --noplugin -u ${../tests/minimal.lua} -c "PlenaryBustedDirectory tests {minimal_init = 'tests/minimal.lua'}"
+        nvim --headless --noplugin -c "PlenaryBustedDirectory tests {nvim_cmd = 'nvim'}"
       '';
     };
 in {

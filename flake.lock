@@ -193,22 +193,6 @@
         "type": "github"
       }
     },
-    "packer-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1673481162,
-        "narHash": "sha256-YAhAFiR31aGl2SEsA/itP+KgkLyV58EJEwosdc+No9s=",
-        "owner": "wbthomason",
-        "repo": "packer.nvim",
-        "rev": "1d0cf98a561f7fd654c970c49f917d74fafe1530",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wbthomason",
-        "repo": "packer.nvim",
-        "type": "github"
-      }
-    },
     "plenary-nvim": {
       "flake": false,
       "locked": {
@@ -255,7 +239,6 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "packer-nvim": "packer-nvim",
         "plenary-nvim": "plenary-nvim",
         "pre-commit-hooks": "pre-commit-hooks",
         "telescope-nvim": "telescope-nvim",

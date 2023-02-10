@@ -1,5 +1,6 @@
 local ht = require('haskell-tools')
 local stub = require('luassert.stub')
+local deps = require('haskell-tools.deps')
 
 local function mk_repl_setup_test(handler, auto_focus)
   describe('Setup ' .. handler .. ' handler ' .. (auto_focus and 'with' or 'without') .. ' auto focus.', function()
@@ -25,5 +26,7 @@ end
 
 mk_repl_setup_test('builtin', true)
 mk_repl_setup_test('builtin', false)
-mk_repl_setup_test('toggleterm', true)
-mk_repl_setup_test('toggleterm', false)
+if deps.has_toggleterm() then
+  mk_repl_setup_test('toggleterm', true)
+  mk_repl_setup_test('toggleterm', false)
+end
