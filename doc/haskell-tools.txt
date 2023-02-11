@@ -256,6 +256,16 @@ lsp.restart({bufnr})                                               *lsp.restart*
         (number|nil)  The LSP client ID after restart
 
 
+lsp.buf_eval_all({bufnr})                                     *lsp.buf_eval_all*
+    Evaluate all code snippets in comments.
+
+    Parameters: ~
+        {bufnr}  (number|nil)  Defaults to the current buffer.
+
+    Returns: ~
+        (nil)
+
+
 ==============================================================================
 haskell-tools Hoogle search                               *haskell-tools.hoogle*
 

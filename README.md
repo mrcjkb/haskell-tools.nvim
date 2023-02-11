@@ -131,6 +131,10 @@ to generate a database.
 #### [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
 [![](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41.svg)](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41?t=0:04)
 
+You can also evaluate all code snippets at once:
+
+[![](https://asciinema.org/a/ljdU8AhJL6rfe0OgV8ryaCtHY.svg)](https://asciinema.org/a/ljdU8AhJL6rfe0OgV8ryaCtHY)
+
 #### [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
 [![](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P.svg)](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P?t=0:02)
 
@@ -396,6 +400,9 @@ ht.lsp.restart()
 
 -- Callback for dynamically loading haskell-language-server settings
 ht.lsp.load_hls_settings(project_root)
+
+-- Evaluate all code snippets in comments
+ht.lsp.buf_eval_all()
 ```
 
 #### Hoogle
