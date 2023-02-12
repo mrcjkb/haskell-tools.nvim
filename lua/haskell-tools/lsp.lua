@@ -4,13 +4,7 @@ local ht = require('haskell-tools')
 local ht_util = require('haskell-tools.util')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
-
-local client_name = 'haskell-tools.nvim'
-
----@param bufnr number the buffer to get clients for
-local function get_active_ht_clients(bufnr)
-  return vim.lsp.get_active_clients { bufnr = bufnr, name = client_name }
-end
+local lsp_util = require('haskell-tools.lsp.util')
 
 local lsp = {}
 
@@ -152,7 +146,7 @@ function lsp.setup()
     local project_root = ht.project.root_dir(file)
     local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
     local client_id = vim.lsp.start {
-      name = client_name,
+      name = lsp_util.client_name,
       cmd = cmd,
       root_dir = project_root,
       capabilities = hls_opts.capabilities,
@@ -163,7 +157,7 @@ function lsp.setup()
         hls_opts.on_attach(client_id, buf)
         local function buf_refresh_codeLens()
           vim.schedule(function()
-            for _, client in pairs(get_active_ht_clients(bufnr)) do
+            for _, client in pairs(lsp_util.get_active_ht_clients(bufnr)) do
               if client.server_capabilities.codeLensProvider then
                 vim.lsp.codelens.refresh()
                 return
@@ -193,7 +187,7 @@ function lsp.setup()
   ---@return table[] clients A list of clients that will be stopped
   function lsp.stop(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
-    local clients = get_active_ht_clients(bufnr)
+    local clients = lsp_util.get_active_ht_clients(bufnr)
     for _, client in ipairs(clients) do
       client:stop()
     end
@@ -230,6 +224,14 @@ function lsp.setup()
 
   for _, command in ipairs(commands) do
     vim.api.nvim_create_user_command(unpack(command))
+  end
+
+  ---Evaluate all code snippets in comments.
+  ---@param bufnr number|nil Defaults to the current buffer.
+  ---@return nil
+  function lsp.buf_eval_all(bufnr)
+    local eval = require('haskell-tools.lsp.eval')
+    return eval.all(bufnr)
   end
 end
 
