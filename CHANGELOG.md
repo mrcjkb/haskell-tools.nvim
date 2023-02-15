@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - LSP: Evaluate all code snippets in comments at once.
+- Support setup in ftplugin/haskell.lua.
 ### Fixed
 - Check if attached LSP client supports codeLens before refreshing.
+- Telescope extension can now be registered before haskell-tools has been setup.
 
 ## [1.8.0] - 2023-02-03
 ### Changed

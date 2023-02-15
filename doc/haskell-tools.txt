@@ -27,9 +27,9 @@ The haskell-tools module                                         *haskell-tools*
 
 Entry-point into this plugin's public API.
 
-ht.setup({opts})                                                      *ht.setup*
-    Sets up the plugin.
-    Must be called before using this plugin's API.
+ht.start_or_attach({opts})                                  *ht.start_or_attach*
+    Starts or attaches an LSP client to the current buffer and sets up the plugin if necessary.
+    Call this function in ~/.config/nvim/ftplugin/haskell.lua
 
 
     Parameters: ~
@@ -38,6 +38,39 @@ ht.setup({opts})                                                      *ht.setup*
     See: ~
         |haskell-tools.config for configuration options.|
         |lspconfig-keybindings for suggested keybindings by `nvim-lspconfig`.|
+        |ftplugin|
+        |base-directories|
+
+    Usage: ~
+>lua
+        local ht = require('haskell-tools')
+        local def_opts = { noremap = true, silent = true, }
+        ht.start_or_attach {
+           tools = {
+           -- ...
+           },
+           hls = {
+             on_attach = function(client, bufnr)
+               -- Set keybindings, etc. here.
+             end,
+             -- ...
+           },
+         }
+<
+
+
+ht.setup({opts})                                                      *ht.setup*
+    Sets up the plugin.
+    Must be called before using this plugin's API, unless using `start_or_attach()`.
+
+
+    Parameters: ~
+        {opts}  (HTOpts|nil)  The plugin configuration.
+
+    See: ~
+        |haskell-tools.config for configuration options.|
+        |lspconfig-keybindings for suggested keybindings by `nvim-lspconfig`.|
+        |haskell-tools.start_or_attach|
 
     Usage: ~
 >lua
@@ -139,8 +172,9 @@ ReplViewOpts                                                      *ReplViewOpts*
 FastTagsOpts                                                      *FastTagsOpts*
 
     Fields: ~
-        {enable}          (boolean)  Enabled by default if the `fast-tags` executable is found
-        {package_events}  (table)    `autocmd` Events to trigger package tag generation
+        {enable}          (boolean)       Enabled by default if the `fast-tags` executable is found
+        {package_events}  (string[])      `autocmd` Events to trigger package tag generation
+        {filetypes}       (string[]|nil)  List of file types to trigger project tag generation on. If empty of `nil`, no autocmd will be set up.
 
 
 HTLogOpts                                                            *HTLogOpts*
@@ -158,7 +192,7 @@ HaskellLspClientOpts                                      *HaskellLspClientOpts*
         {debug}             (boolean)                                   Whether to enable debug logging
         {on_attach}         (fun(client:number,bufnr:number))           Callback to execute when the client attaches to a buffer
         {cmd}               (string[])                                  The command to start the server with
-        {filetypes}         (string[])                                  List of file types to attach the client to
+        {filetypes}         (string[]|nil)                              List of file types to attach the client to. If empty or `nil`, no autocmd will be set up to attach the client.
         {capabilities}      (table)                                     LSP client capabilities
         {settings}          (table|fun(project_root:string|nil):table)  The server config or a function that creates the server config
         {default_settings}  (table)                                     The default server config that will be used if no settings are specified or found

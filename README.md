@@ -78,12 +78,14 @@ See the [Features](#features) section for more info.
 >
 > Do not call the [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig) setup or set up the lsp manually, as doing so may cause conflicts.
 
-To get started quickly with the default setup, add the following to your neovim config:
+To get started quickly with the default setup, add the following Add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
+
+[^1] See `:help base-directories`
 
 ```lua
 local ht = require('haskell-tools')
 local def_opts = { noremap = true, silent = true, }
-ht.setup {
+ht.start_or_attach {
   hls = {
     on_attach = function(client, bufnr)
       local opts = vim.tbl_extend('keep', def_opts, { buffer = bufnr, })
@@ -109,7 +111,8 @@ vim.keymap.set('n', '<leader>rq', ht.repl.quit, def_opts)
 > * For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > * If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
-
+> * If you prefer, you can instead call `require('haskell-tools').setup {}` with the same options as `start_or_attach()` in your Neovim config.
+>   In this case, `haskell-tools.nvim` will set up filetype autocommands for you.
 
 ## Features
 
@@ -359,6 +362,15 @@ hls = {
   },
 },
 ```
+
+>**Note**
+>
+>Alternatively, you can [dynamically enable/disable different code lenses per project](#how-to-dynamically-load-different-haskell-language-server-settings-per-project).
+
+### Launch `haskell-language-server` on Cabal files
+
+Since version `1.9.0.0`, `haskell-language-server` can launch on Cabal files.
+You can either attach the LSP client in a `~/.config/nvim/ftplugin/cabal.lua` file, or call `haskell-tools.setup()`.
 
 ### Set up [`iron.nvim`](https://github.com/hkupty/iron.nvim) to use `haskell-tools.nvim`
 

@@ -94,7 +94,7 @@ end
 ---Setup the LSP client. Called by the haskell-tools setup.
 ---@return nil
 function lsp.setup()
-  ht.log.debug('Setting up the LSP client...')
+  ht.log.debug('Set_optsting up the LSP client...')
   local opts = ht.config.options
   local hls_opts = assert(opts.hls, 'haskell-tools: hls options not set.')
   local cmd = assert(hls_opts.cmd, 'haskell-tools: hls cmd not set.')
@@ -104,8 +104,6 @@ function lsp.setup()
     ht.log.warn('Command ' .. hls_cmd .. ' not found in PATH.')
     return
   end
-
-  local filetypes = assert(hls_opts.filetypes, 'haskell-tools: filetypes not set.')
 
   local handlers = {}
 
@@ -123,6 +121,8 @@ function lsp.setup()
     handlers['textDocument/hover'] = hover.on_hover
   end
 
+  local filetypes = hls_opts.filetypes or {}
+
   ---Start or attach the LSP client.
   ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
   ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
@@ -137,7 +137,7 @@ function lsp.setup()
       return
     end
     local filetype = vim.bo[bufnr].filetype
-    if not vim.tbl_contains(filetypes, filetype) then
+    if #filetypes > 0 and not vim.tbl_contains(filetypes, filetype) then
       local msg = 'File type ' .. filetype .. ' not one of ' .. vim.inspect(filetypes)
       ht.log.error('lsp.start: ' .. msg)
       vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
@@ -213,14 +213,18 @@ function lsp.setup()
     end)
   end
 
-  vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('haskell-tools-lsp', {}),
-    pattern = table.concat(filetypes, ','),
-    callback = function(opt)
-      lsp.start(opt.buf)
-    end,
-    desc = 'Start haskell-language-server or attach to an existing LSP client.',
-  })
+  if #filetypes > 0 then
+    local pattern = table.concat(filetypes, ',')
+    ht.log.info('Setting up haskell-tools client autocmd for ' .. pattern)
+    vim.api.nvim_create_autocmd('FileType', {
+      group = vim.api.nvim_create_augroup('haskell-tools-lsp', {}),
+      pattern = table.concat(filetypes, ','),
+      callback = function(opt)
+        lsp.start(opt.buf)
+      end,
+      desc = 'Start haskell-language-server or attach to an existing LSP client.',
+    })
+  end
 
   for _, command in ipairs(commands) do
     vim.api.nvim_create_user_command(unpack(command))
