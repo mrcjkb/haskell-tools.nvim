@@ -80,7 +80,7 @@ See the [Features](#features) section for more info.
 
 To get started quickly with the default setup, add the following Add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
 
-[^1] See `:help base-directories`
+[^1]: See `:help base-directories`
 
 ```lua
 local ht = require('haskell-tools')
@@ -370,7 +370,7 @@ hls = {
 ### Launch `haskell-language-server` on Cabal files
 
 Since version `1.9.0.0`, `haskell-language-server` can launch on Cabal files.
-You can either attach the LSP client in a `~/.config/nvim/ftplugin/cabal.lua` file, or call `haskell-tools.setup()`.
+You can either attach the LSP client in a `~/.config/nvim/ftplugin/cabal.lua` file[^1], or call `haskell-tools.setup()`.
 
 ### Set up [`iron.nvim`](https://github.com/hkupty/iron.nvim) to use `haskell-tools.nvim`
 
