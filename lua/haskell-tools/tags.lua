@@ -85,23 +85,29 @@ local function setup_fast_tags(config)
     vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
-  vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('haskell-tools-generate-project-tags', {}),
-    pattern = { 'haskell' },
-    callback = function(meta)
-      tags.generate_project_tags(meta.file, { refresh = false })
-    end,
-  })
-  vim.api.nvim_create_autocmd(config.package_events, {
-    group = vim.api.nvim_create_augroup('haskell-tools-generate-package-tags', {}),
-    pattern = { 'haskell', '*.hs' },
-    callback = function(meta)
-      if _state.fast_tags_generating then
-        return
-      end
-      tags.generate_package_tags(meta.file)
-    end,
-  })
+  local filetypes = config.filetypes or {}
+  if #filetypes > 0 then
+    vim.api.nvim_create_autocmd('FileType', {
+      group = vim.api.nvim_create_augroup('haskell-tools-generate-project-tags', {}),
+      pattern = filetypes,
+      callback = function(meta)
+        tags.generate_project_tags(meta.file, { refresh = false })
+      end,
+    })
+  end
+  local package_events = config.package_events
+  if #package_events > 0 then
+    vim.api.nvim_create_autocmd(package_events, {
+      group = vim.api.nvim_create_augroup('haskell-tools-generate-package-tags', {}),
+      pattern = { 'haskell', '*.hs' },
+      callback = function(meta)
+        if _state.fast_tags_generating then
+          return
+        end
+        tags.generate_package_tags(meta.file)
+      end,
+    })
+  end
 end
 
 ---Setup the tags module. Called by the haskell-tools setup.

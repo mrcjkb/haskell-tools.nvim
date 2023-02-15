@@ -41,7 +41,7 @@ function config_check.validate()
     cmd = { hls.cmd, 'table' },
     debug = { hls.debug, 'boolean' },
     default_settings = { hls.default_settings, 'table' },
-    filetypes = { hls.filetypes, 'table' },
+    filetypes = { hls.filetypes, 'table', true },
     on_attach = { hls.on_attach, 'function' },
     settings = { hls.settings, { 'function', 'table' } },
   })
@@ -121,6 +121,7 @@ function config_check.validate()
   ok, err = validate('tools.tags', {
     enable = { tags.enable, 'boolean' },
     package_events = { tags.package_events, 'table' },
+    filetypes = { tags.filetypes, 'table', true },
   })
   if not ok then
     return false, err
