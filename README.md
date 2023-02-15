@@ -78,7 +78,7 @@ See the [Features](#features) section for more info.
 >
 > Do not call the [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig) setup or set up the lsp manually, as doing so may cause conflicts.
 
-To get started quickly with the default setup, add the following Add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
+To get started quickly with the default setup, add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
 
 [^1]: See `:help base-directories`
 
