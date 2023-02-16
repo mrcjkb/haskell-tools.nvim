@@ -564,7 +564,7 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 To enable debug logging, set the log level to `DEBUG` (`:h vim.log.levels`):
 
 ```lua
-require('haskell-tools').setup {
+require('haskell-tools').start_or_attach {
   tools = { -- haskell-tools options
     log = {
       level = vim.log.levels.DEBUG,
