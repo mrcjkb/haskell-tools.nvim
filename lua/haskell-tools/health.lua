@@ -90,7 +90,7 @@ local external_dependencies = {
     url = '[ndmitchell/hoogle](https://github.com/ndmitchell/hoogle)',
     info = [[
       Recommended for better Hoogle search performance.
-      Without a local isntallation, the web API will be used by default.
+      Without a local installation, the web API will be used by default.
       Required if the hoogle mode is set to "telescope-local".
     ]],
     extra_checks = function()
