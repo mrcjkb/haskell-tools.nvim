@@ -233,7 +233,7 @@ To modify the default configs, call
 
 ```lua
 -- defaults
-require('haskell-tools').setup {
+require('haskell-tools').start_or_attach {
   tools = { -- haskell-tools options
     codeLens = {
       -- Whether to automatically display/refresh codeLenses
@@ -320,7 +320,7 @@ You can change this behaviour with the `hls.settings` config:
 
 ```lua
 local ht = require('haskell-tools')
-ht.setup {
+ht.start_or_attach {
   -- ...
   hls = {
     settings = function(project_root)
