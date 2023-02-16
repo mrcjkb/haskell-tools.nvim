@@ -11,7 +11,7 @@
 
 [![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-grey.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Quick Links
@@ -615,9 +615,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/fabfianda"><img src="https://avatars.githubusercontent.com/u/275653?v=4?s=100" width="100px;" alt="fabfianda"/><br /><sub><b>fabfianda</b></sub></a><br /><a href="https://github.com/MrcJkb/haskell-tools.nvim/commits?author=fabfianda" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/MangoIV"><img src="https://avatars.githubusercontent.com/u/40720523?v=4?s=100" width="100px;" alt="Mango The Fourth"/><br /><sub><b>Mango The Fourth</b></sub></a><br /><a href="#infra-MangoIV" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-      <td align="center"><a href="https://github.com/yen3"><img src="https://avatars.githubusercontent.com/u/387292?v=4?s=100" width="100px;" alt="Yen3"/><br /><sub><b>Yen3</b></sub></a><br /><a href="https://github.com/MrcJkb/haskell-tools.nvim/commits?author=yen3" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fabfianda"><img src="https://avatars.githubusercontent.com/u/275653?v=4?s=100" width="100px;" alt="fabfianda"/><br /><sub><b>fabfianda</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=fabfianda" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MangoIV"><img src="https://avatars.githubusercontent.com/u/40720523?v=4?s=100" width="100px;" alt="Mango The Fourth"/><br /><sub><b>Mango The Fourth</b></sub></a><br /><a href="#infra-MangoIV" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yen3"><img src="https://avatars.githubusercontent.com/u/387292?v=4?s=100" width="100px;" alt="Yen3"/><br /><sub><b>Yen3</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=yen3" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sebastianselander"><img src="https://avatars.githubusercontent.com/u/70573736?v=4?s=100" width="100px;" alt="Sebastian Selander"/><br /><sub><b>Sebastian Selander</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=sebastianselander" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
