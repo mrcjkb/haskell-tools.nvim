@@ -32,6 +32,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sebastianselander",
+      "name": "Sebastian Selander",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70573736?v=4",
+      "profile": "https://github.com/sebastianselander",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -39,5 +48,5 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "haskell-tools.nvim",
-  "projectOwner": "MrcJkb"
+  "projectOwner": "mrcjkb"
 }
