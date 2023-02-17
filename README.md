@@ -133,27 +133,21 @@ to generate a database.
   * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (provides completion sources for [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)).
   * [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range) (Adds haskell-specific [expand selection](https://haskell-language-server.readthedocs.io/en/latest/features.html#selection-range) support).
 - [x] Automatically refreshes code lenses by default, which haskell-language-server heavily relies on. [Can be disabled.](#advanced-configuration)
-- [x] The following code lenses are currently supported:
 
-#### [Show/Add type signatures for bindings without type signatures](https://haskell-language-server.readthedocs.io/en/latest/features.html#add-type-signature)
-[![](https://asciinema.org/a/zC88fqMhPq25lHFYgEF6OxMgk.svg)](https://asciinema.org/a/zC88fqMhPq25lHFYgEF6OxMgk?t=0:04)
+![codeLens](https://user-images.githubusercontent.com/12857160/219738949-c20ed266-3b2d-441e-82fe-faf50f5c582a.gif)
 
-#### [Evaluate code snippets in comments](https://haskell-language-server.readthedocs.io/en/latest/features.html#evaluation-code-snippets-in-comments)
-[![](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41.svg)](https://asciinema.org/a/TffryPrWpBkLnBK6dKXvOxd41?t=0:04)
-
-You can also evaluate all code snippets at once:
-
-[![](https://asciinema.org/a/ljdU8AhJL6rfe0OgV8ryaCtHY.svg)](https://asciinema.org/a/ljdU8AhJL6rfe0OgV8ryaCtHY)
-
-#### [Make import lists fully explicit](https://haskell-language-server.readthedocs.io/en/latest/features.html#make-import-lists-fully-explicit-code-lens)
-[![](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P.svg)](https://asciinema.org/a/l2ggVaN5eQbOj9iGkaethnS7P?t=0:02)
-
-#### [Fix module names that do not match the file path](https://haskell-language-server.readthedocs.io/en/latest/features.html#fix-module-names)
-[![](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG.svg)](https://asciinema.org/a/n2qd2zswLOonl2ZEb8uL4MHsG?t=0:02)
 
 ### Beyond haskell-language-server
 
 The below features are not implemented by haskell-language-server.
+
+#### Evaluate all code snippets at once
+
+`haskell-language-server` can evaluate code snippets using code lenses.
+`haskell-tools.nvim` provides a `require('haskell-tools').lsp.buf_eval_all()` shortcut to evaluate all of them at once.
+
+![evalAll](https://user-images.githubusercontent.com/12857160/219743339-e7b7f4e0-478b-4310-a903-36d0a5564937.gif)
+
 
 #### Hoogle-search for signature
 
@@ -168,13 +162,14 @@ The below features are not implemented by haskell-language-server.
 require('haskell-tools').hoogle.hoogle_signature()
 ```
 
-[![](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R.svg)](https://asciinema.org/a/4GSmXrCvpt7idBHnuZVQQkJ9R)
+![hoogleSig](https://user-images.githubusercontent.com/12857160/219745914-505a8fc8-9cb9-49fe-b763-a0dea2a3420b.gif)
+
 
 #### Hole-driven development powered by Hoogle
 
 With the `<C-r>` keymap, the Hoogle search telescope integration can be used to fill holes.
 
-[![](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw.svg)](https://asciinema.org/a/xEWKbTELrnJD0wNbC5t6jL6Tw?t=0:04)
+![hoogleHole](https://user-images.githubusercontent.com/12857160/219751911-f45e4131-afad-47b3-b016-1d341c71c114.gif)
 
 #### GHCi repl
 
@@ -185,11 +180,12 @@ Start a GHCi repl for the current project / buffer.
 * Dynamically create a repl command for [`iron.nvim`](https://github.com/hkupty/iron.nvim) (see [advanced configuration](#advanced-configuration)).
 * Interact with the repl from within Haskell files using a lua API.
 
-[![](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV.svg)](https://asciinema.org/a/HtTdq1tqxoRVjt4hEf22tInLV)
+![repl](https://user-images.githubusercontent.com/12857160/219758588-68f3c06f-5804-4279-b23d-1bdcc050d892.gif)
 
 #### Open project/package files for the current buffer
 
-[![](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr.svg)](https://asciinema.org/a/LBZ8jceyWZv9kwrSqskxZTGlr)
+
+![commands](https://user-images.githubusercontent.com/12857160/219760916-06785cd5-f90a-4bb9-9ca8-94edbd655d46.gif)
 
 
 #### Hover actions
@@ -205,7 +201,7 @@ Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim), this
 Additionally, the default behaviour of stylizing markdown is disabled. And the hover buffer's filetype is set to markdown,
 so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) users can benefit from syntax highliting of code snippets.
 
-[![](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy.svg)](https://asciinema.org/a/AqYEBSIVVSw5qPUHumoxHHiUy)
+![hoverActions](https://user-images.githubusercontent.com/12857160/219763211-61fc4207-4300-41f2-99c4-6a420cf940f2.gif)
 
 
 #### Automatically generate tags
