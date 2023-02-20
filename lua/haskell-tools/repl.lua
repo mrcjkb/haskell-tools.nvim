@@ -68,7 +68,7 @@ local function mk_stack_repl_cmd(file)
 end
 
 ---Create the command to create a repl for a file.
----If `file` is `nil`, create a repl the nearest package.
+---If `file` is `nil`, create a repl for the nearest package.
 ---@param file string|nil
 ---@return table|nil command
 function repl.mk_repl_cmd(file)
