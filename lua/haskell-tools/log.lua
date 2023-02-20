@@ -14,7 +14,7 @@ end
 
 local logpath = vim.fn.stdpath('log')
 vim.fn.mkdir(logpath, 'p')
-local logfilename = logpath .. '/haskell-toolls.log'
+local logfilename = logpath .. '/haskell-tools.log'
 
 ---Get the haskell-tools.nvim log file path.
 ---@return string filepath
