@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2023-02-20
+- Fix typo in the logfile name.
+
 ## [1.9.0] - 2023-02-17
 ### Added
 - LSP: Evaluate all code snippets in comments at once.
@@ -13,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Check if attached LSP client supports codeLens before refreshing.
 - Telescope extension can now be registered before haskell-tools has been setup.
-- Fix typo in the logfile name.
 
 ## [1.8.0] - 2023-02-03
 ### Changed
