@@ -41,6 +41,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "typesafety",
+      "name": "Thomas Li",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21952939?v=4",
+      "profile": "https://github.com/typesafety",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
