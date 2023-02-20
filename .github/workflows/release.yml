@@ -24,4 +24,9 @@ jobs:
             This plugin automatically configures the haskell-language-server builtin LSP client
             and integrates with other Haskell tools. See the README's #features section
             for more info.
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          bodyFile: "CHANGELOG.md"
+          allowUpdates: true
 
