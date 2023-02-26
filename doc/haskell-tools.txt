@@ -324,7 +324,7 @@ haskell-tools GHCi REPL module                              *haskell-tools.repl*
 
 repl.mk_repl_cmd({file})                                      *repl.mk_repl_cmd*
     Create the command to create a repl for a file.
-    If `file` is `nil`, create a repl the nearest package.
+    If `file` is `nil`, create a repl for the nearest package.
 
     Parameters: ~
         {file}  (string|nil)
