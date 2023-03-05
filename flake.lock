@@ -109,11 +109,11 @@
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1677269843,
-        "narHash": "sha256-2liWrba7/Mx2Vky/SGjJnDm/GXxui4sxMIz0OAQW0jM=",
+        "lastModified": 1677910793,
+        "narHash": "sha256-xjlzJzPVUFJ2Jq7wXnGzhcP9y7gIdm64mdj8N5+XNGM=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "a601d031127689a7d60cc92f4ec89907794ed020",
+        "rev": "de14f2c928f913d4fb617d693024eec5cf2223ec",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1677312846,
-        "narHash": "sha256-CBEkl8diEBReMl5xamfx9pYgzToMY4tMGs5I9ghf+x4=",
+        "lastModified": 1677917632,
+        "narHash": "sha256-NwjqAYbhHlTNfvTBfLV1lfHiVnnzuRBTHF9VtCj6rG8=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "31c7e7155194d0abf0ac6109c241b383cd2b2475",
+        "rev": "8066172d476a51da5a437ed512bbd0b9ddf0fdc7",
         "type": "github"
       },
       "original": {
@@ -147,11 +147,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1677179781,
-        "narHash": "sha256-+peLp16ruWLuTFHo0ZUbLlS1/meS/+RsWQQ9bUAzOh8=",
+        "lastModified": 1677779205,
+        "narHash": "sha256-6DBjL9wjq86p2GczmwnHtFRnWPBPItc67gapWENBgX8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "50c23cd4ff6c8344e0b4d438b027b3afabfe58dd",
+        "rev": "96e18717904dfedcd884541e5a92bf9ff632cf39",
         "type": "github"
       },
       "original": {
@@ -179,11 +179,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1677352614,
-        "narHash": "sha256-VYo1cSiCHDXZrHO8pb0c9EGob7C75lCPx1jBMi9UAlU=",
+        "lastModified": 1677852945,
+        "narHash": "sha256-liiVJjkBTuBTAkRW3hrI8MbPD2ImYzwUpa7kvteiKhM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "bf592ea571b11dfee17a74d022f0b481ca5f1319",
+        "rev": "f5ffd5787786dde3a8bf648c7a1b5f78c4e01abb",
         "type": "github"
       },
       "original": {
@@ -220,11 +220,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1677160285,
-        "narHash": "sha256-tBzpCjMP+P3Y3nKLYvdBkXBg3KvTMo3gvi8tLQaqXVY=",
+        "lastModified": 1677832802,
+        "narHash": "sha256-XQf+k6mBYTiQUjWRf/0fozy5InAs03O1b30adCpWeXs=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "2bd861ab81469428d9c823ef72c4bb08372dd2c4",
+        "rev": "382bee738397ca005206eefa36922cc10df8a21c",
         "type": "github"
       },
       "original": {
@@ -248,11 +248,11 @@
     "telescope-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1676929395,
-        "narHash": "sha256-6RQiq9Iz/ifrRsebaVmL4C6Hd2DqHUZ5iKGNuztuWKg=",
+        "lastModified": 1677414372,
+        "narHash": "sha256-QmyVJ/LZFtb/qqD5Q5fHsqAGgqaOT9XkVoLyOcqM14w=",
         "owner": "nvim-telescope",
         "repo": "telescope.nvim",
-        "rev": "a486ac3e8fb2198f3636da1927ed57a28836fbd8",
+        "rev": "a3f17d3baf70df58b9d3544ea30abe52a7a832c2",
         "type": "github"
       },
       "original": {
@@ -264,11 +264,11 @@
     "toggleterm": {
       "flake": false,
       "locked": {
-        "lastModified": 1677093874,
-        "narHash": "sha256-+ssoEGXNgpNoibVKVviu0Cr7LRihvzIskJa6rxC2MQA=",
+        "lastModified": 1677405147,
+        "narHash": "sha256-CB/X+Y0kdHn4rMiwGrMr9GqyD5hhqcFFvC3zV1gmI7w=",
         "owner": "akinsho",
         "repo": "toggleterm.nvim",
-        "rev": "1f47ea9cda973af3f1742a71841f3914f5b1469f",
+        "rev": "31d38d11390bcd35a568fcc65a79b7d6ec89de62",
         "type": "github"
       },
       "original": {
