@@ -145,7 +145,7 @@ function lsp.setup()
     end
     local project_root = ht.project.root_dir(file)
     local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
-    local client_id = vim.lsp.start {
+    local lsp_start_opts = {
       name = lsp_util.client_name,
       cmd = cmd,
       root_dir = project_root,
@@ -176,6 +176,8 @@ function lsp.setup()
         end
       end,
     }
+    ht.log.debug('LSP start options: lsp_start_opts')
+    local client_id = vim.lsp.start(lsp_start_opts)
     if client_id then
       ensure_clean_exit_on_quit(client_id, bufnr)
     end
