@@ -11,7 +11,7 @@
 
 [![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Quick Links
@@ -621,6 +621,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sebastianselander"><img src="https://avatars.githubusercontent.com/u/70573736?v=4?s=100" width="100px;" alt="Sebastian Selander"/><br /><sub><b>Sebastian Selander</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=sebastianselander" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/typesafety"><img src="https://avatars.githubusercontent.com/u/21952939?v=4?s=100" width="100px;" alt="Thomas Li"/><br /><sub><b>Thomas Li</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=typesafety" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/teto"><img src="https://avatars.githubusercontent.com/u/886074?v=4?s=100" width="100px;" alt="Matthieu Coudron"/><br /><sub><b>Matthieu Coudron</b></sub></a><br /><a href="#infra-teto" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://mzchael.com"><img src="https://avatars.githubusercontent.com/u/44309097?v=4?s=100" width="100px;" alt="Michael Lan"/><br /><sub><b>Michael Lan</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Amizlan" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
