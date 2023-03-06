@@ -94,7 +94,7 @@ end
 ---Setup the LSP client. Called by the haskell-tools setup.
 ---@return nil
 function lsp.setup()
-  ht.log.debug('Set_optsting up the LSP client...')
+  ht.log.debug('Setting up the LSP client...')
   local opts = ht.config.options
   local hls_opts = assert(opts.hls, 'haskell-tools: hls options not set.')
   local cmd = assert(hls_opts.cmd, 'haskell-tools: hls cmd not set.')
