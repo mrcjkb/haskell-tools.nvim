@@ -59,6 +59,15 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "mizlan",
+      "name": "Michael Lan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44309097?v=4",
+      "profile": "http://mzchael.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
