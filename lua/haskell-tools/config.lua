@@ -73,7 +73,7 @@ local config = {
   hls_log = vim.fn.stdpath('log') .. '/' .. 'haskell-language-server.log',
 }
 
-local ht_capabilities = {}
+local ht_capabilities = vim.lsp.protocol.make_client_capabilities()
 local cmp_capabilities = deps.if_available('cmp_nvim_lsp', function(cmp_nvim_lsp)
   return cmp_nvim_lsp.default_capabilities()
 end, {})
