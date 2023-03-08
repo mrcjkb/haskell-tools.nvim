@@ -84,7 +84,7 @@ See the [Features](#features) section for more info.
 
 To get started quickly with the default setup, add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
 
-[^1]: See `:help base-directories`
+[^1]: See [`:help base-directories`](https://neovim.io/doc/user/starting.html#base-directories)
 
 ```lua
 local ht = require('haskell-tools')
@@ -561,7 +561,9 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 
 #### Logs
 
-To enable debug logging, set the log level to `DEBUG` (`:h vim.log.levels`):
+To enable debug logging, set the log level to `DEBUG`[^2]:
+
+[^2]: See [`:help vim.log.levels`](https://neovim.io/doc/user/lua.html#vim.log.levels):
 
 ```lua
 require('haskell-tools').start_or_attach {
