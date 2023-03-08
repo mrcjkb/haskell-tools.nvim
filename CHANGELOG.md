@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Changed
 
+## [1.9.3] - 2023-03-08
+### Fixed
+- Silent failure and unexpected error message if `haskell-language-server` executable is not found (#154).
 
 ## [1.9.2] - 2023-03-06
 ### Fixed

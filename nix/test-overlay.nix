@@ -70,6 +70,7 @@ with final.stdenv; let
     name,
     nvim ? final.neovim-unwrapped,
     withTelescope ? true,
+    withHls ? true,
     extraPkgs ? [],
   }: let
     nvim-wrapped = final.pkgs.wrapNeovim nvim {
@@ -112,8 +113,12 @@ with final.stdenv; let
         [
           nvim-wrapped
           makeWrapper
-          haskell-language-server
         ]
+        ++ (
+          if withHls
+          then [haskell-language-server]
+          else []
+        )
         ++ extraPkgs;
 
       buildPhase = ''
@@ -134,6 +139,11 @@ in {
   inherit lints;
 
   haskell-tools-test = mkPlenaryTest {name = "haskell-tools";};
+
+  haskell-tools-test-no-hls = mkPlenaryTest {
+    name = "haskell-tools-no-hls";
+    withHls = false;
+  };
 
   haskell-tools-test-no-telescope = mkPlenaryTest {
     name = "haskell-tools-no-telescope";

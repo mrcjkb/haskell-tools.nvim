@@ -99,10 +99,9 @@ function lsp.setup()
   local hls_opts = assert(opts.hls, 'haskell-tools: hls options not set.')
   local cmd = assert(hls_opts.cmd, 'haskell-tools: hls cmd not set.')
   assert(#cmd > 1, 'haskell-tools: hls cmd table is empty.')
-  local hls_cmd = cmd[1]
-  if vim.fn.executable(hls_cmd) == 0 then
-    ht.log.warn('Command ' .. hls_cmd .. ' not found in PATH.')
-    return
+  local hls_bin = cmd[1]
+  if vim.fn.executable(hls_bin) == 0 then
+    ht.log.warn('Executable ' .. hls_bin .. ' not found.')
   end
 
   local handlers = {}
