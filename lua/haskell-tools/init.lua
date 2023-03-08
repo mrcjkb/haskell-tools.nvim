@@ -55,7 +55,7 @@ local ht = {
 --- }
 ---@usage ]]
 function ht.start_or_attach(opts)
-  opts = vim.tbl_deep_extend('force', opts, {
+  opts = vim.tbl_deep_extend('force', opts or {}, {
     hls = {
       filetypes = nil,
     },
@@ -68,7 +68,10 @@ function ht.start_or_attach(opts)
   if not _state._has_been_setup then
     ht.setup(opts)
   end
-  ht.lsp.start()
+  local hls_bin = ht.config.options.hls.cmd[1]
+  if vim.fn.executable(hls_bin) ~= 0 then
+    ht.lsp.start()
+  end
   if ht.config.options.tools.tags.enable then
     ht.tags.generate_project_tags(nil, { refresh = false })
   end

@@ -134,6 +134,7 @@
         (checkPkgs)
         lints
         haskell-tools-test
+        haskell-tools-test-no-hls
         haskell-tools-test-no-telescope
         haskell-tools-test-no-telescope-with-hoogle
         haskell-tools-test-nightly
