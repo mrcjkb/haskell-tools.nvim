@@ -39,7 +39,7 @@
 * [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html) (recommended)
 * [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
 * A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md) installation (recommended for better hoogle search performance)
-* [`fast-tags`](https://github.com/elaforge/fast-tags) (for automatic tag generation as a fallback for `vim.lsp.tagfunc`).
+* [`fast-tags`](https://github.com/elaforge/fast-tags) (for automatic tag generation as a fallback for [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
 
 
 ## Installation
@@ -210,7 +210,7 @@ so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) us
 
 #### Automatically generate tags
 
-On attaching, Neovim's LSP client will set up `tagfunc` (`:h tagfunc`) to query the language server for locations to jump to.
+On attaching, Neovim's LSP client will set up [`tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc()) to query the language server for locations to jump to.
 If no location is found, it will fall back to a `tags` file.
 
 If [`fast-tags`](https://github.com/elaforge/fast-tags) is installed,
