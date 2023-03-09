@@ -196,10 +196,11 @@ Start a GHCi repl for the current project / buffer.
 
 Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim), this plugin adds the following hover actions (if available):
 
-* Hoogle search for signature.
+* Hoogle search.
 * Open documentation in browser.
 * Open source in browser.
 * Go to definition.
+* Go to type definition.
 * Find references.
 
 Additionally, the default behaviour of stylizing markdown is disabled. And the hover buffer's filetype is set to markdown,
