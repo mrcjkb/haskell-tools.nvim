@@ -69,6 +69,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "carrotfarmer",
+      "name": "Dhruva Srinivas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66675022?v=4",
+      "profile": "http://dhruvas.vercel.app",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
