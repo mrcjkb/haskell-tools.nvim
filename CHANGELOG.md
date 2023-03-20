@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 ### Fixed
 ### Changed
+- Remove rockspec (not needed, due to luarocks-tag-release-workflow).
 
 ## [1.9.3] - 2023-03-08
 ### Fixed
