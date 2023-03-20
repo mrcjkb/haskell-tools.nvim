@@ -103,8 +103,17 @@ local function escape_glob_wildcards(path)
   return escaped_path
 end
 
+---Get the root of a cabal multi-package project for a path
+project_util.match_cabal_multi_project_root = root_pattern('cabal.project')
+
+---Get the root of a cabal package for a path
+project_util.match_cabal_package_root = root_pattern('*.cabal')
+
 ---Get the root of the cabal project for a path
-project_util.match_cabal_project_root = root_pattern('cabal.project')
+---@param path string File path
+project_util.match_cabal_project_root = function(path)
+  return project_util.match_cabal_multi_project_root(path) or project_util.match_cabal_package_root(path)
+end
 
 ---Get the root of the stack project for a path
 project_util.match_stack_project_root = root_pattern('stack.yaml')

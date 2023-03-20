@@ -14,36 +14,34 @@ local repl = {}
 ---If `file` is `nil`, create a repl the nearest package.
 ---@param cmd string[] The command to extend
 ---@param file string|nil An optional project file
----@param on_no_package (fun(cmd:string[]):nil)|nil handler in case no package is found
 ---@return string[]|nil
-local function extend_repl_cmd(cmd, file, on_no_package)
-  on_no_package = on_no_package or function(_)
-    return nil
-  end
+local function extend_repl_cmd(cmd, file)
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
     ht.log.debug('extend_repl_cmd: No file specified. Using current buffer: ' .. file)
-    local pkg = project.get_package_name(file)
-    if pkg then
-      table.insert(cmd, pkg)
+    local project_root = project.match_project_root(file)
+    local subpackage = project_root and project.get_package_name(file)
+    if subpackage then
+      table.insert(cmd, subpackage)
       ht.log.debug { 'extend_repl_cmd: Extended cmd with package.', cmd }
       return cmd
     else
-      ht.log.debug { 'extend_repl_cmd: No package found.', cmd }
-      return on_no_package(cmd)
+      ht.log.debug { 'extend_repl_cmd: No subpackage or no package found.', cmd }
+      return cmd
     end
   end
   ht.log.debug('extend_repl_cmd: File: ' .. file)
-  local pkg = project.get_package_name(file)
-  if not pkg then
+  local project_root = project.match_project_root(file)
+  local subpackage = project_root and project.get_package_name(file)
+  if not subpackage then
     ht.log.debug { 'extend_repl_cmd: No package found.', cmd }
-    return on_no_package(cmd)
+    return cmd
   end
   if vim.endswith(file, '.hs') then
     table.insert(cmd, ht_util.quote(file))
   else
     ht.log.debug('extend_repl_cmd: Not a Haskell file.')
-    table.insert(cmd, pkg)
+    table.insert(cmd, subpackage)
   end
   ht.log.debug { 'extend_repl_cmd', cmd }
   return cmd
@@ -54,7 +52,7 @@ end
 ---@param file string|nil
 ---@return string[]|nil command
 local function mk_cabal_repl_cmd(file)
-  return extend_repl_cmd({ 'cabal', 'new-repl' }, file)
+  return extend_repl_cmd({ 'cabal', 'repl' }, file)
 end
 
 ---Create a stack repl command for `file`.
@@ -62,9 +60,7 @@ end
 ---@param file string|nil
 ---@return string[]|nil command
 local function mk_stack_repl_cmd(file)
-  return extend_repl_cmd({ 'stack', 'ghci' }, ht_util.quote(file), function(cmd)
-    return cmd
-  end)
+  return extend_repl_cmd({ 'stack', 'ghci' }, ht_util.quote(file))
 end
 
 ---Create the command to create a repl for a file.

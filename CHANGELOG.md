@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Fixed
+- Repl: Detection of single-package cabal projects.
 ### Changed
 - Remove rockspec (not needed, due to luarocks-tag-release-workflow).
+- `HsProjectFile`: Try `stack.yml` first, then fall back to `cabal.project` and then to `*.cabal`.
 
 ## [1.9.3] - 2023-03-08
 ### Fixed
