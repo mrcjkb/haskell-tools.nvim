@@ -123,15 +123,19 @@ function project.setup()
   function project.open_project_file()
     vim.schedule(function()
       local file = vim.api.nvim_buf_get_name(0)
-      local project_root = project_util.match_cabal_project_root(file)
-      if project_root then
-        vim.cmd('e ' .. project_root .. '/cabal.project')
+      local stack_project_root = project_util.match_stack_project_root(file)
+      if stack_project_root then
+        vim.cmd('e ' .. stack_project_root .. '/stack.yaml')
         return
       end
-      project_root = project_util.match_stack_project_root(file)
-      if project_root then
-        vim.cmd('e ' .. project_root .. '/stack.yaml')
+      local cabal_project_root = project_util.match_cabal_multi_project_root(file)
+      if cabal_project_root then
+        vim.cmd('e ' .. cabal_project_root .. '/cabal.project')
         return
+      end
+      local package_cabal = project_util.get_package_cabal(file)
+      if package_cabal then
+        vim.cmd('e ' .. package_cabal)
       end
       local err_msg = 'HsProjectFile: Cannot find project file from: ' .. file
       ht.log.error(err_msg)
