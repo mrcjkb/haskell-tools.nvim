@@ -124,6 +124,43 @@ function repl.setup()
   ---Quit the REPL
   repl.quit = handler.quit
 
+  ---@param lines string[]
+  local function repl_send_lines(lines)
+    if #lines > 1 then
+      handler.send_cmd(':{')
+      for _, line in ipairs(lines) do
+        handler.send_cmd(line)
+      end
+      handler.send_cmd(':}')
+    else
+      handler.send_cmd(lines[1])
+    end
+  end
+
+  ---Can be used to send text objects to the repl.
+  ---@usage [[
+  ---vim.keymap.set('n', 'ghc', ht.repl.operator, {noremap = true})
+  ---@usage ]]
+  ---@see operatorfunc
+  function repl.operator()
+    local old_operator_func = vim.go.operatorfunc
+    _G.op_func_send_to_repl = function()
+      local start = vim.api.nvim_buf_get_mark(0, '[')
+      local finish = vim.api.nvim_buf_get_mark(0, ']')
+      local text = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1], finish[2] + 1, {})
+      vim.print(start)
+      vim.print(finish)
+      vim.print(text)
+      repl_send_lines(text)
+      vim.go.operatorfunc = old_operator_func
+      _G.op_func_formatting = nil
+    end
+    vim.go.operatorfunc = 'v:lua.op_func_send_to_repl'
+    vim.api.nvim_feedkeys('g@', 'n', false)
+  end
+
+  vim.keymap.set('n', 'ghc', repl.operator, { noremap = true })
+
   ---Paste from register `reg` to the REPL
   ---@param reg string|nil register (defaults to '"')
   function repl.paste(reg)
@@ -132,15 +169,10 @@ function repl.setup()
       data = data:sub(1, #data - 1)
     end
     local lines = vim.split(data, '\n')
-    if #lines > 1 then
-      handler.send_cmd(':{')
-      for _, line in ipairs(lines) do
-        handler.send_cmd(line)
-      end
-      handler.send_cmd(':}')
-    else
-      handler.send_cmd(data)
+    if #lines <= 1 then
+      lines = { data }
     end
+    repl_send_lines(lines)
   end
 
   local function handle_reg(cmd, reg)

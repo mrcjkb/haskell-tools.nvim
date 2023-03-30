@@ -21,7 +21,6 @@ with final.stdenv; let
     doCheck = true;
 
     buildInputs = with final; [
-      lua51Packages.luacheck
       sumneko-lua-language-server
     ];
 
@@ -29,15 +28,12 @@ with final.stdenv; let
       mkdir -p $out
       cp -r lua $out/lua
       cp -r tests $out/tests
-      cp .luacheckrc $out
       cp .luarc.json $out
     '';
 
     checkPhase = ''
       export HOME=$(realpath .)
       cd $out
-      luacheck lua
-      luacheck tests
       lua-language-server --check "$out/lua" \
         --configpath "$out/.luarc.json" \
         --logpath "$out" \

@@ -82,6 +82,7 @@
         hooks = {
           alejandra.enable = true;
           stylua.enable = true;
+          luacheck.enable = true;
         };
       };
 
