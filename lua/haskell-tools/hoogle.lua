@@ -83,15 +83,15 @@ function hoogle.setup()
   elseif opts.mode == 'telescope-local' then
     if not hoogle_local.has_hoogle() then
       local msg = 'handler set to "telescope-local" but no hoogle executable found.'
-      ht.log.error(msg)
-      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
+      ht.log.warn(msg)
+      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.WARN)
       set_web_handler()
       return
     end
     if not deps.has_telescope() then
       local msg = 'handler set to "telescope-local" but telescope.nvim is not installed.'
-      ht.log.error(msg)
-      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
+      ht.log.warn(msg)
+      vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.WARN)
       set_web_handler()
       return
     end

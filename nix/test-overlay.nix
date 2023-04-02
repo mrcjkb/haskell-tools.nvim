@@ -109,6 +109,7 @@ with final.stdenv; let
         [
           nvim-wrapped
           makeWrapper
+          curl
         ]
         ++ (
           if withHls

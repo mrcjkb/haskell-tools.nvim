@@ -42,12 +42,10 @@ end
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
-  local hoogle_request = vim.fn.fnameescape(
-    'https://hoogle.haskell.org/?hoogle='
-      .. urlencode(search_term)
-      .. scope_param
-      .. (hoogle_opts.json and '&mode=json' or '')
-  )
+  local hoogle_request = 'https://hoogle.haskell.org/?hoogle='
+    .. urlencode(search_term)
+    .. scope_param
+    .. (hoogle_opts.json and '&mode=json' or '')
   ht.log.debug { 'Hoogle web request', hoogle_request }
   return hoogle_request
 end
@@ -73,18 +71,18 @@ if deps.has_telescope() then
       hoogle_web.browser_search(search_term, opts)
       return
     end
+    if vim.fn.executable('curl') == 0 then
+      ht.log.error('curl executable not found.')
+      vim.notify("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.", vim.log.levels.ERROR)
+      return
+    end
+    opts = opts or {}
+    opts.hoogle = opts.hoogle or {}
+    opts.hoogle.json = true
+    local url = mk_hoogle_request(search_term, opts)
     async.run(function()
-      if vim.fn.executable('curl') == 0 then
-        ht.log.error('curl executable not found.')
-        vim.notify("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.", vim.log.levels.ERROR)
-        return
-      end
-      opts = opts or {}
-      opts.hoogle = opts.hoogle or {}
-      opts.hoogle.json = true
-
       local response = curl.get {
-        url = mk_hoogle_request(search_term, opts),
+        url = url,
         accept = 'application/json',
       }
       ht.log.debug { 'Hoogle web response', response }
