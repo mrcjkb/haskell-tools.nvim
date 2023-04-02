@@ -88,6 +88,15 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "moniquelive",
+      "name": "Cyber Oliveira",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70070?v=4",
+      "profile": "https://monique.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
