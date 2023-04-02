@@ -5,9 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Added
+
+## [1.9.4] - 2023-04-02
 ### Fixed
 - Repl: Detection of single-package cabal projects.
+- Hoogle (web): URL escaping.
 ### Changed
 - Remove rockspec (not needed, due to luarocks-tag-release-workflow).
 - `HsProjectFile`: Try `stack.yml` first, then fall back to `cabal.project` and then to `*.cabal`.
