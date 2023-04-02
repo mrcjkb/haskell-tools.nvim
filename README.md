@@ -628,7 +628,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://dhruvas.vercel.app"><img src="https://avatars.githubusercontent.com/u/66675022?v=4?s=100" width="100px;" alt="Dhruva Srinivas"/><br /><sub><b>Dhruva Srinivas</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=carrotfarmer" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gacallea.info/"><img src="https://avatars.githubusercontent.com/u/3269984?v=4?s=100" width="100px;" alt="Andrea Callea (he/him/his)"/><br /><sub><b>Andrea Callea (he/him/his)</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Agacallea" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://gacallea.info/"><img src="https://avatars.githubusercontent.com/u/3269984?v=4?s=100" width="100px;" alt="Andrea Callea (he/him/his)"/><br /><sub><b>Andrea Callea (he/him/his)</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Agacallea" title="Bug reports">🐛</a> <a href="#userTesting-gacallea" title="User Testing">📓</a></td>
     </tr>
   </tbody>
 </table>
