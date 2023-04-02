@@ -22,8 +22,7 @@
 - [Quick Setup](#quick-setup)
 - [Features](#features)
 - [Advanced configuration](#advanced-configuration)
-  - [Available functions](#available-functions)
-  - [Available commands](#available-commands)
+  - [Available functions and commands](#available-functions-and-commands)
   - [Telescope extension](#telescope-extension)
 - [Troubleshooting](#troubleshooting)
 - [Recommendations](#recommendations)
@@ -428,11 +427,15 @@ iron.setup {
 }
 ```
 
-### Available functions
+### Available functions and commands
 
 For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
+
+- `:HlsStart` - Start the LSP client.
+- `:HlsStop` - Stop the LSP client.
+- `:HlsRestart` - Restart the LSP client.
 
 ```lua
 local ht = require('haskell-tools')
@@ -497,6 +500,11 @@ ht.repl.reload()
 
 #### Project
 
+- `:HsProjectFile` - Open the project file for the current buffer
+  (cabal.project or stack.yaml).
+- `:HsPackageYaml` - Open the package.yaml file for the current buffer.
+- `:HsPackageCabal` - Open the *.cabal file for the current buffer.
+
 ```lua
 local ht = require('haskell-tools')
 -- Open the project file for the current buffer (cabal.project or stack.yaml)
@@ -534,21 +542,6 @@ ht.tags.generate_project_tags(path, opts)
 -- `path`: An optional file path, defaults to the current buffer
 ht.tags.generate_package_tags(path)
 ```
-
-### Available commands
-
-#### LSP client
-
-- `:HlsStart` - Start the LSP client.
-- `:HlsStop` - Stop the LSP client.
-- `:HlsRestart` - Restart the LSP client.
-
-#### Project files
-
-- `:HsProjectFile` - Open the project file for the current buffer
-  (cabal.project or stack.yaml).
-- `:HsPackageYaml` - Open the package.yaml file for the current buffer.
-- `:HsPackageCabal` - Open the *.cabal file for the current buffer.
 
 ### Telescope extension
 
