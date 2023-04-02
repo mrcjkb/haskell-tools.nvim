@@ -2,7 +2,8 @@
 
 Contributions are more than welcome!
 
-Please don't forget to add your changes to the "Unreleased" section of [the changelog](./CHANGELOG.md) (if applicable).
+Please don't forget to add your changes to the "Unreleased" section of [the changelog](./CHANGELOG.md)
+(if applicable).
 
 ## Commit messages
 
@@ -12,9 +13,16 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/en/
 
 I use
 
-* [`nix`](https://nixos.org/download.html#download-nix) for development and testing.
-* [`stylua`](https://github.com/JohnnyMorganz/StyLua) for formatting.
-* [`luacheck`](https://github.com/mpeterv/luacheck) and [`sumneko-lua-language-server`](https://github.com/sumneko/lua-language-server/wiki/Diagnosis-Report#create-a-report) for linting.
+- [`nix`](https://nixos.org/download.html#download-nix) for development and testing.
+- [`stylua`](https://github.com/JohnnyMorganz/StyLua),
+  [`.editorconfig`](https://editorconfig.org/),
+  and [`alejandra`](https://github.com/kamadorueda/alejandra)
+  for formatting.
+- [`luacheck`](https://github.com/mpeterv/luacheck),
+  and [`markdownlint`](https://github.com/DavidAnson/markdownlint),
+  for linting.
+- [`sumneko-lua-language-server`](https://github.com/sumneko/lua-language-server/wiki/Diagnosis-Report#create-a-report)
+  for static type checking.
 
 To enter a development shell:
 
@@ -34,10 +42,10 @@ To apply formatting, while in a devShell, run
 pre-commit run --all
 ```
 
-If you use [`direnv`](https://direnv.net/), just run `direnv allow` and you will be dropped in this devShell.
+If you use [`direnv`](https://direnv.net/),
+just run `direnv allow` and you will be dropped in this devShell.
 
 ## Tests
-
 
 To run tests locally
 
