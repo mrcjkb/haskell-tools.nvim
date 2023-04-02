@@ -344,6 +344,12 @@ repl.setup()                                                        *repl.setup*
     Set up this module. Called by the haskell-tools setup.
 
 
+repl.operator()                                                  *repl.operator*
+
+    See: ~
+        |operatorfunc|
+
+
 repl.paste({reg})                                                   *repl.paste*
     Paste from register `reg` to the REPL
 
