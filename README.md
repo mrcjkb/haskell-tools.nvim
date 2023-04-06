@@ -575,7 +575,8 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 
 ### Minimal config
 
-To troubleshoot this plugin with a minimal config in a temporary directory, use [minimal.lua](./tests/minimal.lua).
+To troubleshoot this plugin with a minimal config in a temporary directory,
+you can try [minimal.lua](./tests/minimal.lua).
 
 ```console
 mkdir -p /tmp/minimal/
@@ -584,6 +585,14 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 # Quit Neovim and start it up again with the plugins loaded
 NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 ```
+
+> **Note**
+>
+> This plugin is only tested on Linux.
+> It should work on MacOS, and basic features should also work on Windows
+> (since version `1.9.5`), but this has not been tested.
+> Features that rely on external tools, such as `fast-tags` an `ghci` are likely
+> to break on non-Unix-like operating systems.
 
 #### Logs
 
