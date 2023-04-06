@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.5] - 2023-04-06
+### Fixed
+- Prevent infinite recursion on strange operating systems in path iteration (#171).
+
 ## [1.9.4] - 2023-04-02
 ### Fixed
 - Repl: Detection of single-package cabal projects.

@@ -1,6 +1,8 @@
 ---@mod haskell-tools.log haskell-tools Logging
 
 local ht = require('haskell-tools')
+local deps = require('haskell-tools.deps')
+local Path = deps.require_plenary('plenary.path')
 
 local log = {}
 
@@ -14,7 +16,9 @@ end
 
 local logpath = vim.fn.stdpath('log')
 vim.fn.mkdir(logpath, 'p')
-local logfilename = logpath .. '/haskell-tools.log'
+
+local logfilepath = Path:new(logpath, 'haskell-tools.log')
+local logfilename = logfilepath.filename
 
 ---Get the haskell-tools.nvim log file path.
 ---@return string filepath
