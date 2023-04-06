@@ -13,7 +13,7 @@
 
 [![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Quick Links
@@ -672,6 +672,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://dhruvas.vercel.app"><img src="https://avatars.githubusercontent.com/u/66675022?v=4?s=100" width="100px;" alt="Dhruva Srinivas"/><br /><sub><b>Dhruva Srinivas</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=carrotfarmer" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://gacallea.info/"><img src="https://avatars.githubusercontent.com/u/3269984?v=4?s=100" width="100px;" alt="Andrea Callea (he/him/his)"/><br /><sub><b>Andrea Callea (he/him/his)</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Agacallea" title="Bug reports">🐛</a> <a href="#userTesting-gacallea" title="User Testing">📓</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://monique.dev"><img src="https://avatars.githubusercontent.com/u/70070?v=4?s=100" width="100px;" alt="Cyber Oliveira"/><br /><sub><b>Cyber Oliveira</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Amoniquelive" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Br3akp01nt"><img src="https://avatars.githubusercontent.com/u/91327649?v=4?s=100" width="100px;" alt="Br3akp01nt"/><br /><sub><b>Br3akp01nt</b></sub></a><br /><a href="#userTesting-Br3akp01nt" title="User Testing">📓</a></td>
     </tr>
   </tbody>
 </table>
