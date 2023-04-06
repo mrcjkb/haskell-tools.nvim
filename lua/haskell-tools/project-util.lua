@@ -71,9 +71,14 @@ local function search_ancestors(startpath, matcher)
   if matcher(startpath.filename) then
     return startpath
   end
+  local max_iterations = 100
   for path in iterate_parents(startpath) do
+    max_iterations = max_iterations - 1
+    if max_iterations == 0 then
+      return
+    end
     if not path then
-      return nil
+      return
     end
     if matcher(path.filename) then
       return path
