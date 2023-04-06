@@ -591,8 +591,8 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 > This plugin is only tested on Linux.
 > It should work on MacOS, and basic features should also work on Windows
 > (since version `1.9.5`), but this has not been tested.
-> Features that rely on external tools, such as `fast-tags` an `ghci` are likely
-> to break on non-Unix-like operating systems.
+> Features that rely on external tools, such as `hoogle`,
+> `fast-tags` or `ghci` are likely to break on non-Unix-like operating systems.
 
 #### Logs
 
