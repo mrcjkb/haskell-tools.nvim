@@ -108,8 +108,8 @@ local function create_tab(_)
 end
 
 ---Create a new repl (or toggle its visibility)
----@param create_win function|number Function for creating the window
----@param mk_cmd function Function for creating the repl command
+---@param create_win function|number Function for creating the window or an existing window number
+---@param mk_cmd fun():string[] Function for creating the repl command
 ---@param opts ReplViewOpts?
 ---@return nil
 local function create_or_toggle(create_win, mk_cmd, opts)
