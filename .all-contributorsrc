@@ -107,6 +107,15 @@
         "userTesting",
         "bug"
       ]
+    },
+    {
+      "login": "Alper-Celik",
+      "name": "Alper Çelik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/110625473?v=4",
+      "profile": "https://github.com/Alper-Celik",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
