@@ -6,7 +6,6 @@
 
 local ht = require('haskell-tools')
 local project = require('haskell-tools.project-util')
-local ht_util = require('haskell-tools.util')
 
 local repl = {}
 
@@ -38,7 +37,7 @@ local function extend_repl_cmd(cmd, file)
     return cmd
   end
   if vim.endswith(file, '.hs') then
-    table.insert(cmd, ht_util.quote(file))
+    table.insert(cmd, file)
   else
     ht.log.debug('extend_repl_cmd: Not a Haskell file.')
     table.insert(cmd, subpackage)
@@ -60,7 +59,7 @@ end
 ---@param file string|nil
 ---@return string[]|nil command
 local function mk_stack_repl_cmd(file)
-  return extend_repl_cmd({ 'stack', 'ghci' }, ht_util.quote(file))
+  return extend_repl_cmd({ 'stack', 'ghci' }, file)
 end
 
 ---Create the command to create a repl for a file.
@@ -85,7 +84,7 @@ function repl.mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    local cmd = vim.tbl_flatten { 'ghci', file and { ht_util.quote(file) } or {} }
+    local cmd = vim.tbl_flatten { 'ghci', file and { file } or {} }
     ht.log.debug { 'mk_repl_cmd', cmd }
     return cmd
   end

@@ -11,6 +11,7 @@
 
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
+local ht_util = require('haskell-tools.util')
 
 local toggleterm = {
   terminal = nil,
@@ -66,20 +67,21 @@ function toggleterm.setup(mk_repl_cmd, opts)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
-    local cmd = table.concat(mk_repl_cmd(filepath) or {}, ' ')
-    if cmd == '' then
+    local cmd = mk_repl_cmd(filepath and ht_util.quote(filepath)) or {}
+    if #cmd == 0 then
       local err_msg = 'haskell-tools.repl.toggleterm: Could not create a repl command.'
       ht.log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
-    if is_new_cmd(cmd) then
-      ht.log.debug { 'repl.toggleterm: New command', cmd }
+    local cmd_str = table.concat(cmd, ' ')
+    if is_new_cmd(cmd_str) then
+      ht.log.debug { 'repl.toggleterm: New command', cmd_str }
       toggleterm.quit()
     end
     local cur_win = vim.api.nvim_get_current_win()
     local is_normal_mode = vim.api.nvim_get_mode().mode == 'n'
-    toggleterm.terminal = toggleterm.terminal or mk_new_terminal(cmd)
+    toggleterm.terminal = toggleterm.terminal or mk_new_terminal(cmd_str)
     local function toggle()
       toggleterm.terminal:toggle()
     end
@@ -93,7 +95,7 @@ function toggleterm.setup(mk_repl_cmd, opts)
         vim.cmd('stopinsert')
       end
     end
-    last_cmd = cmd
+    last_cmd = cmd_str
   end
 
   ---Quit the repl
