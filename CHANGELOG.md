@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.9.6] - 2023-04-09
 ### Fixed
-- Loading files with `'builtin'` repl handler.
+- Loading files with `'builtin'` repl handler (#177).
 
 ## [1.9.5] - 2023-04-06
 ### Fixed
