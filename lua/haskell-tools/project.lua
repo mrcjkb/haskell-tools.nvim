@@ -86,7 +86,6 @@ function project.setup()
       if not result then
         local context = ''
         if project_util.is_cabal_project(file) then
-          print('cabal')
           context = ' cabal project file'
         end
         local err_msg = 'HsPackageYaml: Cannot find package.yaml file for' .. context .. ': ' .. file
