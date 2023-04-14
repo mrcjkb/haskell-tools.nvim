@@ -147,9 +147,6 @@ function repl.setup()
       local start = vim.api.nvim_buf_get_mark(0, '[')
       local finish = vim.api.nvim_buf_get_mark(0, ']')
       local text = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1], finish[2] + 1, {})
-      vim.print(start)
-      vim.print(finish)
-      vim.print(text)
       repl_send_lines(text)
       vim.go.operatorfunc = old_operator_func
       _G.op_func_formatting = nil
