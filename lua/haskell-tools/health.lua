@@ -131,6 +131,28 @@ local external_dependencies = {
     url = '[curl](https://curl.se/)',
     info = 'Required for "telescope-web" hoogle seach mode.',
   },
+  {
+    name = 'haskell-debug-adapter',
+    get_binaries = function()
+      return { 'haskell-debug-adapter' }
+    end,
+    optional = function()
+      return true
+    end,
+    url = '[haskell-debug-adapter](https://github.com/phoityne/haskell-debug-adapter)',
+    info = 'Optional, for `dap` support.',
+  },
+  {
+    name = 'ghci-dap',
+    get_binaries = function()
+      return { 'ghci-dap' }
+    end,
+    optional = function()
+      return true
+    end,
+    url = '[ghci-dap](https://github.com/phoityne/ghci-dap)',
+    info = 'Optional, for `dap` support.',
+  },
 }
 
 ---@param dep LuaDependency

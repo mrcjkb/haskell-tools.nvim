@@ -6,3 +6,15 @@ dependencies:
 
 library:
   source-dirs: src
+
+executables:
+  sub1:
+    main: Main.hs
+    source-dirs: app
+
+tests:
+  sub1-spec:
+    main:
+      Spec.hs
+    source-dirs:
+    - test

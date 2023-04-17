@@ -9,7 +9,7 @@
 local ht = require('haskell-tools')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
-local project_util = require('haskell-tools.project-util')
+local project_util = require('haskell-tools.project.util')
 
 local hover = {}
 

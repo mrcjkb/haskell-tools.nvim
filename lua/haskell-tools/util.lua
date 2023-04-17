@@ -11,6 +11,8 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
+local Path = require('plenary.path')
+local loop = vim.loop
 
 ---@class Util
 ---@field get_signature_from_markdown fun(string):string
@@ -79,7 +81,7 @@ function util.quote(str)
   return '"' .. str .. '"'
 end
 
----Read the contents of a file
+---Read the content of a file
 ---@param filename string
 ---@return string|nil content
 function util.read_file(filename)
@@ -90,6 +92,65 @@ function util.read_file(filename)
     f:close()
   end
   return content
+end
+
+---Asynchronously the content of a file
+---@param filename string
+---@return string|nil content
+---@async
+function util.read_file_async(filename)
+  local file_fd = loop.fs_open(filename, 'r', 438)
+  if not file_fd then
+    return nil
+  end
+  local stat = loop.fs_fstat(file_fd)
+  if not stat then
+    return nil
+  end
+  local data = loop.fs_read(file_fd, stat.size, 0)
+  loop.fs_close(file_fd)
+  ---@cast data string?
+  return data
+end
+
+---Trim leading and trailing whitespace.
+---@param str string
+---@return string trimmed
+function util.trim(str)
+  return (str:match('^%s*(.*)') or str):gsub('%s*$', '')
+end
+
+---@param package_name string
+---@param exe_name string
+---@param package_dir string
+---@param mains string[]
+---@param source_dirs string[]
+---@return HsEntryPoint[] entry_points
+function util.mk_entry_points(package_name, exe_name, package_dir, mains, source_dirs)
+  ---@type HsEntryPoint[]
+  local entry_points = {}
+  for _, source_dir in pairs(source_dirs) do
+    for _, main in pairs(mains) do
+      local filename = Path:new(package_dir, source_dir, main).filename
+      if vim.fn.filereadable(filename) == 1 then
+        local entry_point = {
+          package_name = package_name,
+          exe_name = exe_name,
+          main = main,
+          source_dir = source_dir,
+          package_dir = package_dir,
+        }
+        table.insert(entry_points, entry_point)
+      end
+    end
+  end
+  return entry_points
+end
+
+---@param str string
+---@return integer indent
+function util.get_indent(str)
+  return #(str:match('^(%s+)%S') or '')
 end
 
 return util

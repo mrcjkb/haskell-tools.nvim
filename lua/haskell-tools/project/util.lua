@@ -10,13 +10,11 @@
 
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
+local ht_util = require('haskell-tools.util')
+local cabal = require('haskell-tools.project.cabal')
+local stack = require('haskell-tools.project.stack')
 
 local Path = deps.require_plenary('plenary.path')
-
----@class Path Plenary Path (as used by this module)
----@field filename string
----@field parent fun():Path
----@field absolute fun():Path
 
 local project_util = {}
 
@@ -187,6 +185,75 @@ end
 function project_util.get_package_name(path)
   local package_path = project_util.match_package_root(path)
   return package_path and vim.fn.fnamemodify(package_path, ':t')
+end
+
+---Parse the package paths (absolute) from a project file
+---@param project_file string project file (cabal.project or stack.yaml)
+---@return string[] package_paths
+---@async
+function project_util.parse_package_paths(project_file)
+  local package_paths = {}
+  local content = ht_util.read_file_async(project_file)
+  if not content then
+    return package_paths
+  end
+  local project_dir = vim.fn.fnamemodify(project_file, ':h')
+  local lines = vim.split(content, '\n') or {}
+  local packages_start = false
+  for _, line in ipairs(lines) do
+    if packages_start then
+      local is_indented = line:match('^%s') ~= nil
+      local is_yaml_list_elem = line:match('^%-') ~= nil
+      if not (is_indented or is_yaml_list_elem) then
+        return package_paths
+      end
+    end
+    if packages_start then
+      local trimmed = ht_util.trim(line)
+      local pkg_rel_path = trimmed:match('/(.+)')
+      local pkg_path = Path:new(project_dir, pkg_rel_path).filename
+      if vim.fn.isdirectory(pkg_path) == 1 then
+        package_paths[#package_paths + 1] = pkg_path
+      end
+    end
+    if line:match('packages:') then
+      packages_start = true
+    end
+  end
+  return package_paths
+end
+
+---Parse the DAP entry points from a *.cabal file
+---@param package_path string Path to a package directory
+---@return HsEntryPoint[] entry_points
+---@async
+function project_util.parse_package_entrypoints(package_path)
+  if project_util.is_cabal_project(package_path) then
+    return cabal.parse_package_entrypoints(package_path)
+  end
+  return stack.parse_package_entrypoints(package_path)
+end
+
+---@param project_root string Project root directory
+---@return HsEntryPoint[]
+---@async
+function project_util.parse_project_entrypoints(project_root)
+  local entry_points = {}
+  local project_file = Path:new(project_root, 'cabal.project').filename
+  if vim.fn.filereadable(project_file) == 1 then
+    for _, package_path in pairs(project_util.parse_package_paths(project_file)) do
+      vim.list_extend(entry_points, cabal.parse_package_entrypoints(package_path))
+    end
+    return entry_points
+  end
+  project_file = Path:new(project_root, 'stack.yaml').filename
+  if vim.fn.filereadable(project_file) == 1 then
+    for _, package_path in pairs(project_util.parse_package_paths(project_file)) do
+      vim.list_extend(entry_points, stack.parse_package_entrypoints(package_path))
+    end
+    return entry_points
+  end
+  return cabal.parse_package_entrypoints(project_root)
 end
 
 return project_util

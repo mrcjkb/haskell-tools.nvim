@@ -5,7 +5,7 @@
 ---@bruief ]]
 
 local ht = require('haskell-tools')
-local project = require('haskell-tools.project-util')
+local project = require('haskell-tools.project.util')
 
 local repl = {}
 

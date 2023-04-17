@@ -7,8 +7,8 @@
 with final.lib;
 with final.lib.strings;
 with final.stdenv; let
-  lints = mkDerivation {
-    name = "haskell-tools-lints";
+  typecheck = mkDerivation {
+    name = "haskell-tools-typecheck";
 
     src = self;
 
@@ -24,11 +24,33 @@ with final.stdenv; let
       sumneko-lua-language-server
     ];
 
-    buildPhase = ''
+    buildPhase = let
+      luarc = final.writeText ".luarc.json" ''
+        {
+          "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+          "Lua.diagnostics.globals": [
+            "vim",
+            "describe",
+            "it",
+            "assert"
+          ],
+          "Lua.diagnostics.libraryFiles": "Disable",
+          "Lua.diagnostics.disable": [
+            "duplicate-set-field",
+          ],
+          "Lua.workspace.library": [
+            "${final.neovim-unwrapped}/share/nvim/runtime/lua",
+            "${plenary-plugin}/lua"
+          ],
+          "Lua.runtime.version": "LuaJIT"
+        }
+      '';
+    in ''
       mkdir -p $out
       cp -r lua $out/lua
       cp -r tests $out/tests
-      cp .luarc.json $out
+      cp .luacheckrc $out
+      cp ${luarc} $out/.luarc.json
     '';
 
     checkPhase = ''
@@ -36,9 +58,11 @@ with final.stdenv; let
       cd $out
       lua-language-server --check "$out/lua" \
         --configpath "$out/.luarc.json" \
+        --loglevel="trace" \
         --logpath "$out" \
         --checklevel="Warning"
       if [[ -f $out/check.json ]]; then
+        echo "+++++++++++++++ lua-language-server diagnostics +++++++++++++++"
         cat $out/check.json
         exit 1
       fi
@@ -133,7 +157,7 @@ with final.stdenv; let
       '';
     };
 in {
-  inherit lints;
+  typecheck = typecheck;
 
   haskell-tools-test = mkPlenaryTest {name = "haskell-tools";};
 

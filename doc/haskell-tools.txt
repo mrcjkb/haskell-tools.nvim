@@ -5,6 +5,7 @@ Introduction ·································�
 The haskell-tools module ······································· |haskell-tools|
 haskell-tools configuration ····························· |haskell-tools.config|
 haskell-tools LSP client setup ····························· |haskell-tools.lsp|
+haskell-tools nvim-dap setup ······························· |haskell-tools.dap|
 haskell-tools Hoogle search ····························· |haskell-tools.hoogle|
 haskell-tools GHCi REPL module ···························· |haskell-tools.repl|
 haskell-tools Project module ··························· |haskell-tools.project|
@@ -98,6 +99,7 @@ HTOpts                                                                  *HTOpts*
     Fields: ~
         {tools}  (ToolsOpts)             haskell-tools plugin options
         {hls}    (HaskellLspClientOpts)  haskell-language-server client options
+        {dap}    (HTDapOpts)             haskell-debug-adapter client options
 
 
 ToolsOpts                                                            *ToolsOpts*
@@ -201,6 +203,15 @@ HaskellLspClientOpts                                      *HaskellLspClientOpts*
         |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
 
 
+HTDapOpts                                                            *HTDapOpts*
+    @comment To print all options that are available for your haskell-language-server version, run `haskell-language-server-wrapper generate-default-config`
+
+    Fields: ~
+        {cmd}       (string[])                          The command to start haskell-debug-adapter with.
+        {logFile}   (string)                            Log file path for detected configurations.
+        {logLevel}  ("Debug"|"Info"|"Warning"|"Error")  The log level for detected configurations.
+
+
 config.defaults                                                *config.defaults*
 
     Type: ~
@@ -295,6 +306,35 @@ lsp.buf_eval_all({bufnr})                                     *lsp.buf_eval_all*
 
     Parameters: ~
         {bufnr}  (number|nil)  Defaults to the current buffer.
+
+    Returns: ~
+        (nil)
+
+
+==============================================================================
+haskell-tools nvim-dap setup                                 *haskell-tools.dap*
+
+AddDapConfigOpts                                              *AddDapConfigOpts*
+
+    Fields: ~
+        {autodetect}             (boolean)  Whether ta automatically detect launch configurations for the project
+        {settings_file_pattern}  (string)   File name or pattern to search for. Defaults to 'launch.json'
+
+
+                                                   *dap.discover_configurations*
+dap.discover_configurations({bufnr}, {opts})
+    Discover nvim-dap launch configurations for haskell-debug-adapter.
+
+    Parameters: ~
+        {bufnr}  (number|nil)            The buffer number
+        {opts}   (AddDapConfigOpts|nil)
+
+    Returns: ~
+        (nil)
+
+
+dap.setup()                                                          *dap.setup*
+    Setup the DAP module. Called by the haskell-tools setup.
 
     Returns: ~
         (nil)
