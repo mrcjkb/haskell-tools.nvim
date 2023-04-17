@@ -38,10 +38,10 @@
 ### Optional
 
 - [`haskell-language-server`](https://haskell-language-server.readthedocs.io/en/latest/installation.html)
-  (recommended)
-- [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim)
+  (recommended).
+- [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim).
 - A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md)
-  installation (recommended for better hoogle search performance)
+  installation (recommended for better hoogle search performance).
 - [`fast-tags`](https://github.com/elaforge/fast-tags)
   (for automatic tag generation as a fallback for [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
 - [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/) and
