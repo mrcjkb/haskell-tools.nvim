@@ -112,7 +112,7 @@ local function setup_dap(nvim_dap)
       local filename = vim.api.nvim_buf_get_name(bufnr)
       local project_root = project_util.match_project_root(filename)
       if not project_root then
-        ht.log.warning('haskell-tools.dap: Unable to detect project root for file ' .. filename)
+        ht.log.warn('haskell-tools.dap: Unable to detect project root for file ' .. filename)
         return
       end
       if _configuration_cache[project_root] then
