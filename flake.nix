@@ -2,9 +2,7 @@
   description = "haskell-tools.nvim - supercharge your haskell experience in neovim";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
-
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
@@ -14,6 +12,8 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-utils.url = "github:numtide/flake-utils";
 
     flake-compat = {
       url = "github:edolstra/flake-compat";
@@ -40,9 +40,9 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    nixpkgs-unstable,
     neovim-nightly-overlay,
     pre-commit-hooks,
+    flake-utils,
     ...
   }: let
     supportedSystems = [
@@ -51,9 +51,6 @@
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    perSystem = nixpkgs.lib.genAttrs supportedSystems;
-    pkgsFor = system: import nixpkgs {inherit system;};
-    pkgsUnstableFor = system: import nixpkgs-unstable {inherit system;};
 
     test-overlay = import ./nix/test-overlay.nix {
       inherit
@@ -66,17 +63,25 @@
     };
 
     haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix {inherit self;};
+  in
+    flake-utils.lib.eachSystem supportedSystems (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          haskell-tooling-overlay
+          test-overlay
+          neovim-nightly-overlay.overlay
+        ];
+      };
 
-    haskell-tools-nvim-for = system: let
-      pkgs = pkgsFor system;
-    in
-      pkgs.vimUtils.buildVimPluginFrom2Nix {
+      haskell-tools-nvim = pkgs.vimUtils.buildVimPluginFrom2Nix {
         name = "haskell-tools";
         src = self;
       };
 
-    pre-commit-check-for = system:
-      pre-commit-hooks.lib.${system}.run {
+      docgen = pkgs.callPackage ./nix/docgen.nix {};
+
+      pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = self;
         hooks = {
           alejandra.enable = true;
@@ -87,62 +92,57 @@
         };
       };
 
-    shellFor = system: let
-      pkgs = pkgsFor system;
-      pre-commit-check = pre-commit-check-for system;
-    in
-      pkgs.mkShell {
+      haskell-tools-shell = pkgs.mkShell {
         name = "haskell-tools.nvim-shell";
         inherit (pre-commit-check) shellHook;
-        buildInputs = with pkgs; [
-          zlib
-          alejandra
-          stylua
-          lua51Packages.luacheck
-        ];
+        buildInputs =
+          (with pkgs; [
+            sumneko-lua-language-server
+          ])
+          ++ (with pre-commit-hooks.packages.${system}; [
+            alejandra
+            stylua
+            luacheck
+            editorconfig-checker
+            markdownlint-cli
+          ]);
       };
-  in {
-    overlays = {
-      inherit test-overlay haskell-tooling-overlay;
-      default = haskell-tooling-overlay;
-    };
-
-    devShells = perSystem (system: rec {
-      default = haskell-tools;
-      haskell-tools = shellFor system;
-    });
-
-    packages = perSystem (system: let
-      pkgs = pkgsUnstableFor system;
-      haskell-tools-nvim = haskell-tools-nvim-for system;
-      docgen = pkgs.callPackage ./nix/docgen.nix {};
     in {
-      default = haskell-tools-nvim;
-      inherit docgen haskell-tools-nvim;
-    });
+      devShells = rec {
+        default = haskell-tools;
+        haskell-tools = haskell-tools-shell;
+      };
 
-    checks = perSystem (system: let
-      checkPkgs = import nixpkgs {
-        inherit system;
-        overlays = [
+      packages = {
+        default = haskell-tools-nvim;
+        inherit
+          docgen
+          haskell-tools-nvim
+          ;
+      };
+
+      checks = {
+        inherit pre-commit-check;
+        inherit
+          (pkgs)
+          typecheck
+          haskell-tools-test
+          haskell-tools-test-no-hls
+          haskell-tools-test-no-telescope
+          haskell-tools-test-no-telescope-with-hoogle
+          haskell-tools-test-nightly
+          haskell-tools-test-no-telescope-nightly
+          haskell-tools-test-no-telescope-with-hoogle-nightly
+          ;
+      };
+    })
+    // {
+      overlays = {
+        inherit
           test-overlay
           haskell-tooling-overlay
-          neovim-nightly-overlay.overlay
-        ];
+          ;
+        default = haskell-tooling-overlay;
       };
-    in {
-      formatting = pre-commit-check-for system;
-      inherit
-        (checkPkgs)
-        typecheck
-        haskell-tools-test
-        haskell-tools-test-no-hls
-        haskell-tools-test-no-telescope
-        haskell-tools-test-no-telescope-with-hoogle
-        haskell-tools-test-nightly
-        haskell-tools-test-no-telescope-nightly
-        haskell-tools-test-no-telescope-with-hoogle-nightly
-        ;
-    });
-  };
+    };
 }
