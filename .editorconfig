@@ -1,6 +1,6 @@
 root = true
 
-[*.{lua,md,hs}]
+[*.{lua,md,hs,nix}]
 end_of_line = lf
 charset = utf-8
 indent_style = space
