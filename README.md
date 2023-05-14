@@ -1,19 +1,32 @@
 <!-- markdownlint-disable -->
-<h1 align="center">
-  <img src="./nvim-haskell.svg" alt="haskell-tools.nvim">
-</h1>
+<br />
+<div align="center">
+  <a href="https://github.com/mrcjkb/haskell-tools.nvim">
+    <img src="./nvim-haskell.svg" alt="haskell-tools.nvim">
+  </a>
+  <p align="center">
+    <a href="https://github.com/mrcjkb/haskell-tools.nvim/issues">Report Bug</a>
+  </p>
+  <p>
+    <strong>
+      Supercharge your Haskell experience in <a href="https://neovim.io/">Neovim</a>!
+    </strong>
+  </p>
+  <h2>🦥</h>
+</div>
 <!-- markdownlint-restore -->
 
-🦥 Supercharge your Haskell experience in [Neovim](https://neovim.io/)!
+[![Neovim][neovim-shield]][neovim-url]
+[![Lua][lua-shield]][lua-url]
+[![Haskell][haskell-shield]][haskell-url]
+[![Nix][nix-shield]][nix-url]
 
-![Neovim](https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white)
-![Lua](https://img.shields.io/badge/lua-%232C2D72.svg?style=for-the-badge&logo=lua&logoColor=white)
-![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
-![Nix](https://img.shields.io/badge/nix-0175C2?style=for-the-badge&logo=NixOS&logoColor=white)
+[![GPL2 License][license-shield]][license-url]
+[![Issues][issues-shield]][issues-url]
+[![Build Status][ci-shield]][ci-url]
 
-[![Nix build](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml/badge.svg)](https://github.com/MrcJkb/haskell-tools.nvim/actions/workflows/nix-build.yml)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Quick Links
@@ -722,3 +735,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
 specification. Contributions of any kind welcome!
+
+<!-- MARKDOWN LNIKS & IMAGES -->
+[neovim-shield]: https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white
+[neovim-url]: https://neovim.io/
+[lua-shield]: https://img.shields.io/badge/lua-%232C2D72.svg?style=for-the-badge&logo=lua&logoColor=white
+[lua-url]: https://www.lua.org/
+[nix-shield]: https://img.shields.io/badge/nix-0175C2?style=for-the-badge&logo=NixOS&logoColor=white
+[nix-url]: https://nixos.org/
+[haskell-shield]: https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white
+[haskell-url]: https://www.haskell.org/
+[issues-shield]: https://img.shields.io/github/issues/mrcjkb/haskell-tools.nvim.svg?style=for-the-badge
+[issues-url]: https://github.com/mrcjkb/haskell-tools.nvim/issues
+[license-shield]: https://img.shields.io/github/license/mrcjkb/haskell-tools.nvim.svg?style=for-the-badge
+[license-url]: https://github.com/mrcjkb/haskell-tools.nvim/blob/master/LICENSE
+[ci-shield]: https://img.shields.io/github/actions/workflow/status/mrcjkb/haskell-tools.nvim/nix-build.yml?style=for-the-badge
+[ci-url]: https://github.com/mrcjkb/haskell-tools.nvim/actions/workflows/nix-build.yml
