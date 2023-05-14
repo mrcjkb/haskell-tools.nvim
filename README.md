@@ -24,6 +24,7 @@
 [![GPL2 License][license-shield]][license-url]
 [![Issues][issues-shield]][issues-url]
 [![Build Status][ci-shield]][ci-url]
+[![LuaRocks][luarocks-shield]][luarocks-url]
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=for-the-badge)](#contributors-)
@@ -62,9 +63,7 @@
 
 ## Installation
 
-This plugin is available on LuaRocks.
-
-[![LuaRocks](https://img.shields.io/luarocks/v/MrcJkb/haskell-tools.nvim?logo=lua&color=purple)](https://luarocks.org/modules/MrcJkb/haskell-tools.nvim)
+This plugin is [available on LuaRocks][luarocks-url].
 
 If you use a plugin manager that does not support LuaRocks,
 you have to declare the dependencies yourself.
@@ -751,3 +750,5 @@ specification. Contributions of any kind welcome!
 [license-url]: https://github.com/mrcjkb/haskell-tools.nvim/blob/master/LICENSE
 [ci-shield]: https://img.shields.io/github/actions/workflow/status/mrcjkb/haskell-tools.nvim/nix-build.yml?style=for-the-badge
 [ci-url]: https://github.com/mrcjkb/haskell-tools.nvim/actions/workflows/nix-build.yml
+[luarocks-shield]: https://img.shields.io/luarocks/v/MrcJkb/haskell-tools.nvim?logo=lua&color=purple&style=for-the-badge
+[luarocks-url]: https://luarocks.org/modules/MrcJkb/haskell-tools.nvim
