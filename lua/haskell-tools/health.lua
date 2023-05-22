@@ -12,6 +12,10 @@ local health = {}
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local h = vim.health or require('health')
+local start = h.start or h.report_start
+local ok = h.ok or h.report_ok
+local error = h.error or h.report_error
+local warn = h.warn or h.report_warn
 
 ---@class LuaDependency
 ---@field module string The name of a module
@@ -101,9 +105,9 @@ local external_dependencies = {
       if errmsg then
         local hoogle_mode = ht.config and ht.config.options.tools.hoogle.mode
         if hoogle_mode and hoogle_mode == 'auto' or hoogle_mode == 'telescope-local' then
-          h.report_error('hoogle: ' .. errmsg)
+          error('hoogle: ' .. errmsg)
         else
-          h.report_warn('hoogle: ' .. errmsg)
+          warn('hoogle: ' .. errmsg)
         end
       end
     end,
@@ -158,13 +162,13 @@ local external_dependencies = {
 ---@param dep LuaDependency
 local function check_lua_dependency(dep)
   if deps.has(dep.module) then
-    h.report_ok(dep.url .. ' installed.')
+    ok(dep.url .. ' installed.')
     return
   end
   if dep.optional() then
-    h.report_warn(('%s not installed. %s %s'):format(dep.module, dep.info, dep.url))
+    warn(('%s not installed. %s %s'):format(dep.module, dep.info, dep.url))
   else
-    h.report_error(('Lua dependency %s not found: %s'):format(dep.module, dep.url))
+    error(('Lua dependency %s not found: %s'):format(dep.module, dep.url))
   end
 end
 
@@ -197,20 +201,20 @@ local function check_external_dependency(dep)
     local mb_version_newline_idx = mb_version and mb_version:find('\n')
     local mb_version_len = mb_version and (mb_version_newline_idx and mb_version_newline_idx - 1 or mb_version:len())
     local version = mb_version and mb_version:sub(0, mb_version_len) or '(unknown version)'
-    h.report_ok(('%s: found %s'):format(dep.name, version))
+    ok(('%s: found %s'):format(dep.name, version))
     if dep.extra_checks then
       dep.extra_checks()
     end
     return
   end
   if dep.optional() then
-    h.report_warn(([[
+    warn(([[
       %s: not found.
       Install %s for extended capabilities.
       %s
       ]]):format(dep.name, dep.url, dep.info))
   else
-    h.report_error(([[
+    error(([[
       %s: not found.
       haskell-tools.nvim requires %s.
       %s
@@ -219,22 +223,22 @@ local function check_external_dependency(dep)
 end
 
 local function check_config()
-  h.report_start('Checking config')
-  local ok, err = require('haskell-tools.config.check').validate()
-  if ok then
-    h.report_ok('No errors found in config.')
+  start('Checking config')
+  local valid, err = require('haskell-tools.config.check').validate()
+  if valid then
+    ok('No errors found in config.')
   else
-    h.report_error(err)
+    error(err)
   end
 end
 
 function health.check()
-  h.report_start('Checking for Lua dependencies')
+  start('Checking for Lua dependencies')
   for _, dep in ipairs(lua_dependencies) do
     check_lua_dependency(dep)
   end
 
-  h.report_start('Checking external dependencies')
+  start('Checking external dependencies')
   for _, dep in ipairs(external_dependencies) do
     check_external_dependency(dep)
   end
