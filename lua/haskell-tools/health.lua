@@ -194,7 +194,9 @@ end
 local function check_external_dependency(dep)
   local installed, mb_version = check_installed(dep)
   if installed then
-    local version = mb_version and mb_version:sub(0, mb_version:find('\n') - 1) or '(unknown version)'
+    local mb_version_newline_idx = mb_version and mb_version:find('\n')
+    local mb_version_len = mb_version and (mb_version_newline_idx and mb_version_newline_idx - 1 or mb_version:len())
+    local version = mb_version and mb_version:sub(0, mb_version_len) or '(unknown version)'
     h.report_ok(('%s: found %s'):format(dep.name, version))
     if dep.extra_checks then
       dep.extra_checks()
