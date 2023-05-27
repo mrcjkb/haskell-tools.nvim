@@ -687,6 +687,8 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 
 - [neotest-haskell](https://github.com/MrcJkb/neotest-haskell):
   Interact with tests in neovim.
+- [haskell-snippets.nvim](https://github.com/mrcjkb/haskell-snippets.nvim)
+  Collection of Haskell snippets for [LuaSnip](https://github.com/L3MON4D3/LuaSnip).
 - [telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle):
   Live Hoogle search.
 - [telescope-manix](https://github.com/MrcJkb/telescope-manix):
