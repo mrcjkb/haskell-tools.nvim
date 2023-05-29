@@ -14,7 +14,7 @@ jobs:
       - name: Fail if changelog entry does not exist
         run: grep -q "${{ github.ref_name }}" CHANGELOG.md
       - name: LuaRocks Upload
-        uses: nvim-neorocks/luarocks-tag-release@v3
+        uses: nvim-neorocks/luarocks-tag-release@v4
         env:
           LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
         with:
