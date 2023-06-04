@@ -24,3 +24,8 @@ jobs:
           pr-labels: |                  # Labels to be set on the PR
             dependencies
             automated
+      - uses: reitermarkus/automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: squash
+          pull-request: ${{ github.event.inputs.pull-request }}
