@@ -12,7 +12,8 @@ local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 local Path = require('plenary.path')
-local loop = vim.loop
+---@diagnostic disable-next-line: deprecated
+local uv = vim.uv or vim.loop
 
 ---@class Util
 ---@field get_signature_from_markdown fun(string):string
@@ -99,16 +100,16 @@ end
 ---@return string|nil content
 ---@async
 function util.read_file_async(filename)
-  local file_fd = loop.fs_open(filename, 'r', 438)
+  local file_fd = uv.fs_open(filename, 'r', 438)
   if not file_fd then
     return nil
   end
-  local stat = loop.fs_fstat(file_fd)
+  local stat = uv.fs_fstat(file_fd)
   if not stat then
     return nil
   end
-  local data = loop.fs_read(file_fd, stat.size, 0)
-  loop.fs_close(file_fd)
+  local data = uv.fs_read(file_fd, stat.size, 0)
+  uv.fs_close(file_fd)
   ---@cast data string?
   return data
 end
