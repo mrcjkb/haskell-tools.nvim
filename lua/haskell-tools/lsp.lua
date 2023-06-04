@@ -5,6 +5,8 @@ local ht_util = require('haskell-tools.util')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
 local lsp_util = require('haskell-tools.lsp.util')
+---@diagnostic disable-next-line: deprecated
+local uv = vim.uv or vim.loop
 
 local lsp = {}
 
@@ -202,7 +204,7 @@ function lsp.setup()
   function lsp.restart(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
     local clients = lsp.stop(bufnr)
-    local timer = vim.loop.new_timer()
+    local timer = uv.new_timer()
     timer:start(500, 500, function()
       for _, client in ipairs(clients) do
         if client:is_stopped() then

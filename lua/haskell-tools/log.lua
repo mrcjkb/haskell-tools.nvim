@@ -3,6 +3,8 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
+---@diagnostic disable-next-line: deprecated
+local uv = vim.uv or vim.loop
 
 local log = {}
 
@@ -51,7 +53,7 @@ local function open_logfile()
     return false
   end
 
-  local log_info = vim.loop.fs_stat(logfilename)
+  local log_info = uv.fs_stat(logfilename)
   if log_info and log_info.size > LARGE then
     local warn_msg =
       string.format('haskell-tools.nvim log is large (%d MB): %s', log_info.size / (1000 * 1000), logfilename)

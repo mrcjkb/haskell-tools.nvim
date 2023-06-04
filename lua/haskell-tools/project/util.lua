@@ -13,6 +13,8 @@ local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
+---@diagnostic disable-next-line: deprecated
+local uv = vim.uv or vim.loop
 
 local Path = deps.require_plenary('plenary.path')
 
@@ -55,7 +57,7 @@ local function iterate_parents(startpath)
     if next.filename == path.filename or next.filename == '/nix/store' then
       return
     end
-    if vim.loop.fs_realpath(next.filename) then
+    if uv.fs_realpath(next.filename) then
       return next, startpath
     end
   end
