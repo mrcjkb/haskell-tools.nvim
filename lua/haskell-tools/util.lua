@@ -16,8 +16,10 @@ local Path = require('plenary.path')
 local uv = vim.uv or vim.loop
 
 ---@class Util
----@field get_signature_from_markdown fun(string):string
+---@field try_get_signatures_from_markdown fun(string, string):(string|nil, string[])
 ---@field open_browser fun(string):nil
+---@field read_file fun(string):(string|nil)
+---@field read_file_async fun(string):(string|nil)
 ---@field quote fun(string):string
 ---@field tbl_merge function
 
@@ -61,18 +63,34 @@ function util.open_browser(url)
   vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
 end
 
+--- Pretty-print a type signature
+--- @param sig string The raw signature
+--- @return string pp_sig The pretty-printed signature
+local function pp_signature(sig)
+  local pp_sig = sig
+    :gsub('\n', ' ') -- join lines
+    :gsub('forall .*%.%s', '') -- hoogle cannot search for `forall a.`
+    :gsub('^%s*(.-)%s*$', '%1') -- trim
+  return pp_sig
+end
+
 --- Get the type signature of the word under the cursor from markdown
+--- @param func_name string the name of the function
 --- @param docs string Markdown docs
---- @return string result Type signature, or the word under the cursor if none was found
-function util.try_get_signature_from_markdown(docs)
-  local func_name = vim.fn.expand('<cword>')
-  local full_sig = docs:match('```haskell\n' .. func_name .. ' :: ([^```]*)')
-  return full_sig
-      and full_sig
-        :gsub('\n', ' ') -- join lines
-        :gsub('forall .*%.%s', '') -- hoogle cannot search for `forall a.`
-        :gsub('^%s*(.-)%s*$', '%1') -- trim
-    or func_name -- Fall back to value under cursor
+--- @return string|nil function_signature Type signature, or the word under the cursor if none was found
+--- @return string[] signatures Other type signatures returned by hls
+function util.try_get_signatures_from_markdown(func_name, docs)
+  local all_sigs = {}
+  ---@type string|nil
+  local raw_func_sig = docs:match('```haskell\n' .. func_name .. '%s::%s([^```]*)')
+  for code_block in docs:gmatch('```haskell\n([^```]*)\n```') do
+    local sig = code_block:match('::%s([^```]*)')
+    local pp_sig = pp_signature(sig)
+    if sig and not vim.tbl_contains(all_sigs, pp_sig) then
+      table.insert(all_sigs, pp_sig)
+    end
+  end
+  return raw_func_sig and pp_signature(raw_func_sig), all_sigs
 end
 
 --- Quote a string

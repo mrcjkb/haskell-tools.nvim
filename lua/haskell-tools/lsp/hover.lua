@@ -116,8 +116,9 @@ function hover.on_hover(_, result, ctx, config)
   local to_remove = {}
   local actions = {}
   _state.commands = {}
-  local signature = ht_util.try_get_signature_from_markdown(result.contents.value)
-  if signature and signature ~= '' then
+  local func_name = vim.fn.expand('<cword>')
+  local _, signatures = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
+  for _, signature in pairs(signatures) do
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))
     table.insert(_state.commands, function()
       ht.log.debug { 'Hover: Hoogle search for signature', signature }
@@ -125,13 +126,11 @@ function hover.on_hover(_, result, ctx, config)
     end)
   end
   local cword = vim.fn.expand('<cword>')
-  if cword ~= signature then
-    table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, cword))
-    table.insert(_state.commands, function()
-      ht.log.debug { 'Hover: Hoogle search for cword', cword }
-      ht.hoogle.hoogle_signature { search_term = cword }
-    end)
-  end
+  table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, cword))
+  table.insert(_state.commands, function()
+    ht.log.debug { 'Hover: Hoogle search for cword', cword }
+    ht.hoogle.hoogle_signature { search_term = cword }
+  end)
   local params = lsp_util.make_position_params()
   local found_location = false
   local found_type_definition = false
