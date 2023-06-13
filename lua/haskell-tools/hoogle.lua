@@ -19,10 +19,12 @@ local function mk_lsp_hoogle_signature_handler(options)
       vim.notify('hoogle: No information available')
       return
     end
-    local signature = ht_util.try_get_signature_from_markdown(result.contents.value)
-    ht.log.debug { 'Hoogle LSP signature search', signature }
-    if signature ~= '' then
-      handler(signature, options)
+    local func_name = vim.fn.expand('<cword>')
+    local signature_or_func_name = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
+      or func_name
+    ht.log.debug { 'Hoogle LSP signature search', signature_or_func_name }
+    if signature_or_func_name ~= '' then
+      handler(signature_or_func_name, options)
     end
   end
 end
