@@ -77,11 +77,11 @@ function repl.mk_repl_cmd(file)
       return nil
     end
   end
-  if project.is_cabal_project(chk_path) then
-    return mk_cabal_repl_cmd(file)
-  end
   if project.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
+  end
+  if project.is_cabal_project(chk_path) then
+    return mk_cabal_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
     local cmd = vim.tbl_flatten { 'ghci', file and { file } or {} }
