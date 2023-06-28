@@ -116,6 +116,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "mauke",
+      "name": "mauke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/278465?v=4",
+      "profile": "https://github.com/mauke",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -123,5 +132,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "haskell-tools.nvim",
-  "projectOwner": "mrcjkb"
+  "projectOwner": "mrcjkb",
+  "commitType": "docs"
 }
