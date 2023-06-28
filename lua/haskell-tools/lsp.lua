@@ -109,12 +109,12 @@ function lsp.setup()
   local handlers = {}
 
   local tools_opts = assert(opts.tools, 'haskell-tools: tools options not set.')
-  local defintion_opts = tools_opts.definition or {}
+  local definition_opts = tools_opts.definition or {}
 
-  if defintion_opts.hoogle_signature_fallback == true then
+  if definition_opts.hoogle_signature_fallback == true then
     local lsp_definition = require('haskell-tools.lsp.definition')
     ht.log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
-    handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(defintion_opts)
+    handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)
   end
   local hover_opts = tools_opts.hover or {}
   if not hover_opts.disable then
