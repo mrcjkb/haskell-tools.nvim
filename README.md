@@ -27,7 +27,7 @@
 [![LuaRocks][luarocks-shield]][luarocks-url]
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=for-the-badge)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Quick Links
@@ -725,6 +725,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://monique.dev"><img src="https://avatars.githubusercontent.com/u/70070?v=4?s=100" width="100px;" alt="Cyber Oliveira"/><br /><sub><b>Cyber Oliveira</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Amoniquelive" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Br3akp01nt"><img src="https://avatars.githubusercontent.com/u/91327649?v=4?s=100" width="100px;" alt="Br3akp01nt"/><br /><sub><b>Br3akp01nt</b></sub></a><br /><a href="#userTesting-Br3akp01nt" title="User Testing">📓</a> <a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3ABr3akp01nt" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Alper-Celik"><img src="https://avatars.githubusercontent.com/u/110625473?v=4?s=100" width="100px;" alt="Alper Çelik"/><br /><sub><b>Alper Çelik</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3AAlper-Celik" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mauke"><img src="https://avatars.githubusercontent.com/u/278465?v=4?s=100" width="100px;" alt="mauke"/><br /><sub><b>mauke</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=mauke" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
