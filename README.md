@@ -319,6 +319,8 @@ require('haskell-tools').start_or_attach {
       -- 'builtin': Use the simple builtin repl
       -- 'toggleterm': Use akinsho/toggleterm.nvim
       handler = 'builtin',
+      -- Which backend to prefer if both stack and cabal files are present
+      prefer = vim.fn.executable('stack') and 'stack' or 'cabal',
       builtin = {
         create_repl_window = function(view)
           -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win

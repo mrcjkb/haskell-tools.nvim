@@ -29,8 +29,11 @@
 ---@class DefinitionOpts
 ---@field hoogle_signature_fallback boolean (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
 
+---@alias repl_backend 'cabal' | 'stack'
+
 ---@class ReplOpts
 ---@field handler string `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
+---@field prefer repl_backend Prefer cabal or stack when both stack and cabal project files are present?
 ---@field builtin BuiltinReplOpts Configuration for the builtin repl
 ---@field auto_focus boolean|nil Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
 
@@ -123,6 +126,7 @@ config.defaults = {
     ---@type ReplOpts
     repl = {
       handler = 'builtin',
+      prefer = vim.fn.executable('stack') == 1 and 'stack' or 'cabal',
       ---@type BuiltinReplOpts
       builtin = {
         create_repl_window = function(view)
