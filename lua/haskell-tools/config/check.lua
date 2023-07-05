@@ -96,6 +96,7 @@ function config_check.validate()
   end
   local repl = tools.repl
   local valid_handlers = { 'builtin', 'toggleterm' }
+  local valid_backends = { 'cabal', 'stack' }
   ok, err = validate('tools.repl', {
     auto_focus = { repl.auto_focus, 'boolean', true },
     builtin = { repl.builtin, 'table' },
@@ -105,6 +106,13 @@ function config_check.validate()
         return vim.tbl_contains(valid_handlers, handler)
       end,
       'one of ' .. vim.inspect(valid_handlers),
+    },
+    prefer = {
+      repl.prefer,
+      function(backend)
+        return vim.tbl_contains(valid_backends, backend)
+      end,
+      'one of ' .. vim.inspect(valid_backends),
     },
   })
   if not ok then

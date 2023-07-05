@@ -177,6 +177,11 @@ in {
     extraPkgs = [final.pkgs.haskellPackages.hoogle];
   };
 
+  haskell-tools-test-with-stack = mkPlenaryTest {
+    name = "haskell-tools-with-stack";
+    extraPkgs = [final.pkgs.stack];
+  };
+
   haskell-tools-test-nightly = mkPlenaryTest {
     nvim = nvim-nightly;
     name = "haskell-tools-nightly";
