@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hover: Hoogle search entries for all detected type signatures.
 
 ### Fixed
-- repl: If both stack and cabal files are presend, prefer stack if it is installed.
+- repl: If both stack and cabal files are present, prefer stack if it is installed.
   This is configurable with the option `tools.repl.prefer`.
 
 ## [1.10.2] - 2023-05-22
