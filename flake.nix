@@ -87,8 +87,34 @@
           alejandra.enable = true;
           stylua.enable = true;
           luacheck.enable = true;
+          lua-ls.enable = true;
           editorconfig-checker.enable = true;
           markdownlint.enable = true;
+        };
+        settings = {
+          lua-ls = {
+            config = {
+              runtime.version = "LuaJIT";
+              Lua = {
+                workspace = {
+                  library = [
+                    "${pkgs.neovim-nightly}/share/nvim/runtime/lua"
+                    "${pkgs.plenary-plugin}/lua"
+                  ];
+                  checkThirdParty = false;
+                  ignoreDir = [
+                    ".git"
+                    ".github"
+                    ".direnv"
+                    "result"
+                    "nix"
+                    "doc"
+                  ];
+                };
+                diagnostics.libraryFiles = "Disable";
+              };
+            };
+          };
         };
       };
 
@@ -97,7 +123,7 @@
         inherit (pre-commit-check) shellHook;
         buildInputs =
           (with pkgs; [
-            sumneko-lua-language-server
+            lua-language-server
           ])
           ++ (with pre-commit-hooks.packages.${system}; [
             alejandra
@@ -125,7 +151,6 @@
         inherit pre-commit-check;
         inherit
           (pkgs)
-          typecheck
           haskell-tools-test
           haskell-tools-test-no-hls
           haskell-tools-test-no-telescope

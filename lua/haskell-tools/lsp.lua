@@ -191,9 +191,7 @@ function lsp.setup()
   function lsp.stop(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
     local clients = lsp_util.get_active_ht_clients(bufnr)
-    for _, client in ipairs(clients) do
-      client:stop()
-    end
+    vim.lsp.stop_client(clients)
     return clients
   end
 
@@ -204,7 +202,11 @@ function lsp.setup()
   function lsp.restart(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
     local clients = lsp.stop(bufnr)
-    local timer = uv.new_timer()
+    local timer, err_name, err_msg = uv.new_timer()
+    if not timer then
+      ht.log.error { 'Could not create timer', err_name, err_msg }
+      return
+    end
     timer:start(500, 500, function()
       for _, client in ipairs(clients) do
         if client:is_stopped() then
