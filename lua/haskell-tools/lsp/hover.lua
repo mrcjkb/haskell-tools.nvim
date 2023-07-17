@@ -131,7 +131,7 @@ function hover.on_hover(_, result, ctx, config)
     ht.log.debug { 'Hover: Hoogle search for cword', cword }
     ht.hoogle.hoogle_signature { search_term = cword }
   end)
-  local params = lsp_util.make_position_params()
+  local params = ctx.params
   local found_location = false
   local found_type_definition = false
   local found_documentation = false
@@ -173,12 +173,11 @@ function hover.on_hover(_, result, ctx, config)
             table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
             table.insert(_state.commands, function()
               -- We don't call vim.lsp.buf.definition() because the location params may have changed
-              local definition_ctx = {
+              local definition_ctx = vim.tbl_extend('force', ctx, {
                 method = 'textDocument/definition',
-                client_id = ctx.client_id,
-              }
+              })
               ht.log.debug { 'Hover: Go to definition', definition_result }
-              vim.lsp.handlers['textDocument/definition'](_, definition_result, definition_ctx)
+              vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
             end)
           end
         end
@@ -212,12 +211,11 @@ function hover.on_hover(_, result, ctx, config)
             table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
             table.insert(_state.commands, function()
               -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
-              local type_definition_ctx = {
+              local type_definition_ctx = vim.tbl_extend('force', ctx, {
                 method = 'textDocument/typeDefinition',
-                client_id = ctx.client_id,
-              }
+              })
               ht.log.debug { 'Hover: Go to type definition', type_definition_result }
-              vim.lsp.handlers['textDocument/typeDefinition'](_, type_definition_result, type_definition_ctx)
+              vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
             end)
           end
         end
