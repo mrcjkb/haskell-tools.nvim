@@ -12,9 +12,6 @@ local ht = require('haskell-tools')
 
 local builtin = {}
 
----@type ReplView
-local view = {}
-
 ---@class BuiltinRepl
 ---@field bufnr number
 ---@field job_id number
@@ -82,10 +79,10 @@ local function buf_create_repl(bufnr, cmd, opts)
 end
 
 ---Create a split
----@param size function|number?
+---@param size function|number|nil
 local function create_split(size)
   size = size and (type(size) == 'function' and size() or size) or vim.o.lines / 3
-  local args = vim.empty_dict()
+  local args = vim.empty_dict() or {}
   table.insert(args, size)
   table.insert(args, 'split')
   vim.cmd(table.concat(args, ' '))
@@ -95,7 +92,7 @@ end
 ---@param size function|number?
 local function create_vsplit(size)
   size = size and (type(size) == 'function' and size() or size) or vim.o.columns / 2
-  local args = vim.empty_dict()
+  local args = vim.empty_dict() or {}
   table.insert(args, size)
   table.insert(args, 'vsplit')
   vim.cmd(table.concat(args, ' '))
@@ -150,44 +147,47 @@ local function create_or_toggle(create_win, mk_cmd, opts)
   buf_create_repl(bufnr, cmd, opts)
 end
 
----Create a new repl in a horizontal split
----@param opts ReplViewOpts?
----@return fun(function) create_repl
-function view.create_repl_split(opts)
-  return function(mk_cmd)
-    create_or_toggle(create_split, mk_cmd, opts)
-  end
-end
+---@type ReplView
+local view = {
+  ---Create a new repl in a horizontal split
+  ---@param opts ReplViewOpts?
+  ---@return fun(function) create_repl
+  create_repl_split = function(opts)
+    return function(mk_cmd)
+      create_or_toggle(create_split, mk_cmd, opts)
+    end
+  end,
 
----Create a new repl in a vertical split
----@param opts ReplViewOpts?
----@return fun(function) create_repl
-function view.create_repl_vsplit(opts)
-  return function(mk_cmd)
-    create_or_toggle(create_vsplit, mk_cmd, opts)
-  end
-end
+  ---Create a new repl in a vertical split
+  ---@param opts ReplViewOpts?
+  ---@return fun(function) create_repl
+  create_repl_vsplit = function(opts)
+    return function(mk_cmd)
+      create_or_toggle(create_vsplit, mk_cmd, opts)
+    end
+  end,
 
----Create a new repl in a new tab
----@param opts ReplViewOpts?
----@return fun(function) create_repl
-function view.create_repl_tabnew(opts)
-  return function(mk_cmd)
-    create_or_toggle(create_tab, mk_cmd, opts)
-  end
-end
+  ---Create a new repl in a new tab
+  ---@param opts ReplViewOpts?
+  ---@return fun(function) create_repl
+  create_repl_tabnew = function(opts)
+    return function(mk_cmd)
+      create_or_toggle(create_tab, mk_cmd, opts)
+    end
+  end,
 
----Create a new repl in the current window
----@param opts ReplViewOpts?
----@return fun(function) create_repl
-function view.create_repl_cur_win(opts)
-  return function(mk_cmd)
-    create_or_toggle(function(_) end, mk_cmd, opts)
-  end
-end
+  ---Create a new repl in the current window
+  ---@param opts ReplViewOpts?
+  ---@return fun(function) create_repl
+  create_repl_cur_win = function(opts)
+    return function(mk_cmd)
+      create_or_toggle(function(_) end, mk_cmd, opts)
+    end
+  end,
+}
 
 ---@param mk_repl_cmd fun(string):(string[]?)
----@param options ReplOpts
+---@param options ReplConfig
 function builtin.setup(mk_repl_cmd, options)
   ht.log.debug { 'repl.builtin setup', options }
   builtin.go_back = options.auto_focus ~= true

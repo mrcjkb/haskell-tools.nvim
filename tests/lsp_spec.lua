@@ -1,7 +1,7 @@
 local ht = require('haskell-tools')
 
 describe('LSP client API', function()
-  ht.setup {}
+  ht.setup()
   it('LSP client is available after setup.', function()
     assert(ht.lsp ~= nil)
   end)

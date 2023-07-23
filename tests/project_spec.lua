@@ -7,7 +7,7 @@ local stack_project_root = cwd .. '/tests/fixtures/stack/multi-package'
 local invalid_project_path = '/some/invalid/path'
 
 describe('Project API', function()
-  ht.setup {}
+  ht.setup()
   it('Public API is available after setup.', function()
     assert(ht.project ~= nil)
   end)

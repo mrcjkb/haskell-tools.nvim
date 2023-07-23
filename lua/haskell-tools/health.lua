@@ -54,7 +54,7 @@ local lua_dependencies = {
 ---@field optional fun():boolean Function that returns whether the dependency is optional
 ---@field url string URL (markdown)
 ---@field info string Additional information
----@field extra_checks function Optional extra checks to perform if the dependency is installed
+---@field extra_checks function|nil Optional extra checks to perform if the dependency is installed
 
 ---@type ExternalDependency[]
 local external_dependencies = {
