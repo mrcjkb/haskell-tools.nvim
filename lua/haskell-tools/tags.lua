@@ -11,7 +11,7 @@ local _state = {
   projects = {},
 }
 
----@param config FastTagsOpts
+---@param config FastTagsConfig
 local function setup_fast_tags(config)
   local Job = deps.require_plenary('plenary.job')
 

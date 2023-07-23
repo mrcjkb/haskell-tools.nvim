@@ -25,7 +25,7 @@ local function is_new_cmd(cmd)
 end
 
 ---@param mk_repl_cmd fun(string?):string[]? Function for building the repl that takes an optional file path
----@param opts ReplOpts
+---@param opts ReplConfig
 ---@return nil
 function toggleterm.setup(mk_repl_cmd, opts)
   opts = opts or vim.empty_dict()
