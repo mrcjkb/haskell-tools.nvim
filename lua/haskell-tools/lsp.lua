@@ -45,18 +45,34 @@ local commands = {
 ---GHC can leave behind corrupted files if it does not exit cleanly.
 ---(https://gitlab.haskell.org/ghc/ghc/-/issues/14533)
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.
----@param client number The LSP client
+---@param client lsp.Client The LSP client
 ---@param bufnr number The buffer number
 ---@return nil
 local function ensure_clean_exit_on_quit(client, bufnr)
   vim.api.nvim_create_autocmd('VimLeavePre', {
-    group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit', { clear = true }),
+    group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit-' .. tostring(client.id), { clear = true }),
     callback = function()
       ht.log.debug('Stopping LSP client...')
       vim.lsp.stop_client(client, false)
     end,
     buffer = bufnr,
   })
+end
+
+---A workaround for #48:
+---Some plugins that add LSP client capabilities which are not built-in to neovim
+---(like nvim-ufo and nvim-lsp-selection-range) cause error messages, because
+---haskell-language-server falsly advertises those server_capabilities for cabal files.
+---@param client lsp.Client
+---@return nil
+local function fix_cabal_client(client)
+  if client.name == lsp_util.cabal_client_name and client.server_capabilities then
+    client.server_capabilities = vim.tbl_extend('force', client.server_capabilities, {
+      foldingRangeProvider = false,
+      selectionRangeProvider = false,
+      documentHighlightProvider = false,
+    })
+  end
 end
 
 ---@class LoadHlsSettingsOpts
@@ -144,10 +160,11 @@ function lsp.setup()
       vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
       return
     end
+    local is_cabal = filetype == 'cabal' or filetype == 'cabalproject'
     local project_root = ht.project.root_dir(file)
     local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
     local lsp_start_opts = {
-      name = lsp_util.client_name,
+      name = is_cabal and lsp_util.cabal_client_name or lsp_util.haskell_client_name,
       cmd = cmd,
       root_dir = project_root,
       capabilities = hls_opts.capabilities,
@@ -176,12 +193,13 @@ function lsp.setup()
           buf_refresh_codeLens()
         end
       end,
+      on_init = function(client, _)
+        ensure_clean_exit_on_quit(client, bufnr)
+        fix_cabal_client(client)
+      end,
     }
     ht.log.debug('LSP start options: lsp_start_opts')
     local client_id = vim.lsp.start(lsp_start_opts)
-    if client_id then
-      ensure_clean_exit_on_quit(client_id, bufnr)
-    end
     return client_id
   end
 
