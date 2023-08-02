@@ -165,6 +165,7 @@ function repl.setup()
   ---@param reg string|nil register (defaults to '"')
   function repl.paste(reg)
     local data = vim.fn.getreg(reg or '"')
+    ---@cast data string
     if vim.endswith(data, '\n') then
       data = data:sub(1, #data - 1)
     end

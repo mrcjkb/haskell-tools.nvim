@@ -121,17 +121,14 @@
       haskell-tools-shell = pkgs.mkShell {
         name = "haskell-tools.nvim-shell";
         inherit (pre-commit-check) shellHook;
-        buildInputs =
-          (with pkgs; [
-            lua-language-server
-          ])
-          ++ (with pre-commit-hooks.packages.${system}; [
-            alejandra
-            stylua
-            luacheck
-            editorconfig-checker
-            markdownlint-cli
-          ]);
+        buildInputs = with pre-commit-hooks.packages.${system}; [
+          alejandra
+          lua-language-server
+          stylua
+          luacheck
+          editorconfig-checker
+          markdownlint-cli
+        ];
       };
     in {
       devShells = rec {
