@@ -12,7 +12,7 @@
       Supercharge your Haskell experience in <a href="https://neovim.io/">Neovim</a>!
     </strong>
   </p>
-  <h2>🦥</h>
+  <p>🦥</p>
 </div>
 <!-- markdownlint-restore -->
 
