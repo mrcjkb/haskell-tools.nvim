@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Cabal: Do not advertise `server_capabilities` for `foldingRangeProvider`
+  and `selectionRangeProvider` ([#223](https://github.com/mrcjkb/haskell-tools.nvim/issues/223)).
+  Prevents error messages caused by plugins that provide LSP client capabilities that are
+  not built-in to Neovim.
+
 ## [1.11.1] - 2023-07-17
 ### Fixed
 - Hover: Fix error message when using go-to-definition/typeDefinition hover actions
