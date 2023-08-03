@@ -125,6 +125,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Per48edjes",
+      "name": "Ravi Dayabhai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9625484?v=4",
+      "profile": "http://ravi.fyi",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
