@@ -10,11 +10,14 @@
 
 local util = {}
 
+---@diagnostic disable-next-line: deprecated
+util.get_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+
 util.client_name = 'haskell-tools.nvim'
 
 ---@param bufnr number the buffer to get clients for
 function util.get_active_ht_clients(bufnr)
-  return vim.lsp.get_active_clients { bufnr = bufnr, name = util.client_name }
+  return vim.lsp.get_clients { bufnr = bufnr, name = util.client_name }
 end
 
 return util

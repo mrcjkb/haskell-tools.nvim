@@ -81,7 +81,7 @@ local function parse_package_entrypoints(package_file)
     mains = {},
     source_dirs = {},
   }
-  local package_dir = vim.fn.fnamemodify(package_file, ':h')
+  local package_dir = vim.fn.fnamemodify(package_file, ':h') or package_file
   local entry_points = {}
   local content = ht_util.read_file_async(package_file)
   if not content then
@@ -91,12 +91,14 @@ local function parse_package_entrypoints(package_file)
   for idx, line in ipairs(lines) do
     local is_comment = vim.startswith(ht_util.trim(line), '--')
     if not is_comment then
-      get_entrypoint_from_line({
+      ---@type CabalEntryPointParserData
+      local data = {
         package_dir = package_dir,
         line = line,
         lines = lines,
         idx = idx,
-      }, state)
+      }
+      get_entrypoint_from_line(data, state)
     end
   end
   return state.entry_points

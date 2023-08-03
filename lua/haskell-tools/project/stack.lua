@@ -117,7 +117,7 @@ local function parse_package_entrypoints(package_file)
     parsing_exe = false,
     parsing_source_dirs = false,
   }
-  local package_dir = vim.fn.fnamemodify(package_file, ':h')
+  local package_dir = vim.fn.fnamemodify(package_file, ':h') or package_file
   local content = ht_util.read_file_async(package_file)
   if not content then
     return state.entry_points
@@ -125,12 +125,14 @@ local function parse_package_entrypoints(package_file)
   local lines = vim.split(content, '\n') or {}
   for idx, line in ipairs(lines) do
     if not is_yaml_comment(line) then
-      get_entrypoint_from_line({
+      ---@type StackEntryPointParserData
+      local data = {
         package_dir = package_dir,
         line = line,
         lines = lines,
         idx = idx,
-      }, state)
+      }
+      get_entrypoint_from_line(data, state)
     end
     if line:match('^executables:') or line:match('^tests:') then
       state.parsing_exe_list = true

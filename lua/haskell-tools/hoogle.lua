@@ -3,6 +3,7 @@
 local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
+local ht_lsp_util = require('haskell-tools.lsp.util')
 local lsp_util = vim.lsp.util
 
 local handler = function(_, _)
@@ -12,7 +13,7 @@ end
 local hoogle = {}
 
 ---@param options table
----@return nil
+---@return fun(err: lsp.ResponseError|nil, result: any, context: lsp.HandlerContext, config: table|nil)
 local function mk_lsp_hoogle_signature_handler(options)
   return function(_, result, _, _)
     if not (result and result.contents) then
@@ -44,7 +45,7 @@ function hoogle.hoogle_signature(options)
     handler(options.search_term)
     return
   end
-  local clients = vim.lsp.get_active_clients { bufnr = vim.api.nvim_get_current_buf() }
+  local clients = ht_lsp_util.get_clients { bufnr = vim.api.nvim_get_current_buf() }
   if #clients > 0 then
     lsp_hoogle_signature(options)
   else

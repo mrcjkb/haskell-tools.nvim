@@ -196,6 +196,7 @@ function hover.on_hover(_, result, ctx, config)
       table.insert(_state.commands, function()
         ht.log.debug { 'Hover: Find references', reference_params }
         -- We don't call vim.lsp.buf.references() because the location params may have changed
+        ---@diagnostic disable-next-line: missing-parameter
         vim.lsp.buf_request(0, 'textDocument/references', reference_params)
       end)
     end
@@ -264,7 +265,7 @@ function hover.on_hover(_, result, ctx, config)
     return bufnr, winnr
   end
 
-  vim.api.nvim_win_set_option(winnr, 'cursorline', true)
+  vim.api.nvim_set_option_value('cursorline', true, { win = winnr })
 
   -- run the command under the cursor
   vim.keymap.set('n', '<CR>', function()
