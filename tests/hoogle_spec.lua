@@ -1,4 +1,3 @@
-local ht = require('haskell-tools')
 local stub = require('luassert.stub')
 local mock = require('luassert.mock')
 local deps = require('haskell-tools.deps')
@@ -24,7 +23,7 @@ async.run = function(f)
 end
 
 describe('Hoogle:', function()
-  ht.setup {}
+  local ht = require('haskell-tools')
   it('Hoogle API available after setup', function()
     assert(ht.hoogle ~= nil)
   end)

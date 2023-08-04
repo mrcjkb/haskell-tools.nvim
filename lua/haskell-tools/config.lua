@@ -1,4 +1,25 @@
----@mod haskell-tools.config haskell-tools configuration
+---@mod haskell-tools.config plugin configuration
+---
+---@brief [[
+---To configure haskell-tools.nvim, set the variable `vim.g.haskell_tools`,
+---which is a `HTOpts` table, in your neovim configuration.
+---
+---Example:
+--->
+---vim.g.haskell_tools = {
+---   tools = {
+---     -- ...
+---   },
+---   hls = {
+---     on_attach = function(client, bufnr)
+---       -- Set keybindings, etc. here.
+---     end,
+---     -- ...
+---   },
+--- }
+---<
+---
+---@brief ]]
 
 ---@class HTOpts
 ---@field tools ToolsOpts|nil haskell-tools plugin options
@@ -57,7 +78,6 @@
 ---@class FastTagsOpts
 ---@field enable boolean|nil Enabled by default if the `fast-tags` executable is found
 ---@field package_events string[]|nil `autocmd` Events to trigger package tag generation
----@field filetypes string[]|nil List of file types to trigger project tag generation on. If empty of `nil`, no autocmd will be set up.
 
 ---@class HTLogOpts
 ---@field level number|string|nil The log level
@@ -67,7 +87,6 @@
 ---@field debug boolean|nil Whether to enable debug logging
 ---@field on_attach (fun(client:number,bufnr:number))|nil Callback to execute when the client attaches to a buffer
 ---@field cmd string[]|nil The command to start the server with
----@field filetypes string[]|nil List of file types to attach the client to. If empty or `nil`, no autocmd will be set up to attach the client.
 ---@field capabilities table|nil LSP client capabilities
 ---@field settings table|(fun(project_root:string|nil):table)|nil The server config or a function that creates the server config
 ---@field default_settings table|nil The default server config that will be used if no settings are specified or found
@@ -81,7 +100,6 @@
 
 ---@alias LogLevel 'Debug' | 'Info' | 'Warning' | 'Error'
 
-local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
 
 local config = {
@@ -146,7 +164,6 @@ config.defaults = {
     tags = {
       enable = vim.fn.executable('fast-tags') == 1,
       package_events = { 'BufWritePost' },
-      filetypes = { 'haskell' },
     },
     ---@type HTLogConfig
     log = {
@@ -158,9 +175,9 @@ config.defaults = {
     debug = false,
     on_attach = function(_, _) end,
     cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', config.hls_log },
-    filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = capabilities,
     settings = function(project_root)
+      local ht = require('haskell-tools')
       return ht.lsp.load_hls_settings(project_root)
     end,
     default_settings = {
@@ -265,19 +282,17 @@ config.defaults = {
   },
 }
 
----Set the options of this plugin. Called by the haskell-tools setup.
----@param opts HTOpts|nil
-function config.setup(opts)
-  ---@type HTConfig
-  config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts or {})
-  if config.options.hls.debug then
-    table.insert(config.options.hls.cmd, '--debug')
-  end
-  local check = require('haskell-tools.config.check')
-  local ok, err = check.validate()
-  if not ok then
-    vim.notify('haskell-tools: ' .. err, vim.log.levels.ERROR)
-  end
+---@type HTOpts
+local opts = vim.g.haskell_tools or {}
+---@type HTConfig
+config.options = vim.tbl_deep_extend('force', {}, config.defaults, opts)
+if config.options.hls.debug then
+  table.insert(config.options.hls.cmd, '--debug')
+end
+local check = require('haskell-tools.config.check')
+local ok, err = check.validate(config.options)
+if not ok then
+  vim.notify('haskell-tools: ' .. err, vim.log.levels.ERROR)
 end
 
 return config

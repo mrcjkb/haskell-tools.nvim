@@ -9,8 +9,8 @@
 
 local health = {}
 
-local ht = require('haskell-tools')
 local deps = require('haskell-tools.deps')
+local config = require('haskell-tools.config')
 local h = vim.health or require('health')
 local start = h.start or h.report_start
 local ok = h.ok or h.report_ok
@@ -36,7 +36,6 @@ local lua_dependencies = {
   {
     module = 'telescope',
     optional = function()
-      local config = ht.config
       if not config then
         return true
       end
@@ -62,7 +61,6 @@ local external_dependencies = {
     name = 'haskell-language-server',
     get_binaries = function()
       local default = { 'haskell-language-server-wrapper', 'haskell-language-server' }
-      local config = ht.config
       if not config then
         return default
       end
@@ -84,7 +82,6 @@ local external_dependencies = {
       return { 'hoogle' }
     end,
     optional = function()
-      local config = ht.config
       if not config then
         return true
       end
@@ -103,7 +100,7 @@ local external_dependencies = {
         handle:close()
       end
       if errmsg then
-        local hoogle_mode = ht.config and ht.config.options.tools.hoogle.mode
+        local hoogle_mode = config.options.tools.hoogle.mode
         if hoogle_mode and hoogle_mode == 'auto' or hoogle_mode == 'telescope-local' then
           error('hoogle: ' .. errmsg)
         else
@@ -129,7 +126,7 @@ local external_dependencies = {
       return { 'curl' }
     end,
     optional = function()
-      local hoogle_mode = ht.config and ht.config.options.tools.hoogle.mode
+      local hoogle_mode = config.options.tools.hoogle.mode
       return not hoogle_mode or hoogle_mode ~= 'telescope-web'
     end,
     url = '[curl](https://curl.se/)',
@@ -224,7 +221,7 @@ end
 
 local function check_config()
   start('Checking config')
-  local valid, err = require('haskell-tools.config.check').validate()
+  local valid, err = require('haskell-tools.config.check').validate(config.options)
   if valid then
     ok('No errors found in config.')
   else
@@ -242,9 +239,7 @@ function health.check()
   for _, dep in ipairs(external_dependencies) do
     check_external_dependency(dep)
   end
-  if ht.config then
-    check_config()
-  end
+  check_config()
 end
 
 return health

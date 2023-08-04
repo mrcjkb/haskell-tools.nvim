@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 
 local hoogle_local = {}
@@ -36,7 +36,7 @@ end
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
   local args = vim.tbl_flatten { '--json', '--count=' .. count, search_term }
-  ht.log.debug { 'Hoogle local args', args }
+  log.debug { 'Hoogle local args', args }
   return args
 end
 
@@ -55,7 +55,7 @@ function hoogle_local.telescope_search(search_term, opts)
   local config = deps.require_telescope('telescope.config').values
   if not config then
     local msg = 'telescope.nvim has not been setup.'
-    ht.log.error(msg)
+    log.error(msg)
     vim.notify_once('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
     return
   end
@@ -66,7 +66,7 @@ function hoogle_local.telescope_search(search_term, opts)
       vim.schedule(function()
         if exit_code ~= 0 then
           local err_msg = 'haskell-tools: hoogle search failed. Exit code: ' .. exit_code
-          ht.log.error(err_msg)
+          log.error(err_msg)
           vim.notify(err_msg, vim.log.levels.ERROR)
           return
         end
@@ -79,7 +79,7 @@ function hoogle_local.telescope_search(search_term, opts)
         end
         local success, results = pcall(vim.json.decode, output)
         if not success then
-          ht.log.error { 'Hoogle: Could not process result.', output }
+          log.error { 'Hoogle: Could not process result.', output }
           vim.notify('Hoogle: Could not process result - ' .. vim.inspect(output), vim.log.levels.ERROR)
           return
         end

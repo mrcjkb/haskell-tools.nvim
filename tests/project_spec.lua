@@ -1,4 +1,3 @@
-local ht = require('haskell-tools')
 local Path = require('plenary.path')
 
 local cwd = vim.fn.getcwd()
@@ -7,10 +6,7 @@ local stack_project_root = cwd .. '/tests/fixtures/stack/multi-package'
 local invalid_project_path = '/some/invalid/path'
 
 describe('Project API', function()
-  ht.setup()
-  it('Public API is available after setup.', function()
-    assert(ht.project ~= nil)
-  end)
+  local ht = require('haskell-tools')
   describe('Cabal:', function()
     it('Can detect project root', function()
       assert.same(cabal_project_root, ht.project.root_dir(cabal_project_root .. '/sub1/src/Lib.hs'))

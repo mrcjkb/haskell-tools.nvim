@@ -8,7 +8,7 @@
 --- General utility functions that may need to be moded somewhere else
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 local Path = require('plenary.path')
@@ -65,12 +65,12 @@ local util = {
         command = browser_cmd,
         args = { url },
       }
-      ht.log.debug { 'Opening browser', job_opts }
+      log.debug { 'Opening browser', job_opts }
       Job:new(job_opts):start()
       return
     end
     local msg = 'No executable found to open the browser.'
-    ht.log.error(msg)
+    log.error(msg)
     vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
   end,
 

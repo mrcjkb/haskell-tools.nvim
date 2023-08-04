@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 
 local lsp_definition = {}
 
@@ -15,11 +15,12 @@ local lsp_definition = {}
 ---@return nil
 function lsp_definition.mk_hoogle_fallback_definition_handler(opts)
   return function(_, result, ...)
+    local ht = require('haskell-tools')
     if #result > 0 then
       local default_handler = vim.lsp.handlers['textDocument/definition']
       return default_handler(_, result, ...)
     end
-    ht.log.debug('Definition not found. Falling back to Hoogle search.')
+    log.debug('Definition not found. Falling back to Hoogle search.')
     vim.notify('Definition not found. Falling back to Hoogle search...', vim.log.levels.WARN)
     ht.hoogle.hoogle_signature(opts or {})
   end

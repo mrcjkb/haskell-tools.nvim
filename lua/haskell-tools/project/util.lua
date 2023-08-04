@@ -8,7 +8,7 @@
 --- Utility functions for analysing a project.
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local cabal = require('haskell-tools.project.cabal')
@@ -164,7 +164,7 @@ end
 function project_util.is_cabal_project(path)
   local get_root = root_pattern('*.cabal', 'cabal.project')
   if get_root(path) ~= nil then
-    ht.log.debug('Detected cabal project.')
+    log.debug('Detected cabal project.')
     return true
   end
   return false
@@ -175,7 +175,7 @@ end
 ---@return boolean is_stack_project
 function project_util.is_stack_project(path)
   if project_util.match_stack_project_root(path) ~= nil then
-    ht.log.debug('Detected stack project.')
+    log.debug('Detected stack project.')
     return true
   end
   return false

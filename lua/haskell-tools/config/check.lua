@@ -7,8 +7,6 @@
 
 ---@brief ]]
 
-local ht = require('haskell-tools')
-
 local config_check = {}
 
 ---@param path string
@@ -30,25 +28,24 @@ local function validate(path, tbl)
 end
 
 ---Validates the config.
+---@param cfg HTConfig
 ---@return boolean is_valid
 ---@return string|nil error_message
-function config_check.validate()
+function config_check.validate(cfg)
   local ok, err
-  local opts = assert(ht.config, 'haskell-tools has not been set up.').options
-  local hls = opts.hls
+  local hls = cfg.hls
   ok, err = validate('hls', {
     capabilities = { hls.capabilities, 'table' },
     cmd = { hls.cmd, 'table' },
     debug = { hls.debug, 'boolean' },
     default_settings = { hls.default_settings, 'table' },
-    filetypes = { hls.filetypes, 'table', true },
     on_attach = { hls.on_attach, 'function' },
     settings = { hls.settings, { 'function', 'table' } },
   })
   if not ok then
     return false, err
   end
-  local tools = opts.tools
+  local tools = cfg.tools
   local codeLens = tools.codeLens
   ok, err = validate('tools.codeLens', {
     autoRefresh = { codeLens.autoRefresh, 'boolean' },
@@ -129,7 +126,6 @@ function config_check.validate()
   ok, err = validate('tools.tags', {
     enable = { tags.enable, 'boolean' },
     package_events = { tags.package_events, 'table' },
-    filetypes = { tags.filetypes, 'table', true },
   })
   if not ok then
     return false, err

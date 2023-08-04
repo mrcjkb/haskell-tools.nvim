@@ -6,7 +6,7 @@
 --- Inspired by rust-tools.nvim's hover_actions
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local lsp_util = vim.lsp.util
 local ht_util = require('haskell-tools.util')
 local project_util = require('haskell-tools.project.util')
@@ -100,6 +100,7 @@ end
 ---@return number|nil bufnr
 ---@return number|nil winnr
 function hover.on_hover(_, result, ctx, config)
+  local ht = require('haskell-tools')
   config = config or {}
   config.focus_id = ctx.method
   if not (result and result.contents) then
@@ -109,7 +110,7 @@ function hover.on_hover(_, result, ctx, config)
   local markdown_lines = lsp_util.convert_input_to_markdown_lines(result.contents)
   markdown_lines = lsp_util.trim_empty_lines(markdown_lines)
   if vim.tbl_isempty(markdown_lines) then
-    ht.log.debug('No hover information available.')
+    log.debug('No hover information available.')
     vim.notify('No information available')
     return
   end
@@ -121,14 +122,14 @@ function hover.on_hover(_, result, ctx, config)
   for _, signature in pairs(signatures) do
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))
     table.insert(_state.commands, function()
-      ht.log.debug { 'Hover: Hoogle search for signature', signature }
+      log.debug { 'Hover: Hoogle search for signature', signature }
       ht.hoogle.hoogle_signature { search_term = signature }
     end)
   end
   local cword = vim.fn.expand('<cword>')
   table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, cword))
   table.insert(_state.commands, function()
-    ht.log.debug { 'Hover: Hoogle search for cword', cword }
+    log.debug { 'Hover: Hoogle search for cword', cword }
     ht.hoogle.hoogle_signature { search_term = cword }
   end)
   local params = ctx.params
@@ -143,7 +144,7 @@ function hover.on_hover(_, result, ctx, config)
       table.insert(actions, 1, string.format('%d. Open documentation in browser', #actions + 1))
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
       table.insert(_state.commands, function()
-        ht.log.debug { 'Hover: Open documentation in browser', uri }
+        log.debug { 'Hover: Open documentation in browser', uri }
         ht_util.open_browser(uri)
       end)
     elseif vim.startswith(value, '[Source]') and not found_source then
@@ -152,7 +153,7 @@ function hover.on_hover(_, result, ctx, config)
       table.insert(actions, 1, string.format('%d. View source in browser', #actions + 1))
       local uri = string.match(value, '%[Source%]%((.+)%)')
       table.insert(_state.commands, function()
-        ht.log.debug { 'Hover: View source in browser', uri }
+        log.debug { 'Hover: View source in browser', uri }
         ht_util.open_browser(uri)
       end)
     end
@@ -176,7 +177,7 @@ function hover.on_hover(_, result, ctx, config)
               local definition_ctx = vim.tbl_extend('force', ctx, {
                 method = 'textDocument/definition',
               })
-              ht.log.debug { 'Hover: Go to definition', definition_result }
+              log.debug { 'Hover: Go to definition', definition_result }
               vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
             end)
           end
@@ -187,14 +188,14 @@ function hover.on_hover(_, result, ctx, config)
         local search_term = package and package .. '.' .. cword or cword
         table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
         table.insert(_state.commands, function()
-          ht.log.debug { 'Hover: Hoogle search for definition', search_term }
+          log.debug { 'Hover: Hoogle search for definition', search_term }
           ht.hoogle.hoogle_signature { search_term = search_term }
         end)
       end
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
       table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
       table.insert(_state.commands, function()
-        ht.log.debug { 'Hover: Find references', reference_params }
+        log.debug { 'Hover: Find references', reference_params }
         -- We don't call vim.lsp.buf.references() because the location params may have changed
         ---@diagnostic disable-next-line: missing-parameter
         vim.lsp.buf_request(0, 'textDocument/references', reference_params)
@@ -215,7 +216,7 @@ function hover.on_hover(_, result, ctx, config)
               local type_definition_ctx = vim.tbl_extend('force', ctx, {
                 method = 'textDocument/typeDefinition',
               })
-              ht.log.debug { 'Hover: Go to type definition', type_definition_result }
+              log.debug { 'Hover: Go to type definition', type_definition_result }
               vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
             end)
           end
@@ -233,7 +234,8 @@ function hover.on_hover(_, result, ctx, config)
     table.insert(markdown_lines, #actions + 1, '')
     table.insert(markdown_lines, #actions + 1, '')
   end
-  local opts = ht.config.options.tools.hover
+  local ht_config = require('haskell-tools.config')
+  local opts = ht_config.options.tools.hover
   config = vim.tbl_extend('keep', {
     border = opts.border,
     stylize_markdown = opts.stylize_markdown,

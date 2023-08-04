@@ -9,7 +9,7 @@
 
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 
@@ -34,7 +34,7 @@ function toggleterm.setup(mk_repl_cmd, opts)
   else
     toggleterm.go_back = not opts.auto_focus
   end
-  ht.log.debug('repl.toggleterm setup')
+  log.debug('repl.toggleterm setup')
   local Terminal = deps.require_toggleterm('toggleterm.terminal').Terminal
 
   ---@param cmd string The command to execute in the terminal
@@ -45,16 +45,16 @@ function toggleterm.setup(mk_repl_cmd, opts)
       hidden = true,
       close_on_exit = false,
       on_stdout = function(_, job, data, name)
-        ht.log.debug { 'Job ' .. job .. ' - stdout', data, name }
+        log.debug { 'Job ' .. job .. ' - stdout', data, name }
       end,
       on_stderr = function(_, job, data, name)
-        ht.log.warn { 'Job ' .. job .. ' - stderr', data, name }
+        log.warn { 'Job ' .. job .. ' - stderr', data, name }
       end,
       on_exit = function(_, job, exit_code, name)
-        ht.log.debug { 'Job ' .. job .. ' - exit code ' .. exit_code, name }
+        log.debug { 'Job ' .. job .. ' - exit code ' .. exit_code, name }
       end,
     }
-    ht.log.debug { 'Creating new terminal', terminal_opts }
+    log.debug { 'Creating new terminal', terminal_opts }
     return Terminal:new(terminal_opts)
   end
 
@@ -63,20 +63,20 @@ function toggleterm.setup(mk_repl_cmd, opts)
     opts = opts or vim.empty_dict()
     if filepath and not vim.endswith(filepath, '.hs') then
       local err_msg = 'haskell-tools.repl.toggleterm: Not a Haskell file: ' .. filepath
-      ht.log.error(err_msg)
+      log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
     local cmd = mk_repl_cmd(filepath and ht_util.quote(filepath)) or {}
     if #cmd == 0 then
       local err_msg = 'haskell-tools.repl.toggleterm: Could not create a repl command.'
-      ht.log.error(err_msg)
+      log.error(err_msg)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
     local cmd_str = table.concat(cmd, ' ')
     if is_new_cmd(cmd_str) then
-      ht.log.debug { 'repl.toggleterm: New command', cmd_str }
+      log.debug { 'repl.toggleterm: New command', cmd_str }
       toggleterm.quit()
     end
     local cur_win = vim.api.nvim_get_current_win()
@@ -87,7 +87,7 @@ function toggleterm.setup(mk_repl_cmd, opts)
     end
     local success, result = pcall(toggle)
     if not success then
-      ht.log.error { 'repl.toggleterm: toggle failed', result }
+      log.error { 'repl.toggleterm: toggle failed', result }
     end
     if cur_win ~= -1 and toggleterm.go_back then
       vim.api.nvim_set_current_win(cur_win)
@@ -102,10 +102,10 @@ function toggleterm.setup(mk_repl_cmd, opts)
   ---@retrun nil
   function toggleterm.quit()
     if toggleterm.terminal ~= nil then
-      ht.log.debug('repl.toggleterm: sending quit to repl.')
+      log.debug('repl.toggleterm: sending quit to repl.')
       local success, result = pcall(toggleterm.send_cmd, ':q')
       if not success then
-        ht.log.warn { 'repl.toggleterm: Could not send quit command', result }
+        log.warn { 'repl.toggleterm: Could not send quit command', result }
       end
       toggleterm.terminal:close()
       toggleterm.terminal = nil

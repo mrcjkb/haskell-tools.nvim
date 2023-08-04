@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - Unreleased
+### Changed
+- New, more stable architecture.
+- BREAKING: Remove `setup` API.
+- BREAKING: Ignore configuration options in `start_or_attach`.
+  `vim.g.haskell_tools` can be used for configuration instead.
+- BREAKING: Add Haskell and Cabal `ftplugin` files, to automatically
+  start/attach haskell-tools.
+
 ## [1.11.3] - 2023-08-06
 ### Fixed
 - Fix bug that broke codelens auto-refresh and lsp stop/restart [#229](https://github.com/mrcjkb/haskell-tools.nvim/issues/229).

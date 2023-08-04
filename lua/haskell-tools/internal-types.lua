@@ -57,7 +57,6 @@
 ---@class FastTagsConfig
 ---@field enable boolean Enabled by default if the `fast-tags` executable is found
 ---@field package_events string[] `autocmd` Events to trigger package tag generation
----@field filetypes string[]|nil List of file types to trigger project tag generation on. If empty of `nil`, no autocmd will be set up.
 
 ---@class HTLogConfig
 ---@field level number|string The log level
@@ -65,9 +64,8 @@
 
 ---@class HaskellLspClientConfig
 ---@field debug boolean Whether to enable debug logging
----@field on_attach fun(client:number,bufnr:number) Callback to execute when the client attaches to a buffer
+---@field on_attach fun(client:number,bufnr:number,ht:HaskellTools) Callback to execute when the client attaches to a buffer
 ---@field cmd string[] The command to start the server with
----@field filetypes string[]|nil List of file types to attach the client to. If empty or `nil`, no autocmd will be set up to attach the client.
 ---@field capabilities table LSP client capabilities
 ---@field settings table|fun(project_root:string|nil):table The server config or a function that creates the server config
 ---@field default_settings table The default server config that will be used if no settings are specified or found

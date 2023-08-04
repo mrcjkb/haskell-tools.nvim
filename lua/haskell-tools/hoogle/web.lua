@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
-local ht = require('haskell-tools')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
@@ -46,7 +46,7 @@ local function mk_hoogle_request(search_term, opts)
     .. urlencode(search_term)
     .. scope_param
     .. (hoogle_opts.json and '&mode=json' or '')
-  ht.log.debug { 'Hoogle web request', hoogle_request }
+  log.debug { 'Hoogle web request', hoogle_request }
   return hoogle_request
 end
 
@@ -66,13 +66,13 @@ if deps.has_telescope() then
     local config = deps.require_telescope('telescope.config').values
     if not config then
       local msg = 'telescope.nvim has not been setup. Falling back to browser search.'
-      ht.log.warning(msg)
+      log.warn(msg)
       vim.notify_once('haskell-tools.hoogle: ' .. msg, vim.log.levels.WARN)
       hoogle_web.browser_search(search_term, opts)
       return
     end
     if vim.fn.executable('curl') == 0 then
-      ht.log.error('curl executable not found.')
+      log.error('curl executable not found.')
       vim.notify("haskell-tools.hoogle-web: 'curl' executable not found! Aborting.", vim.log.levels.ERROR)
       return
     end
@@ -85,7 +85,7 @@ if deps.has_telescope() then
         url = url,
         accept = 'application/json',
       }
-      ht.log.debug { 'Hoogle web response', response }
+      log.debug { 'Hoogle web response', response }
       local results = vim.json.decode(response.body)
       pickers
         .new(opts, {
