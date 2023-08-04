@@ -30,6 +30,15 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-14-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+>**Warning**
+>
+> Version `2.0.0` with breaking changes will be released soon.
+>
+> - If you would like to avoid breaking changes,
+please use the [`1.x.x` branch](https://github.com/mrcjkb/haskell-tools.nvim/discussions/227)
+> - If you would like to use the new version, the [`2.x.x` branch](https://github.com/mrcjkb/haskell-tools.nvim/tree/2.x.x)
+is ready for testing.
+
 ## Quick Links
 
 - [Installation](#installation)
