@@ -131,4 +131,12 @@ function ht.setup(opts)
   _state._has_been_setup = true
 end
 
+local warning_msg = [[
+  haskell-tools.nvim version 2.0.0 will be released soon.
+  To avoid breaking changes, please switch to the stable 1.x.x branch.
+  If you would like to test drive version 2.0.0, you can also use the 2.x.x branch.
+  More info: https://github.com/mrcjkb/haskell-tools.nvim/discussions/227
+]]
+vim.notify_once(warning_msg, vim.log.levels.WARN)
+
 return ht
