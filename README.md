@@ -641,6 +641,10 @@ require('telescope').load_extension('ht')
 
 For a health check, run `:checkhealth haskell-tools`
 
+### `vim.g.haskell_tools` options are not being used
+
+- Make sure you set `vim.g.haskell_tools` before calling `require('haskell-tools')`.
+
 ### LSP features not working
 
 Check which versions of `hls` and GHC you are using
@@ -660,6 +664,11 @@ NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 # Quit Neovim and start it up again with the plugins loaded
 NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
 ```
+
+If you cannot reproduce your issue with a minimal config,
+it may be caused by another plugin.
+In this case, add additional plugins and their configurations to `minimal.lua`,
+until you can reproduce it.
 
 > **Note**
 >
