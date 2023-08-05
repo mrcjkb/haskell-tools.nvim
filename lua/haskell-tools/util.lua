@@ -165,15 +165,16 @@ HtUtil.get_indent = function(str)
   return #(str:match('^(%s+)%S') or '')
 end
 
----Evaluate a value that may be boolean
----or a function that returns a boolean
----@param boolf (fun():boolean)|boolean
----@return boolean
-HtUtil.eval_boolf = function(boolf)
-  if type(boolf) == 'function' then
-    return boolf()
+---Evaluate a value that may be a function
+---or an evaluated value
+---@generic T
+---@param value (fun():T)|T
+---@return T
+HtUtil.evaluate = function(value)
+  if type(value) == 'function' then
+    return value()
   end
-  return boolf
+  return value
 end
 
 return HtUtil

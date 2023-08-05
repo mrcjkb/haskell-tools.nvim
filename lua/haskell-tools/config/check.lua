@@ -79,7 +79,7 @@ function config_check.validate(cfg)
   ok, err = validate('tools.hover', {
     auto_focus = { hover.auto_focus, 'boolean', true },
     border = { hover.border, 'table', true },
-    disable = { hover.disable, 'boolean' },
+    enable = { hover.enable, { 'boolean', 'function' } },
     stylize_markdown = { hover.stylize_markdown, 'boolean' },
   })
   if not ok then

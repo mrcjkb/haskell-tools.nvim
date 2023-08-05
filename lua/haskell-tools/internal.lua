@@ -38,10 +38,10 @@ local InternalApi = {}
 ---ht.start_or_attach()
 ---@usage ]]
 function InternalApi.start_or_attach()
-  if util.eval_boolf(config.options.hls.auto_attach) then
+  if util.evaluate(config.options.hls.auto_attach) then
     HaskellTools.lsp.start()
   end
-  if util.eval_boolf(config.options.tools.tags.enable) then
+  if util.evaluate(config.options.tools.tags.enable) then
     HaskellTools.tags.generate_project_tags(nil, { refresh = false })
   end
 end

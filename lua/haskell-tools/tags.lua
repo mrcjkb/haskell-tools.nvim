@@ -83,7 +83,7 @@ FastTagsTools.generate_package_tags = function(path)
   end)
 end
 
-if not ht_util.eval_boolf(config.enable) then
+if not ht_util.evaluate(config.enable) then
   return
 end
 

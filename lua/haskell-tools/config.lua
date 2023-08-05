@@ -44,7 +44,7 @@
 ---@alias HoogleMode 'auto' | 'telescope-local' | 'telescope-web' | 'browser'
 
 ---@class HoverOpts
----@field disable boolean|nil (default: `false`) Whether to disable haskell-tools hover and use the builtin lsp's default handler
+---@field enable (fun():boolean)|boolean|nil (default: `true`) Whether to enable haskell-tools hover
 ---@field border table|nil The hover window's border. Set to `nil` to disable.
 ---@field stylize_markdown boolean|nil (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
 ---@field auto_focus boolean|nil (default: `false`) Whether to automatically switch to the hover window
@@ -130,7 +130,7 @@ config.defaults = {
     },
     ---@type HoverConfig
     hover = {
-      disable = false,
+      enable = true,
       border = {
         { '╭', 'FloatBorder' },
         { '─', 'FloatBorder' },

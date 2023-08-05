@@ -71,8 +71,8 @@ if definition_opts.hoogle_signature_fallback == true then
   log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
   handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)
 end
-local hover_opts = tools_opts.hover or {}
-if not hover_opts.disable then
+local hover_opts = tools_opts.hover
+if ht_util.evaluate(hover_opts.enable) then
   local hover = require('haskell-tools.lsp.hover')
   handlers['textDocument/hover'] = hover.on_hover
 end
@@ -149,7 +149,7 @@ HlsTools.start = function(bufnr)
         end)
       end
       local code_lens_opts = tools_opts.codeLens or {}
-      if ht_util.eval_boolf(code_lens_opts.autoRefresh) then
+      if ht_util.evaluate(code_lens_opts.autoRefresh) then
         vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
           group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
           callback = buf_refresh_codeLens,
