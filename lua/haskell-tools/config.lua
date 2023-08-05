@@ -58,7 +58,7 @@
 ---@field handler ReplHandler|(fun():ReplHandler)|nil `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
 ---@field prefer repl_backend|(fun():repl_backend)|nil Prefer cabal or stack when both stack and cabal project files are present?
 ---@field builtin BuiltinReplOpts|nil Configuration for the builtin repl
----@field auto_focus boolean|nil Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.
+---@field auto_focus boolean|nil Whether to auto-focus the repl on toggle or send. If unset, the handler decides.
 
 ---@alias ReplHandler 'builtin' | 'toggleterm'
 
@@ -73,7 +73,7 @@
 
 ---@class ReplViewOpts
 ---@field delete_buffer_on_exit boolean|nil Whether to delete the buffer when the Repl quits
----@field size function|number|nil The size of the window or a function that determines it
+---@field size (fun():number)|number|nil The size of the window or a function that determines it
 
 ---@class FastTagsOpts
 ---@field enable (fun():boolean)|boolean|nil Enabled by default if the `fast-tags` executable is found
