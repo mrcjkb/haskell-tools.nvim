@@ -134,6 +134,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "kamoshi",
+      "name": "Maciej Jur",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18511281?v=4",
+      "profile": "http://kamoshi.org",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
