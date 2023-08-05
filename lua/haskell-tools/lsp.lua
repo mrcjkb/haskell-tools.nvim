@@ -148,8 +148,8 @@ HlsTools.start = function(bufnr)
           end
         end)
       end
-      local codeLensOpts = tools_opts.codeLens or {}
-      if codeLensOpts.autoRefresh then
+      local code_lens_opts = tools_opts.codeLens or {}
+      if ht_util.eval_boolf(code_lens_opts.autoRefresh) then
         vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
           group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
           callback = buf_refresh_codeLens,

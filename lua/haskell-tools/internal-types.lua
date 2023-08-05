@@ -31,7 +31,7 @@
 ---@field log HTLogConfig Logging options
 
 ---@class CodeLensConfig
----@field autoRefresh boolean (default: `true`) Whether to auto-refresh code-lenses
+---@field autoRefresh (fun():boolean)|boolean (default: `true`) Whether to auto-refresh code-lenses
 
 ---@class HoogleConfig
 ---@field mode HoogleMode

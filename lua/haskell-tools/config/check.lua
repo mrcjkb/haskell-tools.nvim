@@ -49,7 +49,7 @@ function config_check.validate(cfg)
   local tools = cfg.tools
   local codeLens = tools.codeLens
   ok, err = validate('tools.codeLens', {
-    autoRefresh = { codeLens.autoRefresh, 'boolean' },
+    autoRefresh = { codeLens.autoRefresh, { 'boolean', 'function' } },
   })
   if not ok then
     return false, err
