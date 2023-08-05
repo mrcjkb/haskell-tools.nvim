@@ -40,7 +40,9 @@ local function buf_create_repl(bufnr, cmd, opts)
   opts = vim.tbl_extend('force', vim.empty_dict(), opts or {})
   local function delete_repl_buf()
     local winid = vim.fn.bufwinid(bufnr)
-    vim.api.nvim_win_close(winid, true)
+    if winid ~= nil then
+      vim.api.nvim_win_close(winid, true)
+    end
     vim.api.nvim_buf_delete(bufnr, { force = true })
   end
   if opts.delete_buffer_on_exit then
@@ -131,8 +133,10 @@ local function create_or_toggle(create_win, mk_cmd, opts)
       create_win()
       vim.api.nvim_set_current_buf(repl.bufnr)
       winid = vim.fn.bufwinid(repl.bufnr)
-      log.debug('repl.builtin: Created window ' .. winid)
-      vim.api.nvim_set_current_win(winid)
+      if winid ~= nil then
+        log.debug('repl.builtin: Created window ' .. winid)
+        vim.api.nvim_set_current_win(winid)
+      end
     end
     return
   end
@@ -142,8 +146,10 @@ local function create_or_toggle(create_win, mk_cmd, opts)
   create_win()
   vim.api.nvim_set_current_buf(bufnr)
   local winid = vim.fn.bufwinid(bufnr)
-  log.debug('repl.builtin: Created window ' .. winid)
-  vim.api.nvim_set_current_win(winid)
+  if winid ~= nil then
+    log.debug('repl.builtin: Created window ' .. winid)
+    vim.api.nvim_set_current_win(winid)
+  end
   buf_create_repl(bufnr, cmd, opts)
 end
 
@@ -252,7 +258,7 @@ function builtin.setup(mk_repl_cmd, options)
     repl_set_cursor()
     vim.api.nvim_chan_send(repl.job_id, txt .. cr)
     repl_set_cursor()
-    if not builtin.go_back then
+    if not builtin.go_back and repl_winid ~= nil then
       vim.api.nvim_set_current_win(repl_winid)
       vim.cmd('startinsert')
     end
