@@ -20,7 +20,7 @@ util.cabal_client_name = 'haskell-tools.nvim (cabal)'
 ---@return lsp.Client[] haskell_clients
 ---@see util.get_clients
 function util.get_active_haskell_clients(bufnr)
-  return util.get_clients { bufnr = bufnr, name = util.cabal_client_name }
+  return util.get_clients { bufnr = bufnr, name = util.haskell_client_name }
 end
 
 ---@param bufnr number the buffer to get clients for
