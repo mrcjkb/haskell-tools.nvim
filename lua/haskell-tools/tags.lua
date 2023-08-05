@@ -1,6 +1,7 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
 local ht_config = require('haskell-tools.config')
+local ht_util = require('haskell-tools.util')
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local project_util = require('haskell-tools.project.util')
@@ -82,7 +83,7 @@ FastTagsTools.generate_package_tags = function(path)
   end)
 end
 
-if config.enable == false then
+if not ht_util.eval_boolf(config.enable) then
   return
 end
 

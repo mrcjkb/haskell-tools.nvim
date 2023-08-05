@@ -55,7 +55,7 @@
 ---@field create_repl_window fun(view:ReplView):function How to create the repl window
 
 ---@class FastTagsConfig
----@field enable boolean Enabled by default if the `fast-tags` executable is found
+---@field enable (fun():boolean)|boolean Enabled by default if the `fast-tags` executable is found
 ---@field package_events string[] `autocmd` Events to trigger package tag generation
 
 ---@class HTLogConfig
@@ -63,6 +63,7 @@
 ---@see vim.log.levels
 
 ---@class HaskellLspClientConfig
+---@field auto_attach(fun():boolean)|boolean Whether to automatically attach the LSP client
 ---@field debug boolean Whether to enable debug logging
 ---@field on_attach fun(client:number,bufnr:number,ht:HaskellTools) Callback to execute when the client attaches to a buffer
 ---@field cmd string[] The command to start the server with

@@ -76,7 +76,7 @@
 ---@field size function|number|nil The size of the window or a function that determines it
 
 ---@class FastTagsOpts
----@field enable boolean|nil Enabled by default if the `fast-tags` executable is found
+---@field enable (fun():boolean)|boolean|nil Enabled by default if the `fast-tags` executable is found
 ---@field package_events string[]|nil `autocmd` Events to trigger package tag generation
 
 ---@class HTLogOpts
@@ -84,6 +84,7 @@
 ---@see vim.log.levels
 
 ---@class HaskellLspClientOpts
+---@field auto_attach(fun():boolean)|boolean|nil Whether to automatically attach the LSP client. Defaults to `true` if the haskell-language-server executable is found.
 ---@field debug boolean|nil Whether to enable debug logging
 ---@field on_attach (fun(client:number,bufnr:number))|nil Callback to execute when the client attaches to a buffer
 ---@field cmd string[]|nil The command to start the server with
@@ -162,7 +163,9 @@ config.defaults = {
     },
     ---@type FastTagsConfig
     tags = {
-      enable = vim.fn.executable('fast-tags') == 1,
+      enable = function()
+        return vim.fn.executable('fast-tags') == 1
+      end,
       package_events = { 'BufWritePost' },
     },
     ---@type HTLogConfig
@@ -172,6 +175,10 @@ config.defaults = {
   },
   ---@type HaskellLspClientConfig
   hls = {
+    auto_attach = function()
+      local hls_bin = config.options.hls.cmd[1]
+      return vim.fn.executable(hls_bin) ~= 0
+    end,
     debug = false,
     on_attach = function(_, _) end,
     cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', config.hls_log },

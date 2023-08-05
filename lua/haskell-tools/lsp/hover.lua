@@ -118,6 +118,7 @@ function hover.on_hover(_, result, ctx, config)
   local actions = {}
   _state.commands = {}
   local func_name = vim.fn.expand('<cword>')
+  ---@cast func_name string
   local _, signatures = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
   for _, signature in pairs(signatures) do
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))

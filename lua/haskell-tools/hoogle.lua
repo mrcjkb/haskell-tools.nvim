@@ -19,6 +19,7 @@ local function mk_lsp_hoogle_signature_handler(options)
       return
     end
     local func_name = vim.fn.expand('<cword>')
+    ---@cast func_name string
     local signature_or_func_name = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
       or func_name
     log.debug { 'Hoogle LSP signature search', signature_or_func_name }

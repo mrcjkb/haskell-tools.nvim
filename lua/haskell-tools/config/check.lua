@@ -35,6 +35,7 @@ function config_check.validate(cfg)
   local ok, err
   local hls = cfg.hls
   ok, err = validate('hls', {
+    auto_attach = { hls.auto_attach, { 'boolean', 'function' } },
     capabilities = { hls.capabilities, 'table' },
     cmd = { hls.cmd, 'table' },
     debug = { hls.debug, 'boolean' },
@@ -124,7 +125,7 @@ function config_check.validate(cfg)
   end
   local tags = tools.tags
   ok, err = validate('tools.tags', {
-    enable = { tags.enable, 'boolean' },
+    enable = { tags.enable, { 'boolean', 'function' } },
     package_events = { tags.package_events, 'table' },
   })
   if not ok then

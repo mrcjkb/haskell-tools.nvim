@@ -342,7 +342,10 @@ vim.g.haskell_tools = {
     -- Set up autocmds to generate tags (using fast-tags)
     -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
     tags = {
-      enable = vim.fn.executable('fast-tags') == 1,
+      ---@type (fun():boolean) | boolean
+      enable = function()
+        return vim.fn.executable('fast-tags') == 1
+      end,
       -- Events to trigger package tag generation
       package_events = { 'BufWritePost' },
     },
@@ -351,6 +354,10 @@ vim.g.haskell_tools = {
     },
   },
   hls = { -- LSP client options
+    --- Whether to auto-attach the client.
+    --- Defaults to `true` if the haskell-language-server executable is found.
+    ---@type (fun():boolean) | boolean
+    auto_attach = true,
     -- ...
     default_settings = {
       haskell = { -- haskell-language-server options
