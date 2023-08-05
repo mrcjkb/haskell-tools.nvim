@@ -6,6 +6,7 @@
 
 local log = require('haskell-tools.log')
 local project = require('haskell-tools.project.util')
+local ht_util = require('haskell-tools.util')
 
 ---Extend a repl command for `file`.
 ---If `file` is `nil`, create a repl the nearest package.
@@ -101,13 +102,23 @@ local config = require('haskell-tools.config')
 local opts = config.options.tools.repl
 local handler
 
-if opts.handler == 'toggleterm' then
+local handler_type = ht_util.evaluate(opts.handler)
+---@cast handler_type ReplHandler
+if handler_type == 'toggleterm' then
   log.info('handler = toggleterm')
   local toggleterm = require('haskell-tools.repl.toggleterm')
   toggleterm.setup(mk_repl_cmd, opts)
   handler = toggleterm
 else
-  log.info('handler = builtin')
+  if handler_type ~= 'builtin' then
+    log.warn('Invalid repl handler type. Falling back to builtin')
+    vim.notify_once(
+      'haskell-tools.repl: the handler "' .. handler_type .. '" is invalid. Defaulting to "builtin".',
+      vim.log.levels.WARN
+    )
+  else
+    log.info('handler = builtin')
+  end
   local builtin = require('haskell-tools.repl.builtin')
   builtin.setup(mk_repl_cmd, opts)
   handler = builtin

@@ -55,7 +55,7 @@
 ---@alias repl_backend 'cabal' | 'stack'
 
 ---@class ReplOpts
----@field handler ReplHandler|nil `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
+---@field handler ReplHandler|(fun():ReplHandler)|nil `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
 ---@field prefer repl_backend|nil Prefer cabal or stack when both stack and cabal project files are present?
 ---@field builtin BuiltinReplOpts|nil Configuration for the builtin repl
 ---@field auto_focus boolean|nil Whether to auto-focus the repl on toggle or send. The default value of `nil` means the handler decides.

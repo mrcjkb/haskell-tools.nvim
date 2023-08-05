@@ -101,7 +101,7 @@ function config_check.validate(cfg)
     handler = {
       repl.handler,
       function(handler)
-        return vim.tbl_contains(valid_handlers, handler)
+        return type(handler) == 'function' or vim.tbl_contains(valid_handlers, handler)
       end,
       'one of ' .. vim.inspect(valid_handlers),
     },
