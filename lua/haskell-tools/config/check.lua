@@ -56,7 +56,7 @@ function config_check.validate(cfg)
   end
   local definition = tools.definition
   ok, err = validate('tools.definition', {
-    hoogle_signature_fallback = { definition.hoogle_signature_fallback, 'boolean' },
+    hoogle_signature_fallback = { definition.hoogle_signature_fallback, { 'boolean', 'function' } },
   })
   if not ok then
     return false, err

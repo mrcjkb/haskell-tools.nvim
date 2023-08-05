@@ -66,7 +66,7 @@ local handlers = {}
 local tools_opts = assert(options.tools, 'haskell-tools: tools options not set.')
 local definition_opts = tools_opts.definition or {}
 
-if definition_opts.hoogle_signature_fallback == true then
+if ht_util.evaluate(definition_opts.hoogle_signature_fallback) then
   local lsp_definition = require('haskell-tools.lsp.definition')
   log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
   handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)

@@ -50,7 +50,7 @@
 ---@field auto_focus boolean|nil (default: `false`) Whether to automatically switch to the hover window
 
 ---@class DefinitionOpts
----@field hoogle_signature_fallback boolean|nil (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
+---@field hoogle_signature_fallback (fun():boolean)|boolean|nil (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
 
 ---@alias repl_backend 'cabal' | 'stack'
 

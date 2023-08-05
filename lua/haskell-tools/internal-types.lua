@@ -43,7 +43,7 @@
 ---@field auto_focus boolean|nil (default: `false`) Whether to automatically switch to the hover window
 
 ---@class DefinitionConfig
----@field hoogle_signature_fallback boolean (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
+---@field hoogle_signature_fallback (fun():boolean)|boolean (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
 
 ---@class ReplConfig
 ---@field handler string `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
