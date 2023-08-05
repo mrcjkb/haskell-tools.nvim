@@ -1,13 +1,11 @@
 {
-  "projectName": "haskell-tools.nvim",
-  "projectOwner": "mrcjkb",
   "files": [
     "README.md"
   ],
   "imageSize": 100,
   "commit": false,
   "commitConvention": "angular",
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/github/all-contributors/<%= projectOwner %>/<%= projectName %>?color=purple&style=for-the-badge)](#contributors)"
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/github/all-contributors/<%= projectOwner %>/<%= projectName %>?color=purple&style=for-the-badge)](#contributors)",
   "contributors": [
     {
       "login": "fabfianda",
