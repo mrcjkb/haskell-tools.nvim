@@ -5,7 +5,6 @@
   "imageSize": 100,
   "commit": false,
   "commitConvention": "angular",
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/github/all-contributors/<%= projectOwner %>/<%= projectName %>?color=purple&style=for-the-badge)](#contributors)",
   "contributors": [
     {
       "login": "fabfianda",
