@@ -36,7 +36,7 @@ local lazy = require('lazy')
 -- TODO: Configure haskell-tools.nvim here
 vim.g.haskell_tools = {}
 
-lazy.setup {
+lazy.setup({
   {
     'mrcjkb/haskell-tools.nvim',
     branch = '2.x.x',
@@ -44,4 +44,4 @@ lazy.setup {
       'nvim-lua/plenary.nvim',
     },
   },
-}
+}, { root = data_path, state = data_path .. '/lazy-state.json', lockfile = data_path .. '/lazy-lock.json' })
