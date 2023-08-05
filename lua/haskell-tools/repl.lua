@@ -78,7 +78,7 @@ local function mk_repl_cmd(file)
   end
   local config = require('haskell-tools.config')
   local opts = config.options.tools.repl
-  if opts.prefer == 'stack' and project.is_stack_project(chk_path) then
+  if ht_util.evaluate(opts.prefer) == 'stack' and project.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
   if project.is_cabal_project(chk_path) then

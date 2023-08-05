@@ -108,7 +108,7 @@ function config_check.validate(cfg)
     prefer = {
       repl.prefer,
       function(backend)
-        return vim.tbl_contains(valid_backends, backend)
+        return type(backend) == 'function' or vim.tbl_contains(valid_backends, backend)
       end,
       'one of ' .. vim.inspect(valid_backends),
     },
