@@ -1,6 +1,6 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
-local ht_config = require('haskell-tools.config')
+local HTConfig = require('haskell-tools.config.internal')
 local ht_util = require('haskell-tools.util')
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
@@ -12,7 +12,7 @@ local _state = {
 }
 
 log.debug('Setting up fast-tags tools')
-local config = ht_config.options.tools.tags
+local config = HTConfig.tools.tags
 
 local Job = deps.require_plenary('plenary.job')
 

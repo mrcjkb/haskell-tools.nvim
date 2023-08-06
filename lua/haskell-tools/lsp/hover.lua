@@ -235,8 +235,8 @@ function hover.on_hover(_, result, ctx, config)
     table.insert(markdown_lines, #actions + 1, '')
     table.insert(markdown_lines, #actions + 1, '')
   end
-  local ht_config = require('haskell-tools.config')
-  local opts = ht_config.options.tools.hover
+  local HTConfig = require('haskell-tools.config.internal')
+  local opts = HTConfig.tools.hover
   config = vim.tbl_extend('keep', {
     border = opts.border,
     stylize_markdown = opts.stylize_markdown,

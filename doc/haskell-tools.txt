@@ -41,14 +41,21 @@ which is a `HTOpts` table, in your neovim configuration.
 
 Example:
 >
+---@type HTOpts
 vim.g.haskell_tools = {
+   ---@type ToolsOpts
    tools = {
      -- ...
    },
+   ---@type HaskellLspClientOpts
    hls = {
      on_attach = function(client, bufnr)
        -- Set keybindings, etc. here.
      end,
+     -- ...
+   },
+   ---@type HTDapOpts
+   dap = {
      -- ...
    },
  }
@@ -58,33 +65,33 @@ vim.g.haskell_tools = {
 HTOpts                                                                  *HTOpts*
 
     Fields: ~
-        {tools}  (ToolsOpts|nil)             haskell-tools plugin options
-        {hls}    (HaskellLspClientOpts|nil)  haskell-language-server client options
-        {dap}    (HTDapOpts|nil)             haskell-debug-adapter client options
+        {tools}  (ToolsOpts|nil)             haskell-tools module options.
+        {hls}    (HaskellLspClientOpts|nil)  haskell-language-server client options.
+        {dap}    (HTDapOpts|nil)             debug adapter config for nvim-dap.
 
 
 ToolsOpts                                                            *ToolsOpts*
 
     Fields: ~
-        {codeLens}    (CodeLensOpts|nil)    LSP client codeLens options
-        {hoogle}      (HoogleOpts|nil)      Hoogle options
-        {hover}       (HoverOpts|nil)       LSP client hover options
-        {definition}  (DefinitionOpts|nil)  LSP client definition options
-        {repl}        (ReplOpts|nil)        GHCi REPL options
-        {tags}        (FastTagsOpts|nil)    Options for generating tags using fast-tags
-        {log}         (HTLogOpts|nil)       Logging options
+        {codeLens}    (CodeLensOpts|nil)    LSP codeLens options.
+        {hoogle}      (HoogleOpts|nil)      Hoogle type signature search options.
+        {hover}       (HoverOpts|nil)       LSP hover options.
+        {definition}  (DefinitionOpts|nil)  LSP go-to-definition options.
+        {repl}        (ReplOpts|nil)        GHCi repl options.
+        {tags}        (FastTagsOpts|nil)    fast-tags module options.
+        {log}         (HTLogOpts|nil)       haskell-tools logger options.
 
 
 CodeLensOpts                                                      *CodeLensOpts*
 
     Fields: ~
-        {autoRefresh}  (fun():boolean|boolean)  (default: `true`) Whether to auto-refresh code-lenses
+        {autoRefresh}  (boolean|fun():boolean|nil)  (default: `true`) Whether to auto-refresh code-lenses.
 
 
 HoogleOpts                                                          *HoogleOpts*
 
     Fields: ~
-        {mode}  (HoogleMode)
+        {mode}  (HoogleMode|nil)  Use a telescope with a local hoogle installation or a web backend, or use the browser for hoogle signature search?
 
 
 HoogleMode                                                          *HoogleMode*
@@ -96,30 +103,24 @@ HoogleMode                                                          *HoogleMode*
 HoverOpts                                                            *HoverOpts*
 
     Fields: ~
-        {enable}            (fun():boolean|boolean|nil)  (default: `true`) Whether to enable haskell-tools hover
-        {border}            (table|nil)                  The hover window's border. Set to `nil` to disable.
-        {stylize_markdown}  (boolean|nil)                (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed
-        {auto_focus}        (boolean|nil)                (default: `false`) Whether to automatically switch to the hover window
+        {enable}            (boolean|fun():boolean|nil)  (default: `true`) Whether to enable haskell-tools hover.
+        {border}            (string[][]|nil)             The hover window's border. Set to `nil` to disable.
+        {stylize_markdown}  (boolean|nil)                (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed.
+        {auto_focus}        (boolean|nil)                (default: `false`) Whether to automatically switch to the hover window.
 
 
 DefinitionOpts                                                  *DefinitionOpts*
 
     Fields: ~
-        {hoogle_signature_fallback}  (fun():boolean|boolean|nil)  (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`)
-
-
-repl_backend                                                      *repl_backend*
-
-    Type: ~
-        "cabal"|"stack"
+        {hoogle_signature_fallback}  (boolean|fun():boolean|nil)  (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`).
 
 
 ReplOpts                                                              *ReplOpts*
 
     Fields: ~
-        {handler}     (ReplHandler|fun():ReplHandler|nil)    `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim
+        {handler}     (ReplHandler|fun():ReplHandler|nil)    `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim.
         {prefer}      (repl_backend|fun():repl_backend|nil)  Prefer cabal or stack when both stack and cabal project files are present?
-        {builtin}     (BuiltinReplOpts|nil)                  Configuration for the builtin repl
+        {builtin}     (BuiltinReplOpts|nil)                  Configuration for the builtin repl.
         {auto_focus}  (boolean|nil)                          Whether to auto-focus the repl on toggle or send. If unset, the handler decides.
 
 
@@ -129,39 +130,51 @@ ReplHandler                                                        *ReplHandler*
         "builtin"|"toggleterm"
 
 
+repl_backend                                                      *repl_backend*
+
+    Type: ~
+        "cabal"|"stack"
+
+
 BuiltinReplOpts                                                *BuiltinReplOpts*
 
     Fields: ~
-        {create_repl_window}  (fun(view:ReplView):function|nil)  How to create the repl window
+        {create_repl_window}  (fun(view:ReplView):fun(mk_repl_cmd:mk_repl_cmd_fun)|nil)  How to create the repl window. Should return a function that calls one of the `ReplView`'s functions.
 
 
 ReplView                                                              *ReplView*
 
     Fields: ~
-        {create_repl_split}    (fun(opts:ReplViewOpts):function)  Create the REPL in a horizontally split window
-        {create_repl_vsplit}   (fun(opts:ReplViewOpts):function)  Create the REPL in a vertically split window
-        {create_repl_tabnew}   (fun(opts:ReplViewOpts):function)  Create the REPL in a new tab
-        {create_repl_cur_win}  (fun(opts:ReplViewOpts):function)  Create the REPL in the current window
+        {create_repl_split}    (fun(opts:ReplViewOpts):mk_repl_cmd_fun)  Create the REPL in a horizontally split window.
+        {create_repl_vsplit}   (fun(opts:ReplViewOpts):mk_repl_cmd_fun)  Create the REPL in a vertically split window.
+        {create_repl_tabnew}   (fun(opts:ReplViewOpts):mk_repl_cmd_fun)  Create the REPL in a new tab.
+        {create_repl_cur_win}  (fun(opts:ReplViewOpts):mk_repl_cmd_fun)  Create the REPL in the current window.
 
 
 ReplViewOpts                                                      *ReplViewOpts*
 
     Fields: ~
-        {delete_buffer_on_exit}  (boolean|nil)              Whether to delete the buffer when the Repl quits
-        {size}                   (fun():number|number|nil)  The size of the window or a function that determines it
+        {delete_buffer_on_exit}  (boolean|nil)              Whether to delete the buffer when the Repl quits.
+        {size}                   (fun():number|number|nil)  The size of the window or a function that determines it.
+
+
+mk_repl_cmd_fun                                                *mk_repl_cmd_fun*
+
+    Type: ~
+        fun():string[]|nil
 
 
 FastTagsOpts                                                      *FastTagsOpts*
 
     Fields: ~
-        {enable}          (fun():boolean|boolean|nil)  Enabled by default if the `fast-tags` executable is found
-        {package_events}  (string[]|nil)               `autocmd` Events to trigger package tag generation
+        {enable}          (boolean|fun():boolean|nil)  Enabled by default if the `fast-tags` executable is found.
+        {package_events}  (string[]|nil)               `autocmd` Events to trigger package tag generation.
 
 
 HTLogOpts                                                            *HTLogOpts*
 
     Fields: ~
-        {level}  (number|string|nil)  The log level
+        {level}  (number|string|nil)  The log level.
 
     See: ~
         |vim.log.levels|
@@ -170,43 +183,28 @@ HTLogOpts                                                            *HTLogOpts*
 HaskellLspClientOpts                                      *HaskellLspClientOpts*
 
     Fields: ~
-        {debug}             (boolean|nil)                                   Whether to enable debug logging
-                                                                            @field auto_attach(fun():boolean)|boolean|nil Whether to automatically attach the LSP client. Defaults to `true` if the haskell-language-server executable is found.
-        {on_attach}         (fun(client:number,bufnr:number)|nil)           Callback to execute when the client attaches to a buffer
-        {cmd}               (string[]|nil)                                  The command to start the server with
-        {capabilities}      (table|nil)                                     LSP client capabilities
-        {settings}          (table|fun(project_root:string|nil):table|nil)  The server config or a function that creates the server config
-        {default_settings}  (table|nil)                                     The default server config that will be used if no settings are specified or found
-
-    See: ~
-        |https://haskell-language-server.readthedocs.io/en/latest/configuration.html.|
+        {auto_attach}       (boolean|fun():boolean|nil)                            Whether to automatically attach the LSP client. Defaults to `true` if the haskell-language-server executable is found.
+        {debug}             (boolean)                                              Whether to enable haskell-language-server debug logging.
+        {on_attach}         (fun(client:number,bufnr:number,ht:HaskellTools)|nil)  Callback that is invoked when the client attaches to a buffer.
+        {cmd}               (string[]|fun():string[]|nil)                          The command to start haskell-language-server with.
+        {capabilities}      (lsp.ClientCapabilities|nil)                           LSP client capabilities.
+        {settings}          (table|fun(project_root:string|nil):table|nil)         The haskell-language-server settings or a function that creates them. To view the default settings, run `haskell-language-server generate-default-config`.
+        {default_settings}  (table|nil)                                            The default haskell-language-server settings that will be used if no settings are specified or detected.
+        {logfile}           (string)                                               The path to the haskell-language-server log file.
 
 
 HTDapOpts                                                            *HTDapOpts*
-    @comment To print all options that are available for your haskell-language-server version, run `haskell-language-server-wrapper generate-default-config`
 
     Fields: ~
-        {cmd}       (string[]|nil)  The command to start haskell-debug-adapter with.
-        {logFile}   (string|nil)    Log file path for detected configurations.
-        {logLevel}  (LogLevel|nil)  The log level for detected configurations.
+        {cmd}       (string[]|nil)                     The command to start haskell-debug-adapter with.
+        {logFile}   (string|nil)                       Log file path for detected configurations.
+        {logLevel}  (HaskellDebugAdapterLogLevel|nil)  The log level for detected configurations.
 
 
-LogLevel                                                              *LogLevel*
+HaskellDebugAdapterLogLevel                        *HaskellDebugAdapterLogLevel*
 
     Type: ~
         "Debug"|"Info"|"Warning"|"Error"
-
-
-config.defaults                                                *config.defaults*
-
-    Type: ~
-        (HTConfig)
-
-
-config.options                                                  *config.options*
-
-    Type: ~
-        (HTConfig)
 
 
 ==============================================================================

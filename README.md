@@ -276,113 +276,39 @@ For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-to
 
 ## Advanced configuration
 
-To modify the default configuration, set `vim.g.haskell_tools`:
+To modify the default configuration, set `vim.g.haskell_tools`.
+
+- See [`:help haskell-tools.config`](./doc/haskell-tools.txt) for a detailed
+  documentation of all available configuration options.
+  You may need to run `:helptags ALL` if the documentation has not been installed.
+- The default configuration [can be found here (see `HTDefaultConfig`)](./lua/haskell-tools/config/internal.lua).
+- To view all available `haskell-language-server` settings
+  (including those not set by this plugin), run `haskell-language-server generate-default-config`.
+  - For detailed descriptions of the configs,
+    look at the [`haskell-language-server` documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
 ```lua
--- defaults
 vim.g.haskell_tools = {
-  tools = { -- haskell-tools options
-    codeLens = {
-      -- Whether to automatically display/refresh codeLenses
-      -- (explicitly set to false to disable)
-      autoRefresh = true,
-    },
-    hoogle = {
-      -- 'auto': Choose a mode automatically, based on what is available.
-      -- 'telescope-local': Force use of a local installation.
-      -- 'telescope-web': The online version (depends on curl).
-      -- 'browser': Open hoogle search in the default browser.
-      mode = 'auto',
-    },
-    hover = {
-      -- Whether to disable haskell-tools hover
-      -- and use the builtin lsp's default handler
-      disable = false,
-      -- Set to nil to disable
-      border = {
-        { '╭', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '╮', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-        { '╯', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '╰', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-      },
-      -- Stylize markdown (the builtin lsp's default behaviour).
-      -- Setting this option to false sets the file type to markdown and enables
-      -- Treesitter syntax highligting for Haskell snippets
-      -- if nvim-treesitter is installed
-      stylize_markdown = false,
-      -- Whether to automatically switch to the hover window
-      auto_focus = false,
-    },
-    definition = {
-      -- Configure vim.lsp.definition to fall back to hoogle search
-      -- (does not affect vim.lsp.tagfunc)
-      hoogle_signature_fallback = false,
-    },
-    repl = {
-      -- 'builtin': Use the simple builtin repl
-      -- 'toggleterm': Use akinsho/toggleterm.nvim
-      handler = 'builtin',
-      -- Which backend to prefer if both stack and cabal files are present
-      prefer = vim.fn.executable('stack') and 'stack' or 'cabal',
-      builtin = {
-        ---@param view ReplView
-        create_repl_window = function(view)
-          -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win
-          return view.create_repl_split { size = vim.o.lines / 3 }
-        end
-      },
-      -- Can be overriden to either `true` or `false`.
-      -- The default behaviour depends on the handler.
-      auto_focus = nil,
-    },
-    -- Set up autocmds to generate tags (using fast-tags)
-    -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
-    tags = {
-      ---@type (fun():boolean) | boolean
-      enable = function()
-        return vim.fn.executable('fast-tags') == 1
-      end,
-      -- Events to trigger package tag generation
-      package_events = { 'BufWritePost' },
-    },
-    dap = {
-      cmd = { 'haskell-debug-adapter' },
-    },
-  },
-  hls = { -- LSP client options
-    --- Whether to auto-attach the client.
-    --- Defaults to `true` if the haskell-language-server executable is found.
-    ---@type (fun():boolean) | boolean
-    auto_attach = true,
+  ---@type ToolsOpts
+  tools = {
     -- ...
-    default_settings = {
-      haskell = { -- haskell-language-server options
-        formattingProvider = 'ormolu',
-        -- Setting this to true could have a performance impact on large mono repos.
-        checkProject = true,
-        -- ...
-      }
-    }
-    -- Called when the LSP client attaches.
-    -- Useful for setting LSP-specific keymaps, etc.
-    ---@param client number LSP client ID
-    ---@param bufnr number Buffer number
-    ---@param ht HaskellTools = require('haskell-tools') (:help haskell-tools)
+  },
+  ---@type HaskellLspClientOpts
+  hls = {
+    ---@param client number The LSP client ID.
+    ---@param bufnr number The buffer number
+    ---@param ht HaskellTools = require('haskell-tools')
     on_attach = function(client, bufnr, ht)
+      -- Set keybindings, etc. here.
     end,
-  }
+    -- ...
+  },
+  ---@type HTDapOpts
+  dap = {
+    -- ...
+  },
 }
 ```
-
-- The full list of defaults [can be found here](./lua/haskell-tools/config.lua).
-- To view all available language server settings
-  (including those not set by this plugin), run `haskell-language-server generate-default-config`.
-- For detailed descriptions of the configs,
-  look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
 ### How to dynamically load different `haskell-language-server` settings per project
 

@@ -157,7 +157,7 @@ end
 local view = {
   ---Create a new repl in a horizontal split
   ---@param opts ReplViewOpts?
-  ---@return fun(function) create_repl
+  ---@return fun(mk_cmd_fun) create_repl
   create_repl_split = function(opts)
     return function(mk_cmd)
       create_or_toggle(create_split, mk_cmd, opts)

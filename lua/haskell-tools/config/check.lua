@@ -37,7 +37,7 @@ function config_check.validate(cfg)
   ok, err = validate('hls', {
     auto_attach = { hls.auto_attach, { 'boolean', 'function' } },
     capabilities = { hls.capabilities, 'table' },
-    cmd = { hls.cmd, 'table' },
+    cmd = { hls.cmd, { 'table', 'function' } },
     debug = { hls.debug, 'boolean' },
     default_settings = { hls.default_settings, 'table' },
     on_attach = { hls.on_attach, 'function' },

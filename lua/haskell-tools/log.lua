@@ -1,7 +1,5 @@
 ---@mod haskell-tools.log haskell-tools Logging
 
-local deps = require('haskell-tools.deps')
-local Path = deps.require_plenary('plenary.path')
 ---@diagnostic disable-next-line: deprecated
 local uv = vim.uv or vim.loop
 
@@ -24,11 +22,9 @@ local function format_log(arg)
   return vim.inspect(arg, { newline = '' })
 end
 
-local logpath = vim.fn.stdpath('log')
-vim.fn.mkdir(logpath, 'p')
+local HTConfig = require('haskell-tools.config.internal')
 
-local logfilepath = Path:new(logpath, 'haskell-tools.log')
-local logfilename = logfilepath.filename
+local logfilename = HTConfig.tools.log.logfile
 
 ---Get the haskell-tools.nvim log file path.
 ---@return string filepath
@@ -73,10 +69,9 @@ local function open_logfile()
   return true
 end
 
-local config = require('haskell-tools.config')
-local opts = config.options.tools.log
+local opts = HTConfig.tools.log
 
-local hls_log = config.hls_log
+local hls_log = HTConfig.hls.logfile
 
 --- Get the haskell-language-server log file
 function HaskellToolsLog.get_hls_logfile()
@@ -138,6 +133,6 @@ for level, levelnr in pairs(vim.log.levels) do
   end
 end
 
-HaskellToolsLog.debug { 'Config', config.options }
+HaskellToolsLog.debug { 'Config', HTConfig }
 
 return HaskellToolsLog

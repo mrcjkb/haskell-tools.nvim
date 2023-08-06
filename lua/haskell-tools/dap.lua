@@ -43,8 +43,8 @@ end
 ---@return table
 local function detect_launch_configurations(root_dir)
   local launch_configurations = {}
-  local ht_config = require('haskell-tools.config')
-  local dap_opts = ht_config.options.dap
+  local HTConfig = require('haskell-tools.config.internal')
+  local dap_opts = HTConfig.dap
   ---@param entry_point HsEntryPoint
   local function mk_launch_configuration(entry_point)
     return {
@@ -84,8 +84,8 @@ local HsDapTools = {
 
 local function setup_dap(nvim_dap)
   HsDapTools.nvim_dap = nvim_dap
-  local config = require('haskell-tools.config')
-  local dap_opts = config.options.dap
+  local HTConfig = require('haskell-tools.config.internal')
+  local dap_opts = HTConfig.dap
   nvim_dap.adapters.ghc = {
     type = 'executable',
     command = table.concat(dap_opts.cmd, ' '),

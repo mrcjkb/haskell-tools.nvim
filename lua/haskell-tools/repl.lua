@@ -76,8 +76,8 @@ local function mk_repl_cmd(file)
       return nil
     end
   end
-  local config = require('haskell-tools.config')
-  local opts = config.options.tools.repl
+  local HTConfig = require('haskell-tools.config.internal')
+  local opts = HTConfig.tools.repl
   if ht_util.evaluate(opts.prefer) == 'stack' and project.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
@@ -98,8 +98,8 @@ local function mk_repl_cmd(file)
   return nil
 end
 
-local config = require('haskell-tools.config')
-local opts = config.options.tools.repl
+local HTConfig = require('haskell-tools.config.internal')
+local opts = HTConfig.tools.repl
 local handler
 
 local handler_type = ht_util.evaluate(opts.handler)

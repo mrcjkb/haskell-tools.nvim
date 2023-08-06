@@ -8,7 +8,7 @@
 --- The internal API for use by this plugin's ftplugins
 ---@brief ]]
 
-local config = require('haskell-tools.config')
+local HTConfig = require('haskell-tools.config.internal')
 local util = require('haskell-tools.util')
 local HaskellTools = require('haskell-tools')
 
@@ -38,10 +38,10 @@ local InternalApi = {}
 ---ht.start_or_attach()
 ---@usage ]]
 function InternalApi.start_or_attach()
-  if util.evaluate(config.options.hls.auto_attach) then
+  if util.evaluate(HTConfig.hls.auto_attach) then
     HaskellTools.lsp.start()
   end
-  if util.evaluate(config.options.tools.tags.enable) then
+  if util.evaluate(HTConfig.tools.tags.enable) then
     HaskellTools.tags.generate_project_tags(nil, { refresh = false })
   end
 end

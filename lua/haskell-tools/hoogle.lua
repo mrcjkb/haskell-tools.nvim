@@ -35,8 +35,8 @@ local function lsp_hoogle_signature(options)
   return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
-local ht_config = require('haskell-tools.config')
-local opts = ht_config.options.tools.hoogle
+local HTConfig = require('haskell-tools.config.internal')
+local opts = HTConfig.tools.hoogle
 local hoogle_web = require('haskell-tools.hoogle.web')
 local hoogle_local = require('haskell-tools.hoogle.local')
 

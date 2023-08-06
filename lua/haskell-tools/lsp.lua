@@ -1,6 +1,6 @@
 ---@mod haskell-tools.lsp haskell-language-server LSP client tools
 
-local ht_config = require('haskell-tools.config')
+local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log')
 local ht_util = require('haskell-tools.util')
 local deps = require('haskell-tools.deps')
@@ -52,18 +52,10 @@ end
 ---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
 log.debug('Setting up the LSP client...')
-local options = ht_config.options
-local hls_opts = assert(options.hls, 'haskell-tools: hls options not set.')
-local cmd = assert(hls_opts.cmd, 'haskell-tools: hls cmd not set.')
-assert(#cmd > 1, 'haskell-tools: hls cmd table is empty.')
-local hls_bin = cmd[1]
-if vim.fn.executable(hls_bin) == 0 then
-  log.warn('Executable ' .. hls_bin .. ' not found.')
-end
-
+local hls_opts = assert(HTConfig.hls, 'haskell-tools: hls options not set.')
 local handlers = {}
 
-local tools_opts = assert(options.tools, 'haskell-tools: tools options not set.')
+local tools_opts = assert(HTConfig.tools, 'haskell-tools: tools options not set.')
 local definition_opts = tools_opts.definition or {}
 
 if ht_util.evaluate(definition_opts.hoogle_signature_fallback) then
@@ -86,7 +78,7 @@ local HlsTools = {}
 ---@return table hls_settings
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
 HlsTools.load_hls_settings = function(project_root, opts)
-  local default_settings = ht_config.options.hls.default_settings
+  local default_settings = HTConfig.hls.default_settings
   if not project_root then
     return default_settings
   end
@@ -128,9 +120,18 @@ HlsTools.start = function(bufnr)
   local is_cabal = filetype == 'cabal' or filetype == 'cabalproject'
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
+  local cmd = ht_util.evaluate(hls_opts.cmd)
+  ---@cast cmd string[]
+  assert(type(cmd) == 'table', 'haskell-tools: hls.cmd should evaluate to a string[]')
+  assert(#cmd > 1, 'haskell-tools: hls.cmd evaluates to an empty list.')
+  local hls_bin = cmd[1]
+  if vim.fn.executable(hls_bin) == 0 then
+    log.warn('Executable ' .. hls_bin .. ' not found.')
+  end
+
   local lsp_start_opts = {
     name = is_cabal and lsp_util.cabal_client_name or lsp_util.haskell_client_name,
-    cmd = cmd,
+    cmd = ht_util.evaluate(cmd),
     root_dir = project_root,
     capabilities = hls_opts.capabilities,
     handlers = handlers,
