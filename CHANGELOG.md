@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `vim.g.haskell_tools` can be used for configuration instead.
 - BREAKING: Add Haskell and Cabal `ftplugin` files, to automatically
   start/attach haskell-tools.
+- BREAKING configuration changes:
+  - `hover.disable` has been changed to `hover.enable` for consistency.
+  - `hls_log` (undocumented) has been moved to `hls.logfile`.
 
 ## [1.11.3] - 2023-08-06
 ### Fixed
