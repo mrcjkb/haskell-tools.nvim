@@ -591,6 +591,20 @@ ht.tags.generate_project_tags(path, opts)
 ht.tags.generate_package_tags(path)
 ```
 
+#### DAP
+
+```lua
+local ht = require('haskell-tools')
+
+---@param bufnr integer The buffer number
+---@param opts table? Optional
+---@param opts.autodetect: (boolean)
+--- Whether to auto-detect launch configurations
+---@param opts.settings_file_pattern: (string)
+--- File name or pattern to search for. Defaults to 'launch.json'
+ht.dap.discover_configurations(bufnr, opts)
+```
+
 ### Telescope extension
 
 If [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is installed,
@@ -608,20 +622,6 @@ To load the extension, call
 
 ```lua
 require('telescope').load_extension('ht')
-```
-
-#### DAP
-
-```lua
-local ht = require('haskell-tools')
-
----@param bufnr integer The buffer number
----@param opts table? Optional
----@param opts.autodetect: (boolean)
---- Whether to auto-detect launch configurations
----@param opts.settings_file_pattern: (string)
---- File name or pattern to search for. Defaults to 'launch.json'
-ht.dap.discover_configurations(bufnr, opts)
 ```
 
 ## Troubleshooting
