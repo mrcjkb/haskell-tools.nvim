@@ -9,11 +9,21 @@
 ---@brief ]]
 
 local HTConfig = require('haskell-tools.config.internal')
-local util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local LspUtil = require('haskell-tools.lsp.util')
 local HaskellTools = require('haskell-tools')
 
 ---@class InternalApi
 local InternalApi = {}
+
+---@return boolean tf Is LSP supported for the current buffer?
+local function buf_is_lsp_supported()
+  local bufnr = vim.api.nvim_get_current_buf()
+  if not HtUtil.is_cabal_file(bufnr) then
+    return true
+  end
+  return LspUtil.is_hls_version_with_cabal_support()
+end
 
 ---Starts or attaches an LSP client to the current buffer and sets up the plugin if necessary.
 ---
@@ -38,10 +48,10 @@ local InternalApi = {}
 ---ht.start_or_attach()
 ---@usage ]]
 function InternalApi.start_or_attach()
-  if util.evaluate(HTConfig.hls.auto_attach) then
+  if HtUtil.evaluate(HTConfig.hls.auto_attach) and buf_is_lsp_supported() then
     HaskellTools.lsp.start()
   end
-  if util.evaluate(HTConfig.tools.tags.enable) then
+  if HtUtil.evaluate(HTConfig.tools.tags.enable) then
     HaskellTools.tags.generate_project_tags(nil, { refresh = false })
   end
 end

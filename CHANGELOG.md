@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `hover.disable` has been changed to `hover.enable` for consistency.
   - `hls_log` (undocumented) has been moved to `hls.logfile`.
 
+### Added
+- Only attach cabal LSP clients if using `haskell-language-server > 1.9.0.0`.
+
 ## [1.11.3] - 2023-08-06
 ### Fixed
 - Fix bug that broke codelens auto-refresh and lsp stop/restart [#229](https://github.com/mrcjkb/haskell-tools.nvim/issues/229).

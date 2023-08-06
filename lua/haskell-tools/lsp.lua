@@ -52,10 +52,10 @@ end
 ---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
 log.debug('Setting up the LSP client...')
-local hls_opts = assert(HTConfig.hls, 'haskell-tools: hls options not set.')
+local hls_opts = HTConfig.hls
 local handlers = {}
 
-local tools_opts = assert(HTConfig.tools, 'haskell-tools: tools options not set.')
+local tools_opts = HTConfig.tools
 local definition_opts = tools_opts.definition or {}
 
 if ht_util.evaluate(definition_opts.hoogle_signature_fallback) then
@@ -116,14 +116,10 @@ HlsTools.start = function(bufnr)
     vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
     return
   end
-  local filetype = vim.bo[bufnr].filetype
-  local is_cabal = filetype == 'cabal' or filetype == 'cabalproject'
+  local is_cabal = ht_util.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
-  local cmd = ht_util.evaluate(hls_opts.cmd)
-  ---@cast cmd string[]
-  assert(type(cmd) == 'table', 'haskell-tools: hls.cmd should evaluate to a string[]')
-  assert(#cmd > 1, 'haskell-tools: hls.cmd evaluates to an empty list.')
+  local cmd = lsp_util.get_hls_cmd()
   local hls_bin = cmd[1]
   if vim.fn.executable(hls_bin) == 0 then
     log.warn('Executable ' .. hls_bin .. ' not found.')

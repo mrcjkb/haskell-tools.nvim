@@ -177,4 +177,11 @@ HtUtil.evaluate = function(value)
   return value
 end
 
+---@param bufnr number The buffer number
+---@return boolean is_cabal_file
+HtUtil.is_cabal_file = function(bufnr)
+  local filetype = vim.bo[bufnr].filetype
+  return filetype == 'cabal' or filetype == 'cabalproject'
+end
+
 return HtUtil
