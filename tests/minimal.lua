@@ -33,15 +33,21 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy = require('lazy')
 
--- TODO: Configure haskell-tools.nvim here
-vim.g.haskell_tools = {}
-
 lazy.setup({
   {
     'mrcjkb/haskell-tools.nvim',
     branch = '2.x.x',
+    init = function()
+      -- Configure haskell-tools.nvim here
+      vim.g.haskell_tools = {}
+    end,
     dependencies = {
       'nvim-lua/plenary.nvim',
+      -- Uncomment or add any optional dependencies needed to reproduce the issue
+      -- 'nvim-telescope/telescope.nvim',
+      -- 'akinsho/toggleterm.nvim',
     },
   },
+  -- Add any other plugins needed to reproduce the issue.
+  -- see https://github.com/folke/lazy.nvim#-lazynvim for details.
 }, { root = data_path, state = data_path .. '/lazy-state.json', lockfile = data_path .. '/lazy-lock.json' })
