@@ -86,6 +86,11 @@ Example using `lazy.nvim`:
     'nvim-telescope/telescope.nvim', -- optional
   },
   branch = '2.x.x', -- recommended
+  init = function() -- Optional, see Advanced configuration.
+    vim.g.haskell_tools = {
+      -- ...
+    },
+  end,
 }
 ```
 
