@@ -117,7 +117,12 @@ local HTDefaultConfig = {
     ---@type string[] | (fun():string[]) The command to start haskell-language-server with.
     ---@see vim.lsp.start
     cmd = function()
-      local cmd = { 'haskell-language-server-wrapper', '--lsp', '--logfile', HTConfig.hls.logfile }
+      -- Some distributions don't prorvide a hls wrapper.
+      -- So we check if it exists and fall back to hls if it doesn't
+      local hls_bin = 'haskell-language-server'
+      local hls_wrapper_bin = hls_bin .. '-wrapper'
+      local bin = vim.fn.executable(hls_wrapper_bin) == 1 and hls_wrapper_bin or hls_bin
+      local cmd = { bin, '--lsp', '--logfile', HTConfig.hls.logfile }
       if HTConfig.hls.debug then
         table.insert(cmd, '--debug')
       end

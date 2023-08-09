@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Only attach cabal LSP clients if using `haskell-language-server > 1.9.0.0`.
+- By default, fall back to `haskell-language-server` if `haskell-language-server-wrapper`
+  is not found [#233](https://github.com/mrcjkb/haskell-tools.nvim/issues/233).
 
 ## [1.11.3] - 2023-08-06
 ### Fixed
