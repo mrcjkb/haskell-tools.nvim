@@ -83,16 +83,15 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
   'mrcjkb/haskell-tools.nvim',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim', -- optional
+    'nvim-telescope/telescope.nvim', -- Optional
   },
   branch = '2.x.x', -- Recommended
-  init = function() -- Optional, see Advanced configuration.
+  init = function() -- Optional, see Advanced configuration
     vim.g.haskell_tools = {
       -- ...
     },
   end,
-  -- This plugin is lazy by design
-  lazy = false,
+  ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
 }
 ```
 
