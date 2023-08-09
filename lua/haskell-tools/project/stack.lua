@@ -14,7 +14,8 @@
 local ht_util = require('haskell-tools.util')
 local Path = require('plenary.path')
 
-local stack = {}
+---@class StackProjectHelper
+local StackProjectHelper = {}
 
 ---@param str string
 ---@return boolean is_yaml_comment
@@ -145,7 +146,7 @@ end
 ---@param package_path string Path to a package directory
 ---@return HsEntryPoint[] entry_points
 ---@async
-function stack.parse_package_entrypoints(package_path)
+function StackProjectHelper.parse_package_entrypoints(package_path)
   local entry_points = {}
   for _, package_file in pairs(vim.fn.glob(Path:new(package_path, 'package.yaml').filename, true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
@@ -153,4 +154,4 @@ function stack.parse_package_entrypoints(package_path)
   return entry_points
 end
 
-return stack
+return StackProjectHelper

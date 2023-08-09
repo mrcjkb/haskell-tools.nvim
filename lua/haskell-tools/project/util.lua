@@ -18,7 +18,8 @@ local uv = vim.uv or vim.loop
 
 local Path = deps.require_plenary('plenary.path')
 
-local project_util = {}
+---@class HtProjectUtil
+local HtProjectUtil = {}
 
 ---@param path string
 ---@return string stripped_path For zipfile: or tarfile: virtual paths, returns the path to the archive. Other paths are returned unaltered.
@@ -109,33 +110,33 @@ local function escape_glob_wildcards(path)
 end
 
 ---Get the root of a cabal multi-package project for a path
-project_util.match_cabal_multi_project_root = root_pattern('cabal.project')
+HtProjectUtil.match_cabal_multi_project_root = root_pattern('cabal.project')
 
 ---Get the root of a cabal package for a path
-project_util.match_cabal_package_root = root_pattern('*.cabal')
+HtProjectUtil.match_cabal_package_root = root_pattern('*.cabal')
 
 ---Get the root of the cabal project for a path
 ---@param path string File path
-project_util.match_cabal_project_root = function(path)
-  return project_util.match_cabal_multi_project_root(path) or project_util.match_cabal_package_root(path)
+HtProjectUtil.match_cabal_project_root = function(path)
+  return HtProjectUtil.match_cabal_multi_project_root(path) or HtProjectUtil.match_cabal_package_root(path)
 end
 
 ---Get the root of the stack project for a path
-project_util.match_stack_project_root = root_pattern('stack.yaml')
+HtProjectUtil.match_stack_project_root = root_pattern('stack.yaml')
 
 ---Get the root of the project for a path
-project_util.match_project_root = root_pattern('cabal.project', 'stack.yaml')
+HtProjectUtil.match_project_root = root_pattern('cabal.project', 'stack.yaml')
 
 ---Get the root of the package for a path
-project_util.match_package_root = root_pattern('*.cabal', 'package.yaml')
+HtProjectUtil.match_package_root = root_pattern('*.cabal', 'package.yaml')
 
 ---Get the directory containing a haskell-language-server hie.yaml
-project_util.match_hie_yaml = root_pattern('hie.yaml')
+HtProjectUtil.match_hie_yaml = root_pattern('hie.yaml')
 
 ---Get the package.yaml for a given path
 ---@param path string
 ---@return string|nil package_yaml_path
-function project_util.get_package_yaml(path)
+function HtProjectUtil.get_package_yaml(path)
   local match = root_pattern('package.yaml')
   local dir = match(path)
   return dir and dir .. '/package.yaml'
@@ -144,7 +145,7 @@ end
 ---Get the *.cabal for a given path
 ---@param path string
 ---@return string|nil cabal_file_path
-function project_util.get_package_cabal(path)
+function HtProjectUtil.get_package_cabal(path)
   local match = root_pattern('*.cabal')
   local dir = match(path)
   if not dir then
@@ -161,7 +162,7 @@ end
 ---Is `path` part of a cabal project?
 ---@param path string
 ---@return boolean is_cabal_project
-function project_util.is_cabal_project(path)
+function HtProjectUtil.is_cabal_project(path)
   local get_root = root_pattern('*.cabal', 'cabal.project')
   if get_root(path) ~= nil then
     log.debug('Detected cabal project.')
@@ -173,8 +174,8 @@ end
 ---Is `path` part of a stack project?
 ---@param path string
 ---@return boolean is_stack_project
-function project_util.is_stack_project(path)
-  if project_util.match_stack_project_root(path) ~= nil then
+function HtProjectUtil.is_stack_project(path)
+  if HtProjectUtil.match_stack_project_root(path) ~= nil then
     log.debug('Detected stack project.')
     return true
   end
@@ -184,8 +185,8 @@ end
 ---Get the package name for a given path
 ---@param path string
 ---@return string|nil package_name
-function project_util.get_package_name(path)
-  local package_path = project_util.match_package_root(path)
+function HtProjectUtil.get_package_name(path)
+  local package_path = HtProjectUtil.match_package_root(path)
   return package_path and vim.fn.fnamemodify(package_path, ':t')
 end
 
@@ -193,7 +194,7 @@ end
 ---@param project_file string project file (cabal.project or stack.yaml)
 ---@return string[] package_paths
 ---@async
-function project_util.parse_package_paths(project_file)
+function HtProjectUtil.parse_package_paths(project_file)
   local package_paths = {}
   local content = ht_util.read_file_async(project_file)
   if not content then
@@ -229,8 +230,8 @@ end
 ---@param package_path string Path to a package directory
 ---@return HsEntryPoint[] entry_points
 ---@async
-function project_util.parse_package_entrypoints(package_path)
-  if project_util.is_cabal_project(package_path) then
+function HtProjectUtil.parse_package_entrypoints(package_path)
+  if HtProjectUtil.is_cabal_project(package_path) then
     return cabal.parse_package_entrypoints(package_path)
   end
   return stack.parse_package_entrypoints(package_path)
@@ -239,18 +240,18 @@ end
 ---@param project_root string Project root directory
 ---@return HsEntryPoint[]
 ---@async
-function project_util.parse_project_entrypoints(project_root)
+function HtProjectUtil.parse_project_entrypoints(project_root)
   local entry_points = {}
   local project_file = Path:new(project_root, 'cabal.project').filename
   if vim.fn.filereadable(project_file) == 1 then
-    for _, package_path in pairs(project_util.parse_package_paths(project_file)) do
+    for _, package_path in pairs(HtProjectUtil.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, cabal.parse_package_entrypoints(package_path))
     end
     return entry_points
   end
   project_file = Path:new(project_root, 'stack.yaml').filename
   if vim.fn.filereadable(project_file) == 1 then
-    for _, package_path in pairs(project_util.parse_package_paths(project_file)) do
+    for _, package_path in pairs(HtProjectUtil.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, stack.parse_package_entrypoints(package_path))
     end
     return entry_points
@@ -258,4 +259,4 @@ function project_util.parse_project_entrypoints(project_root)
   return cabal.parse_package_entrypoints(project_root)
 end
 
-return project_util
+return HtProjectUtil
