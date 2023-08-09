@@ -12,17 +12,18 @@
 ---@brief ]]
 
 local deps = require('haskell-tools.deps')
-local util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
 local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
-local hoogle_util = {}
+---@class HoogleUtil
+local HoogleUtil = {}
 
 ---@param buf number the telescope buffebuffer numberr
 ---@param map fun(mode:string,keys:string,action:function) callback for creating telescope keymaps
 ---@return boolean
-function hoogle_util.hoogle_attach_mappings(buf, map)
+function HoogleUtil.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     -- Copy type signature to clipboard
     local entry = actions_state.get_selected_entry()
@@ -33,7 +34,7 @@ function hoogle_util.hoogle_attach_mappings(buf, map)
   map('i', '<C-b>', function()
     -- Open in browser
     local entry = actions_state.get_selected_entry()
-    util.open_browser(vim.fn.fnameescape(entry.url))
+    HtUtil.open_browser(vim.fn.fnameescape(entry.url))
   end)
   map('i', '<C-r>', function()
     -- Replace word under cursor
@@ -120,7 +121,7 @@ end
 
 ---@param data HoogleData
 ---@return TelescopeHoogleEntry|nil
-function hoogle_util.mk_hoogle_entry(data)
+function HoogleUtil.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''
   if not module_name or not type_sig then
@@ -139,4 +140,4 @@ function hoogle_util.mk_hoogle_entry(data)
   }
 end
 
-return hoogle_util
+return HoogleUtil

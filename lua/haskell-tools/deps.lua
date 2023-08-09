@@ -36,6 +36,7 @@ end
 ---@param modname string
 ---@param plugin_name string
 ---@return unknown
+---@require
 function deps.require_or_err(modname, plugin_name)
   return deps.if_available(modname, function(mod)
     return mod
@@ -56,16 +57,19 @@ function deps.has_telescope()
 end
 
 ---@return unknown
+---@require
 function deps.require_telescope(modname)
   return deps.require_or_err(modname, 'nvim-telescope/telescope.nvim')
 end
 
 ---@return unknown
+---@require
 function deps.require_plenary(modname)
   return deps.require_or_err(modname, 'nvim-lua/plenary.nvim')
 end
 
 ---@return unknown
+---@require
 function deps.require_toggleterm(modname)
   return deps.require_or_err(modname, 'akinsho/toggleterm')
 end
@@ -76,6 +80,7 @@ function deps.has_toggleterm()
 end
 
 ---@return unknown
+---@require
 function deps.require_iron(modname)
   return deps.require_or_err(modname, 'hkupty/iron.nvim')
 end

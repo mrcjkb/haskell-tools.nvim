@@ -11,7 +11,8 @@ local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local util = require('haskell-tools.util')
 
-local hoogle_web = {}
+---@class WebHoogleHandler
+local WebHoogleHandler = {}
 
 ---@param c string A single character
 ---@return string The hex representation
@@ -62,13 +63,13 @@ if deps.has_telescope() then
   ---@param search_term string
   ---@param opts TelescopeHoogleWebOpts|nil
   ---@return nil
-  function hoogle_web.telescope_search(search_term, opts)
+  function WebHoogleHandler.telescope_search(search_term, opts)
     local config = deps.require_telescope('telescope.config').values
     if not config then
       local msg = 'telescope.nvim has not been setup. Falling back to browser search.'
       log.warn(msg)
       vim.notify_once('haskell-tools.hoogle: ' .. msg, vim.log.levels.WARN)
-      hoogle_web.browser_search(search_term, opts)
+      WebHoogleHandler.browser_search(search_term, opts)
       return
     end
     if vim.fn.executable('curl') == 0 then
@@ -106,11 +107,11 @@ end
 ---@param search_term string
 ---@param opts TelescopeHoogleWebOpts|nil
 ---@return nil
-function hoogle_web.browser_search(search_term, opts)
+function WebHoogleHandler.browser_search(search_term, opts)
   opts = util.tbl_merge(opts or {}, {
     hoogle = { json = false },
   })
   util.open_browser(mk_hoogle_request(search_term, opts))
 end
 
-return hoogle_web
+return WebHoogleHandler

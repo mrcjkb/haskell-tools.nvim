@@ -6,9 +6,8 @@ local ht_util = require('haskell-tools.util')
 local ht_lsp_util = require('haskell-tools.lsp.util')
 local lsp_util = vim.lsp.util
 
-local handler = function(_, _)
-  log.error('Hoogle search called without a handler.')
-end
+---@type fun(sig_or_func_name:string, options:table|nil):nil
+local handler
 
 ---@param options table
 ---@return fun(err: lsp.ResponseError|nil, result: any, context: lsp.HandlerContext, config: table|nil)
@@ -106,6 +105,7 @@ HoogleTools.hoogle_signature = function(options)
   else
     log.debug('Hoogle signature search: No clients attached. Falling back to <cword>.')
     local cword = vim.fn.expand('<cword>')
+    ---@cast cword string
     handler(cword, options)
   end
 end

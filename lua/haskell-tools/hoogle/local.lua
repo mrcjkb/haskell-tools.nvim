@@ -10,19 +10,20 @@
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 
-local hoogle_local = {}
+---@class LocalHoogleHandler
+local HoogleLocal = {}
 
 ---@return boolean has_hoogle `true` if the `hoogle` executable exists
-function hoogle_local.has_hoogle()
+function HoogleLocal.has_hoogle()
   return vim.fn.executable('hoogle') == 1
 end
 
-if not hoogle_local.has_hoogle() then
-  return hoogle_local
+if not HoogleLocal.has_hoogle() then
+  return HoogleLocal
 end
 
 if not deps.has_telescope() then
-  return hoogle_local
+  return HoogleLocal
 end
 
 ---@class LocalHoogleOpts
@@ -49,7 +50,7 @@ local Job = deps.require_plenary('plenary.job')
 ---@param search_term string The Hoogle search term
 ---@param opts LocalHoogleOpts|nil
 ---@return nil
-function hoogle_local.telescope_search(search_term, opts)
+function HoogleLocal.telescope_search(search_term, opts)
   opts = opts or {}
   opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
   local config = deps.require_telescope('telescope.config').values
@@ -100,4 +101,4 @@ function hoogle_local.telescope_search(search_term, opts)
   }):start()
 end
 
-return hoogle_local
+return HoogleLocal
