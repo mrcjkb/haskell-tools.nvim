@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING: Remove `setup` API.
 - BREAKING: Ignore configuration options in `start_or_attach`.
   `vim.g.haskell_tools` can be used for configuration instead.
-- BREAKING: Add Haskell and Cabal `ftplugin` files, to automatically
-  start/attach haskell-tools.
+- BREAKING: `haskell-tools` now
+  automatically initialises and attaches when opening a Haskell or Cabal file.
+  You can fine-tune this behaviour in the config.
 - BREAKING configuration changes:
   - `hover.disable` has been changed to `hover.enable` for consistency.
   - `hls_log` (undocumented) has been moved to `hls.logfile`.
