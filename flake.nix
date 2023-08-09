@@ -100,6 +100,8 @@
                   library = [
                     "${pkgs.neovim-nightly}/share/nvim/runtime/lua"
                     "${pkgs.plenary-plugin}/lua"
+                    "${pkgs.telescope-plugin}/lua"
+                    "${pkgs.toggleterm-plugin}/lua"
                   ];
                   checkThirdParty = false;
                   ignoreDir = [

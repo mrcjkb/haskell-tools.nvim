@@ -139,5 +139,7 @@ in {
   inherit
     nvim-nightly
     plenary-plugin
+    telescope-plugin
+    toggleterm-plugin
     ;
 }

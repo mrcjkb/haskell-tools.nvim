@@ -100,15 +100,14 @@ end
 
 local HTConfig = require('haskell-tools.config.internal')
 local opts = HTConfig.tools.repl
+---@type ReplHandlerImpl
 local handler
 
 local handler_type = ht_util.evaluate(opts.handler)
 ---@cast handler_type ReplHandler
 if handler_type == 'toggleterm' then
   log.info('handler = toggleterm')
-  local toggleterm = require('haskell-tools.repl.toggleterm')
-  toggleterm.setup(mk_repl_cmd, opts)
-  handler = toggleterm
+  handler = require('haskell-tools.repl.toggleterm')(mk_repl_cmd, opts)
 else
   if handler_type ~= 'builtin' then
     log.warn('Invalid repl handler type. Falling back to builtin')
@@ -119,9 +118,7 @@ else
   else
     log.info('handler = builtin')
   end
-  local builtin = require('haskell-tools.repl.builtin')
-  builtin.setup(mk_repl_cmd, opts)
-  handler = builtin
+  handler = require('haskell-tools.repl.builtin')(mk_repl_cmd, opts)
 end
 
 local function handle_reg(cmd, reg)
