@@ -286,7 +286,16 @@ HlsTools.buf_eval_all({bufnr})                           *HlsTools.buf_eval_all*
 ==============================================================================
 haskell-tools nvim-dap setup                                 *haskell-tools.dap*
 
+HsDapLaunchConfiguration                              *HsDapLaunchConfiguration*
+
+
 HsDapTools                                                          *HsDapTools*
+
+
+HsDapTools.nvim_dap                                        *HsDapTools.nvim_dap*
+
+    Type: ~
+        (table)  A copy of the nvim-dap `dap` module
 
 
 AddDapConfigOpts                                              *AddDapConfigOpts*

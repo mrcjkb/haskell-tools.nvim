@@ -31,6 +31,11 @@
       flake = false;
     };
 
+    nvim-dap = {
+      url = "github:mfussenegger/nvim-dap";
+      flake = false;
+    };
+
     toggleterm = {
       url = "github:akinsho/toggleterm.nvim";
       flake = false;
@@ -58,6 +63,7 @@
         self
         plenary-nvim
         telescope-nvim
+        nvim-dap
         toggleterm
         ;
     };
@@ -102,6 +108,7 @@
                     "${pkgs.plenary-plugin}/lua"
                     "${pkgs.telescope-plugin}/lua"
                     "${pkgs.toggleterm-plugin}/lua"
+                    "${pkgs.nvim-dap-plugin}/lua"
                   ];
                   checkThirdParty = false;
                   ignoreDir = [

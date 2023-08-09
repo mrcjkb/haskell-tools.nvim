@@ -370,6 +370,22 @@
         "type": "github"
       }
     },
+    "nvim-dap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1690903198,
+        "narHash": "sha256-aXEgur2B3kLwioDRnkdtHOThWBplvD9RNcec55cwVPw=",
+        "owner": "mfussenegger",
+        "repo": "nvim-dap",
+        "rev": "1c63f37f95cd4fb54512898168138d9a75d1516a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mfussenegger",
+        "repo": "nvim-dap",
+        "type": "github"
+      }
+    },
     "plenary-nvim": {
       "flake": false,
       "locked": {
@@ -416,6 +432,7 @@
         "flake-utils": "flake-utils",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_3",
+        "nvim-dap": "nvim-dap",
         "plenary-nvim": "plenary-nvim",
         "pre-commit-hooks": "pre-commit-hooks",
         "telescope-nvim": "telescope-nvim",

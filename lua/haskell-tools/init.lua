@@ -31,7 +31,8 @@ local HaskellTools = {
   repl = require('haskell-tools.repl'),
   project = require('haskell-tools.project'),
   tags = require('haskell-tools.tags'),
-  dap = require('haskell-tools.dap'),
+  ---@type HsDapTools | nil
+  dap = require('haskell-tools.dap') or nil,
 }
 
 return HaskellTools

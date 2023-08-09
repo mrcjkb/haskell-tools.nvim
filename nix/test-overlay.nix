@@ -2,6 +2,7 @@
   self,
   plenary-nvim,
   telescope-nvim,
+  nvim-dap,
   toggleterm,
 }: final: prev:
 with final.lib;
@@ -17,6 +18,11 @@ with final.stdenv; let
   telescope-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
     name = "telescope.nvim";
     src = telescope-nvim;
+  };
+
+  nvim-dap-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "nvim-dap";
+    src = nvim-dap;
   };
 
   toggleterm-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
@@ -140,6 +146,7 @@ in {
     nvim-nightly
     plenary-plugin
     telescope-plugin
+    nvim-dap-plugin
     toggleterm-plugin
     ;
 }
