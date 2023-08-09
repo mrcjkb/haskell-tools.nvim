@@ -47,6 +47,7 @@ lazy.setup({
       -- 'nvim-telescope/telescope.nvim',
       -- 'akinsho/toggleterm.nvim',
     },
+    ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
   },
   -- Add any other plugins needed to reproduce the issue.
   -- see https://github.com/folke/lazy.nvim#-lazynvim for details.
