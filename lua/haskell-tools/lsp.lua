@@ -134,7 +134,12 @@ HlsTools.start = function(bufnr)
     settings = hls_settings,
     on_attach = function(client_id, buf)
       log.debug('LSP attach')
-      hls_opts.on_attach(client_id, buf, ht)
+      local ok, err = pcall(hls_opts.on_attach, client_id, buf, ht)
+      if not ok then
+        ---@cast err string
+        log.error { 'on_attach failed', err }
+        vim.notify('haskell-tools.lsp: Error in hls.on_attach: ' .. err)
+      end
       local function buf_refresh_codeLens()
         vim.schedule(function()
           for _, client in pairs(lsp_util.get_active_ht_clients(bufnr)) do

@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - By default, fall back to `haskell-language-server` if `haskell-language-server-wrapper`
   is not found [#233](https://github.com/mrcjkb/haskell-tools.nvim/issues/233).
 
+### Fixed
+- LSP client: Don't fail if `hls.on_attach` fails.
+
 ## [1.11.3] - 2023-08-06
 ### Fixed
 - Fix bug that broke codelens auto-refresh and lsp stop/restart [#229](https://github.com/mrcjkb/haskell-tools.nvim/issues/229).
