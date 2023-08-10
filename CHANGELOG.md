@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING: `haskell-tools` now
   automatically initialises and attaches when opening a Haskell or Cabal file.
   You can fine-tune this behaviour in the config.
+- BREAKING: Removed `haskell-tools.dap.nvim_dap` (copy of the `dap` module).
 - BREAKING configuration changes:
   - `hover.disable` has been changed to `hover.enable` for consistency.
   - `hls_log` (undocumented) has been moved to `hls.logfile`.

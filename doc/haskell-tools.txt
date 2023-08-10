@@ -292,12 +292,6 @@ HsDapLaunchConfiguration                              *HsDapLaunchConfiguration*
 HsDapTools                                                          *HsDapTools*
 
 
-HsDapTools.nvim_dap                                        *HsDapTools.nvim_dap*
-
-    Type: ~
-        (table)  A copy of the nvim-dap `dap` module
-
-
 AddDapConfigOpts                                              *AddDapConfigOpts*
 
     Fields: ~

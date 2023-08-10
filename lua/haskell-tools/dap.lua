@@ -79,29 +79,35 @@ end
 ---@type table<string, table>
 local _configuration_cache = {}
 
----@class HsDapTools
-local HsDapTools = nil
-
 if not deps.has('dap') then
-  return HsDapTools
+  ---@type HsDapTools
+  local NullHsDapTools = {
+    discover_configurations = function(_)
+      vim.notify_once('haskell-tools.dap: Failed to initialise. Is nvim-dap installed?', vim.log.levels.ERROR)
+    end,
+  }
+  return NullHsDapTools
 end
 
-local nvim_dap = require('dap')
+local dap = require('dap')
 
-HsDapTools = {}
+---@class HsDapTools
+local HsDapTools = {}
 
----@type table A copy of the nvim-dap `dap` module
-HsDapTools.nvim_dap = nvim_dap
 local HTConfig = require('haskell-tools.config.internal')
 local dap_opts = HTConfig.dap
-nvim_dap.adapters.ghc = {
+dap.adapters.ghc = {
   type = 'executable',
   command = table.concat(dap_opts.cmd, ' '),
 }
 
 ---@class AddDapConfigOpts
----@field autodetect boolean Whether to automatically detect launch configurations for the project
----@field settings_file_pattern string File name or pattern to search for. Defaults to 'launch.json'
+local DefaultAutoDapConfigOpts = {
+  ---@type boolean Whether to automatically detect launch configurations for the project
+  autodetect = true,
+  ---@type string File name or pattern to search for. Defaults to 'launch.json'
+  settings_file_pattern = 'launch.json',
+}
 
 ---Discover nvim-dap launch configurations for haskell-debug-adapter.
 ---@param bufnr number|nil The buffer number
@@ -110,11 +116,7 @@ nvim_dap.adapters.ghc = {
 HsDapTools.discover_configurations = function(bufnr, opts)
   async.run(function()
     bufnr = bufnr or 0 -- Default to current buffer
-    local default_opts = {
-      autodetect = true,
-      settings_file_pattern = 'launch.json',
-    }
-    opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
+    opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
     local filename = vim.api.nvim_buf_get_name(bufnr)
     local project_root = project_util.match_project_root(filename)
     if not project_root then
@@ -133,7 +135,7 @@ HsDapTools.discover_configurations = function(bufnr, opts)
     end
     _configuration_cache[project_root] = discovered_configurations
     ---@type HsDapLaunchConfiguration[]
-    local dap_configurations = nvim_dap.configurations.haskell or {}
+    local dap_configurations = dap.configurations.haskell or {}
     for _, cfg in ipairs(discovered_configurations) do
       for i, existing_config in pairs(dap_configurations) do
         if cfg.name == existing_config.name and cfg.startup == existing_config.startup then
@@ -142,7 +144,7 @@ HsDapTools.discover_configurations = function(bufnr, opts)
       end
       table.insert(dap_configurations, cfg)
     end
-    nvim_dap.configurations.haskell = dap_configurations
+    dap.configurations.haskell = dap_configurations
   end)
 end
 
