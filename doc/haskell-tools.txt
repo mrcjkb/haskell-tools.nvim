@@ -294,10 +294,6 @@ HsDapTools                                                          *HsDapTools*
 
 AddDapConfigOpts                                              *AddDapConfigOpts*
 
-    Fields: ~
-        {autodetect}             (boolean)  Whether to automatically detect launch configurations for the project
-        {settings_file_pattern}  (string)   File name or pattern to search for. Defaults to 'launch.json'
-
 
                                             *HsDapTools.discover_configurations*
 HsDapTools.discover_configurations({bufnr}, {opts})
