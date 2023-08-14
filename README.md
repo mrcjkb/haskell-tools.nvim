@@ -594,14 +594,11 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 ### Minimal config
 
 To troubleshoot this plugin with a minimal config in a temporary directory,
-you can try [minimal.lua](./tests/minimal.lua).
+you can try [minimal.lua](./troubleshooting/minimal.lua).
 
 ```console
 mkdir -p /tmp/minimal/
-# The first start will install the plugins into the temporary directory
-NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
-# Quit Neovim and start it up again with the plugins loaded
-NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
+NVIM_DATA_MINIMAL="/tmp/minimal" NVIM_APP_NAME="nvim-ht-minimal" nvim -u minimal.lua
 ```
 
 If you cannot reproduce your issue with a minimal config,

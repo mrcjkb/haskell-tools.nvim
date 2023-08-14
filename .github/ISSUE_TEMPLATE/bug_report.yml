@@ -24,18 +24,16 @@ body:
   - type: input
     attributes:
       label: "Output of `haskell-language-server-wrapper --version`"
-      placeholder: "1.9.0.0 (GHC: 9.2.4)"
+      placeholder: "2.1.0.0 (GHC: 9.2.8)"
   - type: textarea
     attributes:
       label: "How to reproduce the issue"
       description: |
-        Steps to reproduce using a [minimal config](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
+        Steps to reproduce using a [minimal config](https://github.com/mrcjkb/haskell-tools.nvim/blob/master/troubleshooting/minimal.lua).
       placeholder: |
         mkdir -p /tmp/minimal
-        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
-        :q
-        NVIM_DATA_MINIMAL=/tmp/minimal -u minimal.lua
-        :edit foo.hs
+        NVIM_DATA_MINIMAL=/tmp/minimal NVIM_APP_NAME="ht-nvim-minimal" -u minimal.lua
+        :edit Foo.hs
         4j
         :lua require('haskell-tools').hoogle_signature()
     validations:

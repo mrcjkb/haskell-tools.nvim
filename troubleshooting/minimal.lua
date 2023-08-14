@@ -3,6 +3,7 @@
 -- Start with
 --
 -- export NVIM_DATA_MINIMAL=$(mktemp -d)
+-- export NVIM_APP_NAME="nvim-ht-minimal"
 -- nvim -u minimal.lua
 --
 -- Then exit out of neovim and start again.
