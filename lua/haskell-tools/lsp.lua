@@ -6,8 +6,9 @@ local ht_util = require('haskell-tools.util')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
 local lsp_util = require('haskell-tools.lsp.util')
----@diagnostic disable-next-line: deprecated
-local uv = vim.uv or vim.loop
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
 
 ---@brief [[
 --- The following commands are available:

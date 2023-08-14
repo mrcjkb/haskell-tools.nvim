@@ -13,8 +13,9 @@ local deps = require('haskell-tools.deps')
 local ht_util = require('haskell-tools.util')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
----@diagnostic disable-next-line: deprecated
-local uv = vim.uv or vim.loop
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
 
 local Path = deps.require_plenary('plenary.path')
 

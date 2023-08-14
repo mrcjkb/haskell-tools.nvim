@@ -1,7 +1,8 @@
 ---@mod haskell-tools.log haskell-tools Logging
 
----@diagnostic disable-next-line: deprecated
-local uv = vim.uv or vim.loop
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
 
 ---@class HaskellToolsLog
 local HaskellToolsLog = {

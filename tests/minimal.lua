@@ -19,7 +19,10 @@ vim.opt.packpath:remove(pack_path)
 -- bootstrap lazy.nvim
 data_path = assert(os.getenv('NVIM_DATA_MINIMAL'), '$NVIM_DATA_MINIMAL environment variable not set!')
 local lazypath = data_path .. '/lazy/lazy.nvim'
-if not vim.uv.fs_stat(lazypath) then
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
+if not uv.fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',

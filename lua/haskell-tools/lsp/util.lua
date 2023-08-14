@@ -13,8 +13,9 @@ local HtUtil = require('haskell-tools.util')
 ---@class LspUtil
 local LspUtil = {}
 
----@diagnostic disable-next-line: deprecated
-LspUtil.get_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+LspUtil.get_clients = vim.lsp.get_clients
+  ---@diagnostic disable-next-line: deprecated
+  or vim.lsp.get_active_clients
 
 LspUtil.haskell_client_name = 'haskell-tools.nvim'
 LspUtil.cabal_client_name = 'haskell-tools.nvim (cabal)'

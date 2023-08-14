@@ -12,8 +12,9 @@ local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 local Path = require('plenary.path')
----@diagnostic disable-next-line: deprecated
-local uv = vim.uv or vim.loop
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
 
 --- Pretty-print a type signature
 --- @param sig string|nil The raw signature
