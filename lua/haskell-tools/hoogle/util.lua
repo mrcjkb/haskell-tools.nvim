@@ -34,7 +34,7 @@ function HoogleUtil.hoogle_attach_mappings(buf, map)
   map('i', '<C-b>', function()
     -- Open in browser
     local entry = actions_state.get_selected_entry()
-    HtUtil.open_browser(vim.fn.fnameescape(entry.url))
+    HtUtil.open_browser(vim.fn.fnameescape(entry.url) or entry.url)
   end)
   map('i', '<C-r>', function()
     -- Replace word under cursor

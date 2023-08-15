@@ -20,7 +20,12 @@
       flake = false;
     };
 
-    # inputs for tests
+    # inputs for tests and lints
+    neodev-nvim = {
+      url = "github:folke/neodev.nvim";
+      flake = false;
+    };
+
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
@@ -61,6 +66,7 @@
       inherit
         (inputs)
         self
+        neodev-nvim
         plenary-nvim
         telescope-nvim
         nvim-dap
@@ -109,6 +115,7 @@
                     "${pkgs.telescope-plugin}/lua"
                     "${pkgs.toggleterm-plugin}/lua"
                     "${pkgs.nvim-dap-plugin}/lua"
+                    "${pkgs.neodev-plugin}/types/nightly"
                   ];
                   checkThirdParty = false;
                   ignoreDir = [

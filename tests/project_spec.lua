@@ -1,6 +1,6 @@
 local Path = require('plenary.path')
 
-local cwd = vim.fn.getcwd()
+local cwd = vim.fn.getcwd() or '.'
 local cabal_project_root = cwd .. '/tests/fixtures/cabal/multi-package'
 local stack_project_root = cwd .. '/tests/fixtures/stack/multi-package'
 local invalid_project_path = '/some/invalid/path'

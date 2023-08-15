@@ -27,8 +27,8 @@ local HtProjectUtil = {}
 --- Taken from nvim-lspconfig
 local function strip_archive_subpath(path)
   -- Matches regex from zip.vim / tar.vim
-  path = vim.fn.substitute(path, 'zipfile://\\(.\\{-}\\)::[^\\\\].*$', '\\1', '')
-  path = vim.fn.substitute(path, 'tarfile:\\(.\\{-}\\)::.*$', '\\1', '')
+  path = vim.fn.substitute(path, 'zipfile://\\(.\\{-}\\)::[^\\\\].*$', '\\1', '') or path
+  path = vim.fn.substitute(path, 'tarfile:\\(.\\{-}\\)::.*$', '\\1', '') or path
   return path
 end
 

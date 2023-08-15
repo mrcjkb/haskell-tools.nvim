@@ -1,5 +1,6 @@
 {
   self,
+  neodev-nvim,
   plenary-nvim,
   telescope-nvim,
   nvim-dap,
@@ -9,6 +10,11 @@ with final.lib;
 with final.lib.strings;
 with final.stdenv; let
   nvim-nightly = final.neovim-nightly;
+
+  neodev-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "neodev.nvim";
+    src = neodev-nvim;
+  };
 
   plenary-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
     name = "plenary.nvim";
@@ -145,6 +151,7 @@ in {
   inherit
     nvim-nightly
     plenary-plugin
+    neodev-plugin
     telescope-plugin
     nvim-dap-plugin
     toggleterm-plugin
