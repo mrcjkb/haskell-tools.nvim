@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING configuration changes:
   - `hover.disable` has been changed to `hover.enable` for consistency.
   - `hls_log` (undocumented) has been moved to `hls.logfile`.
+- Repl: Add `--ghc-option -Wwarn` to `cabal repl` command.
 
 ### Added
 - Only attach cabal LSP clients if using `haskell-language-server > 1.9.0.0`.

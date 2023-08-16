@@ -50,7 +50,7 @@ end
 ---@param file string|nil
 ---@return string[]|nil command
 local function mk_cabal_repl_cmd(file)
-  return extend_repl_cmd({ 'cabal', 'repl' }, file)
+  return extend_repl_cmd({ 'cabal', 'repl', '--ghc-option', '-Wwarn' }, file)
 end
 
 ---Create a stack repl command for `file`.
