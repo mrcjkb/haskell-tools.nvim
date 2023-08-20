@@ -2,7 +2,8 @@
 
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log')
-local ht_util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
 local lsp_util = require('haskell-tools.lsp.util')
@@ -59,13 +60,13 @@ local handlers = {}
 local tools_opts = HTConfig.tools
 local definition_opts = tools_opts.definition or {}
 
-if ht_util.evaluate(definition_opts.hoogle_signature_fallback) then
+if HtUtil.evaluate(definition_opts.hoogle_signature_fallback) then
   local lsp_definition = require('haskell-tools.lsp.definition')
   log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
   handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)
 end
 local hover_opts = tools_opts.hover
-if ht_util.evaluate(hover_opts.enable) then
+if HtUtil.evaluate(hover_opts.enable) then
   local hover = require('haskell-tools.lsp.hover')
   handlers['textDocument/hover'] = hover.on_hover
 end
@@ -91,7 +92,7 @@ HlsTools.load_hls_settings = function(project_root, opts)
     return default_settings
   end
   local settings_json = results[1]
-  local content = ht_util.read_file(settings_json)
+  local content = OS.read_file(settings_json)
   local success, settings = pcall(vim.json.decode, content)
   if not success then
     local msg = 'Could not decode ' .. settings_json .. '. Falling back to default settings.'
@@ -117,7 +118,7 @@ HlsTools.start = function(bufnr)
     vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
     return
   end
-  local is_cabal = ht_util.is_cabal_file(bufnr)
+  local is_cabal = HtUtil.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
   local cmd = lsp_util.get_hls_cmd()
@@ -128,7 +129,7 @@ HlsTools.start = function(bufnr)
 
   local lsp_start_opts = {
     name = is_cabal and lsp_util.cabal_client_name or lsp_util.haskell_client_name,
-    cmd = ht_util.evaluate(cmd),
+    cmd = HtUtil.evaluate(cmd),
     root_dir = project_root,
     capabilities = hls_opts.capabilities,
     handlers = handlers,
@@ -152,7 +153,7 @@ HlsTools.start = function(bufnr)
         end)
       end
       local code_lens_opts = tools_opts.codeLens or {}
-      if ht_util.evaluate(code_lens_opts.autoRefresh) then
+      if HtUtil.evaluate(code_lens_opts.autoRefresh) then
         vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
           group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
           callback = buf_refresh_codeLens,

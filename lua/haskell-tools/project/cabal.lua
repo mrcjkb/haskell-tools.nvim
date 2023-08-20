@@ -8,7 +8,8 @@
 --- Helper functions related to cabal projects
 ---@brief ]]
 
-local ht_util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
 
 ---@class CabalProjectHelper
@@ -35,11 +36,11 @@ local function get_entrypoint_from_line(data, state)
   local lines = data.lines
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
-  local no_indent = ht_util.get_indent(line) == 0
+  local no_indent = HtUtil.get_indent(line) == 0
   if no_indent or idx == #lines then
     vim.list_extend(
       state.entry_points,
-      ht_util.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
+      HtUtil.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
     )
     state.mains = {}
     state.source_dirs = {}
@@ -84,13 +85,13 @@ local function parse_package_entrypoints(package_file)
   }
   local package_dir = vim.fn.fnamemodify(package_file, ':h') or package_file
   local entry_points = {}
-  local content = ht_util.read_file_async(package_file)
+  local content = OS.read_file_async(package_file)
   if not content then
     return entry_points
   end
   local lines = vim.split(content, '\n') or {}
   for idx, line in ipairs(lines) do
-    local is_comment = vim.startswith(ht_util.trim(line), '--')
+    local is_comment = vim.startswith(HtUtil.trim(line), '--')
     if not is_comment then
       ---@type CabalEntryPointParserData
       local data = {

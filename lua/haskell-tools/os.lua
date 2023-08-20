@@ -12,6 +12,10 @@ local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
 local log = require('haskell-tools.log')
 
+local uv = vim.uv
+  ---@diagnostic disable-next-line: deprecated
+  or vim.loop
+
 ---@class OS
 local OS = {}
 
@@ -41,6 +45,38 @@ OS.open_browser = function(url)
   local msg = 'No executable found to open the browser.'
   log.error(msg)
   vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
+end
+
+---Read the content of a file
+---@param filename string
+---@return string|nil content
+OS.read_file = function(filename)
+  local content
+  local f = io.open(filename, 'r')
+  if f then
+    content = f:read('*a')
+    f:close()
+  end
+  return content
+end
+
+---Asynchronously the content of a file
+---@param filename string
+---@return string|nil content
+---@async
+OS.read_file_async = function(filename)
+  local file_fd = uv.fs_open(filename, 'r', 438)
+  if not file_fd then
+    return nil
+  end
+  local stat = uv.fs_fstat(file_fd)
+  if not stat then
+    return nil
+  end
+  local data = uv.fs_read(file_fd, stat.size, 0)
+  uv.fs_close(file_fd)
+  ---@cast data string?
+  return data
 end
 
 return OS

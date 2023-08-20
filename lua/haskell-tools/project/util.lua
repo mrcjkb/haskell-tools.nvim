@@ -10,7 +10,8 @@
 
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local ht_util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
 local uv = vim.uv
@@ -197,7 +198,7 @@ end
 ---@async
 function HtProjectUtil.parse_package_paths(project_file)
   local package_paths = {}
-  local content = ht_util.read_file_async(project_file)
+  local content = OS.read_file_async(project_file)
   if not content then
     return package_paths
   end
@@ -213,7 +214,7 @@ function HtProjectUtil.parse_package_paths(project_file)
       end
     end
     if packages_start then
-      local trimmed = ht_util.trim(line)
+      local trimmed = HtUtil.trim(line)
       local pkg_rel_path = trimmed:match('/(.+)')
       local pkg_path = Path:new(project_dir, pkg_rel_path).filename
       if vim.fn.isdirectory(pkg_path) == 1 then

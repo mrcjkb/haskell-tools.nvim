@@ -11,7 +11,8 @@
 -- local ht_util = require('haskell-tools.util')
 -- local Path = require('plenary.path')
 
-local ht_util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
 
 ---@class StackProjectHelper
@@ -20,7 +21,7 @@ local StackProjectHelper = {}
 ---@param str string
 ---@return boolean is_yaml_comment
 local function is_yaml_comment(str)
-  return vim.startswith(ht_util.trim(str), '#')
+  return vim.startswith(HtUtil.trim(str), '#')
 end
 
 ---@class StackEntryPointParserData
@@ -47,7 +48,7 @@ local function parse_exe_list_line(data, state)
   local lines = data.lines
   local line = data.line
   local next_line = lines[idx + 1]
-  local indent = ht_util.get_indent(line)
+  local indent = HtUtil.get_indent(line)
   state.exe_indent = state.exe_indent or indent
   state.exe_name = indent == state.exe_indent and line:match('%s*(.+):') or state.exe_name
   if state.parsing_exe then
@@ -74,13 +75,13 @@ local function parse_exe_list_line(data, state)
       or (
         state.parsing_source_dirs
         and next_line
-        and (next_line:match('^%s+%-') or ht_util.get_indent(next_line) > indent)
+        and (next_line:match('^%s+%-') or HtUtil.get_indent(next_line) > indent)
       )
   end
-  if state.parsing_exe and (not next_line or ht_util.get_indent(next_line) == 0 or indent <= state.exe_indent) then
+  if state.parsing_exe and (not next_line or HtUtil.get_indent(next_line) == 0 or indent <= state.exe_indent) then
     vim.list_extend(
       state.entry_points,
-      ht_util.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
+      HtUtil.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
     )
     state.mains = {}
     state.source_dirs = {}
@@ -95,7 +96,7 @@ end
 local function get_entrypoint_from_line(data, state)
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
-  local indent = ht_util.get_indent(line)
+  local indent = HtUtil.get_indent(line)
   if indent == 0 then
     state.parsing_exe_list = false
     state.exe_indent = nil
@@ -119,7 +120,7 @@ local function parse_package_entrypoints(package_file)
     parsing_source_dirs = false,
   }
   local package_dir = vim.fn.fnamemodify(package_file, ':h') or package_file
-  local content = ht_util.read_file_async(package_file)
+  local content = OS.read_file_async(package_file)
   if not content then
     return state.entry_points
   end

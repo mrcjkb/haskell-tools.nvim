@@ -9,51 +9,9 @@
 ---@brief ]]
 
 local Path = require('plenary.path')
-local uv = vim.uv
-  ---@diagnostic disable-next-line: deprecated
-  or vim.loop
 
 ---@class HtUtil
 local HtUtil = {}
-
---- Quote a string
---- @param str string
---- @return string quoted_string
-HtUtil.quote = function(str)
-  return '"' .. str .. '"'
-end
-
----Read the content of a file
----@param filename string
----@return string|nil content
-HtUtil.read_file = function(filename)
-  local content
-  local f = io.open(filename, 'r')
-  if f then
-    content = f:read('*a')
-    f:close()
-  end
-  return content
-end
-
----Asynchronously the content of a file
----@param filename string
----@return string|nil content
----@async
-HtUtil.read_file_async = function(filename)
-  local file_fd = uv.fs_open(filename, 'r', 438)
-  if not file_fd then
-    return nil
-  end
-  local stat = uv.fs_fstat(file_fd)
-  if not stat then
-    return nil
-  end
-  local data = uv.fs_read(file_fd, stat.size, 0)
-  uv.fs_close(file_fd)
-  ---@cast data string?
-  return data
-end
 
 ---Trim leading and trailing whitespace.
 ---@param str string

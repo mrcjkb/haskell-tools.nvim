@@ -1,7 +1,7 @@
 ---@mod haskell-tools.dap haskell-tools nvim-dap setup
 
 local log = require('haskell-tools.log')
-local ht_util = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
 local project_util = require('haskell-tools.project.util')
 local Path = deps.require_plenary('plenary.path')
@@ -27,7 +27,7 @@ local function find_json_configurations(root_dir, opts)
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. root_dir)
   else
     for _, launch_json in pairs(results) do
-      local content = ht_util.read_file(launch_json)
+      local content = OS.read_file(launch_json)
       local success, settings = pcall(vim.json.decode, content)
       if not success then
         local msg = 'Could not decode ' .. launch_json .. '.'
