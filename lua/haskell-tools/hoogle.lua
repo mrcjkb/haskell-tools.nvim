@@ -2,7 +2,7 @@
 
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local ht_util = require('haskell-tools.util')
+local HtParser = require('haskell-tools.parser')
 local ht_lsp_util = require('haskell-tools.lsp.util')
 local lsp_util = vim.lsp.util
 
@@ -19,7 +19,7 @@ local function mk_lsp_hoogle_signature_handler(options)
     end
     local func_name = vim.fn.expand('<cword>')
     ---@cast func_name string
-    local signature_or_func_name = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
+    local signature_or_func_name = HtParser.try_get_signatures_from_markdown(func_name, result.contents.value)
       or func_name
     log.debug { 'Hoogle LSP signature search', signature_or_func_name }
     if signature_or_func_name ~= '' then
