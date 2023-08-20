@@ -5,18 +5,17 @@
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
---- General utility functions that may need to be moved somewhere else
+--- Helper functions for working with strings
 ---@brief ]]
 
----@class HtUtil
-local HtUtil = {}
+---@class StringsUtil
+local Strings = {}
 
----TODO: Move this to a "strings" module?
 ---Trim leading and trailing whitespace.
 ---@param str string
 ---@return string trimmed
-HtUtil.trim = function(str)
+Strings.trim = function(str)
   return (str:match('^%s*(.*)') or str):gsub('%s*$', '')
 end
 
-return HtUtil
+return Strings

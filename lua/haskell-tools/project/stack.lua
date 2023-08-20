@@ -11,7 +11,7 @@
 -- local ht_util = require('haskell-tools.util')
 -- local Path = require('plenary.path')
 
-local HtUtil = require('haskell-tools.util')
+local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
@@ -23,7 +23,7 @@ local StackProjectHelper = {}
 ---@param str string
 ---@return boolean is_yaml_comment
 local function is_yaml_comment(str)
-  return vim.startswith(HtUtil.trim(str), '#')
+  return vim.startswith(Strings.trim(str), '#')
 end
 
 ---@class StackEntryPointParserData

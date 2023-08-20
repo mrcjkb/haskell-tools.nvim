@@ -10,7 +10,7 @@
 
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local HtUtil = require('haskell-tools.util')
+local Strings = require('haskell-tools.strings')
 local OS = require('haskell-tools.os')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
@@ -214,7 +214,7 @@ function HtProjectUtil.parse_package_paths(project_file)
       end
     end
     if packages_start then
-      local trimmed = HtUtil.trim(line)
+      local trimmed = Strings.trim(line)
       local pkg_rel_path = trimmed:match('/(.+)')
       local pkg_path = Path:new(project_dir, pkg_rel_path).filename
       if vim.fn.isdirectory(pkg_path) == 1 then
