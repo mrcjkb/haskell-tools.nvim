@@ -11,13 +11,19 @@
 
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local ht_util = require('haskell-tools.util')
 
 local last_cmd = ''
 
 ---@param cmd string?
 local function is_new_cmd(cmd)
   return last_cmd ~= (cmd or '')
+end
+
+--- Quote a string
+--- @param str string
+--- @return string quoted_string
+local function quote(str)
+  return '"' .. str .. '"'
 end
 
 ---@param mk_repl_cmd fun(string?):string[]? Function for building the repl that takes an optional file path
@@ -71,7 +77,7 @@ return function(mk_repl_cmd, opts)
       vim.notify(err_msg, vim.log.levels.ERROR)
       return
     end
-    local cmd = mk_repl_cmd(filepath and ht_util.quote(filepath)) or {}
+    local cmd = mk_repl_cmd(filepath and quote(filepath)) or {}
     if #cmd == 0 then
       local err_msg = 'haskell-tools.repl.toggleterm: Could not create a repl command.'
       log.error(err_msg)
