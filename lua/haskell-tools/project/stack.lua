@@ -12,6 +12,7 @@
 -- local Path = require('plenary.path')
 
 local HtUtil = require('haskell-tools.util')
+local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
 
@@ -81,7 +82,7 @@ local function parse_exe_list_line(data, state)
   if state.parsing_exe and (not next_line or HtUtil.get_indent(next_line) == 0 or indent <= state.exe_indent) then
     vim.list_extend(
       state.entry_points,
-      HtUtil.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
+      Dap.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
     )
     state.mains = {}
     state.source_dirs = {}

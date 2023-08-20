@@ -9,6 +9,7 @@
 ---@brief ]]
 
 local HtUtil = require('haskell-tools.util')
+local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
 
@@ -40,7 +41,7 @@ local function get_entrypoint_from_line(data, state)
   if no_indent or idx == #lines then
     vim.list_extend(
       state.entry_points,
-      HtUtil.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
+      Dap.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
     )
     state.mains = {}
     state.source_dirs = {}
