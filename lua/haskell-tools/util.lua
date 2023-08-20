@@ -11,6 +11,7 @@
 ---@class HtUtil
 local HtUtil = {}
 
+---TODO: Move this to a "strings" module?
 ---Trim leading and trailing whitespace.
 ---@param str string
 ---@return string trimmed
@@ -18,6 +19,7 @@ HtUtil.trim = function(str)
   return (str:match('^%s*(.*)') or str):gsub('%s*$', '')
 end
 
+---TODO: Move this to a "types" module?
 ---Evaluate a value that may be a function
 ---or an evaluated value
 ---@generic T
