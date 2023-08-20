@@ -8,7 +8,7 @@
 --- Helper functions related to cabal projects
 ---@brief ]]
 
-local HtUtil = require('haskell-tools.util')
+local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
@@ -93,7 +93,7 @@ local function parse_package_entrypoints(package_file)
   end
   local lines = vim.split(content, '\n') or {}
   for idx, line in ipairs(lines) do
-    local is_comment = vim.startswith(HtUtil.trim(line), '--')
+    local is_comment = vim.startswith(Strings.trim(line), '--')
     if not is_comment then
       ---@type CabalEntryPointParserData
       local data = {
