@@ -43,4 +43,10 @@ HtParser.try_get_signatures_from_markdown = function(func_name, docs)
   return raw_func_sig and pp_signature(raw_func_sig), all_sigs
 end
 
+---@param str string
+---@return integer indent
+HtParser.get_indent = function(str)
+  return #(str:match('^(%s+)%S') or '')
+end
+
 return HtParser

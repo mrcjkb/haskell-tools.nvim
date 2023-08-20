@@ -18,12 +18,6 @@ HtUtil.trim = function(str)
   return (str:match('^%s*(.*)') or str):gsub('%s*$', '')
 end
 
----@param str string
----@return integer indent
-HtUtil.get_indent = function(str)
-  return #(str:match('^(%s+)%S') or '')
-end
-
 ---Evaluate a value that may be a function
 ---or an evaluated value
 ---@generic T

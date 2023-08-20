@@ -12,6 +12,7 @@
 -- local Path = require('plenary.path')
 
 local HtUtil = require('haskell-tools.util')
+local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
@@ -49,7 +50,7 @@ local function parse_exe_list_line(data, state)
   local lines = data.lines
   local line = data.line
   local next_line = lines[idx + 1]
-  local indent = HtUtil.get_indent(line)
+  local indent = HtParser.get_indent(line)
   state.exe_indent = state.exe_indent or indent
   state.exe_name = indent == state.exe_indent and line:match('%s*(.+):') or state.exe_name
   if state.parsing_exe then
@@ -76,10 +77,10 @@ local function parse_exe_list_line(data, state)
       or (
         state.parsing_source_dirs
         and next_line
-        and (next_line:match('^%s+%-') or HtUtil.get_indent(next_line) > indent)
+        and (next_line:match('^%s+%-') or HtParser.get_indent(next_line) > indent)
       )
   end
-  if state.parsing_exe and (not next_line or HtUtil.get_indent(next_line) == 0 or indent <= state.exe_indent) then
+  if state.parsing_exe and (not next_line or HtParser.get_indent(next_line) == 0 or indent <= state.exe_indent) then
     vim.list_extend(
       state.entry_points,
       Dap.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
@@ -97,7 +98,7 @@ end
 local function get_entrypoint_from_line(data, state)
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
-  local indent = HtUtil.get_indent(line)
+  local indent = HtParser.get_indent(line)
   if indent == 0 then
     state.parsing_exe_list = false
     state.exe_indent = nil

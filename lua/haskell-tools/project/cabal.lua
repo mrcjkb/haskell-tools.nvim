@@ -9,6 +9,7 @@
 ---@brief ]]
 
 local HtUtil = require('haskell-tools.util')
+local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
@@ -37,7 +38,7 @@ local function get_entrypoint_from_line(data, state)
   local lines = data.lines
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
-  local no_indent = HtUtil.get_indent(line) == 0
+  local no_indent = HtParser.get_indent(line) == 0
   if no_indent or idx == #lines then
     vim.list_extend(
       state.entry_points,
