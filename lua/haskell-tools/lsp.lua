@@ -3,6 +3,7 @@
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log')
 local HtUtil = require('haskell-tools.util')
+local HtProjectUtil = require('haskell-tools.project.util')
 local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
@@ -118,7 +119,7 @@ HlsTools.start = function(bufnr)
     vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
     return
   end
-  local is_cabal = HtUtil.is_cabal_file(bufnr)
+  local is_cabal = HtProjectUtil.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
   local cmd = lsp_util.get_hls_cmd()

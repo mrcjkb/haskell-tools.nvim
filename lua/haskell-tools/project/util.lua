@@ -261,4 +261,11 @@ function HtProjectUtil.parse_project_entrypoints(project_root)
   return cabal.parse_package_entrypoints(project_root)
 end
 
+---@param bufnr number The buffer number
+---@return boolean is_cabal_file
+HtProjectUtil.is_cabal_file = function(bufnr)
+  local filetype = vim.bo[bufnr].filetype
+  return filetype == 'cabal' or filetype == 'cabalproject'
+end
+
 return HtProjectUtil
