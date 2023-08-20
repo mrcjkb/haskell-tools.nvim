@@ -3,13 +3,13 @@
 local log = require('haskell-tools.log')
 local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
-local project_util = require('haskell-tools.project.util')
+local HtProjectHelpers = require('haskell-tools.project.helpers')
 local Path = deps.require_plenary('plenary.path')
 local async = deps.require_plenary('plenary.async')
 
 ---@param root_dir string
 local function get_ghci_dap_cmd(root_dir)
-  if project_util.is_cabal_project(root_dir) then
+  if HtProjectHelpers.is_cabal_project(root_dir) then
     return 'cabal exec -- ghci-dap --interactive -i ${workspaceFolder}'
   else
     return 'stack ghci --test --no-load --no-build --main-is TARGET --ghci-options -fprint-evld-with-show'
@@ -70,7 +70,7 @@ local function detect_launch_configurations(root_dir)
     }
     return HsDapLaunchConfiguration
   end
-  for _, entry_point in pairs(project_util.parse_project_entrypoints(root_dir)) do
+  for _, entry_point in pairs(HtProjectHelpers.parse_project_entrypoints(root_dir)) do
     table.insert(launch_configurations, mk_launch_configuration(entry_point))
   end
   return launch_configurations
@@ -118,7 +118,7 @@ HsDapTools.discover_configurations = function(bufnr, opts)
     bufnr = bufnr or 0 -- Default to current buffer
     opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
     local filename = vim.api.nvim_buf_get_name(bufnr)
-    local project_root = project_util.match_project_root(filename)
+    local project_root = HtProjectHelpers.match_project_root(filename)
     if not project_root then
       log.warn('haskell-tools.dap: Unable to detect project root for file ' .. filename)
       return

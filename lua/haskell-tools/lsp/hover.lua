@@ -10,7 +10,7 @@ local log = require('haskell-tools.log')
 local lsp_util = vim.lsp.util
 local HtParser = require('haskell-tools.parser')
 local OS = require('haskell-tools.os')
-local project_util = require('haskell-tools.project.util')
+local HtProjectHelpers = require('haskell-tools.project.helpers')
 
 local hover = {}
 
@@ -62,11 +62,11 @@ local function format_location(location, current_file)
     return formatted_location:sub(#current_file + 2)
   end
   local path = file_location .. '.hs'
-  local package_path = project_util.match_package_root(path)
+  local package_path = HtProjectHelpers.match_package_root(path)
   if package_path then
     return formatted_location:sub(#package_path + 2) -- trim package path + first '/'
   end
-  local project_path = project_util.match_project_root(path)
+  local project_path = HtProjectHelpers.match_project_root(path)
   if project_path then
     formatted_location = formatted_location:sub(#project_path + 2):gsub('/', ':', 1) -- trim project path + first '/'
   end

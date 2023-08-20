@@ -5,7 +5,7 @@
 ---@bruief ]]
 
 local log = require('haskell-tools.log')
-local HtProjectUtil = require('haskell-tools.project.util')
+local HtProjectHelpers = require('haskell-tools.project.helpers')
 local Types = require('haskell-tools.types.internal')
 
 ---Extend a repl command for `file`.
@@ -17,8 +17,8 @@ local function extend_repl_cmd(cmd, file)
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
     log.debug('extend_repl_cmd: No file specified. Using current buffer: ' .. file)
-    local project_root = HtProjectUtil.match_project_root(file)
-    local subpackage = project_root and HtProjectUtil.get_package_name(file)
+    local project_root = HtProjectHelpers.match_project_root(file)
+    local subpackage = project_root and HtProjectHelpers.get_package_name(file)
     if subpackage then
       table.insert(cmd, subpackage)
       log.debug { 'extend_repl_cmd: Extended cmd with package.', cmd }
@@ -29,8 +29,8 @@ local function extend_repl_cmd(cmd, file)
     end
   end
   log.debug('extend_repl_cmd: File: ' .. file)
-  local project_root = HtProjectUtil.match_project_root(file)
-  local subpackage = project_root and HtProjectUtil.get_package_name(file)
+  local project_root = HtProjectHelpers.match_project_root(file)
+  local subpackage = project_root and HtProjectHelpers.get_package_name(file)
   if not subpackage then
     log.debug { 'extend_repl_cmd: No package found.', cmd }
     return cmd
@@ -78,13 +78,13 @@ local function mk_repl_cmd(file)
   end
   local HTConfig = require('haskell-tools.config.internal')
   local opts = HTConfig.tools.repl
-  if Types.evaluate(opts.prefer) == 'stack' and HtProjectUtil.is_stack_project(chk_path) then
+  if Types.evaluate(opts.prefer) == 'stack' and HtProjectHelpers.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
-  if HtProjectUtil.is_cabal_project(chk_path) then
+  if HtProjectHelpers.is_cabal_project(chk_path) then
     return mk_cabal_repl_cmd(file)
   end
-  if HtProjectUtil.is_stack_project(chk_path) then
+  if HtProjectHelpers.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then

@@ -20,8 +20,8 @@ local uv = vim.uv
 
 local Path = deps.require_plenary('plenary.path')
 
----@class HtProjectUtil
-local HtProjectUtil = {}
+---@class HtProjectHelpers
+local HtProjectHelpers = {}
 
 ---@param path string
 ---@return string stripped_path For zipfile: or tarfile: virtual paths, returns the path to the archive. Other paths are returned unaltered.
@@ -112,33 +112,33 @@ local function escape_glob_wildcards(path)
 end
 
 ---Get the root of a cabal multi-package project for a path
-HtProjectUtil.match_cabal_multi_project_root = root_pattern('cabal.project')
+HtProjectHelpers.match_cabal_multi_project_root = root_pattern('cabal.project')
 
 ---Get the root of a cabal package for a path
-HtProjectUtil.match_cabal_package_root = root_pattern('*.cabal')
+HtProjectHelpers.match_cabal_package_root = root_pattern('*.cabal')
 
 ---Get the root of the cabal project for a path
 ---@param path string File path
-HtProjectUtil.match_cabal_project_root = function(path)
-  return HtProjectUtil.match_cabal_multi_project_root(path) or HtProjectUtil.match_cabal_package_root(path)
+HtProjectHelpers.match_cabal_project_root = function(path)
+  return HtProjectHelpers.match_cabal_multi_project_root(path) or HtProjectHelpers.match_cabal_package_root(path)
 end
 
 ---Get the root of the stack project for a path
-HtProjectUtil.match_stack_project_root = root_pattern('stack.yaml')
+HtProjectHelpers.match_stack_project_root = root_pattern('stack.yaml')
 
 ---Get the root of the project for a path
-HtProjectUtil.match_project_root = root_pattern('cabal.project', 'stack.yaml')
+HtProjectHelpers.match_project_root = root_pattern('cabal.project', 'stack.yaml')
 
 ---Get the root of the package for a path
-HtProjectUtil.match_package_root = root_pattern('*.cabal', 'package.yaml')
+HtProjectHelpers.match_package_root = root_pattern('*.cabal', 'package.yaml')
 
 ---Get the directory containing a haskell-language-server hie.yaml
-HtProjectUtil.match_hie_yaml = root_pattern('hie.yaml')
+HtProjectHelpers.match_hie_yaml = root_pattern('hie.yaml')
 
 ---Get the package.yaml for a given path
 ---@param path string
 ---@return string|nil package_yaml_path
-function HtProjectUtil.get_package_yaml(path)
+function HtProjectHelpers.get_package_yaml(path)
   local match = root_pattern('package.yaml')
   local dir = match(path)
   return dir and dir .. '/package.yaml'
@@ -147,7 +147,7 @@ end
 ---Get the *.cabal for a given path
 ---@param path string
 ---@return string|nil cabal_file_path
-function HtProjectUtil.get_package_cabal(path)
+function HtProjectHelpers.get_package_cabal(path)
   local match = root_pattern('*.cabal')
   local dir = match(path)
   if not dir then
@@ -164,7 +164,7 @@ end
 ---Is `path` part of a cabal project?
 ---@param path string
 ---@return boolean is_cabal_project
-function HtProjectUtil.is_cabal_project(path)
+function HtProjectHelpers.is_cabal_project(path)
   local get_root = root_pattern('*.cabal', 'cabal.project')
   if get_root(path) ~= nil then
     log.debug('Detected cabal project.')
@@ -176,8 +176,8 @@ end
 ---Is `path` part of a stack project?
 ---@param path string
 ---@return boolean is_stack_project
-function HtProjectUtil.is_stack_project(path)
-  if HtProjectUtil.match_stack_project_root(path) ~= nil then
+function HtProjectHelpers.is_stack_project(path)
+  if HtProjectHelpers.match_stack_project_root(path) ~= nil then
     log.debug('Detected stack project.')
     return true
   end
@@ -187,8 +187,8 @@ end
 ---Get the package name for a given path
 ---@param path string
 ---@return string|nil package_name
-function HtProjectUtil.get_package_name(path)
-  local package_path = HtProjectUtil.match_package_root(path)
+function HtProjectHelpers.get_package_name(path)
+  local package_path = HtProjectHelpers.match_package_root(path)
   return package_path and vim.fn.fnamemodify(package_path, ':t')
 end
 
@@ -196,7 +196,7 @@ end
 ---@param project_file string project file (cabal.project or stack.yaml)
 ---@return string[] package_paths
 ---@async
-function HtProjectUtil.parse_package_paths(project_file)
+function HtProjectHelpers.parse_package_paths(project_file)
   local package_paths = {}
   local content = OS.read_file_async(project_file)
   if not content then
@@ -232,8 +232,8 @@ end
 ---@param package_path string Path to a package directory
 ---@return HsEntryPoint[] entry_points
 ---@async
-function HtProjectUtil.parse_package_entrypoints(package_path)
-  if HtProjectUtil.is_cabal_project(package_path) then
+function HtProjectHelpers.parse_package_entrypoints(package_path)
+  if HtProjectHelpers.is_cabal_project(package_path) then
     return cabal.parse_package_entrypoints(package_path)
   end
   return stack.parse_package_entrypoints(package_path)
@@ -242,18 +242,18 @@ end
 ---@param project_root string Project root directory
 ---@return HsEntryPoint[]
 ---@async
-function HtProjectUtil.parse_project_entrypoints(project_root)
+function HtProjectHelpers.parse_project_entrypoints(project_root)
   local entry_points = {}
   local project_file = Path:new(project_root, 'cabal.project').filename
   if vim.fn.filereadable(project_file) == 1 then
-    for _, package_path in pairs(HtProjectUtil.parse_package_paths(project_file)) do
+    for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, cabal.parse_package_entrypoints(package_path))
     end
     return entry_points
   end
   project_file = Path:new(project_root, 'stack.yaml').filename
   if vim.fn.filereadable(project_file) == 1 then
-    for _, package_path in pairs(HtProjectUtil.parse_package_paths(project_file)) do
+    for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, stack.parse_package_entrypoints(package_path))
     end
     return entry_points
@@ -263,9 +263,9 @@ end
 
 ---@param bufnr number The buffer number
 ---@return boolean is_cabal_file
-HtProjectUtil.is_cabal_file = function(bufnr)
+HtProjectHelpers.is_cabal_file = function(bufnr)
   local filetype = vim.bo[bufnr].filetype
   return filetype == 'cabal' or filetype == 'cabalproject'
 end
 
-return HtProjectUtil
+return HtProjectHelpers
