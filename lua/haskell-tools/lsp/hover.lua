@@ -8,7 +8,8 @@
 
 local log = require('haskell-tools.log')
 local lsp_util = vim.lsp.util
-local ht_util = require('haskell-tools.util')
+local HtUtil = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 local project_util = require('haskell-tools.project.util')
 
 local hover = {}
@@ -119,7 +120,7 @@ function hover.on_hover(_, result, ctx, config)
   _state.commands = {}
   local func_name = vim.fn.expand('<cword>')
   ---@cast func_name string
-  local _, signatures = ht_util.try_get_signatures_from_markdown(func_name, result.contents.value)
+  local _, signatures = HtUtil.try_get_signatures_from_markdown(func_name, result.contents.value)
   for _, signature in pairs(signatures) do
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))
     table.insert(_state.commands, function()
@@ -146,7 +147,7 @@ function hover.on_hover(_, result, ctx, config)
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
       table.insert(_state.commands, function()
         log.debug { 'Hover: Open documentation in browser', uri }
-        ht_util.open_browser(uri)
+        OS.open_browser(uri)
       end)
     elseif vim.startswith(value, '[Source]') and not found_source then
       found_source = true
@@ -155,7 +156,7 @@ function hover.on_hover(_, result, ctx, config)
       local uri = string.match(value, '%[Source%]%((.+)%)')
       table.insert(_state.commands, function()
         log.debug { 'Hover: View source in browser', uri }
-        ht_util.open_browser(uri)
+        OS.open_browser(uri)
       end)
     end
     local location = string.match(value, '*Defined [ia][nt] (.+)')

@@ -9,7 +9,7 @@
 
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local util = require('haskell-tools.util')
+local OS = require('haskell-tools.os')
 
 ---@class WebHoogleHandler
 local WebHoogleHandler = {}
@@ -108,10 +108,10 @@ end
 ---@param opts TelescopeHoogleWebOpts|nil
 ---@return nil
 function WebHoogleHandler.browser_search(search_term, opts)
-  opts = util.tbl_merge(opts or {}, {
+  opts = vim.tbl_deep_extend('keep', opts or {}, {
     hoogle = { json = false },
   })
-  util.open_browser(mk_hoogle_request(search_term, opts))
+  OS.open_browser(mk_hoogle_request(search_term, opts))
 end
 
 return WebHoogleHandler

@@ -8,9 +8,6 @@
 --- General utility functions that may need to be moded somewhere else
 ---@brief ]]
 
-local log = require('haskell-tools.log')
-local deps = require('haskell-tools.deps')
-local Job = deps.require_plenary('plenary.job')
 local Path = require('plenary.path')
 local uv = vim.uv
   ---@diagnostic disable-next-line: deprecated
@@ -30,42 +27,6 @@ end
 
 ---@class HtUtil
 local HtUtil = {}
----Deep extend tables with the 'keep' behaviour
----@generic T1: table
----@generic T2: table
----@param ... T2 Two or more map-like tables
----@return T1|T2 The merged table
-HtUtil.tbl_merge = function(...)
-  return vim.tbl_deep_extend('keep', ...)
-end
-
----@param url string
----@return nil
-HtUtil.open_browser = function(url)
-  local browser_cmd
-  if vim.fn.has('unix') == 1 then
-    if vim.fn.executable('sensible-browser') == 1 then
-      browser_cmd = 'sensible-browser'
-    else
-      browser_cmd = 'xdg-open'
-    end
-  end
-  if vim.fn.has('mac') == 1 then
-    browser_cmd = 'open'
-  end
-  if browser_cmd and vim.fn.executable(browser_cmd) == 1 then
-    local job_opts = {
-      command = browser_cmd,
-      args = { url },
-    }
-    log.debug { 'Opening browser', job_opts }
-    Job:new(job_opts):start()
-    return
-  end
-  local msg = 'No executable found to open the browser.'
-  log.error(msg)
-  vim.notify('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
-end
 
 --- Get the type signature of the word under the cursor from markdown
 --- @param func_name string the name of the function
