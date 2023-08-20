@@ -1,6 +1,6 @@
 local HtParser = require('haskell-tools.parser')
 
-describe('Util:', function()
+describe('Parser:', function()
   it('Can get function signatures from LSP markdown docs', function()
     -- For some reason, [[ ]] strings do not work here.
     local doc = '```haskell\n'

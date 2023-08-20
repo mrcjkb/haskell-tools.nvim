@@ -27,7 +27,7 @@ describe('Project API', function()
   end)
 end)
 
-describe('Internal project utils:', function()
+describe('Internal project helpers:', function()
   local HtProjectHelpers = require('haskell-tools.project.helpers')
   describe('Cabal:', function()
     it('Can find project root.', function()

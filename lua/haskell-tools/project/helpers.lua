@@ -1,4 +1,4 @@
----@mod haskell-tools.project_util
+---@mod haskell-tools.project.helpers
 
 ---@brief [[
 

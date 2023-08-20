@@ -1,4 +1,4 @@
----@mod haskell-tools.util
+---@mod haskell-tools.strings
 
 ---@brief [[
 
