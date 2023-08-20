@@ -7,7 +7,7 @@ local HtProjectUtil = require('haskell-tools.project.util')
 local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
 local Path = deps.require_plenary('plenary.path')
-local lsp_util = require('haskell-tools.lsp.util')
+local LspHelpers = require('haskell-tools.lsp.helpers')
 local uv = vim.uv
   ---@diagnostic disable-next-line: deprecated
   or vim.loop
@@ -42,7 +42,7 @@ end
 ---@param client lsp.Client
 ---@return nil
 local function fix_cabal_client(client)
-  if client.name == lsp_util.cabal_client_name and client.server_capabilities then
+  if client.name == LspHelpers.cabal_client_name and client.server_capabilities then
     client.server_capabilities = vim.tbl_extend('force', client.server_capabilities, {
       foldingRangeProvider = false,
       selectionRangeProvider = false,
@@ -122,14 +122,14 @@ HlsTools.start = function(bufnr)
   local is_cabal = HtProjectUtil.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
-  local cmd = lsp_util.get_hls_cmd()
+  local cmd = LspHelpers.get_hls_cmd()
   local hls_bin = cmd[1]
   if vim.fn.executable(hls_bin) == 0 then
     log.warn('Executable ' .. hls_bin .. ' not found.')
   end
 
   local lsp_start_opts = {
-    name = is_cabal and lsp_util.cabal_client_name or lsp_util.haskell_client_name,
+    name = is_cabal and LspHelpers.cabal_client_name or LspHelpers.haskell_client_name,
     cmd = Types.evaluate(cmd),
     root_dir = project_root,
     capabilities = hls_opts.capabilities,
@@ -145,7 +145,7 @@ HlsTools.start = function(bufnr)
       end
       local function buf_refresh_codeLens()
         vim.schedule(function()
-          for _, client in pairs(lsp_util.get_active_ht_clients(bufnr)) do
+          for _, client in pairs(LspHelpers.get_active_ht_clients(bufnr)) do
             if client.server_capabilities.codeLensProvider then
               vim.lsp.codelens.refresh()
               return
@@ -178,7 +178,7 @@ end
 ---@return table[] clients A list of clients that will be stopped
 HlsTools.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local clients = lsp_util.get_active_ht_clients(bufnr)
+  local clients = LspHelpers.get_active_ht_clients(bufnr)
   vim.lsp.stop_client(clients)
   return clients
 end

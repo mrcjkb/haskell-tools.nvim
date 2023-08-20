@@ -11,7 +11,7 @@
 local HTConfig = require('haskell-tools.config.internal')
 local Types = require('haskell-tools.types.internal')
 local HtProjectUtil = require('haskell-tools.project.util')
-local LspUtil = require('haskell-tools.lsp.util')
+local LspHelpers = require('haskell-tools.lsp.helpers')
 local HaskellTools = require('haskell-tools')
 
 ---@class InternalApi
@@ -23,7 +23,7 @@ local function buf_is_lsp_supported()
   if not HtProjectUtil.is_cabal_file(bufnr) then
     return true
   end
-  return LspUtil.is_hls_version_with_cabal_support()
+  return LspHelpers.is_hls_version_with_cabal_support()
 end
 
 ---Starts or attaches an LSP client to the current buffer and sets up the plugin if necessary.

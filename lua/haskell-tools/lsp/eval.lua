@@ -8,7 +8,7 @@
 ---@brief ]]
 local eval = {}
 
-local lsp_util = require('haskell-tools.lsp.util')
+local LspHelpers = require('haskell-tools.lsp.helpers')
 
 ---@param bufnr number The buffer number
 ---@return table[] The `evalCommand` lenses, in reverse order
@@ -42,7 +42,7 @@ end
 ---@return nil
 function eval.all(bufnr)
   bufnr = bufnr or vim.api.nvim_win_get_buf(0)
-  local clients = lsp_util.get_active_ht_clients(bufnr)
+  local clients = LspHelpers.get_active_ht_clients(bufnr)
   if not clients or #clients == 0 then
     return
   end

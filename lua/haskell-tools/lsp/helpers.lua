@@ -1,37 +1,37 @@
----@mod haskell-tools.lsp.util
+---@mod haskell-tools.lsp.helpers
 
 ---@brief [[
 
 ---WARNING: This is not part of the public API.
 ---Breaking changes to this module will not be reflected in the semantic versioning of this plugin.
 
---- LSP utilities
+--- LSP helper functions
 ---@brief ]]
 
 local Types = require('haskell-tools.types.internal')
 
----@class LspUtil
-local LspUtil = {}
+---@class LspHelpers
+local LspHelpers = {}
 
-LspUtil.get_clients = vim.lsp.get_clients
+LspHelpers.get_clients = vim.lsp.get_clients
   ---@diagnostic disable-next-line: deprecated
   or vim.lsp.get_active_clients
 
-LspUtil.haskell_client_name = 'haskell-tools.nvim'
-LspUtil.cabal_client_name = 'haskell-tools.nvim (cabal)'
+LspHelpers.haskell_client_name = 'haskell-tools.nvim'
+LspHelpers.cabal_client_name = 'haskell-tools.nvim (cabal)'
 
 ---@param bufnr number the buffer to get clients for
 ---@return lsp.Client[] haskell_clients
 ---@see util.get_clients
-function LspUtil.get_active_haskell_clients(bufnr)
-  return LspUtil.get_clients { bufnr = bufnr, name = LspUtil.haskell_client_name }
+function LspHelpers.get_active_haskell_clients(bufnr)
+  return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.haskell_client_name }
 end
 
 ---@param bufnr number the buffer to get clients for
 ---@return lsp.Client[] cabal_clinets
 ---@see util.get_clients
-function LspUtil.get_active_cabal_clients(bufnr)
-  return LspUtil.get_clients { bufnr = bufnr, name = LspUtil.cabal_client_name }
+function LspHelpers.get_active_cabal_clients(bufnr)
+  return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.cabal_client_name }
 end
 
 ---@param bufnr number the buffer to get clients for
@@ -39,15 +39,15 @@ end
 ---@see util.get_clients
 ---@see util.get_active_haskell_clients
 ---@see util.get_active_cabal_clients
-function LspUtil.get_active_ht_clients(bufnr)
+function LspHelpers.get_active_ht_clients(bufnr)
   local clients = {}
-  vim.list_extend(clients, LspUtil.get_active_haskell_clients(bufnr))
-  vim.list_extend(clients, LspUtil.get_active_cabal_clients(bufnr))
+  vim.list_extend(clients, LspHelpers.get_active_haskell_clients(bufnr))
+  vim.list_extend(clients, LspHelpers.get_active_cabal_clients(bufnr))
   return clients
 end
 
 ---@return string[] cmd The command to invoke haskell-language-server
-LspUtil.get_hls_cmd = function()
+LspHelpers.get_hls_cmd = function()
   local HTConfig = require('haskell-tools.config.internal')
   local cmd = Types.evaluate(HTConfig.hls.cmd)
   ---@cast cmd string[]
@@ -59,7 +59,7 @@ end
 ---Returns nil if the hls version cannot be determined.
 ---@return number[]|nil hls_version The haskell-language-server version
 local function get_hls_version()
-  local hls_bin = LspUtil.get_hls_cmd()[1]
+  local hls_bin = LspHelpers.get_hls_cmd()[1]
   if vim.fn.executable(hls_bin) ~= 1 then
     return nil
   end
@@ -88,7 +88,7 @@ local function get_hls_version()
 end
 
 ---@return boolean
-LspUtil.is_hls_version_with_cabal_support = function()
+LspHelpers.is_hls_version_with_cabal_support = function()
   local version = get_hls_version()
   -- XXX: If the version cannot be parsed, we assume it supports
   --- cabal (in case there is a newer version that we cannot
@@ -96,4 +96,4 @@ LspUtil.is_hls_version_with_cabal_support = function()
   return version == nil or version[1] > 1 or version[2] >= 9
 end
 
-return LspUtil
+return LspHelpers

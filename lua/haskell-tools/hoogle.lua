@@ -3,7 +3,7 @@
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
 local HtParser = require('haskell-tools.parser')
-local ht_lsp_util = require('haskell-tools.lsp.util')
+local LspHelpers = require('haskell-tools.lsp.helpers')
 local lsp_util = vim.lsp.util
 
 ---@type fun(sig_or_func_name:string, options:table|nil):nil
@@ -99,7 +99,7 @@ HoogleTools.hoogle_signature = function(options)
     handler(options.search_term)
     return
   end
-  local clients = ht_lsp_util.get_clients { bufnr = vim.api.nvim_get_current_buf() }
+  local clients = LspHelpers.get_clients { bufnr = vim.api.nvim_get_current_buf() }
   if #clients > 0 then
     lsp_hoogle_signature(options)
   else
