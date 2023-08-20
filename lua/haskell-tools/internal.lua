@@ -9,7 +9,7 @@
 ---@brief ]]
 
 local HTConfig = require('haskell-tools.config.internal')
-local HtUtil = require('haskell-tools.util')
+local Types = require('haskell-tools.types.internal')
 local HtProjectUtil = require('haskell-tools.project.util')
 local LspUtil = require('haskell-tools.lsp.util')
 local HaskellTools = require('haskell-tools')
@@ -49,10 +49,10 @@ end
 ---ht.start_or_attach()
 ---@usage ]]
 function InternalApi.start_or_attach()
-  if HtUtil.evaluate(HTConfig.hls.auto_attach) and buf_is_lsp_supported() then
+  if Types.evaluate(HTConfig.hls.auto_attach) and buf_is_lsp_supported() then
     HaskellTools.lsp.start()
   end
-  if HtUtil.evaluate(HTConfig.tools.tags.enable) then
+  if Types.evaluate(HTConfig.tools.tags.enable) then
     HaskellTools.tags.generate_project_tags(nil, { refresh = false })
   end
 end

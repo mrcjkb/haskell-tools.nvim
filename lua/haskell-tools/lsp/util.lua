@@ -8,7 +8,7 @@
 --- LSP utilities
 ---@brief ]]
 
-local HtUtil = require('haskell-tools.util')
+local Types = require('haskell-tools.types.internal')
 
 ---@class LspUtil
 local LspUtil = {}
@@ -49,7 +49,7 @@ end
 ---@return string[] cmd The command to invoke haskell-language-server
 LspUtil.get_hls_cmd = function()
   local HTConfig = require('haskell-tools.config.internal')
-  local cmd = HtUtil.evaluate(HTConfig.hls.cmd)
+  local cmd = Types.evaluate(HTConfig.hls.cmd)
   ---@cast cmd string[]
   assert(type(cmd) == 'table', 'haskell-tools: hls.cmd should evaluate to a string[]')
   assert(#cmd > 1, 'haskell-tools: hls.cmd evaluates to an empty list.')

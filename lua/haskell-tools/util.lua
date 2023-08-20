@@ -19,17 +19,4 @@ HtUtil.trim = function(str)
   return (str:match('^%s*(.*)') or str):gsub('%s*$', '')
 end
 
----TODO: Move this to a "types" module?
----Evaluate a value that may be a function
----or an evaluated value
----@generic T
----@param value (fun():T)|T
----@return T
-HtUtil.evaluate = function(value)
-  if type(value) == 'function' then
-    return value()
-  end
-  return value
-end
-
 return HtUtil

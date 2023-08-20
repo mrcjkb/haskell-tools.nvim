@@ -9,7 +9,7 @@
 
 local health = {}
 
-local ht_util = require('haskell-tools.util')
+local Types = require('haskell-tools.types.internal')
 local deps = require('haskell-tools.deps')
 local HTConfig = require('haskell-tools.config.internal')
 local h = vim.health or require('health')
@@ -65,7 +65,7 @@ local external_dependencies = {
       if not HTConfig then
         return default
       end
-      local cmd = ht_util.evaluate(HTConfig.hls.cmd)
+      local cmd = Types.evaluate(HTConfig.hls.cmd)
       if not cmd or #cmd == 0 then
         return default
       end

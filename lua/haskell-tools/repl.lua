@@ -5,8 +5,8 @@
 ---@bruief ]]
 
 local log = require('haskell-tools.log')
-local project = require('haskell-tools.project.util')
-local ht_util = require('haskell-tools.util')
+local HtProjectUtil = require('haskell-tools.project.util')
+local Types = require('haskell-tools.types.internal')
 
 ---Extend a repl command for `file`.
 ---If `file` is `nil`, create a repl the nearest package.
@@ -17,8 +17,8 @@ local function extend_repl_cmd(cmd, file)
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
     log.debug('extend_repl_cmd: No file specified. Using current buffer: ' .. file)
-    local project_root = project.match_project_root(file)
-    local subpackage = project_root and project.get_package_name(file)
+    local project_root = HtProjectUtil.match_project_root(file)
+    local subpackage = project_root and HtProjectUtil.get_package_name(file)
     if subpackage then
       table.insert(cmd, subpackage)
       log.debug { 'extend_repl_cmd: Extended cmd with package.', cmd }
@@ -29,8 +29,8 @@ local function extend_repl_cmd(cmd, file)
     end
   end
   log.debug('extend_repl_cmd: File: ' .. file)
-  local project_root = project.match_project_root(file)
-  local subpackage = project_root and project.get_package_name(file)
+  local project_root = HtProjectUtil.match_project_root(file)
+  local subpackage = project_root and HtProjectUtil.get_package_name(file)
   if not subpackage then
     log.debug { 'extend_repl_cmd: No package found.', cmd }
     return cmd
@@ -78,13 +78,13 @@ local function mk_repl_cmd(file)
   end
   local HTConfig = require('haskell-tools.config.internal')
   local opts = HTConfig.tools.repl
-  if ht_util.evaluate(opts.prefer) == 'stack' and project.is_stack_project(chk_path) then
+  if Types.evaluate(opts.prefer) == 'stack' and HtProjectUtil.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
-  if project.is_cabal_project(chk_path) then
+  if HtProjectUtil.is_cabal_project(chk_path) then
     return mk_cabal_repl_cmd(file)
   end
-  if project.is_stack_project(chk_path) then
+  if HtProjectUtil.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
@@ -103,7 +103,7 @@ local opts = HTConfig.tools.repl
 ---@type ReplHandlerImpl
 local handler
 
-local handler_type = ht_util.evaluate(opts.handler)
+local handler_type = Types.evaluate(opts.handler)
 ---@cast handler_type ReplHandler
 if handler_type == 'toggleterm' then
   log.info('handler = toggleterm')

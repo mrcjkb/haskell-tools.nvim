@@ -103,8 +103,8 @@ local HTDefaultConfig = {
   hls = {
     ---@type boolean | (fun():boolean) Whether to automatically attach the LSP client. Defaults to `true` if the haskell-language-server executable is found.
     auto_attach = function()
-      local util = require('haskell-tools.util')
-      local cmd = util.evaluate(HTConfig.hls.cmd)
+      local Types = require('haskell-tools.types.internal')
+      local cmd = Types.evaluate(HTConfig.hls.cmd)
       ---@cast cmd string[]
       local hls_bin = cmd[1]
       return vim.fn.executable(hls_bin) ~= 0

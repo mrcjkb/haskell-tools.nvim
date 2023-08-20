@@ -2,7 +2,7 @@
 
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log')
-local HtUtil = require('haskell-tools.util')
+local Types = require('haskell-tools.types.internal')
 local HtProjectUtil = require('haskell-tools.project.util')
 local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
@@ -61,13 +61,13 @@ local handlers = {}
 local tools_opts = HTConfig.tools
 local definition_opts = tools_opts.definition or {}
 
-if HtUtil.evaluate(definition_opts.hoogle_signature_fallback) then
+if Types.evaluate(definition_opts.hoogle_signature_fallback) then
   local lsp_definition = require('haskell-tools.lsp.definition')
   log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
   handlers['textDocument/definition'] = lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)
 end
 local hover_opts = tools_opts.hover
-if HtUtil.evaluate(hover_opts.enable) then
+if Types.evaluate(hover_opts.enable) then
   local hover = require('haskell-tools.lsp.hover')
   handlers['textDocument/hover'] = hover.on_hover
 end
@@ -130,7 +130,7 @@ HlsTools.start = function(bufnr)
 
   local lsp_start_opts = {
     name = is_cabal and lsp_util.cabal_client_name or lsp_util.haskell_client_name,
-    cmd = HtUtil.evaluate(cmd),
+    cmd = Types.evaluate(cmd),
     root_dir = project_root,
     capabilities = hls_opts.capabilities,
     handlers = handlers,
@@ -154,7 +154,7 @@ HlsTools.start = function(bufnr)
         end)
       end
       local code_lens_opts = tools_opts.codeLens or {}
-      if HtUtil.evaluate(code_lens_opts.autoRefresh) then
+      if Types.evaluate(code_lens_opts.autoRefresh) then
         vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
           group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
           callback = buf_refresh_codeLens,

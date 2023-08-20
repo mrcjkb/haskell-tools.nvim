@@ -1,10 +1,10 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
 local HTConfig = require('haskell-tools.config.internal')
-local ht_util = require('haskell-tools.util')
+local Types = require('haskell-tools.types.internal')
 local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local project_util = require('haskell-tools.project.util')
+local HtProjectUtil = require('haskell-tools.project.util')
 
 local _state = {
   fast_tags_generating = false,
@@ -29,7 +29,7 @@ local FastTagsTools = {}
 FastTagsTools.generate_project_tags = function(path, opts)
   path = path or vim.api.nvim_buf_get_name(0)
   opts = vim.tbl_extend('force', { refresh = true }, opts or {})
-  local project_root = project_util.match_project_root(path) or vim.fn.getcwd() or 'UNDEFINED'
+  local project_root = HtProjectUtil.match_project_root(path) or vim.fn.getcwd() or 'UNDEFINED'
   if opts.refresh == false and _state.projects[project_root] then
     log.debug('Project tags already generated. Skipping.')
     return
@@ -57,13 +57,13 @@ end
 FastTagsTools.generate_package_tags = function(path)
   path = path or vim.api.nvim_buf_get_name(0)
   _state.fast_tags_generating = true
-  local rel_package_root = project_util.match_package_root(path)
+  local rel_package_root = HtProjectUtil.match_package_root(path)
   if not rel_package_root then
     log.warn('generate_package_tags: No rel_package root found.')
     return
   end
   local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
-  local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
+  local project_root = HtProjectUtil.match_project_root(path) or vim.fn.getcwd()
   if not package_root then
     log.warn('generate_package_tags: No package root found.')
     return
@@ -83,7 +83,7 @@ FastTagsTools.generate_package_tags = function(path)
   end)
 end
 
-if not ht_util.evaluate(config.enable) then
+if not Types.evaluate(config.enable) then
   return
 end
 
