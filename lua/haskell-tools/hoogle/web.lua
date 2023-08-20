@@ -55,7 +55,7 @@ if deps.has_telescope() then
   local pickers = deps.require_telescope('telescope.pickers')
   local finders = deps.require_telescope('telescope.finders')
   local previewers = deps.require_telescope('telescope.previewers')
-  local hoogle_util = require('haskell-tools.hoogle.util')
+  local HoogleHelpers = require('haskell-tools.hoogle.helpers')
   local async = deps.require_plenary('plenary.async')
 
   local curl = deps.require_plenary('plenary.curl')
@@ -93,11 +93,11 @@ if deps.has_telescope() then
           prompt_title = 'Hoogle: ' .. search_term,
           finder = finders.new_table {
             results = results,
-            entry_maker = hoogle_util.mk_hoogle_entry,
+            entry_maker = HoogleHelpers.mk_hoogle_entry,
           },
           sorter = config.generic_sorter(opts),
           previewer = previewers.display_content.new(opts),
-          attach_mappings = hoogle_util.hoogle_attach_mappings,
+          attach_mappings = HoogleHelpers.hoogle_attach_mappings,
         })
         :find()
     end)

@@ -44,7 +44,7 @@ end
 local pickers = deps.require_telescope('telescope.pickers')
 local finders = deps.require_telescope('telescope.finders')
 local previewers = deps.require_telescope('telescope.previewers')
-local hoogle_util = require('haskell-tools.hoogle.util')
+local HoogleHelpers = require('haskell-tools.hoogle.helpers')
 local Job = deps.require_plenary('plenary.job')
 
 ---@param search_term string The Hoogle search term
@@ -52,7 +52,7 @@ local Job = deps.require_plenary('plenary.job')
 ---@return nil
 function HoogleLocal.telescope_search(search_term, opts)
   opts = opts or {}
-  opts.entry_maker = opts.entry_maker or hoogle_util.mk_hoogle_entry
+  opts.entry_maker = opts.entry_maker or HoogleHelpers.mk_hoogle_entry
   local config = deps.require_telescope('telescope.config').values
   if not config then
     local msg = 'telescope.nvim has not been setup.'
@@ -90,10 +90,10 @@ function HoogleLocal.telescope_search(search_term, opts)
             sorter = config.generic_sorter(opts),
             finder = finders.new_table {
               results = results,
-              entry_maker = hoogle_util.mk_hoogle_entry,
+              entry_maker = HoogleHelpers.mk_hoogle_entry,
             },
             previewer = previewers.display_content.new(opts),
-            attach_mappings = hoogle_util.hoogle_attach_mappings,
+            attach_mappings = HoogleHelpers.hoogle_attach_mappings,
           })
           :find()
       end)

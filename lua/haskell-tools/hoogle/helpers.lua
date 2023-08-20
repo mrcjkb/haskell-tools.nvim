@@ -1,4 +1,4 @@
----@mod haskell-tools.hoogle.util
+---@mod haskell-tools.hoogle.helpers
 
 ---@brief [[
 
@@ -17,13 +17,13 @@ local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
----@class HoogleUtil
-local HoogleUtil = {}
+---@class HoogleHelpers
+local HoogleHelpers = {}
 
 ---@param buf number the telescope buffebuffer numberr
 ---@param map fun(mode:string,keys:string,action:function) callback for creating telescope keymaps
 ---@return boolean
-function HoogleUtil.hoogle_attach_mappings(buf, map)
+function HoogleHelpers.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     -- Copy type signature to clipboard
     local entry = actions_state.get_selected_entry()
@@ -121,7 +121,7 @@ end
 
 ---@param data HoogleData
 ---@return TelescopeHoogleEntry|nil
-function HoogleUtil.mk_hoogle_entry(data)
+function HoogleHelpers.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''
   if not module_name or not type_sig then
@@ -140,4 +140,4 @@ function HoogleUtil.mk_hoogle_entry(data)
   }
 end
 
-return HoogleUtil
+return HoogleHelpers
