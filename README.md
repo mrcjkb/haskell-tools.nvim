@@ -30,14 +30,6 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-16-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
->**Warning**
->
-> This is the **work in progress** 2.x.x branch.
-> It is ready for use, but I am dogfeeding it before
-> merging it into `master`.
->
-> Use at your own risk!
-
 ## Quick Links
 
 - [Installation](#installation)
@@ -579,10 +571,6 @@ require('telescope').load_extension('ht')
 ## Troubleshooting
 
 For a health check, run `:checkhealth haskell-tools`
-
-### `vim.g.haskell_tools` options are not being used
-
-- Make sure you set `vim.g.haskell_tools` before calling `require('haskell-tools')`.
 
 ### LSP features not working
 
