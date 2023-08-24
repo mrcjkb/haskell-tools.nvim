@@ -5,7 +5,6 @@
 ---@bruief ]]
 
 local log = require('haskell-tools.log')
-local HtProjectHelpers = require('haskell-tools.project.helpers')
 local Types = require('haskell-tools.types.internal')
 
 ---Extend a repl command for `file`.
@@ -14,6 +13,7 @@ local Types = require('haskell-tools.types.internal')
 ---@param file string|nil An optional project file
 ---@return string[]|nil
 local function extend_repl_cmd(cmd, file)
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   if file == nil then
     file = vim.api.nvim_buf_get_name(0)
     log.debug('extend_repl_cmd: No file specified. Using current buffer: ' .. file)
@@ -78,6 +78,7 @@ local function mk_repl_cmd(file)
   end
   local HTConfig = require('haskell-tools.config.internal')
   local opts = HTConfig.tools.repl
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   if Types.evaluate(opts.prefer) == 'stack' and HtProjectHelpers.is_stack_project(chk_path) then
     return mk_stack_repl_cmd(file)
   end

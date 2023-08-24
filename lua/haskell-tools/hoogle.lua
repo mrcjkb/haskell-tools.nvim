@@ -1,9 +1,6 @@
 ---@mod haskell-tools.hoogle haskell-tools Hoogle search
 
 local log = require('haskell-tools.log')
-local deps = require('haskell-tools.deps')
-local HtParser = require('haskell-tools.parser')
-local LspHelpers = require('haskell-tools.lsp.helpers')
 local lsp_util = vim.lsp.util
 
 ---@type fun(sig_or_func_name:string, options:table|nil):nil
@@ -19,6 +16,7 @@ local function mk_lsp_hoogle_signature_handler(options)
     end
     local func_name = vim.fn.expand('<cword>')
     ---@cast func_name string
+    local HtParser = require('haskell-tools.parser')
     local signature_or_func_name = HtParser.try_get_signatures_from_markdown(func_name, result.contents.value)
       or func_name
     log.debug { 'Hoogle LSP signature search', signature_or_func_name }
@@ -67,6 +65,7 @@ elseif opts.mode == 'telescope-local' then
     set_web_handler()
     return
   end
+  local deps = require('haskell-tools.deps')
   if not deps.has_telescope() then
     local msg = 'handler set to "telescope-local" but telescope.nvim is not installed.'
     log.warn(msg)
@@ -78,6 +77,7 @@ elseif opts.mode == 'telescope-local' then
 elseif opts.mode == 'browser' then
   set_browser_handler()
 elseif opts.mode == 'auto' then
+  local deps = require('haskell-tools.deps')
   if not deps.has_telescope() then
     set_browser_handler()
   elseif hoogle_local.has_hoogle() then
@@ -99,6 +99,7 @@ HoogleTools.hoogle_signature = function(options)
     handler(options.search_term)
     return
   end
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   local clients = LspHelpers.get_clients { bufnr = vim.api.nvim_get_current_buf() }
   if #clients > 0 then
     lsp_hoogle_signature(options)

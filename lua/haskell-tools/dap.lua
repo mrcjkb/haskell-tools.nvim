@@ -1,14 +1,10 @@
 ---@mod haskell-tools.dap haskell-tools nvim-dap setup
 
-local log = require('haskell-tools.log')
-local OS = require('haskell-tools.os')
 local deps = require('haskell-tools.deps')
-local HtProjectHelpers = require('haskell-tools.project.helpers')
-local Path = deps.require_plenary('plenary.path')
-local async = deps.require_plenary('plenary.async')
 
 ---@param root_dir string
 local function get_ghci_dap_cmd(root_dir)
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   if HtProjectHelpers.is_cabal_project(root_dir) then
     return 'cabal exec -- ghci-dap --interactive -i ${workspaceFolder}'
   else
@@ -22,11 +18,14 @@ end
 local function find_json_configurations(root_dir, opts)
   ---@type HsDapLaunchConfiguration[]
   local configurations = {}
+  local Path = deps.require_plenary('plenary.path')
+  local log = require('haskell-tools.log')
   local results = vim.fn.glob(Path:new(root_dir, opts.settings_file_pattern).filename, true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. root_dir)
   else
     for _, launch_json in pairs(results) do
+      local OS = require('haskell-tools.os')
       local content = OS.read_file(launch_json)
       local success, settings = pcall(vim.json.decode, content)
       if not success then
@@ -44,6 +43,7 @@ end
 ---@return table
 local function detect_launch_configurations(root_dir)
   local launch_configurations = {}
+  local Path = deps.require_plenary('plenary.path')
   local HTConfig = require('haskell-tools.config.internal')
   local dap_opts = HTConfig.dap
   ---@param entry_point HsEntryPoint
@@ -70,6 +70,7 @@ local function detect_launch_configurations(root_dir)
     }
     return HsDapLaunchConfiguration
   end
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   for _, entry_point in pairs(HtProjectHelpers.parse_project_entrypoints(root_dir)) do
     table.insert(launch_configurations, mk_launch_configuration(entry_point))
   end
@@ -114,10 +115,13 @@ local DefaultAutoDapConfigOpts = {
 ---@param opts AddDapConfigOpts|nil
 ---@return nil
 HsDapTools.discover_configurations = function(bufnr, opts)
+  local async = deps.require_plenary('plenary.async')
+  local log = require('haskell-tools.log')
   async.run(function()
     bufnr = bufnr or 0 -- Default to current buffer
     opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
     local filename = vim.api.nvim_buf_get_name(bufnr)
+    local HtProjectHelpers = require('haskell-tools.project.helpers')
     local project_root = HtProjectHelpers.match_project_root(filename)
     if not project_root then
       log.warn('haskell-tools.dap: Unable to detect project root for file ' .. filename)

@@ -3,11 +3,6 @@
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log')
 local Types = require('haskell-tools.types.internal')
-local HtProjectHelpers = require('haskell-tools.project.helpers')
-local OS = require('haskell-tools.os')
-local deps = require('haskell-tools.deps')
-local Path = deps.require_plenary('plenary.path')
-local LspHelpers = require('haskell-tools.lsp.helpers')
 local uv = vim.uv
   ---@diagnostic disable-next-line: deprecated
   or vim.loop
@@ -42,6 +37,7 @@ end
 ---@param client lsp.Client
 ---@return nil
 local function fix_cabal_client(client)
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   if client.name == LspHelpers.cabal_client_name and client.server_capabilities then
     client.server_capabilities = vim.tbl_extend('force', client.server_capabilities, {
       foldingRangeProvider = false,
@@ -87,12 +83,15 @@ HlsTools.load_hls_settings = function(project_root, opts)
   end
   local default_opts = { settings_file_pattern = 'hls.json' }
   opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
+  local deps = require('haskell-tools.deps')
+  local Path = deps.require_plenary('plenary.path')
   local results = vim.fn.glob(Path:new(project_root, opts.settings_file_pattern).filename, true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
     return default_settings
   end
   local settings_json = results[1]
+  local OS = require('haskell-tools.os')
   local content = OS.read_file(settings_json)
   local success, settings = pcall(vim.json.decode, content)
   if not success then
@@ -119,9 +118,11 @@ HlsTools.start = function(bufnr)
     vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
     return
   end
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   local is_cabal = HtProjectHelpers.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   local cmd = LspHelpers.get_hls_cmd()
   local hls_bin = cmd[1]
   if vim.fn.executable(hls_bin) == 0 then
@@ -178,6 +179,7 @@ end
 ---@return table[] clients A list of clients that will be stopped
 HlsTools.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   local clients = LspHelpers.get_active_ht_clients(bufnr)
   vim.lsp.stop_client(clients)
   return clients

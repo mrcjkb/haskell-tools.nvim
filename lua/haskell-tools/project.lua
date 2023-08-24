@@ -1,7 +1,6 @@
 ---@mod haskell-tools.project haskell-tools Project module
 
 local log = require('haskell-tools.log')
-local HtProjectHelpers = require('haskell-tools.project.helpers')
 local deps = require('haskell-tools.deps')
 
 ---@brief [[
@@ -22,6 +21,7 @@ local function telescope_package_search(callback, opts)
     vim.notify(err_msg, vim.log.levels.ERROR)
     return
   end
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   local package_root = HtProjectHelpers.match_package_root(file)
   if not package_root then
     local err_msg = 'Telescope package search: No package root found for file ' .. file
@@ -63,6 +63,7 @@ local HsProjectTools = {}
 ---@param project_file string The path to a project file
 ---@return string|nil
 HsProjectTools.root_dir = function(project_file)
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   return HtProjectHelpers.match_cabal_project_root(project_file)
     or HtProjectHelpers.match_stack_project_root(project_file)
     or HtProjectHelpers.match_package_root(project_file)
@@ -72,6 +73,7 @@ end
 ---Open the package.yaml of the package containing the current buffer.
 ---@return nil
 HsProjectTools.open_package_yaml = function()
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   vim.schedule(function()
     local file = vim.api.nvim_buf_get_name(0)
     local result = HtProjectHelpers.get_package_yaml(file)
@@ -93,6 +95,7 @@ end
 ---@return nil
 HsProjectTools.open_package_cabal = function()
   vim.schedule(function()
+    local HtProjectHelpers = require('haskell-tools.project.helpers')
     local file = vim.api.nvim_buf_get_name(0)
     if vim.fn.filewritable(file) ~= 0 and not HtProjectHelpers.is_cabal_project(file) then
       vim.notify('HsPackageCabal: Not a cabal project?', vim.log.levels.ERROR)
@@ -113,6 +116,7 @@ end
 ---@return nil
 HsProjectTools.open_project_file = function()
   vim.schedule(function()
+    local HtProjectHelpers = require('haskell-tools.project.helpers')
     local file = vim.api.nvim_buf_get_name(0)
     local stack_project_root = HtProjectHelpers.match_stack_project_root(file)
     if stack_project_root then

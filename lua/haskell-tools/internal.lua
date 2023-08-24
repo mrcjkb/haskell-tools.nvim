@@ -9,10 +9,6 @@
 ---@brief ]]
 
 local HTConfig = require('haskell-tools.config.internal')
-local Types = require('haskell-tools.types.internal')
-local HtProjectHelpers = require('haskell-tools.project.helpers')
-local LspHelpers = require('haskell-tools.lsp.helpers')
-local HaskellTools = require('haskell-tools')
 
 ---@class InternalApi
 local InternalApi = {}
@@ -20,9 +16,11 @@ local InternalApi = {}
 ---@return boolean tf Is LSP supported for the current buffer?
 local function buf_is_lsp_supported()
   local bufnr = vim.api.nvim_get_current_buf()
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
   if not HtProjectHelpers.is_cabal_file(bufnr) then
     return true
   end
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   return LspHelpers.is_hls_version_with_cabal_support()
 end
 
@@ -49,6 +47,8 @@ end
 ---ht.start_or_attach()
 ---@usage ]]
 function InternalApi.start_or_attach()
+  local Types = require('haskell-tools.types.internal')
+  local HaskellTools = require('haskell-tools')
   if Types.evaluate(HTConfig.hls.auto_attach) and buf_is_lsp_supported() then
     HaskellTools.lsp.start()
   end
