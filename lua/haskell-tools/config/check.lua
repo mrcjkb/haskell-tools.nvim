@@ -7,7 +7,8 @@
 
 ---@brief ]]
 
-local config_check = {}
+---@class HtConfigCheck
+local HtConfigCheck = {}
 
 ---@param path string
 ---@param msg string|nil
@@ -31,7 +32,7 @@ end
 ---@param cfg HTConfig
 ---@return boolean is_valid
 ---@return string|nil error_message
-function config_check.validate(cfg)
+function HtConfigCheck.validate(cfg)
   local ok, err
   local hls = cfg.hls
   ok, err = validate('hls', {
@@ -134,4 +135,4 @@ function config_check.validate(cfg)
   return true
 end
 
-return config_check
+return HtConfigCheck
