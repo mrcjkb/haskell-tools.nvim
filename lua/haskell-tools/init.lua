@@ -32,6 +32,32 @@ local ht = {
   dap = nil,
 }
 
+local announce_2xx
+announce_2xx = function(show_more_info)
+  local skipfile = vim.fn.stdpath('state') .. '/.no-haskell-tools-2.x.x-notify'
+  local skipmsg = "Don't show me this message again"
+  local announcement_url = 'https://github.com/mrcjkb/haskell-tools.nvim/discussions/227'
+  local more_info_msg = 'More info: ' .. announcement_url
+  if vim.fn.filereadable(skipfile) == 0 then
+    local choices = { 'OK', skipmsg }
+    if show_more_info then
+      table.insert(choices, more_info_msg)
+    end
+    vim.ui.select(choices, {
+      prompt = 'The haskell-tools.nvim 2.x.x stable branch is ready for use.',
+    }, function(choice)
+      if choice == skipmsg then
+        vim.system { 'touch', skipfile }
+      end
+      if choice == more_info_msg then
+        local util = require('haskell-tools.util')
+        util.open_browser(announcement_url)
+        announce_2xx()
+      end
+    end)
+  end
+end
+
 ---Starts or attaches an LSP client to the current buffer and sets up the plugin if necessary.
 ---Call this function in ~/.config/nvim/ftplugin/haskell.lua
 ---
@@ -101,6 +127,7 @@ end
 --- }
 ---@usage ]]
 function ht.setup(opts)
+  announce_2xx(true)
   local config = require('haskell-tools.config')
   ht.config = config
   local log = require('haskell-tools.log')

@@ -16,6 +16,12 @@
 </div>
 <!-- markdownlint-restore -->
 
+> **Warning**
+>
+> This branch is no longer maintained.
+> Please use the [`2.x.x`](https://github.com/mrcjkb/haskell-tools.nvim/tree/2.x.x)
+> branch instead.
+
 [![Neovim][neovim-shield]][neovim-url]
 [![Lua][lua-shield]][lua-url]
 [![Haskell][haskell-shield]][haskell-url]
