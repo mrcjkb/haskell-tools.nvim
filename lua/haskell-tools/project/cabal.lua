@@ -29,6 +29,7 @@ local CabalProjectHelper = {}
 ---@field mains string[]
 ---@field source_dirs string[]
 ---@field src_dir_indent_pattern string
+---@field exe_name string | nil
 
 ---@param data CabalEntryPointParserData
 ---@param state CabalEntryPointParserState

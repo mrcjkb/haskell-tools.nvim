@@ -41,6 +41,8 @@ end
 ---@field parsing_exe_list boolean
 ---@field parsing_exe boolean
 ---@field parsing_source_dirs boolean
+---@field exe_indent integer | nil
+---@field exe_name string | nil
 
 ---@param data StackEntryPointParserData
 ---@param state StackEntryPointParserState

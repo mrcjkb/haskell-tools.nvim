@@ -92,7 +92,7 @@ function HaskellToolsLog.set_level(level)
   vim.tbl_add_reverse_lookup(log_levels)
   if type(level) == 'string' then
     HaskellToolsLog.level =
-      assert(log_levels[opts.level:upper()], string.format('haskell-tools: Invalid log level: %q', level))
+      assert(log_levels[string.upper(opts.level)], string.format('haskell-tools: Invalid log level: %q', level))
   else
     assert(log_levels[opts.level], string.format('haskell-tools: Invalid log level: %d', level))
     HaskellToolsLog.level = level
