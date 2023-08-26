@@ -1,4 +1,3 @@
-local ht = require('haskell-tools')
 local stub = require('luassert.stub')
 local mock = require('luassert.mock')
 local deps = require('haskell-tools.deps')
@@ -8,8 +7,8 @@ local hoogle_local = require('haskell-tools.hoogle.local')
 local local_telescope_search = stub(hoogle_local, 'telescope_search')
 local browser_search = stub(hoogle_web, 'browser_search')
 local web_telescope_search = stub(hoogle_web, 'telescope_search')
-local util = require('haskell-tools.util')
-local open_browser = stub(util, 'open_browser')
+local os = require('haskell-tools.os')
+local open_browser = stub(os, 'open_browser')
 local curl = deps.require_plenary('plenary.curl')
 local mock_curl = mock {
   get = function()
@@ -24,7 +23,7 @@ async.run = function(f)
 end
 
 describe('Hoogle:', function()
-  ht.setup {}
+  local ht = require('haskell-tools')
   it('Hoogle API available after setup', function()
     assert(ht.hoogle ~= nil)
   end)

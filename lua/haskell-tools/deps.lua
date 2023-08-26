@@ -8,15 +8,13 @@
 ---@brief ]]
 
 ---@class Deps
-
----@type Deps
-local deps = {}
+local Deps = {}
 
 ---@param modname string The name of the module
 ---@param on_available any|nil Callback. Can be a function that takes the module name as an argument or a value.
 ---@param on_not_available any|nil Callback to execute if the module is not available. Can be a function or a value.
 ---@return any result Return value of on_available or on_not_available
-function deps.if_available(modname, on_available, on_not_available)
+function Deps.if_available(modname, on_available, on_not_available)
   local has_mod, mod = pcall(require, modname)
   if has_mod and type(on_available) == 'function' then
     return on_available(mod)
@@ -36,8 +34,9 @@ end
 ---@param modname string
 ---@param plugin_name string
 ---@return unknown
-function deps.require_or_err(modname, plugin_name)
-  return deps.if_available(modname, function(mod)
+---@require
+function Deps.require_or_err(modname, plugin_name)
+  return Deps.if_available(modname, function(mod)
     return mod
   end, function()
     error('haskell-tools: This plugin requires the ' .. plugin_name .. ' plugin.')
@@ -46,38 +45,42 @@ end
 
 ---@param modname string The name of the module
 ---@return boolean
-function deps.has(modname)
-  return deps.if_available(modname, true, false)
+function Deps.has(modname)
+  return Deps.if_available(modname, true, false)
 end
 
 ---@return boolean
-function deps.has_telescope()
-  return deps.has('telescope')
+function Deps.has_telescope()
+  return Deps.has('telescope')
 end
 
 ---@return unknown
-function deps.require_telescope(modname)
-  return deps.require_or_err(modname, 'nvim-telescope/telescope.nvim')
+---@require
+function Deps.require_telescope(modname)
+  return Deps.require_or_err(modname, 'nvim-telescope/telescope.nvim')
 end
 
 ---@return unknown
-function deps.require_plenary(modname)
-  return deps.require_or_err(modname, 'nvim-lua/plenary.nvim')
+---@require
+function Deps.require_plenary(modname)
+  return Deps.require_or_err(modname, 'nvim-lua/plenary.nvim')
 end
 
 ---@return unknown
-function deps.require_toggleterm(modname)
-  return deps.require_or_err(modname, 'akinsho/toggleterm')
+---@require
+function Deps.require_toggleterm(modname)
+  return Deps.require_or_err(modname, 'akinsho/toggleterm')
 end
 
 ---@return boolean
-function deps.has_toggleterm()
-  return deps.has('toggleterm')
+function Deps.has_toggleterm()
+  return Deps.has('toggleterm')
 end
 
 ---@return unknown
-function deps.require_iron(modname)
-  return deps.require_or_err(modname, 'hkupty/iron.nvim')
+---@require
+function Deps.require_iron(modname)
+  return Deps.require_or_err(modname, 'hkupty/iron.nvim')
 end
 
-return deps
+return Deps

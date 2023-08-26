@@ -30,17 +30,6 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-16-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
->**Warning**
->
-> Version `2.0.0` with breaking changes will be released soon.
->
-> - If you would like to avoid breaking changes,
-please use the [`1.x.x` branch](https://github.com/mrcjkb/haskell-tools.nvim/discussions/227).
-> - If you would like to use the new version, the [`2.x.x` branch](https://github.com/mrcjkb/haskell-tools.nvim/tree/2.x.x)
-is ready for testing.
-> - See [the announcement](https://github.com/mrcjkb/haskell-tools.nvim/discussions/227)
-for more info.
-
 ## Quick Links
 
 - [Installation](#installation)
@@ -79,16 +68,22 @@ This plugin is [available on LuaRocks][luarocks-url].
 If you use a plugin manager that does not support LuaRocks,
 you have to declare the dependencies yourself.
 
-Example using `packer.nvim`:
+Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
 ```lua
-use {
+{
   'mrcjkb/haskell-tools.nvim',
-  requires = {
+  dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim', -- optional
+    'nvim-telescope/telescope.nvim', -- Optional
   },
-  branch = '1.x.x', -- recommended
+  branch = '2.x.x', -- Recommended
+  init = function() -- Optional, see Advanced configuration
+    vim.g.haskell_tools = {
+      -- ...
+    },
+  end,
+  ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
 }
 ```
 
@@ -114,33 +109,33 @@ See the [Features](#features) section for more info.
 >**Warning**
 >
 > Do not call the [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig)
-> setup or set up the lsp manually, as doing so may cause conflicts.
+> setup or set up the lsp client for `haskell-language-server` manually,
+> as doing so may cause conflicts.
 
-To get started quickly with the default setup, add the following to `~/.config/nvim/ftplugin/haskell.lua`[^1]:
+This is a filetype plugin, so there is no need to call a `setup` function.
+
+You will most likely want to add some keymaps, and optionally
+detect launch configurations for [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
+Most keymaps are only useful in haskell and/or cabal files,
+so I suggest you define them in `~/.config/nvim/after/ftplugin/haskell.lua`[^1]
+and/or `~/.config/nvim/after/ftplugin/cabal.lua`[^1].
 
 [^1]: See [`:help base-directories`](https://neovim.io/doc/user/starting.html#base-directories)
 
+Some suggestions:
+
 ```lua
+-- ~/.config/nvim/after/ftplugin/haskell.lua
 local ht = require('haskell-tools')
-local def_opts = { noremap = true, silent = true, }
-ht.start_or_attach {
-  hls = {
-    on_attach = function(client, bufnr)
-      local opts = vim.tbl_extend('keep', def_opts, { buffer = bufnr, })
-      -- haskell-language-server relies heavily on codeLenses,
-      -- so auto-refresh (see advanced configuration) is enabled by default
-      vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
-      vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
-      vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
-    end,
-  },
-}
-
--- Suggested keymaps that do not depend on haskell-language-server:
 local bufnr = vim.api.nvim_get_current_buf()
--- set buffer = bufnr in ftplugin/haskell.lua
-local opts = { noremap = true, silent = true, buffer = bufnr }
-
+local def_opts = { noremap = true, silent = true, buffer = bufnr, }
+-- haskell-language-server relies heavily on codeLenses,
+-- so auto-refresh (see advanced configuration) is enabled by default
+vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
+-- Hoogle search for the type signature of the definition under the cursor
+vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
+-- Evaluate all code snippets
+vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
 -- Toggle a GHCi repl for the current package
 vim.keymap.set('n', '<leader>rr', ht.repl.toggle, opts)
 -- Toggle a GHCi repl for the current buffer
@@ -159,9 +154,8 @@ ht.dap.discover_configurations(bufnr)
 > - For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > - If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
-> - If you prefer, you can instead call `require('haskell-tools').setup {}` with
->   the same options as `start_or_attach()` in your Neovim config.
->   In this case, `haskell-tools.nvim` will set up filetype autocommands for you.
+> - See the [Advanced configuration](#advanced-configuration) section
+for more configuration options.
 
 ## Features
 
@@ -280,98 +274,39 @@ For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-to
 
 ## Advanced configuration
 
-To modify the default configs, call
+To modify the default configuration, set `vim.g.haskell_tools`.
+
+- See [`:help haskell-tools.config`](./doc/haskell-tools.txt) for a detailed
+  documentation of all available configuration options.
+  You may need to run `:helptags ALL` if the documentation has not been installed.
+- The default configuration [can be found here (see `HTDefaultConfig`)](./lua/haskell-tools/config/internal.lua).
+- To view all available `haskell-language-server` settings
+  (including those not set by this plugin), run `haskell-language-server generate-default-config`.
+  - For detailed descriptions of the configs,
+    look at the [`haskell-language-server` documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
 ```lua
--- defaults
-require('haskell-tools').start_or_attach {
-  tools = { -- haskell-tools options
-    codeLens = {
-      -- Whether to automatically display/refresh codeLenses
-      -- (explicitly set to false to disable)
-      autoRefresh = true,
-    },
-    hoogle = {
-      -- 'auto': Choose a mode automatically, based on what is available.
-      -- 'telescope-local': Force use of a local installation.
-      -- 'telescope-web': The online version (depends on curl).
-      -- 'browser': Open hoogle search in the default browser.
-      mode = 'auto',
-    },
-    hover = {
-      -- Whether to disable haskell-tools hover
-      -- and use the builtin lsp's default handler
-      disable = false,
-      -- Set to nil to disable
-      border = {
-        { '╭', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '╮', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-        { '╯', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '╰', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-      },
-      -- Stylize markdown (the builtin lsp's default behaviour).
-      -- Setting this option to false sets the file type to markdown and enables
-      -- Treesitter syntax highligting for Haskell snippets
-      -- if nvim-treesitter is installed
-      stylize_markdown = false,
-      -- Whether to automatically switch to the hover window
-      auto_focus = false,
-    },
-    definition = {
-      -- Configure vim.lsp.definition to fall back to hoogle search
-      -- (does not affect vim.lsp.tagfunc)
-      hoogle_signature_fallback = false,
-    },
-    repl = {
-      -- 'builtin': Use the simple builtin repl
-      -- 'toggleterm': Use akinsho/toggleterm.nvim
-      handler = 'builtin',
-      -- Which backend to prefer if both stack and cabal files are present
-      prefer = vim.fn.executable('stack') and 'stack' or 'cabal',
-      builtin = {
-        create_repl_window = function(view)
-          -- create_repl_split | create_repl_vsplit | create_repl_tabnew | create_repl_cur_win
-          return view.create_repl_split { size = vim.o.lines / 3 }
-        end
-      },
-      -- Can be overriden to either `true` or `false`.
-      -- The default behaviour depends on the handler.
-      auto_focus = nil,
-    },
-    -- Set up autocmds to generate tags (using fast-tags)
-    -- e.g. so that `vim.lsp.tagfunc` can fall back to Haskell tags
-    tags = {
-      enable = vim.fn.executable('fast-tags') == 1,
-      -- Events to trigger package tag generation
-      package_events = { 'BufWritePost' },
-    },
-    dap = {
-      cmd = { 'haskell-debug-adapter' },
-    },
-  },
-  hls = { -- LSP client options
+vim.g.haskell_tools = {
+  ---@type ToolsOpts
+  tools = {
     -- ...
-    default_settings = {
-      haskell = { -- haskell-language-server options
-        formattingProvider = 'ormolu',
-        -- Setting this to true could have a performance impact on large mono repos.
-        checkProject = true,
-        -- ...
-      }
-    }
-  }
+  },
+  ---@type HaskellLspClientOpts
+  hls = {
+    ---@param client number The LSP client ID.
+    ---@param bufnr number The buffer number
+    ---@param ht HaskellTools = require('haskell-tools')
+    on_attach = function(client, bufnr, ht)
+      -- Set keybindings, etc. here.
+    end,
+    -- ...
+  },
+  ---@type HTDapOpts
+  dap = {
+    -- ...
+  },
 }
 ```
-
-- The full list of defaults [can be found here](./lua/haskell-tools/config.lua).
-- To view all available language server settings
-  (including those not set by this plugin), run `haskell-language-server generate-default-config`.
-- For detailed descriptions of the configs,
-  look at the [haskell-language-server documentation](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
 
 ### How to dynamically load different `haskell-language-server` settings per project
 
@@ -383,11 +318,12 @@ the `hls.default_settings` will be used.
 You can change this behaviour with the `hls.settings` config:
 
 ```lua
-local ht = require('haskell-tools')
-ht.start_or_attach {
+vim.g.haskell_tools = {
   -- ...
   hls = {
+    ---@param project_root string Path to the project root
     settings = function(project_root)
+      local ht = require('haskell-tools')
       return ht.lsp.load_hls_settings(project_root, {
         settings_file_pattern = 'hls.json'
       })
@@ -442,9 +378,9 @@ hls = {
 
 ### Launch `haskell-language-server` on Cabal files
 
-Since version `1.9.0.0`, `haskell-language-server` can launch on Cabal files.
-You can either attach the LSP client in a `~/.config/nvim/ftplugin/cabal.lua`
-file[^1], or call `haskell-tools.setup()`.
+Since version `1.9.0.0`, `haskell-language-server` can launch on Cabal files,
+but it does not support all features that it has for Haskell files.
+You can add cabal-specific keymaps, etc. in `~/.config/nvim/after/ftplugin/cabal.lua`.
 
 ### Set up [`iron.nvim`](https://github.com/hkupty/iron.nvim) to use `haskell-tools.nvim`
 
@@ -487,19 +423,22 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 ```lua
 local ht = require('haskell-tools')
--- Start or attach the LSP client.
+--- Start or attach the LSP client.
 ht.lsp.start()
 
--- Stop the LSP client.
+--- Stop the LSP client.
 ht.lsp.stop()
 
--- Restart the LSP client.
+--- Restart the LSP client.
 ht.lsp.restart()
 
--- Callback for dynamically loading haskell-language-server settings
+--- Callback for dynamically loading haskell-language-server settings
+--- Falls back to the `hls.default_settings` if no file is found
+--- or one is found, but it cannot be read or decoded.
+--- @param project_root string? The project root
 ht.lsp.load_hls_settings(project_root)
 
--- Evaluate all code snippets in comments
+--- Evaluate all code snippets in comments
 ht.lsp.buf_eval_all()
 ```
 
@@ -507,7 +446,7 @@ ht.lsp.buf_eval_all()
 
 ```lua
 local ht = require('haskell-tools')
--- Run a hoogle signature search for the value under the cursor
+--- Run a hoogle signature search for the value under the cursor
 ht.hoogle.hoogle_signature()
 ```
 
@@ -515,34 +454,39 @@ ht.hoogle.hoogle_signature()
 
 ```lua
 local ht = require('haskell-tools')
--- Toggle a GHCi repl for the current project
+--- Toggle a GHCi repl for the current project
 ht.repl.toggle()
 
--- Toggle a GHCi repl for `file` (must be a Haskell file)
+--- Toggle a GHCi repl for `file`
+--- @param file string Path to a Haskell file
 ht.repl.toggle(file)
 
--- Quit the repl
+--- Quit the repl
 ht.repl.quit()
 
--- Paste a command to the repl from register `reg`. (`reg` defaults to '"')
+--- Paste a command to the repl from register `reg`.
+--- @param reg string? Register to paste from (:h registers), defaults to '"'.
 ht.repl.paste(reg)
 
--- Query the repl for the type of register `reg`. (`reg` defaults to '"')
+--- Query the repl for the type of register `reg`, and paste it to the repl.
+--- @param reg string? Register to paste from (:h registers), defaults to '"'.
 ht.repl.paste_type(reg)
 
--- Query the repl for the type of word under the cursor
+--- Query the repl for the type of word under the cursor
 ht.repl.cword_type()
 
--- Query the repl for info on register `reg`. (`reg` defaults to '"')
+--- Query the repl for info on register `reg`.
+--- @param reg string? Register to paste from (:h registers), defaults to '"'.
 ht.repl.paste_info(reg)
 
--- Query the repl for info on the word under the cursor
+--- Query the repl for info on the word under the cursor
 ht.repl.cword_info()
 
--- Load a file into the repl
+--- Load a file into the repl
+--- @param file string The absolute file path
 ht.repl.load_file(file)
 
--- Reload the repl
+--- Reload the repl
 ht.repl.reload()
 ```
 
@@ -555,20 +499,20 @@ ht.repl.reload()
 
 ```lua
 local ht = require('haskell-tools')
--- Open the project file for the current buffer (cabal.project or stack.yaml)
+--- Open the project file for the current buffer (cabal.project or stack.yaml)
 ht.project.open_project_file()
 
--- Open the package.yaml file for the current buffer
+--- Open the package.yaml file for the current buffer
 ht.project.open_package_yaml()
 
--- Open the *.cabal file for the current buffer
+--- Open the *.cabal file for the current buffer
 ht.project.open_package_cabal()
 
--- Search for files within the current (sub)package
----@param opts: Optional telescope.nvim `find_files` options
+--- Search for files within the current (sub)package
+--- @param opts table Optional telescope.nvim `find_files` options
 ht.project.telescope_package_files(opts)
--- Live grep within the current (sub)package
----@param opts: Optional telescope.nvim `live_grep` options
+--- Live grep within the current (sub)package
+--- @param opts table Optional telescope.nvim `live_grep` options
 ht.project.telescope_package_grep(opts)
 ```
 
@@ -580,14 +524,14 @@ The following functions depend on [`fast-tags`](https://github.com/elaforge/fast
 local ht = require('haskell-tools')
 
 -- Generate tags for the whole project
----@param path: An optional file path, defaults to the current buffer
----@param opts: Optional options:
----@param opts.refresh: Whether to refresh tags
---- if they have already been generated for a project
+---@param path string? An optional file path, defaults to the current buffer
+---@param opts table Optional options:
+---       opts.refresh boolean
+---       - Whether to refresh tags if they have already been generated for a project
 ht.tags.generate_project_tags(path, opts)
 
 -- Generate tags for the whole project
----@param path: An optional file path, defaults to the current buffer
+---@param path string? An optional file path, defaults to the current buffer
 ht.tags.generate_package_tags(path)
 ```
 
@@ -638,15 +582,17 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 ### Minimal config
 
 To troubleshoot this plugin with a minimal config in a temporary directory,
-you can try [minimal.lua](./tests/minimal.lua).
+you can try [minimal.lua](./troubleshooting/minimal.lua).
 
 ```console
 mkdir -p /tmp/minimal/
-# The first start will install the plugins into the temporary directory
-NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
-# Quit Neovim and start it up again with the plugins loaded
-NVIM_DATA_MINIMAL=/tmp/minimal nvim -u minimal.lua
+NVIM_DATA_MINIMAL="/tmp/minimal" NVIM_APP_NAME="nvim-ht-minimal" nvim -u minimal.lua
 ```
+
+If you cannot reproduce your issue with a minimal config,
+it may be caused by another plugin.
+In this case, add additional plugins and their configurations to `minimal.lua`,
+until you can reproduce it.
 
 > **Note**
 >
@@ -663,7 +609,7 @@ To enable debug logging, set the log level to `DEBUG`[^2]:
 [^2]: See [`:help vim.log.levels`](https://neovim.io/doc/user/lua.html#vim.log.levels):
 
 ```lua
-require('haskell-tools').start_or_attach {
+vim.g.haskell_tools = {
   tools = { -- haskell-tools options
     log = {
       level = vim.log.levels.DEBUG,

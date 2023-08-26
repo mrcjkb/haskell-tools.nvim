@@ -8,10 +8,14 @@
 --- Helper functions related to cabal projects
 ---@brief ]]
 
-local ht_util = require('haskell-tools.util')
+local Strings = require('haskell-tools.strings')
+local HtParser = require('haskell-tools.parser')
+local Dap = require('haskell-tools.dap.internal')
+local OS = require('haskell-tools.os')
 local Path = require('plenary.path')
 
-local cabal = {}
+---@class CabalProjectHelper
+local CabalProjectHelper = {}
 
 ---@class CabalEntryPointParserData
 ---@field idx integer
@@ -25,6 +29,7 @@ local cabal = {}
 ---@field mains string[]
 ---@field source_dirs string[]
 ---@field src_dir_indent_pattern string
+---@field exe_name string | nil
 
 ---@param data CabalEntryPointParserData
 ---@param state CabalEntryPointParserState
@@ -34,11 +39,11 @@ local function get_entrypoint_from_line(data, state)
   local lines = data.lines
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
-  local no_indent = ht_util.get_indent(line) == 0
+  local no_indent = HtParser.get_indent(line) == 0
   if no_indent or idx == #lines then
     vim.list_extend(
       state.entry_points,
-      ht_util.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
+      Dap.mk_entry_points(state.package_name, state.exe_name, package_dir, state.mains, state.source_dirs)
     )
     state.mains = {}
     state.source_dirs = {}
@@ -83,13 +88,13 @@ local function parse_package_entrypoints(package_file)
   }
   local package_dir = vim.fn.fnamemodify(package_file, ':h') or package_file
   local entry_points = {}
-  local content = ht_util.read_file_async(package_file)
+  local content = OS.read_file_async(package_file)
   if not content then
     return entry_points
   end
   local lines = vim.split(content, '\n') or {}
   for idx, line in ipairs(lines) do
-    local is_comment = vim.startswith(ht_util.trim(line), '--')
+    local is_comment = vim.startswith(Strings.trim(line), '--')
     if not is_comment then
       ---@type CabalEntryPointParserData
       local data = {
@@ -108,7 +113,7 @@ end
 ---@param package_path string Path to a package directory
 ---@return HsEntryPoint[] entry_points
 ---@async
-function cabal.parse_package_entrypoints(package_path)
+function CabalProjectHelper.parse_package_entrypoints(package_path)
   local entry_points = {}
   for _, package_file in pairs(vim.fn.glob(Path:new(package_path, '*.cabal').filename, true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
@@ -116,4 +121,4 @@ function cabal.parse_package_entrypoints(package_path)
   return entry_points
 end
 
-return cabal
+return CabalProjectHelper

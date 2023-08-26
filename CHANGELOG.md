@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2023-08-27
+### Changed
+- New, more stable architecture.
+- BREAKING: Remove `setup` API.
+- BREAKING: Remove `start_or_attach` API.
+  `vim.g.haskell_tools` can be used for configuration instead.
+- BREAKING: `haskell-tools` now
+  automatically initialises and attaches when opening a Haskell or Cabal file.
+  You can fine-tune this behaviour in the config.
+- BREAKING: Removed `haskell-tools.dap.nvim_dap` (copy of the `dap` module).
+- BREAKING configuration changes:
+  - `hover.disable` has been changed to `hover.enable` for consistency.
+  - `hls_log` (undocumented) has been moved to `hls.logfile`.
+- Repl: Add `--ghc-option -Wwarn` to `cabal repl` command.
+
+### Added
+- Only attach cabal LSP clients if using `haskell-language-server > 1.9.0.0`.
+- By default, fall back to `haskell-language-server` if `haskell-language-server-wrapper`
+  is not found [#233](https://github.com/mrcjkb/haskell-tools.nvim/issues/233).
+
+### Fixed
+- LSP client: Don't fail if `hls.on_attach` fails.
+
 ## [1.11.3] - 2023-08-06
 ### Fixed
 - Fix bug that broke codelens auto-refresh and lsp stop/restart [#229](https://github.com/mrcjkb/haskell-tools.nvim/issues/229).

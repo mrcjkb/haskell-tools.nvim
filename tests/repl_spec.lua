@@ -1,19 +1,18 @@
-local ht = require('haskell-tools')
 local stub = require('luassert.stub')
 local deps = require('haskell-tools.deps')
 
-local function mk_repl_setup_test(handler, auto_focus)
-  describe('Setup ' .. handler .. ' handler ' .. (auto_focus and 'with' or 'without') .. ' auto focus.', function()
+local function mk_repl_setup_test(handler)
+  describe('Repl with ' .. handler .. ' handler', function()
     local notify_once = stub(vim, 'notify_once')
     local notify = stub(vim, 'notify')
-    ht.setup {
+    vim.g.haskell_tools = {
       tools = {
         repl = {
           handler = handler,
-          auto_focus = auto_focus,
         },
       },
     }
+    local ht = require('haskell-tools')
     it('Public API is available after setup.', function()
       assert(ht.repl ~= nil)
     end)
@@ -24,17 +23,16 @@ local function mk_repl_setup_test(handler, auto_focus)
   end)
 end
 
-mk_repl_setup_test('builtin', true)
-mk_repl_setup_test('builtin', false)
 if deps.has_toggleterm() then
-  mk_repl_setup_test('toggleterm', true)
-  mk_repl_setup_test('toggleterm', false)
+  mk_repl_setup_test('toggleterm')
+else
+  mk_repl_setup_test('builtin')
 end
 
-local repl = assert(ht.repl, 'repl not set up')
 local cwd = vim.fn.getcwd()
 
 describe('mk_repl_cmd', function()
+  local repl = require('haskell-tools').repl
   local stack_project_file = cwd .. '/tests/fixtures/stack/single-package/Abc.hs'
   if vim.fn.executable('stack') == 1 then
     it('prefers stack if stack.yml exists', function()

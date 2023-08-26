@@ -4,7 +4,9 @@
       "enabled": true,
       "plugins": [
         "telescope.nvim",
-        "plenary.nvim"
+        "plenary.nvim",
+        "toggleterm.nvim",
+        "nvim-dap"
       ]
     }
   },

@@ -1,122 +1,111 @@
 ---@mod haskell-tools.tags haskell-tools fast-tags module
 
-local ht = require('haskell-tools')
+local HTConfig = require('haskell-tools.config.internal')
+local Types = require('haskell-tools.types.internal')
+local log = require('haskell-tools.log')
 local deps = require('haskell-tools.deps')
-local project_util = require('haskell-tools.project.util')
-
-local tags = {}
 
 local _state = {
   fast_tags_generating = false,
   projects = {},
 }
 
----@param config FastTagsConfig
-local function setup_fast_tags(config)
-  local Job = deps.require_plenary('plenary.job')
+log.debug('Setting up fast-tags tools')
+local config = HTConfig.tools.tags
 
-  ---@class GenerateProjectTagsOpts
-  ---@field refresh boolean Whether to refresh the tags if they have already been generated
-  --- for the project (default: true)
+local Job = deps.require_plenary('plenary.job')
 
-  ---Generates tags for the current project
-  ---@param path string|nil File path
-  ---@param opts GenerateProjectTagsOpts|nil Options
-  function tags.generate_project_tags(path, opts)
-    path = path or vim.api.nvim_buf_get_name(0)
-    opts = vim.tbl_extend('force', { refresh = true }, opts or {})
-    local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
-    if opts.refresh == false and _state.projects[project_root] then
-      ht.log.debug('Project tags already generated. Skipping.')
-      return
-    end
-    _state.projects[project_root] = true
-    _state.fast_tags_generating = true
-    if project_root then
-      ht.log.debug('Generating project tags for' .. project_root)
-      vim.schedule(function()
-        Job:new({
-          command = 'fast-tags',
-          args = { '-R', project_root },
-          on_exit = function(_)
-            _state.fast_tags_generating = false
-          end,
-        }):start()
-      end)
-    else
-      ht.log.warn('generate_project_tags: No project root found.')
-    end
+---@class GenerateProjectTagsOpts
+---@field refresh boolean Whether to refresh the tags if they have already been generated
+--- for the project (default: true)
+
+---@class FastTagsTools
+local FastTagsTools = {}
+
+---Generates tags for the current project
+---@param path string|nil File path
+---@param opts GenerateProjectTagsOpts|nil Options
+FastTagsTools.generate_project_tags = function(path, opts)
+  path = path or vim.api.nvim_buf_get_name(0)
+  opts = vim.tbl_extend('force', { refresh = true }, opts or {})
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
+  local project_root = HtProjectHelpers.match_project_root(path) or vim.fn.getcwd() or 'UNDEFINED'
+  if opts.refresh == false and _state.projects[project_root] then
+    log.debug('Project tags already generated. Skipping.')
+    return
   end
-
-  ---Generate tags for the package containing `path`
-  ---@param path string|nil File path
-  function tags.generate_package_tags(path)
-    path = path or vim.api.nvim_buf_get_name(0)
-    _state.fast_tags_generating = true
-    local rel_package_root = project_util.match_package_root(path)
-    if not rel_package_root then
-      ht.log.warn('generate_package_tags: No rel_package root found.')
-      return
-    end
-    local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
-    local project_root = project_util.match_project_root(path) or vim.fn.getcwd()
-    if not package_root then
-      ht.log.warn('generate_package_tags: No package root found.')
-      return
-    end
-    if not project_root then
-      ht.log.warn('generate_package_tags: No project root found.')
-      return
-    end
+  _state.projects[project_root] = true
+  _state.fast_tags_generating = true
+  if project_root then
+    log.debug('Generating project tags for' .. project_root)
     vim.schedule(function()
       Job:new({
         command = 'fast-tags',
-        args = { '-R', package_root, project_root },
+        args = { '-R', project_root },
         on_exit = function(_)
           _state.fast_tags_generating = false
         end,
       }):start()
     end)
+  else
+    log.warn('generate_project_tags: No project root found.')
   end
+end
 
-  if vim.fn.executable('fast-tags') ~= 1 then
-    local err_msg = 'haskell-tools: fast-tags fallback configured, but fast-tags executable not found'
-    ht.log.error(err_msg)
-    vim.notify(err_msg, vim.log.levels.ERROR)
+---Generate tags for the package containing `path`
+---@param path string|nil File path
+FastTagsTools.generate_package_tags = function(path)
+  path = path or vim.api.nvim_buf_get_name(0)
+  _state.fast_tags_generating = true
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
+  local rel_package_root = HtProjectHelpers.match_package_root(path)
+  if not rel_package_root then
+    log.warn('generate_package_tags: No rel_package root found.')
     return
   end
-  local filetypes = config.filetypes or {}
-  if #filetypes > 0 then
-    vim.api.nvim_create_autocmd('FileType', {
-      group = vim.api.nvim_create_augroup('haskell-tools-generate-project-tags', {}),
-      pattern = filetypes,
-      callback = function(meta)
-        tags.generate_project_tags(meta.file, { refresh = false })
-      end,
-    })
+  local package_root = vim.fn.getcwd() .. '/' .. rel_package_root
+  local project_root = HtProjectHelpers.match_project_root(path) or vim.fn.getcwd()
+  if not package_root then
+    log.warn('generate_package_tags: No package root found.')
+    return
   end
-  local package_events = config.package_events
-  if #package_events > 0 then
-    vim.api.nvim_create_autocmd(package_events, {
-      group = vim.api.nvim_create_augroup('haskell-tools-generate-package-tags', {}),
-      pattern = { 'haskell', '*.hs' },
-      callback = function(meta)
-        if _state.fast_tags_generating then
-          return
-        end
-        tags.generate_package_tags(meta.file)
-      end,
-    })
+  if not project_root then
+    log.warn('generate_package_tags: No project root found.')
+    return
   end
+  vim.schedule(function()
+    Job:new({
+      command = 'fast-tags',
+      args = { '-R', package_root, project_root },
+      on_exit = function(_)
+        _state.fast_tags_generating = false
+      end,
+    }):start()
+  end)
 end
 
----Setup the tags module. Called by the haskell-tools setup.
-function tags.setup()
-  ht.log.debug('tags.setup')
-  local config = ht.config.options.tools.tags
-  if config.enable == true then
-    setup_fast_tags(config)
-  end
+if not Types.evaluate(config.enable) then
+  return
 end
 
-return tags
+if vim.fn.executable('fast-tags') ~= 1 then
+  local err_msg = 'haskell-tools: fast-tags fallback configured, but fast-tags executable not found'
+  log.error(err_msg)
+  vim.notify(err_msg, vim.log.levels.ERROR)
+  return
+end
+local package_events = config.package_events
+if #package_events > 0 then
+  vim.api.nvim_create_autocmd(package_events, {
+    group = vim.api.nvim_create_augroup('haskell-tools-generate-package-tags', {}),
+    pattern = { 'haskell', '*.hs' },
+    callback = function(meta)
+      if _state.fast_tags_generating then
+        return
+      end
+      FastTagsTools.generate_package_tags(meta.file)
+    end,
+  })
+end
+
+return FastTagsTools
