@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - New, more stable architecture.
 - BREAKING: Remove `setup` API.
-- BREAKING: Ignore configuration options in `start_or_attach`.
+- BREAKING: Remove `start_or_attach` API.
   `vim.g.haskell_tools` can be used for configuration instead.
 - BREAKING: `haskell-tools` now
   automatically initialises and attaches when opening a Haskell or Cabal file.
