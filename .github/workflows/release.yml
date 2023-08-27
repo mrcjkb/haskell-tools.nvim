@@ -27,6 +27,7 @@ jobs:
             and integrates with other Haskell tools. See the README's #features section
             for more info.
       - name: GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@v1
         with:
           bodyFile: "CHANGELOG.md"
