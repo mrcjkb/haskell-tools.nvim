@@ -78,10 +78,6 @@ with final.stdenv; let
         # Neovim expects to be able to create log files, etc.
         export HOME=$(realpath .)
       '';
-
-      env = {
-        TEST_CWD = "${self}/spec";
-      };
     };
 in {
   haskell-tools-test = mkNeorocksTest {name = "haskell-tools";};
