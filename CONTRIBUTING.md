@@ -24,6 +24,20 @@ I use
 - [`sumneko-lua-language-server`](https://github.com/sumneko/lua-language-server/wiki/Diagnosis-Report#create-a-report)
   for static type checking.
 
+### Running tests
+
+This plugin uses [`busted`](https://lunarmodules.github.io/busted/) for testing.
+
+The best way to run tests is with Nix (see below),
+because this includes tests that take different
+envrionments into account (e.g. with/without `fast-tags`, `hoogle`, ...).
+
+If you do not use Nix, you can run a basic version of the test suite using
+`luarocks test`.
+For more information, see the [neorocks tutorial](https://github.com/nvim-neorocks/neorocks#without-neolua).
+
+### Development using Nix
+
 To enter a development shell:
 
 ```console
@@ -59,10 +73,10 @@ or (with flakes enabled)
 nix build .#checks.<your-system>.haskell-tools-test --print-build-logs
 ```
 
-For formatting:
+For formatting and linting:
 
 ```console
-nix-build -A formatting
+nix-build -A pre-commit-check
 ```
 
 or (with flakes enabled)
