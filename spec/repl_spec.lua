@@ -33,7 +33,7 @@ local cwd = vim.fn.getcwd()
 
 describe('mk_repl_cmd', function()
   local repl = require('haskell-tools').repl
-  local stack_project_file = cwd .. '/tests/fixtures/stack/single-package/Abc.hs'
+  local stack_project_file = cwd .. '/spec/fixtures/stack/single-package/Abc.hs'
   if vim.fn.executable('stack') == 1 then
     it('prefers stack if stack.yml exists', function()
       local cmd = assert(repl.mk_repl_cmd(stack_project_file))
@@ -47,7 +47,7 @@ describe('mk_repl_cmd', function()
       assert.same('cabal', cmd[1])
     end)
   end
-  local cabal_project_file = cwd .. '/tests/fixtures/cabal/single-package/Abc.hs'
+  local cabal_project_file = cwd .. '/spec/fixtures/cabal/single-package/Abc.hs'
   it('prefers cabal if no stack.yml exists and cabal files exist', function()
     local cmd = assert(repl.mk_repl_cmd(cabal_project_file))
     assert(#cmd > 1)

@@ -1,8 +1,8 @@
 local Path = require('plenary.path')
 
 local cwd = vim.fn.getcwd() or '.'
-local cabal_project_root = cwd .. '/tests/fixtures/cabal/multi-package'
-local stack_project_root = cwd .. '/tests/fixtures/stack/multi-package'
+local cabal_project_root = cwd .. '/spec/fixtures/cabal/multi-package'
+local stack_project_root = cwd .. '/spec/fixtures/stack/multi-package'
 local invalid_project_path = '/some/invalid/path'
 
 describe('Project API', function()
@@ -110,7 +110,7 @@ describe('Internal project helpers:', function()
 
   describe('Cabal project', function()
     it('Can parse multiple package paths', function()
-      local project_file = Path:new('tests/fixtures/cabal/multi-package/cabal.project').filename
+      local project_file = Path:new('spec/fixtures/cabal/multi-package/cabal.project').filename
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
       assert.equals(2, #package_paths)
       for _, path in pairs(package_paths) do
@@ -118,7 +118,7 @@ describe('Internal project helpers:', function()
       end
     end)
     it('Can parse single package path', function()
-      local project_file = Path:new('tests/fixtures/cabal/single-package/cabal.project').filename
+      local project_file = Path:new('spec/fixtures/cabal/single-package/cabal.project').filename
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
       assert.equals(1, #package_paths)
       for _, path in pairs(package_paths) do
@@ -129,26 +129,26 @@ describe('Internal project helpers:', function()
     local expected_entry_points = {
       {
         package_name = 'sub1',
-        package_dir = 'tests/fixtures/cabal/multi-package/sub1',
+        package_dir = 'spec/fixtures/cabal/multi-package/sub1',
         exe_name = 'app',
         main = 'Main.hs',
         source_dir = 'app',
       },
       {
         package_name = 'sub1',
-        package_dir = 'tests/fixtures/cabal/multi-package/sub1',
+        package_dir = 'spec/fixtures/cabal/multi-package/sub1',
         exe_name = 'tests',
         main = 'Spec.hs',
         source_dir = 'test',
       },
     }
     it('Can parse package entry points.', function()
-      local package_dir = Path:new('tests/fixtures/cabal/multi-package/sub1').filename
+      local package_dir = Path:new('spec/fixtures/cabal/multi-package/sub1').filename
       local entry_points = HtProjectHelpers.parse_package_entrypoints(package_dir)
       assert.same(expected_entry_points, entry_points)
     end)
     it('Can parse project entry points.', function()
-      local project_dir = Path:new('tests/fixtures/cabal/multi-package').filename
+      local project_dir = Path:new('spec/fixtures/cabal/multi-package').filename
       local entry_points = HtProjectHelpers.parse_project_entrypoints(project_dir)
       assert.same(expected_entry_points, entry_points)
     end)
@@ -156,7 +156,7 @@ describe('Internal project helpers:', function()
 
   describe('Stack project', function()
     it('Can parse multi package paths', function()
-      local project_file = Path:new('tests/fixtures/stack/multi-package/stack.yaml').filename
+      local project_file = Path:new('spec/fixtures/stack/multi-package/stack.yaml').filename
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
       assert.equals(2, #package_paths)
       for _, path in pairs(package_paths) do
@@ -164,7 +164,7 @@ describe('Internal project helpers:', function()
       end
     end)
     it('Can parse single package path', function()
-      local project_file = Path:new('tests/fixtures/stack/single-package/stack.yaml').filename
+      local project_file = Path:new('spec/fixtures/stack/single-package/stack.yaml').filename
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
       assert.equals(1, #package_paths)
       for _, path in pairs(package_paths) do
@@ -175,26 +175,26 @@ describe('Internal project helpers:', function()
     local expected_entry_points = {
       {
         package_name = 'sub1',
-        package_dir = 'tests/fixtures/stack/multi-package/sub1',
+        package_dir = 'spec/fixtures/stack/multi-package/sub1',
         exe_name = 'sub1',
         main = 'Main.hs',
         source_dir = 'app',
       },
       {
         package_name = 'sub1',
-        package_dir = 'tests/fixtures/stack/multi-package/sub1',
+        package_dir = 'spec/fixtures/stack/multi-package/sub1',
         exe_name = 'sub1-spec',
         main = 'Spec.hs',
         source_dir = 'test',
       },
     }
     it('Can parse package entry points.', function()
-      local package_dir = Path:new('tests/fixtures/stack/multi-package/sub1').filename
+      local package_dir = Path:new('spec/fixtures/stack/multi-package/sub1').filename
       local entry_points = HtProjectHelpers.parse_package_entrypoints(package_dir)
       assert.same(expected_entry_points, entry_points)
     end)
     it('Can parse project entry points.', function()
-      local project_dir = Path:new('tests/fixtures/stack/multi-package').filename
+      local project_dir = Path:new('spec/fixtures/stack/multi-package').filename
       local entry_points = HtProjectHelpers.parse_project_entrypoints(project_dir)
       assert.same(expected_entry_points, entry_points)
     end)
