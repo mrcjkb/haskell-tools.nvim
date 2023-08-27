@@ -1,7 +1,6 @@
 {
   self,
   neodev-nvim,
-  plenary-nvim,
   telescope-nvim,
   nvim-dap,
   toggleterm,
@@ -9,16 +8,11 @@
 with final.lib;
 with final.lib.strings;
 with final.stdenv; let
-  nvim-nightly = final.neovim-nightly;
+  nvim-nightly = final.pkgs.neovim-nightly;
 
   neodev-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
     name = "neodev.nvim";
     src = neodev-nvim;
-  };
-
-  plenary-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
-    name = "plenary.nvim";
-    src = plenary-nvim;
   };
 
   telescope-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
@@ -36,7 +30,7 @@ with final.stdenv; let
     src = toggleterm;
   };
 
-  mkPlenaryTest = {
+  mkNeorocksTest = {
     name,
     nvim ? final.neovim-unwrapped,
     withTelescope ? true,
@@ -45,16 +39,9 @@ with final.stdenv; let
   }: let
     nvim-wrapped = final.pkgs.wrapNeovim nvim {
       configure = {
-        customRC = ''
-          lua << EOF
-          vim.cmd('runtime! plugin/plenary.vim')
-          EOF
-        '';
         packages.myVimPackage = {
           start =
             [
-              final.haskell-tools-nvim-dev
-              plenary-plugin
               toggleterm-plugin
             ]
             ++ (
@@ -66,20 +53,15 @@ with final.stdenv; let
       };
     };
   in
-    mkDerivation {
+    final.pkgs.neorocksTest {
       inherit name;
-
+      pname = "haskell-tools.nvim";
       src = self;
+      neovim = nvim;
 
-      phases = [
-        "unpackPhase"
-        "buildPhase"
-        "checkPhase"
-      ];
+      luaPackages = ps: with ps; [plenary-nvim];
 
-      doCheck = true;
-
-      buildInputs = with final;
+      extraPackages = with final;
         [
           nvim-wrapped
           makeWrapper
@@ -92,56 +74,47 @@ with final.stdenv; let
         )
         ++ extraPkgs;
 
-      buildPhase = ''
-        mkdir -p $out
-        cp -r tests $out
-        # FIXME: Fore some reason, this doesn't work
-        # haskell-language-server-wrapper generate-default-config > $out/tests/hls.json
-      '';
-
-      checkPhase = ''
+      preCheck = ''
+        # Neovim expects to be able to create log files, etc.
         export HOME=$(realpath .)
-        export TEST_CWD=$(realpath $out/tests)
-        cd $out
-        nvim --headless --noplugin -c "PlenaryBustedDirectory tests {nvim_cmd = 'nvim'}"
       '';
     };
 in {
-  haskell-tools-test = mkPlenaryTest {name = "haskell-tools";};
+  haskell-tools-test = mkNeorocksTest {name = "haskell-tools";};
 
-  haskell-tools-test-no-hls = mkPlenaryTest {
+  haskell-tools-test-no-hls = mkNeorocksTest {
     name = "haskell-tools-no-hls";
     withHls = false;
   };
 
-  haskell-tools-test-no-telescope = mkPlenaryTest {
+  haskell-tools-test-no-telescope = mkNeorocksTest {
     name = "haskell-tools-no-telescope";
     withTelescope = false;
   };
 
-  haskell-tools-test-no-telescope-with-hoogle = mkPlenaryTest {
+  haskell-tools-test-no-telescope-with-hoogle = mkNeorocksTest {
     name = "haskell-tools-no-telescope-local-hoogle";
     withTelescope = false;
     extraPkgs = [final.pkgs.haskellPackages.hoogle];
   };
 
-  haskell-tools-test-with-stack = mkPlenaryTest {
+  haskell-tools-test-with-stack = mkNeorocksTest {
     name = "haskell-tools-with-stack";
     extraPkgs = [final.pkgs.stack];
   };
 
-  haskell-tools-test-nightly = mkPlenaryTest {
+  haskell-tools-test-nightly = mkNeorocksTest {
     nvim = nvim-nightly;
     name = "haskell-tools-nightly";
   };
 
-  haskell-tools-test-no-telescope-nightly = mkPlenaryTest {
+  haskell-tools-test-no-telescope-nightly = mkNeorocksTest {
     nvim = nvim-nightly;
     name = "haskell-tools-no-telescope-nightly";
     withTelescope = false;
   };
 
-  haskell-tools-test-no-telescope-with-hoogle-nightly = mkPlenaryTest {
+  haskell-tools-test-no-telescope-with-hoogle-nightly = mkNeorocksTest {
     nvim = nvim-nightly;
     name = "haskell-tools-no-telescope-local-hoogle-nightly";
     withTelescope = false;

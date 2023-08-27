@@ -4,8 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    neorocks = {
+      url = "github:nvim-neorocks/neorocks";
     };
 
     pre-commit-hooks = {
@@ -23,11 +23,6 @@
     # inputs for tests and lints
     neodev-nvim = {
       url = "github:folke/neodev.nvim";
-      flake = false;
-    };
-
-    plenary-nvim = {
-      url = "github:nvim-lua/plenary.nvim";
       flake = false;
     };
 
@@ -50,7 +45,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    neovim-nightly-overlay,
+    neorocks,
     pre-commit-hooks,
     flake-utils,
     ...
@@ -67,7 +62,6 @@
         (inputs)
         self
         neodev-nvim
-        plenary-nvim
         telescope-nvim
         nvim-dap
         toggleterm
@@ -82,7 +76,7 @@
         overlays = [
           haskell-tooling-overlay
           test-overlay
-          neovim-nightly-overlay.overlay
+          neorocks.overlays.default
         ];
       };
 
@@ -111,7 +105,7 @@
                 workspace = {
                   library = [
                     "${pkgs.neovim-nightly}/share/nvim/runtime/lua"
-                    "${pkgs.plenary-plugin}/lua"
+                    "${pkgs.vimPlugins.plenary-nvim}/lua"
                     "${pkgs.telescope-plugin}/lua"
                     "${pkgs.toggleterm-plugin}/lua"
                     "${pkgs.nvim-dap-plugin}/lua"
