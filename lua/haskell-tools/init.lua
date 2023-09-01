@@ -32,6 +32,7 @@ local HaskellTools = {
   project = require('haskell-tools.project'),
   tags = require('haskell-tools.tags'),
   dap = require('haskell-tools.dap'),
+  log = require('haskell-tools.log'),
 }
 
 return HaskellTools

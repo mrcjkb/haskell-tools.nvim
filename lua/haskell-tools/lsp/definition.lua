@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 
 local lsp_definition = {}
 

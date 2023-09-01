@@ -4,7 +4,7 @@
 ---Tools for interaction with a GHCi REPL
 ---@bruief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
 
 ---Extend a repl command for `file`.

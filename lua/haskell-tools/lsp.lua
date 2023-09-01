@@ -1,7 +1,7 @@
 ---@mod haskell-tools.lsp haskell-language-server LSP client tools
 
 local HTConfig = require('haskell-tools.config.internal')
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
 local uv = vim.uv
   ---@diagnostic disable-next-line: deprecated

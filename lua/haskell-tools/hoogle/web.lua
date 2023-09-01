@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 local OS = require('haskell-tools.os')
 

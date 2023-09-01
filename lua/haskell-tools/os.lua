@@ -10,7 +10,7 @@
 
 local deps = require('haskell-tools.deps')
 local Job = deps.require_plenary('plenary.job')
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 
 local uv = vim.uv
   ---@diagnostic disable-next-line: deprecated

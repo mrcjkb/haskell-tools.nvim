@@ -19,7 +19,7 @@ local function find_json_configurations(root_dir, opts)
   ---@type HsDapLaunchConfiguration[]
   local configurations = {}
   local Path = deps.require_plenary('plenary.path')
-  local log = require('haskell-tools.log')
+  local log = require('haskell-tools.log.internal')
   local results = vim.fn.glob(Path:new(root_dir, opts.settings_file_pattern).filename, true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. root_dir)
@@ -116,7 +116,7 @@ local DefaultAutoDapConfigOpts = {
 ---@return nil
 HsDapTools.discover_configurations = function(bufnr, opts)
   local async = deps.require_plenary('plenary.async')
-  local log = require('haskell-tools.log')
+  local log = require('haskell-tools.log.internal')
   async.run(function()
     bufnr = bufnr or 0 -- Default to current buffer
     opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})

@@ -1,6 +1,6 @@
 ---@mod haskell-tools.project haskell-tools Project module
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 
 ---@brief [[
