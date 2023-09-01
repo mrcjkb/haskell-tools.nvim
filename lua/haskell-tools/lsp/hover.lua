@@ -176,6 +176,7 @@ function hover.on_hover(_, result, ctx, config)
       local location_suffix = ('%s'):format(format_location(location, current_file))
       local definition_result = definition_results[1]
       if not is_same_position(params, definition_result) then
+        log.debug { 'Hover: definition location', location_suffix }
         table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
         table.insert(_state.commands, function()
           -- We don't call vim.lsp.buf.definition() because the location params may have changed
@@ -221,6 +222,7 @@ function hover.on_hover(_, result, ctx, config)
     if is_same_position(params, result) then
       goto SkipTypeDefinition
     end
+    log.debug { 'Hover: type definition location', type_def_suffix }
     table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
     table.insert(_state.commands, function()
       -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
