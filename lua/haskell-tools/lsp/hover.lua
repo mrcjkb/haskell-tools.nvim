@@ -161,70 +161,76 @@ function hover.on_hover(_, result, ctx, config)
     end
     local location = string.match(value, '*Defined [ia][nt] (.+)')
     local current_file = params.textDocument.uri:gsub('file://', '')
-    if location and not found_location then
-      found_location = true
-      table.insert(to_remove, 1, i)
+    local results, err, definition_results
+    if location == nil or found_location then
+      goto SkipDefinition
+    end
+    found_location = true
+    table.insert(to_remove, 1, i)
+    results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
+    if err or results == nil or #results == 0 then
+      goto SkipDefinition
+    end
+    definition_results = results[1] and results[1].result or {}
+    if #definition_results > 0 then
       local location_suffix = ('%s'):format(format_location(location, current_file))
-      local results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
-      local can_go_to_definition = false
-      if not err and results and #results > 0 then -- Can go to definition
-        local definition_results = results[1] and results[1].result or {}
-        if #definition_results > 0 then
-          can_go_to_definition = true
-          local definition_result = definition_results[1]
-          if not is_same_position(params, definition_result) then
-            table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
-            table.insert(_state.commands, function()
-              -- We don't call vim.lsp.buf.definition() because the location params may have changed
-              local definition_ctx = vim.tbl_extend('force', ctx, {
-                method = 'textDocument/definition',
-              })
-              log.debug { 'Hover: Go to definition', definition_result }
-              vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
-            end)
-          end
-        end
-      end
-      if not can_go_to_definition then -- Display Hoogle search instead
-        local package = location:match('‘(.+)’')
-        local search_term = package and package .. '.' .. cword or cword
-        table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
+      local definition_result = definition_results[1]
+      if not is_same_position(params, definition_result) then
+        table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
         table.insert(_state.commands, function()
-          log.debug { 'Hover: Hoogle search for definition', search_term }
-          ht.hoogle.hoogle_signature { search_term = search_term }
+          -- We don't call vim.lsp.buf.definition() because the location params may have changed
+          local definition_ctx = vim.tbl_extend('force', ctx, {
+            method = 'textDocument/definition',
+          })
+          log.debug { 'Hover: Go to definition', definition_result }
+          vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
         end)
       end
-      local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
-      table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
+    else -- Display Hoogle search instead
+      local package = location:match('‘(.+)’')
+      local search_term = package and package .. '.' .. cword or cword
+      table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
       table.insert(_state.commands, function()
-        log.debug { 'Hover: Find references', reference_params }
-        -- We don't call vim.lsp.buf.references() because the location params may have changed
-        ---@diagnostic disable-next-line: missing-parameter
-        vim.lsp.buf_request(0, 'textDocument/references', reference_params)
+        log.debug { 'Hover: Hoogle search for definition', search_term }
+        ht.hoogle.hoogle_signature { search_term = search_term }
       end)
     end
-    if not found_type_definition then
-      local results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
-      if not err and results and #results > 0 then -- Can go to type definition
-        found_type_definition = true
-        local type_definition_results = results[1] and results[1].result or {}
-        if #type_definition_results > 0 then
-          local type_definition_result = type_definition_results[1]
-          local type_def_suffix = format_location(mk_location(type_definition_result), current_file)
-          if not is_same_position(params, result) then
-            table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
-            table.insert(_state.commands, function()
-              -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
-              local type_definition_ctx = vim.tbl_extend('force', ctx, {
-                method = 'textDocument/typeDefinition',
-              })
-              log.debug { 'Hover: Go to type definition', type_definition_result }
-              vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
-            end)
-          end
-        end
-      end
+    table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
+    table.insert(_state.commands, function()
+      local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
+      log.debug { 'Hover: Find references', reference_params }
+      -- We don't call vim.lsp.buf.references() because the location params may have changed
+      ---@diagnostic disable-next-line: missing-parameter
+      vim.lsp.buf_request(0, 'textDocument/references', reference_params)
+    end)
+    ::SkipDefinition::
+    if found_type_definition then
+      goto SkipTypeDefinition
     end
+    results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
+    if err or results == nil or #results == 0 then -- Can go to type definition
+      goto SkipTypeDefinition
+    end
+    found_type_definition = true
+    local type_definition_results = results[1] and results[1].result or {}
+    if #type_definition_results == 0 then
+      goto SkipTypeDefinition
+    end
+    local type_definition_result = type_definition_results[1]
+    local type_def_suffix = format_location(mk_location(type_definition_result), current_file)
+    if is_same_position(params, result) then
+      goto SkipTypeDefinition
+    end
+    table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
+    table.insert(_state.commands, function()
+      -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
+      local type_definition_ctx = vim.tbl_extend('force', ctx, {
+        method = 'textDocument/typeDefinition',
+      })
+      log.debug { 'Hover: Go to type definition', type_definition_result }
+      vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
+    end)
+    ::SkipTypeDefinition::
   end
   for _, pos in ipairs(to_remove) do
     table.remove(markdown_lines, pos)
