@@ -51,7 +51,7 @@ end
 ---Formats a location in a Haskell file, shortening it to a relative path if possible.
 ---@param location string The location provided by LSP hover
 ---@param current_file string The current file path or an empty string
----@return string | '' formatted_location or an empty string if the file is not a Haskell file
+---@return string formatted_location or the original location if the file is not a Haskell file
 local function format_location(location, current_file)
   local formatted_location = ('%s'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
   local file_location = formatted_location:match('(.*).hs:')
