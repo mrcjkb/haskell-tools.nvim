@@ -6,7 +6,7 @@
 --- Inspired by rust-tools.nvim's hover_actions
 ---@brief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local lsp_util = vim.lsp.util
 local HtParser = require('haskell-tools.parser')
 local OS = require('haskell-tools.os')

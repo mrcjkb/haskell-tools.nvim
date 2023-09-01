@@ -1,6 +1,6 @@
 ---@mod haskell-tools.hoogle haskell-tools Hoogle search
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local lsp_util = vim.lsp.util
 
 ---@type fun(sig_or_func_name:string, options:table|nil):nil

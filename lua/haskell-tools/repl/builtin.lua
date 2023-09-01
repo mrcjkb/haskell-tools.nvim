@@ -8,7 +8,7 @@
 ---Utility functions for the ghci repl module.
 ---@brief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 
 ---@class BuiltinRepl
 ---@field bufnr number

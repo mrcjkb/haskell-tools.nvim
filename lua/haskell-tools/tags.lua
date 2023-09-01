@@ -2,7 +2,7 @@
 
 local HTConfig = require('haskell-tools.config.internal')
 local Types = require('haskell-tools.types.internal')
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 
 local _state = {

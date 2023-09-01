@@ -6,6 +6,6 @@ pkgs.writeShellApplication {
   ];
   text = ''
     mkdir -p doc
-    lemmy-help lua/haskell-tools/{init,config,lsp,dap,hoogle,repl,project,tags,log}.lua lua/telescope/_extensions/ht.lua > doc/haskell-tools.txt
+    lemmy-help lua/haskell-tools/{init,config,lsp,dap,hoogle,repl,project,tags,log/init}.lua lua/telescope/_extensions/ht.lua > doc/haskell-tools.txt
   '';
 }

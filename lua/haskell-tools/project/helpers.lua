@@ -8,7 +8,7 @@
 --- Utility functions for analysing a project.
 ---@brief ]]
 
-local log = require('haskell-tools.log')
+local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 local Strings = require('haskell-tools.strings')
 local OS = require('haskell-tools.os')

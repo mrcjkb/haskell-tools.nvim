@@ -460,6 +460,13 @@ haskell-tools Logging                                        *haskell-tools.log*
 HaskellToolsLog                                                *HaskellToolsLog*
 
 
+HaskellToolsLog.get_hls_logfile()              *HaskellToolsLog.get_hls_logfile*
+    Get the haskell-language-server log file
+
+    Returns: ~
+        (string)  filepath
+
+
 HaskellToolsLog.get_logfile()                      *HaskellToolsLog.get_logfile*
     Get the haskell-tools.nvim log file path.
 
@@ -467,21 +474,27 @@ HaskellToolsLog.get_logfile()                      *HaskellToolsLog.get_logfile*
         (string)  filepath
 
 
+HaskellToolsLog.nvim_open_hls_logfile()  *HaskellToolsLog.nvim_open_hls_logfile*
+    Open the haskell-language-server log file
+
+    Returns: ~
+        (nil)
+
+
 HaskellToolsLog.nvim_open_logfile()          *HaskellToolsLog.nvim_open_logfile*
     Open the haskell-tools.nvim log file.
 
-
-HaskellToolsLog.get_hls_logfile()              *HaskellToolsLog.get_hls_logfile*
-     Get the haskell-language-server log file
-
-
-HaskellToolsLog.nvim_open_hls_logfile()  *HaskellToolsLog.nvim_open_hls_logfile*
+    Returns: ~
+        (nil)
 
 
 HaskellToolsLog.set_level()                          *HaskellToolsLog.set_level*
-     Set the log level
-     @param level (string|integer) The log level
-     @see vim.log.levels
+
+    Returns: ~
+        (nil)
+
+    See: ~
+        |vim.log.levels|
 
 
 vim:tw=78:ts=8:noet:ft=help:norl:
