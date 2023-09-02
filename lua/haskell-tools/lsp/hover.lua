@@ -48,12 +48,26 @@ local function run_command()
   action()
 end
 
+---@param x string hex
+---@return string char
+local function hex_to_char(x)
+  return string.char(tonumber(x, 16))
+end
+
 ---Formats a location in a Haskell file, shortening it to a relative path if possible.
 ---@param location string The location provided by LSP hover
 ---@param current_file string The current file path or an empty string
 ---@return string formatted_location or the original location if the file is not a Haskell file
 local function format_location(location, current_file)
-  local formatted_location = ('%s'):format(location):gsub('%*', ''):gsub('‘', '`'):gsub('’', '`')
+  -- remove *
+  -- replace quotes with markdown backticks
+  -- decode url-encoded characters
+  local formatted_location = ('%s')
+    :format(location)
+    :gsub('%*', '') -- remove *
+    :gsub('‘', '`') -- markdown backticks
+    :gsub('’', '`')
+    :gsub('%%(%x%x)', hex_to_char) -- decode url-encoded characters
   local file_location = formatted_location:match('(.*).hs:')
   if not file_location then
     return formatted_location
