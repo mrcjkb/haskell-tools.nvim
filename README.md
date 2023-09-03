@@ -76,7 +76,11 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
   dependencies = {
     'nvim-lua/plenary.nvim',
     {
-     "nvim-telescope/telescope.nvim",
+      "nvim-telescope/telescope.nvim",
+      optional = true,
+    },
+    {
+      "mfussenegger/nvim-dap",
       optional = true,
     },
   },
