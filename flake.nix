@@ -81,7 +81,7 @@
       };
 
       haskell-tools-nvim = pkgs.vimUtils.buildVimPluginFrom2Nix {
-        name = "haskell-tools";
+        name = "haskell-tools.nvim";
         src = self;
       };
 
