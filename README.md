@@ -75,7 +75,14 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
   'mrcjkb/haskell-tools.nvim',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim', -- Optional
+    {
+      "nvim-telescope/telescope.nvim",
+      optional = true,
+    },
+    {
+      "mfussenegger/nvim-dap",
+      optional = true,
+    },
   },
   branch = '2.x.x', -- Recommended
   init = function() -- Optional, see Advanced configuration
