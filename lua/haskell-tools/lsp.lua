@@ -39,6 +39,7 @@ end
 local function fix_cabal_client(client)
   local LspHelpers = require('haskell-tools.lsp.helpers')
   if client.name == LspHelpers.cabal_client_name and client.server_capabilities then
+    ---@diagnostic disable-next-line: inject-field
     client.server_capabilities = vim.tbl_extend('force', client.server_capabilities, {
       foldingRangeProvider = false,
       selectionRangeProvider = false,
