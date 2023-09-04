@@ -108,9 +108,10 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html.
 
 ---@class HTDapOpts
----@field cmd string[] | nil The command to start haskell-debug-adapter with.
+---@field cmd string[] | nil The command to start the debug adapter server with.
 ---@field logFile string | nil Log file path for detected configurations.
 ---@field logLevel HaskellDebugAdapterLogLevel | nil The log level for detected configurations.
+---@field auto_discover boolean | AddDapConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
 
 ---@alias HaskellDebugAdapterLogLevel 'Debug' | 'Info' | 'Warning' | 'Error'
 
