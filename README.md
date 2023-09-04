@@ -137,10 +137,6 @@ vim.keymap.set('n', '<leader>rf', function()
   ht.repl.toggle(vim.api.nvim_buf_get_name(0))
 end, def_opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
-
--- Detect nvim-dap launch configurations
--- (requires nvim-dap and haskell-debug-adapter)
-ht.dap.discover_configurations(bufnr)
 ```
 
 >**Note**
@@ -249,10 +245,10 @@ this plugin will set up `autocmd`s to automatically generate tags:
 
 This feature can be tweaked or disabled in the [advanced configuration](#advanced-configuration).
 
-- [x] **Auto-detect `haskell-debug-adapter` configurations**
+- [x] **Auto-discover `haskell-debug-adapter` configurations**
 
 If the [`nvim-dap`](https://github.com/mfussenegger/nvim-dap) plugin is installed,
-you can use `haskell-tools.nvim` to auto-detect [`haskell-debug-adapter`](https://hackage.haskell.org/package/haskell-debug-adapter)
+`haskell-tools.nvim` will automatically discover [`haskell-debug-adapter`](https://hackage.haskell.org/package/haskell-debug-adapter)
 configurations.
 
 ![dap](https://user-images.githubusercontent.com/12857160/232348888-4fea5393-d624-417e-b994-6eb44113a3d9.gif)
@@ -542,6 +538,12 @@ local ht = require('haskell-tools')
 --- File name or pattern to search for. Defaults to 'launch.json'
 ht.dap.discover_configurations(bufnr, opts)
 ```
+
+> **Note**
+>
+> `haskell-tools.nvim` will discover DAP launch configurations automatically,
+> if `nivm-dap` is installed and the debug adapter server is executable.
+> There is typically no need to call this function manually.
 
 ### Telescope extension
 

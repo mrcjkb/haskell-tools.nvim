@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Automatically discover debug adapter launch configurations if `nvim-dap` and `haskell-debug-adapter`
+  are detected.
+  This can be disabled by setting the `vim.g.haskell_tools.dap.auto_discover` option to `false`.
+
 ## [2.0.2] - 2023-09-02
 ### Fixed
 - Hover: Decode url-encoded (type-)definition paths in hover actions ([#238](https://github.com/mrcjkb/haskell-tools.nvim/issues/238)).

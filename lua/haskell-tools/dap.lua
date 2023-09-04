@@ -1,6 +1,7 @@
 ---@mod haskell-tools.dap haskell-tools nvim-dap setup
 
 local deps = require('haskell-tools.deps')
+local Types = require('haskell-tools.types.internal')
 
 ---@param root_dir string
 local function get_ghci_dap_cmd(root_dir)
@@ -40,7 +41,7 @@ local function find_json_configurations(root_dir, opts)
 end
 
 ---@param root_dir string
----@return table
+---@return HsDapLaunchConfiguration[]
 local function detect_launch_configurations(root_dir)
   local launch_configurations = {}
   local Path = deps.require_plenary('plenary.path')
@@ -83,9 +84,7 @@ local _configuration_cache = {}
 if not deps.has('dap') then
   ---@type HsDapTools
   local NullHsDapTools = {
-    discover_configurations = function(_)
-      vim.notify_once('haskell-tools.dap: Failed to initialise. Is nvim-dap installed?', vim.log.levels.ERROR)
-    end,
+    discover_configurations = function(_) end,
   }
   return NullHsDapTools
 end
@@ -95,18 +94,11 @@ local dap = require('dap')
 ---@class HsDapTools
 local HsDapTools = {}
 
-local HTConfig = require('haskell-tools.config.internal')
-local dap_opts = HTConfig.dap
-dap.adapters.ghc = {
-  type = 'executable',
-  command = table.concat(dap_opts.cmd, ' '),
-}
-
 ---@class AddDapConfigOpts
 local DefaultAutoDapConfigOpts = {
-  ---@type boolean Whether to automatically detect launch configurations for the project
+  ---@type boolean Whether to automatically detect launch configurations for the project.
   autodetect = true,
-  ---@type string File name or pattern to search for. Defaults to 'launch.json'
+  ---@type string File name or pattern to search for. Defaults to 'launch.json'.
   settings_file_pattern = 'launch.json',
 }
 
@@ -115,8 +107,20 @@ local DefaultAutoDapConfigOpts = {
 ---@param opts AddDapConfigOpts|nil
 ---@return nil
 HsDapTools.discover_configurations = function(bufnr, opts)
-  local async = deps.require_plenary('plenary.async')
+  local HTConfig = require('haskell-tools.config.internal')
+  local HTDapConfig = HTConfig.dap
   local log = require('haskell-tools.log.internal')
+  local dap_cmd = Types.evaluate(HTDapConfig.cmd) or {}
+  if #dap_cmd == 0 or vim.fn.executable(dap_cmd[1]) ~= 1 then
+    log.debug { 'DAP server executable not found.', dap_cmd }
+    return
+  end
+  ---@cast dap_cmd string[]
+  dap.adapters.ghc = {
+    type = 'executable',
+    command = table.concat(dap_cmd, ' '),
+  }
+  local async = deps.require_plenary('plenary.async')
   async.run(function()
     bufnr = bufnr or 0 -- Default to current buffer
     opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
@@ -124,10 +128,11 @@ HsDapTools.discover_configurations = function(bufnr, opts)
     local HtProjectHelpers = require('haskell-tools.project.helpers')
     local project_root = HtProjectHelpers.match_project_root(filename)
     if not project_root then
-      log.warn('haskell-tools.dap: Unable to detect project root for file ' .. filename)
+      log.warn('dap: Unable to detect project root for file ' .. filename)
       return
     end
     if _configuration_cache[project_root] then
+      log.debug('dap: Found cached configuration. Skipping.')
       return
     end
     local discovered_configurations = {}
