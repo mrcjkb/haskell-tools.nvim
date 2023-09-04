@@ -132,6 +132,34 @@ function HtConfigCheck.validate(cfg)
   if not ok then
     return false, err
   end
+  local dap = cfg.dap
+  local valid_dap_log_levels = { 'Debug', 'Info', 'Warning', 'Error' }
+  ok, err = validate('dap', {
+    auto_discover = { dap.auto_discover, { 'boolean', 'table' } },
+    cmd = { dap.cmd, { 'function', 'table' } },
+    logFile = { dap.logFile, 'string' },
+    logLevel = {
+      dap.logLevel,
+      function(level)
+        return type(level) == 'string' and vim.tbl_contains(valid_dap_log_levels, level)
+      end,
+      'one of ' .. vim.inspect(valid_backends),
+    },
+  })
+  if not ok then
+    return false, err
+  end
+  local auto_discover = dap.auto_discover
+  if type(auto_discover) == 'table' then
+    ---@cast auto_discover AddDapConfigOpts
+    ok, err = validate('dap.auto_discover', {
+      autodetect = { auto_discover.autodetect, 'boolean' },
+      settings_file_pattern = { auto_discover.settings_file_pattern, 'string' },
+    })
+    if not ok then
+      return false, err
+    end
+  end
   return true
 end
 

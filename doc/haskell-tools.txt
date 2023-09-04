@@ -196,9 +196,10 @@ HaskellLspClientOpts                                      *HaskellLspClientOpts*
 HTDapOpts                                                            *HTDapOpts*
 
     Fields: ~
-        {cmd}       (string[]|nil)                     The command to start haskell-debug-adapter with.
-        {logFile}   (string|nil)                       Log file path for detected configurations.
-        {logLevel}  (HaskellDebugAdapterLogLevel|nil)  The log level for detected configurations.
+        {cmd}            (string[]|nil)                     The command to start the debug adapter server with.
+        {logFile}        (string|nil)                       Log file path for detected configurations.
+        {logLevel}       (HaskellDebugAdapterLogLevel|nil)  The log level for detected configurations.
+        {auto_discover}  (boolean|AddDapConfigOpts)         Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
 
 
 HaskellDebugAdapterLogLevel                        *HaskellDebugAdapterLogLevel*

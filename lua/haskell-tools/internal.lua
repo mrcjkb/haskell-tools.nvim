@@ -57,4 +57,17 @@ function InternalApi.start_or_attach()
   end
 end
 
+---Auto-discover nvim-dap launch configurations (if auto-discovery is enabled)
+function InternalApi.dap_discover()
+  local auto_discover = HTConfig.dap.auto_discover
+  if not auto_discover then
+    return
+  elseif type(auto_discover) == 'boolean' then
+    return require('haskell-tools').dap.discover_configurations()
+  end
+  ---@cast auto_discover AddDapConfigOpts
+  local bufnr = vim.api.nvim_get_current_buf()
+  require('haskell-tools').dap.discover_configurations(bufnr, auto_discover)
+end
+
 return InternalApi
