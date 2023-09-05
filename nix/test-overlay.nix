@@ -57,13 +57,12 @@ with final.stdenv; let
       inherit name;
       pname = "haskell-tools.nvim";
       src = self;
-      neovim = nvim;
+      neovim = nvim-wrapped;
 
       luaPackages = ps: with ps; [plenary-nvim];
 
       extraPackages = with final;
         [
-          nvim-wrapped
           makeWrapper
           curl
         ]
