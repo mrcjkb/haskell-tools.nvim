@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   are detected.
   This can be disabled by setting the `vim.g.haskell_tools.dap.auto_discover` option to `false`.
 
+### Fixed
+- Hoogle replace (`<C-r>`) no longer switches to insert mode.
+
 ## [2.0.2] - 2023-09-02
 ### Fixed
 - Hover: Decode url-encoded (type-)definition paths in hover actions ([#238](https://github.com/mrcjkb/haskell-tools.nvim/issues/238)).

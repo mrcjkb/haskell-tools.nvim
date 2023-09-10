@@ -40,8 +40,12 @@ function HoogleHelpers.hoogle_attach_mappings(buf, map)
     -- Replace word under cursor
     local entry = actions_state.get_selected_entry()
     local func_name = entry.type_sig:match('([^%s]*)%s::')
+    if not func_name then
+      vim.notify('Hoogle (replace): Not a function.', vim.log.levels.WARN)
+      return
+    end
     actions.close(buf)
-    vim.cmd('normal! ciw' .. func_name)
+    vim.api.nvim_input('ciw' .. func_name .. '<ESC>')
   end)
   return true
 end
