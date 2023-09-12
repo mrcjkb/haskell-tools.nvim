@@ -166,7 +166,10 @@ for more configuration options.
   - [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
     (provides completion sources for [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)).
   - [nvim-lsp-selection-range](https://github.com/camilledejoye/nvim-lsp-selection-range)
-    (Adds haskell-specific [expand selection](https://haskell-language-server.readthedocs.io/en/latest/features.html#selection-range)
+    (Adds [expand selection](https://haskell-language-server.readthedocs.io/en/latest/features.html#selection-range)
+    support).
+  - [nvim-ufo](https://github.com/kevinhwang91/nvim-ufo).
+    (Adds [folding range](https://haskell-language-server.readthedocs.io/en/latest/features.html#folding-range)
     support).
 - [x] **Automatically refreshes code lenses by default,**
       which `haskell-language-server` heavily relies on. [Can be disabled.](#advanced-configuration)
