@@ -6,7 +6,10 @@
         "telescope.nvim",
         "plenary.nvim",
         "toggleterm.nvim",
-        "nvim-dap"
+        "nvim-dap",
+        "nvim-lsp-selection-range",
+        "nvim-ufo",
+        "cmp-nvim-lsp"
       ]
     }
   },
