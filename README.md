@@ -423,6 +423,7 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 | `:HlsStart`    | Start the LSP client         |
 | `:HlsStop`     | Stop the LSP client          |
 | `:HlsRestart`  | Restart the LSP client       |
+| `:HlsEvalAll`  | Evaluate all code snippets   |
 
 ```lua
 local ht = require('haskell-tools')

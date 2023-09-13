@@ -240,6 +240,13 @@ local commands = {
     end,
     {},
   },
+  {
+    'HlsEvalAll',
+    function()
+      HlsTools.buf_eval_all()
+    end,
+    {},
+  },
 }
 
 for _, command in ipairs(commands) do
