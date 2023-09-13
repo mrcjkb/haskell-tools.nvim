@@ -23,8 +23,9 @@ body:
       required: true
   - type: input
     attributes:
-      label: "Output of `haskell-language-server-wrapper --version`"
-      placeholder: "2.1.0.0 (GHC: 9.2.8)"
+      label: "Output of `:checkhealth haskell-tools`"
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: "How to reproduce the issue"

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Health: Check for conflicting `lspconfig.hls` configuration.
+
 ## [2.2.0] - 2023-09-12
 ### Added
 - Automatically add `foldingRange` LSP client capabilities if [`nvim-ufo`](https://github.com/kevinhwang91/nvim-ufo)
@@ -139,7 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only show definition/typeDefinition hover actions if they are in different locations.
 ### Added
 - Rockspec for automatic dependency management by LuaRocks-compatible plugin managers.
-- LuaRocks tag release worflow.
+- LuaRocks tag release workflow.
 - `HlsStart`, `HlsStop` and `HlsRestart` commands.
 - Dynamically load `haskell-language-server` settings JSON from project root, if available.
 - Health checks, runnable with `:checkhealth haskell-tools`.
