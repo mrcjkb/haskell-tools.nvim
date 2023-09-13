@@ -418,9 +418,11 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-- `:HlsStart` - Start the LSP client.
-- `:HlsStop` - Stop the LSP client.
-- `:HlsRestart` - Restart the LSP client.
+| Command        | Description                  |
+| -------------- | ---------------------------- |
+| `:HlsStart`    | Start the LSP client         |
+| `:HlsStop`     | Stop the LSP client          |
+| `:HlsRestart`  | Restart the LSP client       |
 
 ```lua
 local ht = require('haskell-tools')
@@ -493,10 +495,13 @@ ht.repl.reload()
 
 #### Project
 
-- `:HsProjectFile` - Open the project file for the current buffer
-  (cabal.project or stack.yaml).
-- `:HsPackageYaml` - Open the package.yaml file for the current buffer.
-- `:HsPackageCabal` - Open the *.cabal file for the current buffer.
+<!-- markdownlint-disable -->
+| Command           | Description                                                                |
+| ----------------- | ---------------------------------------------------------------------------|
+| `:HsProjectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
+| `:HsPackageYaml`  | Open the package.yaml file for the current buffer                          |
+| `:HsPackageCabal` | Open the *.cabal file for the current buffer                               |
+<!-- markdownlint-enable -->
 
 ```lua
 local ht = require('haskell-tools')
@@ -562,12 +567,15 @@ If [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is insta
 `haskell-tools.nvim` will register the `ht` extenstion
 with the following commands:
 
-- `:Telescope ht package_files` - Search for files within the current (sub)package.
-- `:Telescope ht package_hsfiles` - Search for Haskell files within the current (sub)package.
-- `:Telescope ht package_grep` - Live grep within the current (sub)package.
-- `:Telescope ht package_hsgrep` - Live grep Haskell files within the current (sub)package.
-- `:Telescope ht hoogle_signature` - Run a Hoogle search for the type signature
-  under the cursor.
+<!-- markdownlint-disable -->
+| Command                          | Description                                                  |
+| -------------------------------- | -------------------------------------------------------------|
+| `:Telescope ht package_files`    | Search for files within the current (sub)package             |
+| `:Telescope ht package_hsfiles`  | Search for Haskell files within the current (sub)package     |
+| `:Telescope ht package_grep`     | Live grep within the current (sub)package                    |
+| `:Telescope ht package_hsgrep`   | Live grep Haskell files within the current (sub)package      |
+| `:Telescope ht hoogle_signature` | Run a Hoogle search for the type signature under the cursor  |
+<!-- markdownlint-enable -->
 
 To load the extension, call
 
