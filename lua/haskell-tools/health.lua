@@ -230,6 +230,17 @@ local function check_config()
   end
 end
 
+local function check_for_conflicts()
+  start('Checking for conflicting plugins')
+  for _, autocmd in ipairs(vim.api.nvim_get_autocmds { event = 'FileType', pattern = 'haskell' }) do
+    if autocmd.group_name and autocmd.group_name == 'lspconfig' then
+      error('lspconfig.hls has been setup. This will likely lead to conflicts with the haskell-tools LSP client.')
+      return
+    end
+  end
+  ok('No conflicting plugins detected.')
+end
+
 function health.check()
   start('Checking for Lua dependencies')
   for _, dep in ipairs(lua_dependencies) do
@@ -241,6 +252,7 @@ function health.check()
     check_external_dependency(dep)
   end
   check_config()
+  check_for_conflicts()
 end
 
 return health
