@@ -18,11 +18,17 @@ local log = require('haskell-tools.log.internal')
 ---@type BuiltinRepl | nil
 local BuiltinRepl = nil
 
+local function is_repl_loaded()
+  return BuiltinRepl ~= nil and vim.api.nvim_buf_is_loaded(BuiltinRepl.bufnr)
+end
+
 ---@param callback fun(repl:BuiltinRepl)
 ---@return nil
 local function when_repl_loaded(callback)
-  if BuiltinRepl ~= nil and vim.api.nvim_buf_is_loaded(BuiltinRepl.bufnr) then
-    callback(BuiltinRepl)
+  if is_repl_loaded() then
+    local repl = BuiltinRepl
+    ---@cast repl BuiltinRepl
+    callback(repl)
   end
 end
 
@@ -131,7 +137,9 @@ return function(mk_repl_cmd, options)
       log.debug { 'repl.builtin: New command', cmd }
       ReplHandlerImpl.quit()
     end
-    when_repl_loaded(function(repl)
+    if is_repl_loaded() then
+      local repl = BuiltinRepl
+      ---@cast repl BuiltinRepl
       log.debug('repl.builtin: is loaded')
       local winid = vim.fn.bufwinid(repl.bufnr)
       if winid ~= -1 then
@@ -146,7 +154,8 @@ return function(mk_repl_cmd, options)
           vim.api.nvim_set_current_win(winid)
         end
       end
-    end)
+      return
+    end
     log.debug('repl.builtin: is not loaded')
     opts = opts or vim.empty_dict()
     local bufnr = vim.api.nvim_create_buf(true, true)

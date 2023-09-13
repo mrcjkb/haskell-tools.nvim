@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Health: Check for conflicting `lspconfig.hls` configuration.
 - New commands: `:HlsEvalAll`
 
+### Fixed
+- Builtin repl: Broken toggle
+
 ## [2.2.0] - 2023-09-12
 ### Added
 - Automatically add `foldingRange` LSP client capabilities if [`nvim-ufo`](https://github.com/kevinhwang91/nvim-ufo)
