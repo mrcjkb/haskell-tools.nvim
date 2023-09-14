@@ -549,6 +549,11 @@ ht.tags.generate_project_tags(path, opts)
 ht.tags.generate_package_tags(path)
 ```
 
+> **Note**
+>
+> By default, `haskell-tools` will automate generating project and package
+> tags, if `fast-tags` is detected.
+
 #### DAP
 
 ```lua
