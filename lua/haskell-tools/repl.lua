@@ -4,6 +4,15 @@
 ---Tools for interaction with a GHCi REPL
 ---@bruief ]]
 
+---@brief [[
+--- The following commands are available:
+---
+--- * `:HtReplToggle` - Toggle a GHCi repl.
+--- * `:HtReplQuit` - Quit the current repl.
+--- * `:HtReplLoad` - Load a Haskell file into the repl.
+--- * `:HtReplReload` - Reload the current repl.
+---@brief ]]
+
 local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
 
@@ -236,5 +245,46 @@ HsReplTools.reload = function()
 end
 
 vim.keymap.set('n', 'ghc', HsReplTools.operator, { noremap = true })
+
+local commands = {
+  {
+    'HtReplToggle',
+    ---@param tbl table
+    function(tbl)
+      local filepath = tbl.args ~= '' and vim.fn.expand(tbl.args)
+      ---@cast filepath string
+      HsReplTools.toggle(filepath)
+    end,
+    { nargs = '?' },
+  },
+  {
+    'HtReplLoad',
+    ---@param tbl table
+    function(tbl)
+      local filepath = vim.fn.expand(tbl.args)
+      ---@cast filepath string
+      HsReplTools.load_file(filepath)
+    end,
+    { nargs = 1 },
+  },
+  {
+    'HtReplQuit',
+    function()
+      HsReplTools.quit()
+    end,
+    {},
+  },
+  {
+    'HtReplReload',
+    function()
+      HsReplTools.reload()
+    end,
+    {},
+  },
+}
+
+for _, command in ipairs(commands) do
+  vim.api.nvim_create_user_command(unpack(command))
+end
 
 return HsReplTools

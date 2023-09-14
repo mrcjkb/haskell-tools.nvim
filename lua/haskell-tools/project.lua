@@ -40,7 +40,7 @@ log.debug('Setting up project tools...')
 
 --- Live grep the current package with telescope.
 --- available if nvim-telescope/telescope.nvim is installed.
----@param opts table telescope options
+---@param opts table|nil telescope options
 local function telescope_package_grep(opts)
   local t = require('telescope.builtin')
   opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'package live grep' }, opts or {})
@@ -49,7 +49,7 @@ end
 
 --- Find file in the current package with telescope
 --- available if nvim-telescope/telescope.nvim is installed.
----@param opts table telescope options
+---@param opts table|nil telescope options
 local function telescope_package_files(opts)
   local t = require('telescope.builtin')
   opts = vim.tbl_deep_extend('keep', { prompt_title_prefix = 'package file search' }, opts or {})

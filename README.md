@@ -418,9 +418,12 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-- `:HlsStart` - Start the LSP client.
-- `:HlsStop` - Stop the LSP client.
-- `:HlsRestart` - Restart the LSP client.
+| Command        | Description                  |
+| -------------- | ---------------------------- |
+| `:HlsStart`    | Start the LSP client         |
+| `:HlsStop`     | Stop the LSP client          |
+| `:HlsRestart`  | Restart the LSP client       |
+| `:HlsEvalAll`  | Evaluate all code snippets   |
 
 ```lua
 local ht = require('haskell-tools')
@@ -452,6 +455,13 @@ ht.hoogle.hoogle_signature()
 ```
 
 #### Repl
+
+| Command         | Description                         | Arguments           |
+| --------------- | ----------------------------------- | ------------------- |
+| `:HtReplToggle` | Toggle a GHCi repl                  | filepath (optional) |
+| `:HtReplQuit`   | Quit the current repl               |                     |
+| `:HtReplLoad`   | Load a file into the current repl   | filepath (required) |
+| `:HtReplReload` | Reload the current repl             |                     |
 
 ```lua
 local ht = require('haskell-tools')
@@ -493,10 +503,13 @@ ht.repl.reload()
 
 #### Project
 
-- `:HsProjectFile` - Open the project file for the current buffer
-  (cabal.project or stack.yaml).
-- `:HsPackageYaml` - Open the package.yaml file for the current buffer.
-- `:HsPackageCabal` - Open the *.cabal file for the current buffer.
+<!-- markdownlint-disable -->
+| Command           | Description                                                                |
+| ----------------- | ---------------------------------------------------------------------------|
+| `:HsProjectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
+| `:HsPackageYaml`  | Open the package.yaml file for the current buffer                          |
+| `:HsPackageCabal` | Open the *.cabal file for the current buffer                               |
+<!-- markdownlint-enable -->
 
 ```lua
 local ht = require('haskell-tools')
@@ -536,6 +549,11 @@ ht.tags.generate_project_tags(path, opts)
 ht.tags.generate_package_tags(path)
 ```
 
+> **Note**
+>
+> By default, `haskell-tools` will automate generating project and package
+> tags, if `fast-tags` is detected.
+
 #### DAP
 
 ```lua
@@ -559,21 +577,29 @@ ht.dap.discover_configurations(bufnr, opts)
 ### Telescope extension
 
 If [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is installed,
-`haskell-tools.nvim` will register the `ht` extenstion
+`haskell-tools.nvim` will register the `ht` extension
 with the following commands:
 
-- `:Telescope ht package_files` - Search for files within the current (sub)package.
-- `:Telescope ht package_hsfiles` - Search for Haskell files within the current (sub)package.
-- `:Telescope ht package_grep` - Live grep within the current (sub)package.
-- `:Telescope ht package_hsgrep` - Live grep Haskell files within the current (sub)package.
-- `:Telescope ht hoogle_signature` - Run a Hoogle search for the type signature
-  under the cursor.
+<!-- markdownlint-disable -->
+| Command                          | Description                                                  |
+| -------------------------------- | -------------------------------------------------------------|
+| `:Telescope ht package_files`    | Search for files within the current (sub)package             |
+| `:Telescope ht package_hsfiles`  | Search for Haskell files within the current (sub)package     |
+| `:Telescope ht package_grep`     | Live grep within the current (sub)package                    |
+| `:Telescope ht package_hsgrep`   | Live grep Haskell files within the current (sub)package      |
+| `:Telescope ht hoogle_signature` | Run a Hoogle search for the type signature under the cursor  |
+<!-- markdownlint-enable -->
 
 To load the extension, call
 
 ```lua
 require('telescope').load_extension('ht')
 ```
+
+> **Note**
+>
+> If you lazy-load this plugin,
+> make sure it is loaded _before_ registering the Telescope extension.
 
 ## Troubleshooting
 

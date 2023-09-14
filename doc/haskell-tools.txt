@@ -216,6 +216,7 @@ haskell-language-server LSP client tools                     *haskell-tools.lsp*
  * `:HlsStart` - Start the LSP client.
  * `:HlsStop` - Stop the LSP client.
  * `:HlsRestart` - Restart the LSP client.
+ * `:HlsEvalAll` - Evaluate all code snippets in comments.
 
 LoadHlsSettingsOpts                                        *LoadHlsSettingsOpts*
 
@@ -325,6 +326,13 @@ HoogleTools.hoogle_signature({options})           *HoogleTools.hoogle_signature*
 
 ==============================================================================
 haskell-tools GHCi REPL module                              *haskell-tools.repl*
+
+ The following commands are available:
+
+ * `:HtReplToggle` - Toggle a GHCi repl.
+ * `:HtReplQuit` - Quit the current repl.
+ * `:HtReplLoad` - Load a Haskell file into the repl.
+ * `:HtReplReload` - Reload the current repl.
 
 HsReplTools                                                        *HsReplTools*
 
