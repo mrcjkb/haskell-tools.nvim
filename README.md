@@ -572,7 +572,7 @@ ht.dap.discover_configurations(bufnr, opts)
 ### Telescope extension
 
 If [`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is installed,
-`haskell-tools.nvim` will register the `ht` extenstion
+`haskell-tools.nvim` will register the `ht` extension
 with the following commands:
 
 <!-- markdownlint-disable -->
@@ -590,6 +590,11 @@ To load the extension, call
 ```lua
 require('telescope').load_extension('ht')
 ```
+
+> **Note**
+>
+> If you lazy-load this plugin,
+> make sure it is loaded _before_ registering the Telescope extension.
 
 ## Troubleshooting
 
