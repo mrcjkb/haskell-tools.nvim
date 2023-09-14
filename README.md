@@ -456,6 +456,13 @@ ht.hoogle.hoogle_signature()
 
 #### Repl
 
+| Command         | Description                         | Arguments           |
+| --------------- | ----------------------------------- | ------------------- |
+| `:HtReplToggle` | Toggle a GHCi repl                  | filepath (optional) |
+| `:HtReplQuit`   | Quit the current repl               |                     |
+| `:HtReplLoad`   | Load a file into the current repl   | filepath (required) |
+| `:HtReplReload` | Reload the current repl             |                     |
+
 ```lua
 local ht = require('haskell-tools')
 --- Toggle a GHCi repl for the current project

@@ -13,6 +13,7 @@ local uv = vim.uv
 --- * `:HlsStart` - Start the LSP client.
 --- * `:HlsStop` - Stop the LSP client.
 --- * `:HlsRestart` - Restart the LSP client.
+--- * `:HlsEvalAll` - Evaluate all code snippets in comments.
 ---@brief ]]
 
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.

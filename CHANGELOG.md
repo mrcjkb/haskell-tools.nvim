@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Health: Check for conflicting `lspconfig.hls` configuration.
-- New commands: `:HlsEvalAll`
+- New commands: `HlsEvalAll`, `HtReplToggle`, `HtReplQuit`, `HtReplLoad`, `HtReplReload`
 
 ### Fixed
 - Builtin repl: Broken toggle
