@@ -114,7 +114,8 @@ See the [Features](#features) section for more info.
 > setup or set up the lsp client for `haskell-language-server` manually,
 > as doing so may cause conflicts.
 
-This is a filetype plugin, so there is no need to call a `setup` function.
+This is a filetype plugin that works out of the box,
+so there is no need to call a `setup` function.
 
 You will most likely want to add some keymaps, and optionally
 detect launch configurations for [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
