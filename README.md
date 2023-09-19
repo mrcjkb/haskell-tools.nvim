@@ -115,7 +115,8 @@ See the [Features](#features) section for more info.
 > as doing so may cause conflicts.
 
 This is a filetype plugin that works out of the box,
-so there is no need to call a `setup` function.
+so there is no need to call a `setup` function or configure anything
+to get this plugin working.
 
 You will most likely want to add some keymaps, and optionally
 detect launch configurations for [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
