@@ -84,7 +84,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
-  branch = '2.x.x', -- Recommended
+  version = '^2', -- Recommended
   ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
 }
 ```
