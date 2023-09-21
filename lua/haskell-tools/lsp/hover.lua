@@ -124,7 +124,6 @@ function hover.on_hover(_, result, ctx, config)
     return
   end
   local markdown_lines = lsp_util.convert_input_to_markdown_lines(result.contents)
-  markdown_lines = lsp_util.trim_empty_lines(markdown_lines)
   if vim.tbl_isempty(markdown_lines) then
     log.debug('No hover information available.')
     vim.notify('No information available')
