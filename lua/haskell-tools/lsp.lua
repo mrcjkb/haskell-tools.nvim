@@ -116,8 +116,7 @@ HlsTools.start = function(bufnr)
   local file = vim.api.nvim_buf_get_name(bufnr)
   if not file or #file == 0 then
     local msg = 'Could not determine the name of buffer ' .. bufnr .. '.'
-    log.error('lsp.start: ' .. msg)
-    vim.notify('haskell-tools: ' .. msg, vim.log.levels.ERROR)
+    log.debug('lsp.start: ' .. msg)
     return
   end
   local HtProjectHelpers = require('haskell-tools.project.helpers')

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Don't send an error notification if the name of the buffer
+  cannot be determined when starting the LSP client.
+
 ## [2.3.0] - 2023-09-20
 ### Added
 - Health: Check for conflicting `lspconfig.hls` configuration.
