@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Configure `haskell-language-server` to log to a temporary file by default,
+  to prevent huge log files [#264](https://github.com/mrcjkb/haskell-tools.nvim/issues/264).
+
 ### Changed
 - Don't send an error notification if the name of the buffer
   cannot be determined when starting the LSP client.
