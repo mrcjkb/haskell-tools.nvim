@@ -248,7 +248,7 @@ local HTDefaultConfig = {
       },
     },
     ---@type string The path to the haskell-language-server log file.
-    logfile = Path:new(vim.fn.stdpath('log'), 'haskell-language-server.log').filename,
+    logfile = vim.fn.tempname() .. '-haskell-language-server.log',
   },
   ---@class HTDapConfig debug adapter config for nvim-dap.
   dap = {

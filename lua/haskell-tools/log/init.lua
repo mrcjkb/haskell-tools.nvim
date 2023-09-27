@@ -35,4 +35,34 @@ function HaskellToolsLog.set_level(level)
   return require('haskell-tools.log.internal').set_level(level)
 end
 
+local commands = {
+  {
+    'HtLog',
+    function()
+      HaskellToolsLog.nvim_open_logfile()
+    end,
+    {},
+  },
+  {
+    'HlsLog',
+    function()
+      HaskellToolsLog.nvim_open_hls_logfile()
+    end,
+    { nargs = 1 },
+  },
+  {
+    'HtSetLogLevel',
+    function(tbl)
+      local level = vim.fn.expand(tbl.args)
+      ---@cast level string
+      HaskellToolsLog.set_level(tonumber(level) or level)
+    end,
+    { nargs = 1 },
+  },
+}
+
+for _, command in ipairs(commands) do
+  vim.api.nvim_create_user_command(unpack(command))
+end
+
 return HaskellToolsLog

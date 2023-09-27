@@ -655,6 +655,12 @@ vim.g.haskell_tools = {
 
 You can also temporarily set the log level by calling
 
+| Command          | Argument                                           |
+| ---------------- | -------------------------------------------------- |
+| `:HtSetLogLevel` | One of `debug` `error` `warn` `info` `trace` `off` |
+
+or
+
 ```lua
 :lua require('haskell-tools').log.set_level(vim.log.levels.DEBUG)
 ```
@@ -671,8 +677,8 @@ You can find the log files by calling
 or open them by calling
 
 ```lua
-:lua require('haskell-tools').log.nvim_open_logfile()
-:lua require('haskell-tools').log.nvim_open_hls_logfile()
+:lua require('haskell-tools').log.nvim_open_logfile() -- or :HtLog
+:lua require('haskell-tools').log.nvim_open_hls_logfile() -- or :HlsLog
 ```
 
 ## Recommendations
