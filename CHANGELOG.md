@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `HlsLog` and `HtLog`, `HtSetLogLevel` commands.
+
 ### Fixed
 - Configure `haskell-language-server` to log to a temporary file by default,
   to prevent huge log files [#264](https://github.com/mrcjkb/haskell-tools.nvim/issues/264).
