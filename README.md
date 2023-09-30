@@ -212,7 +212,7 @@ the Hoogle search telescope integration can be used to fill holes.
 
 Start a GHCi repl for the current project / buffer.
 
-- Automagically detects the appropriate command (`cabal new-repl`, `stack ghci`
+- Automagically detects the appropriate command (`cabal repl`, `stack ghci`
   or `ghci`) for your project.
 - Choose between a builtin handler or [`toggleterm.nvim`](https://github.com/akinsho/toggleterm.nvim).
 - Dynamically create a repl command for [`iron.nvim`](https://github.com/hkupty/iron.nvim)
