@@ -10,22 +10,22 @@ with final.lib.strings;
 with final.stdenv; let
   nvim-nightly = final.pkgs.neovim-nightly;
 
-  neodev-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+  neodev-plugin = final.pkgs.vimUtils.buildVimPlugin {
     name = "neodev.nvim";
     src = neodev-nvim;
   };
 
-  telescope-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+  telescope-plugin = final.pkgs.vimUtils.buildVimPlugin {
     name = "telescope.nvim";
     src = telescope-nvim;
   };
 
-  nvim-dap-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+  nvim-dap-plugin = final.pkgs.vimUtils.buildVimPlugin {
     name = "nvim-dap";
     src = nvim-dap;
   };
 
-  toggleterm-plugin = final.pkgs.vimUtils.buildVimPluginFrom2Nix {
+  toggleterm-plugin = final.pkgs.vimUtils.buildVimPlugin {
     name = "toggleterm";
     src = toggleterm;
   };
