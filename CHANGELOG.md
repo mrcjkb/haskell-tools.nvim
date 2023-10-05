@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `vim.g.haskell_tools` can now also be a function that returns
+  a configuration table.
 - `HlsLog` and `HtLog`, `HtSetLogLevel` commands.
 
 ### Fixed

@@ -311,6 +311,11 @@ vim.g.haskell_tools = {
 }
 ```
 
+> **Note**
+>
+> `vim.g.haskell_tools` can also be a function that returns
+> a table.
+
 ### How to dynamically load different `haskell-language-server` settings per project
 
 By default, this plugin will look for a `hls.json` file in the project root directory,
