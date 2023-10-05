@@ -263,8 +263,9 @@ local HTDefaultConfig = {
   },
 }
 
+local haskell_tools = vim.g.haskell_tools or {}
 ---@type HTOpts
-local opts = vim.g.haskell_tools or {}
+local opts = type(haskell_tools) == 'function' and haskell_tools() or haskell_tools
 
 ---@type HTConfig
 HTConfig = vim.tbl_deep_extend('force', {}, HTDefaultConfig, opts)

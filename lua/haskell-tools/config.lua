@@ -26,11 +26,13 @@
 --- }
 ---<
 ---
+---Note: `vim.g.haskell_tools` can also be a function that returns a 'HTOpts' table.
+---
 ---@brief ]]
 
 local config = {}
 
----@type HTOpts|nil
+---@type HTOpts | fun():HTOpts | nil
 vim.g.haskell_tools = vim.g.haskell_tools
 
 ---@class HTOpts

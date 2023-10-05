@@ -61,6 +61,8 @@ vim.g.haskell_tools = {
  }
 <
 
+Note: `vim.g.haskell_tools` can also be a function that returns a 'HTOpts' table.
+
 
 HTOpts                                                                  *HTOpts*
 
