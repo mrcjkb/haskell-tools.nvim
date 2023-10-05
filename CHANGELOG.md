@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Don't send an error notification if the name of the buffer
   cannot be determined when starting the LSP client.
+- `checkhealth`: Report on whether or not `vim.g.haskell_tools` is set.
 
 ## [2.3.0] - 2023-09-20
 ### Added

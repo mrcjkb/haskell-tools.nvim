@@ -222,11 +222,16 @@ end
 
 local function check_config()
   start('Checking config')
+  if vim.g.haskell_tools then
+    ok('vim.g.haskell_tools is set')
+  else
+    ok('vim.g.haskell_tools is not set')
+  end
   local valid, err = require('haskell-tools.config.check').validate(HTConfig)
   if valid then
     ok('No errors found in config.')
   else
-    error(err)
+    error(err or '' .. vim.g.haskell_tools and '' or ' This looks like a plugin bug!')
   end
 end
 
