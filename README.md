@@ -118,8 +118,7 @@ This is a filetype plugin that works out of the box,
 so there is no need to call a `setup` function or configure anything
 to get this plugin working.
 
-You will most likely want to add some keymaps, and optionally
-detect launch configurations for [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
+You will most likely want to add some keymaps.
 Most keymaps are only useful in haskell and/or cabal files,
 so I suggest you define them in `~/.config/nvim/after/ftplugin/haskell.lua`[^1]
 and/or `~/.config/nvim/after/ftplugin/cabal.lua`[^1].
