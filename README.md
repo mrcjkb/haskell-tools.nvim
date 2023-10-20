@@ -38,6 +38,12 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-16-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+> **Note**
+>
+> - Just works. No need to call `setup`!
+> - No dependency on `lspconfig`.
+> - Lazy initialization by design.
+
 ## Quick Links
 
 - [Installation](#installation)
