@@ -134,6 +134,7 @@ HlsTools.start = function(bufnr)
     name = is_cabal and LspHelpers.cabal_client_name or LspHelpers.haskell_client_name,
     cmd = Types.evaluate(cmd),
     root_dir = project_root,
+    filetypes = is_cabal and { 'cabal', 'cabalproject' } or { 'haskell', 'lhaskell' },
     capabilities = hls_opts.capabilities,
     handlers = handlers,
     settings = hls_settings,
