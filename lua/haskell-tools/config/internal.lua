@@ -123,7 +123,7 @@ local HTDefaultConfig = {
       local cmd = Types.evaluate(HTConfig.hls.cmd)
       ---@cast cmd string[]
       local hls_bin = cmd[1]
-      return vim.fn.executable(hls_bin) ~= 0
+      return vim.fn.executable(hls_bin) == 1
     end,
     ---@type boolean Whether to enable haskell-language-server debug logging.
     debug = false,
