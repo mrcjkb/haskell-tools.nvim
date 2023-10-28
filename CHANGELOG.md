@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   NOTE: `plenary.nvim` is still a dependency of `telescope.nvim`.
 - POTENTIALLY BREAKING: Bump minimum Neovim version requirement to `0.9`.
   This plugin may still work with Neovim `0.8`, but its compatibility is not tested.
+- New, fabulous logo.
+
+![](https://raw.githubusercontent.com/mrcjkb/haskell-tools.nvim/e6e7afa8f9cacd4a65b7707e38feedaf64b8e21a/nvim-haskell.svg)
 
 ### Added
 
