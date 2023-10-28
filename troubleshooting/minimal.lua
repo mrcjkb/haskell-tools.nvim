@@ -40,13 +40,12 @@ local lazy = require('lazy')
 lazy.setup({
   {
     'mrcjkb/haskell-tools.nvim',
-    branch = '2.x.x',
+    version = '^3', -- Recommended
     init = function()
       -- Configure haskell-tools.nvim here
       vim.g.haskell_tools = {}
     end,
     dependencies = {
-      'nvim-lua/plenary.nvim',
       -- Uncomment or add any optional dependencies needed to reproduce the issue
       -- 'nvim-telescope/telescope.nvim',
       -- 'akinsho/toggleterm.nvim',
