@@ -198,6 +198,8 @@ function hover.on_hover(_, result, ctx, config)
             method = 'textDocument/definition',
           })
           log.debug { 'Hover: Go to definition', definition_result }
+          ---Neovim 0.9 has a bug in the lua doc
+          ---@diagnostic disable-next-line: param-type-mismatch
           vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
         end)
       end
@@ -244,6 +246,8 @@ function hover.on_hover(_, result, ctx, config)
         method = 'textDocument/typeDefinition',
       })
       log.debug { 'Hover: Go to type definition', type_definition_result }
+      ---Neovim 0.9 has a bug in the lua doc
+      ---@diagnostic disable-next-line: param-type-mismatch
       vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
     end)
     ::SkipTypeDefinition::
