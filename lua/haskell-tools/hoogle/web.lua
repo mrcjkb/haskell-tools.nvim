@@ -10,6 +10,7 @@
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 local OS = require('haskell-tools.os')
+local compat = require('haskell-tools.compat')
 
 ---@class WebHoogleHandler
 local WebHoogleHandler = {}
@@ -56,9 +57,6 @@ if deps.has_telescope() then
   local finders = deps.require_telescope('telescope.finders')
   local previewers = deps.require_telescope('telescope.previewers')
   local HoogleHelpers = require('haskell-tools.hoogle.helpers')
-  local async = deps.require_plenary('plenary.async')
-
-  local curl = deps.require_plenary('plenary.curl')
 
   ---@param search_term string
   ---@param opts TelescopeHoogleWebOpts|nil
@@ -81,25 +79,29 @@ if deps.has_telescope() then
     opts.hoogle = opts.hoogle or {}
     opts.hoogle.json = true
     local url = mk_hoogle_request(search_term, opts)
-    async.run(function()
-      local response = curl.get {
-        url = url,
-        accept = 'application/json',
-      }
-      log.debug { 'Hoogle web response', response }
-      local results = vim.json.decode(response.body)
-      pickers
-        .new(opts, {
-          prompt_title = 'Hoogle: ' .. search_term,
-          finder = finders.new_table {
-            results = results,
-            entry_maker = HoogleHelpers.mk_hoogle_entry,
-          },
-          sorter = config.generic_sorter(opts),
-          previewer = previewers.display_content.new(opts),
-          attach_mappings = HoogleHelpers.hoogle_attach_mappings,
-        })
-        :find()
+    compat.system({ 'curl', url, '-H', 'Accept: application/json' }, nil, function(result)
+      ---@cast result vim.SystemCompleted
+      log.debug { 'Hoogle web response', result }
+      local response = result.stdout
+      if result.code ~= 0 or response == nil then
+        vim.notify('hoogle web: ' .. (result.stderr or 'error calling curl'), vim.log.levels.ERROR)
+        return
+      end
+      local results = vim.json.decode(response)
+      vim.schedule(function()
+        pickers
+          .new(opts, {
+            prompt_title = 'Hoogle: ' .. search_term,
+            finder = finders.new_table {
+              results = results,
+              entry_maker = HoogleHelpers.mk_hoogle_entry,
+            },
+            sorter = config.generic_sorter(opts),
+            previewer = previewers.display_content.new(opts),
+            attach_mappings = HoogleHelpers.hoogle_attach_mappings,
+          })
+          :find()
+      end)
     end)
   end
 end

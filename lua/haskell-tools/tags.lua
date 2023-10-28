@@ -3,7 +3,7 @@
 local HTConfig = require('haskell-tools.config.internal')
 local Types = require('haskell-tools.types.internal')
 local log = require('haskell-tools.log.internal')
-local deps = require('haskell-tools.deps')
+local compat = require('haskell-tools.compat')
 
 local _state = {
   fast_tags_generating = false,
@@ -12,8 +12,6 @@ local _state = {
 
 log.debug('Setting up fast-tags tools')
 local config = HTConfig.tools.tags
-
-local Job = deps.require_plenary('plenary.job')
 
 ---@class GenerateProjectTagsOpts
 ---@field refresh boolean Whether to refresh the tags if they have already been generated
@@ -38,14 +36,12 @@ FastTagsTools.generate_project_tags = function(path, opts)
   _state.fast_tags_generating = true
   if project_root then
     log.debug('Generating project tags for' .. project_root)
-    vim.schedule(function()
-      Job:new({
-        command = 'fast-tags',
-        args = { '-R', project_root },
-        on_exit = function(_)
-          _state.fast_tags_generating = false
-        end,
-      }):start()
+    compat.system({ 'fast-tags', '-R', project_root }, nil, function(sc)
+      if sc.code ~= 0 then
+        log.error { 'Error running fast-tags on project root', sc.code, sc.stderr }
+      end
+      ---@cast sc vim.SystemCompleted
+      _state.fast_tags_generating = false
     end)
   else
     log.warn('generate_project_tags: No project root found.')
@@ -73,14 +69,12 @@ FastTagsTools.generate_package_tags = function(path)
     log.warn('generate_package_tags: No project root found.')
     return
   end
-  vim.schedule(function()
-    Job:new({
-      command = 'fast-tags',
-      args = { '-R', package_root, project_root },
-      on_exit = function(_)
-        _state.fast_tags_generating = false
-      end,
-    }):start()
+  compat.system({ 'fast-tags', '-R', package_root, project_root }, nil, function(sc)
+    ---@cast sc vim.SystemCompleted
+    if sc.code ~= 0 then
+      log.error { 'Error running fast-tags on package', sc.code, sc.stderr }
+    end
+    _state.fast_tags_generating = false
   end)
 end
 

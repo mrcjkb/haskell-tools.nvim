@@ -1,4 +1,4 @@
----@mod haskell-tools.project.helpers
+---@mod haskell-tools.project
 
 ---@brief [[
 
@@ -9,16 +9,11 @@
 ---@brief ]]
 
 local log = require('haskell-tools.log.internal')
-local deps = require('haskell-tools.deps')
 local Strings = require('haskell-tools.strings')
 local OS = require('haskell-tools.os')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
-local uv = vim.uv
-  ---@diagnostic disable-next-line: deprecated
-  or vim.loop
-
-local Path = deps.require_plenary('plenary.path')
+local compat = require('haskell-tools.compat')
 
 ---@class HtProjectHelpers
 local HtProjectHelpers = {}
@@ -38,7 +33,7 @@ end
 ---@return string|nil The first file that matches the globs
 local function find_file(path, ...)
   for _, search_term in ipairs(vim.tbl_flatten { ... }) do
-    local results = vim.fn.glob(Path:new(path, search_term).filename, true, true)
+    local results = vim.fn.glob(compat.joinpath(path, search_term), true, true)
     if #results > 0 then
       return results[1]
     end
@@ -46,32 +41,32 @@ local function find_file(path, ...)
 end
 
 ---Iterate the path until we find the rootdir.
----@param startpath Path The start path
----@return fun(_:any,path:Path):(Path?,Path?)
----@return Path startpath
----@return Path startpath
+---@param startpath string The start path
+---@return fun(_:any,path:string):(string?,string?)
+---@return string startpath
+---@return string startpath
 local function iterate_parents(startpath)
   ---@param _ any Ignored
-  ---@param path Path file path
-  ---@return Path|nil path
-  ---@return Path|nil startpath
+  ---@param path string file path
+  ---@return string|nil path
+  ---@return string|nil startpath
   local function it(_, path)
-    local next = path:parent()
-    if next.filename == path.filename or next.filename == '/nix/store' then
+    local next = vim.fn.fnamemodify(path, ':h')
+    if not next or vim.fn.isdirectory(next) == 0 or next == path or next == '/nix/store' then
       return
     end
-    if uv.fs_realpath(next.filename) then
+    if compat.uv.fs_realpath(next) then
       return next, startpath
     end
   end
   return it, startpath, startpath
 end
 
----@param startpath Path The start path to search upward from
+---@param startpath string The start path to search upward from
 ---@param matcher fun(path:string):string|nil
----@return Path|nil
+---@return string|nil
 local function search_ancestors(startpath, matcher)
-  if matcher(startpath.filename) then
+  if matcher(startpath) then
     return startpath
   end
   local max_iterations = 100
@@ -83,7 +78,7 @@ local function search_ancestors(startpath, matcher)
     if not path then
       return
     end
-    if matcher(path.filename) then
+    if matcher(path) then
       return path
     end
   end
@@ -97,10 +92,8 @@ local function root_pattern(...)
     return find_file(path, unpack(args))
   end
   return function(path)
-    ---@type Path
-    local startpath = Path:new(strip_archive_subpath(path))
-    local result = search_ancestors(startpath, matcher)
-    return result and result.filename
+    local startpath = strip_archive_subpath(path)
+    return search_ancestors(startpath, matcher)
   end
 end
 
@@ -154,7 +147,7 @@ function HtProjectHelpers.get_package_cabal(path)
     return nil
   end
   dir = escape_glob_wildcards(dir)
-  for _, pattern in ipairs(vim.fn.glob(Path:new(dir, '*.cabal').filename, true, true)) do
+  for _, pattern in ipairs(vim.fn.glob(compat.joinpath(dir, '*.cabal'), true, true)) do
     if pattern then
       return pattern
     end
@@ -216,7 +209,7 @@ function HtProjectHelpers.parse_package_paths(project_file)
     if packages_start then
       local trimmed = Strings.trim(line)
       local pkg_rel_path = trimmed:match('/(.+)')
-      local pkg_path = Path:new(project_dir, pkg_rel_path).filename
+      local pkg_path = compat.joinpath(project_dir, pkg_rel_path)
       if vim.fn.isdirectory(pkg_path) == 1 then
         package_paths[#package_paths + 1] = pkg_path
       end
@@ -244,14 +237,14 @@ end
 ---@async
 function HtProjectHelpers.parse_project_entrypoints(project_root)
   local entry_points = {}
-  local project_file = Path:new(project_root, 'cabal.project').filename
+  local project_file = compat.joinpath(project_root, 'cabal.project')
   if vim.fn.filereadable(project_file) == 1 then
     for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, cabal.parse_package_entrypoints(package_path))
     end
     return entry_points
   end
-  project_file = Path:new(project_root, 'stack.yaml').filename
+  project_file = compat.joinpath(project_root, 'stack.yaml')
   if vim.fn.filereadable(project_file) == 1 then
     for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, stack.parse_package_entrypoints(package_path))

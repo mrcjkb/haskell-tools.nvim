@@ -27,14 +27,6 @@ local warn = h.warn or h.report_warn
 ---@type LuaDependency[]
 local lua_dependencies = {
   {
-    module = 'plenary',
-    optional = function()
-      return false
-    end,
-    url = '[nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)',
-    info = '',
-  },
-  {
     module = 'telescope',
     optional = function()
       if not HTConfig then

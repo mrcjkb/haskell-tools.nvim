@@ -8,14 +8,11 @@
 --- Helper functions related to stack projects
 ---@brief ]]
 
--- local ht_util = require('haskell-tools.util')
--- local Path = require('plenary.path')
-
 local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
-local Path = require('plenary.path')
+local compat = require('haskell-tools.compat')
 
 ---@class StackProjectHelper
 local StackProjectHelper = {}
@@ -153,7 +150,7 @@ end
 ---@async
 function StackProjectHelper.parse_package_entrypoints(package_path)
   local entry_points = {}
-  for _, package_file in pairs(vim.fn.glob(Path:new(package_path, 'package.yaml').filename, true, true)) do
+  for _, package_file in pairs(vim.fn.glob(compat.joinpath(package_path, 'package.yaml'), true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
   end
   return entry_points

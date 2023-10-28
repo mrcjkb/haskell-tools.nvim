@@ -46,7 +46,10 @@ with final.stdenv; let
             ]
             ++ (
               if withTelescope
-              then [telescope-plugin]
+              then [
+                telescope-plugin
+                final.vimPlugins.plenary-nvim
+              ]
               else []
             );
         };
@@ -58,8 +61,6 @@ with final.stdenv; let
       pname = "haskell-tools.nvim";
       src = self;
       neovim = nvim-wrapped;
-
-      luaPackages = ps: with ps; [plenary-nvim];
 
       extraPackages = with final;
         [

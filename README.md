@@ -60,8 +60,7 @@
 
 ### Required
 
-- `neovim >= 0.8`
-- [`plenary.nvim`](https://github.com/nvim-lua/plenary.nvim)
+- `neovim >= 0.9`
 
 ### Optional
 
@@ -79,18 +78,12 @@
 
 This plugin is [available on LuaRocks][luarocks-url].
 
-If you use a plugin manager that does not support LuaRocks,
-you have to declare the dependencies yourself.
-
 Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
   'mrcjkb/haskell-tools.nvim',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-  },
-  version = '^2', -- Recommended
+  version = '^3', -- Recommended
   ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
 }
 ```
