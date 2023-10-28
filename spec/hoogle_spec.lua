@@ -1,6 +1,8 @@
 local stub = require('luassert.stub')
 local mock = require('luassert.mock')
+local match = require('luassert.match')
 local deps = require('haskell-tools.deps')
+local compat = require('haskell-tools.compat')
 
 local hoogle_web = require('haskell-tools.hoogle.web')
 local hoogle_local = require('haskell-tools.hoogle.local')
@@ -9,13 +11,12 @@ local browser_search = stub(hoogle_web, 'browser_search')
 local web_telescope_search = stub(hoogle_web, 'telescope_search')
 local os = require('haskell-tools.os')
 local open_browser = stub(os, 'open_browser')
-local curl = deps.require_plenary('plenary.curl')
-local mock_curl = mock {
-  get = function()
+local mock_compat = mock {
+  system = function(_)
     return {}
   end,
 }
-curl.get = mock_curl.get
+compat.system = mock_compat.system
 
 local async = deps.require_plenary('plenary.async')
 async.run = function(f)
@@ -49,10 +50,12 @@ describe('Hoogle:', function()
       end)
       it('Formatting of URL', function()
         pcall(hoogle_web.telescope_search, 'Foldable t => t a -> Bool')
-        assert.spy(mock_curl.get).was_called_with {
-          url = 'https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool&mode=json',
-          accept = 'application/json',
-        }
+        assert.spy(mock_compat.system).was_called_with({
+          'curl',
+          'https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool&mode=json',
+          '-H',
+          'Accept: application/json',
+        }, nil, match.is_not_nil())
       end)
     else
       it('Web handler is available', function()
