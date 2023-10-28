@@ -62,12 +62,6 @@ end
 
 ---@return unknown
 ---@require
-function Deps.require_plenary(modname)
-  return Deps.require_or_err(modname, 'nvim-lua/plenary.nvim')
-end
-
----@return unknown
----@require
 function Deps.require_toggleterm(modname)
   return Deps.require_or_err(modname, 'akinsho/toggleterm')
 end
