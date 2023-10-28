@@ -8,9 +8,6 @@
 --- Helper functions related to stack projects
 ---@brief ]]
 
--- local ht_util = require('haskell-tools.util')
--- local Path = require('plenary.path')
-
 local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
