@@ -10,10 +10,7 @@
 
 local compat = require('haskell-tools.compat')
 local log = require('haskell-tools.log.internal')
-
-local uv = vim.uv
-  ---@diagnostic disable-next-line: deprecated
-  or vim.loop
+local uv = compat.uv
 
 ---@class OS
 local OS = {}
