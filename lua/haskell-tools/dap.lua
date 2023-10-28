@@ -120,41 +120,38 @@ HsDapTools.discover_configurations = function(bufnr, opts)
     type = 'executable',
     command = table.concat(dap_cmd, ' '),
   }
-  local async = deps.require_plenary('plenary.async')
-  async.run(function()
-    bufnr = bufnr or 0 -- Default to current buffer
-    opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
-    local filename = vim.api.nvim_buf_get_name(bufnr)
-    local HtProjectHelpers = require('haskell-tools.project.helpers')
-    local project_root = HtProjectHelpers.match_project_root(filename)
-    if not project_root then
-      log.warn('dap: Unable to detect project root for file ' .. filename)
-      return
-    end
-    if _configuration_cache[project_root] then
-      log.debug('dap: Found cached configuration. Skipping.')
-      return
-    end
-    local discovered_configurations = {}
-    local json_configurations = find_json_configurations(project_root, opts)
-    vim.list_extend(discovered_configurations, json_configurations)
-    if opts.autodetect then
-      local detected_configurations = detect_launch_configurations(project_root)
-      vim.list_extend(discovered_configurations, detected_configurations)
-    end
-    _configuration_cache[project_root] = discovered_configurations
-    ---@type HsDapLaunchConfiguration[]
-    local dap_configurations = dap.configurations.haskell or {}
-    for _, cfg in ipairs(discovered_configurations) do
-      for i, existing_config in pairs(dap_configurations) do
-        if cfg.name == existing_config.name and cfg.startup == existing_config.startup then
-          table.remove(dap_configurations, i)
-        end
+  bufnr = bufnr or 0 -- Default to current buffer
+  opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
+  local project_root = HtProjectHelpers.match_project_root(filename)
+  if not project_root then
+    log.warn('dap: Unable to detect project root for file ' .. filename)
+    return
+  end
+  if _configuration_cache[project_root] then
+    log.debug('dap: Found cached configuration. Skipping.')
+    return
+  end
+  local discovered_configurations = {}
+  local json_configurations = find_json_configurations(project_root, opts)
+  vim.list_extend(discovered_configurations, json_configurations)
+  if opts.autodetect then
+    local detected_configurations = detect_launch_configurations(project_root)
+    vim.list_extend(discovered_configurations, detected_configurations)
+  end
+  _configuration_cache[project_root] = discovered_configurations
+  ---@type HsDapLaunchConfiguration[]
+  local dap_configurations = dap.configurations.haskell or {}
+  for _, cfg in ipairs(discovered_configurations) do
+    for i, existing_config in pairs(dap_configurations) do
+      if cfg.name == existing_config.name and cfg.startup == existing_config.startup then
+        table.remove(dap_configurations, i)
       end
-      table.insert(dap_configurations, cfg)
     end
-    dap.configurations.haskell = dap_configurations
-  end)
+    table.insert(dap_configurations, cfg)
+  end
+  dap.configurations.haskell = dap_configurations
 end
 
 return HsDapTools

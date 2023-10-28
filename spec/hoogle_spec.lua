@@ -18,11 +18,6 @@ local mock_compat = mock {
 }
 compat.system = mock_compat.system
 
-local async = deps.require_plenary('plenary.async')
-async.run = function(f)
-  return f()
-end
-
 describe('Hoogle:', function()
   local ht = require('haskell-tools')
   it('Hoogle API available after setup', function()
