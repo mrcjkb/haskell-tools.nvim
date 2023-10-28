@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   POTENTIALLY BREAKING: This should not break anything, but removing a dependency is worth
   a major version bump, just in case.
   NOTE: `plenary.nvim` is still a dependency of `telescope.nvim`.
+- POTENTIALLY BREAKING: Bump minimum Neovim version requirement to `0.9`.
+  This plugin may still work with Neovim `0.8`, but its compatibility is not tested.
 
 ### Added
 
