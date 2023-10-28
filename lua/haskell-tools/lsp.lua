@@ -85,9 +85,8 @@ HlsTools.load_hls_settings = function(project_root, opts)
   end
   local default_opts = { settings_file_pattern = 'hls.json' }
   opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
-  local deps = require('haskell-tools.deps')
-  local Path = deps.require_plenary('plenary.path')
-  local results = vim.fn.glob(Path:new(project_root, opts.settings_file_pattern).filename, true, true)
+  local compat = require('haskell-tools.compat')
+  local results = vim.fn.glob(compat.joinpath(project_root, opts.settings_file_pattern), true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
     return default_settings
