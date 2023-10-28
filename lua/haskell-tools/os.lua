@@ -8,8 +8,7 @@
 --- Functions for interacting with the operating system
 ---@brief ]]
 
-local deps = require('haskell-tools.deps')
-local Job = deps.require_plenary('plenary.job')
+local compat = require('haskell-tools.compat')
 local log = require('haskell-tools.log.internal')
 
 local uv = vim.uv
@@ -34,12 +33,14 @@ OS.open_browser = function(url)
     browser_cmd = 'open'
   end
   if browser_cmd and vim.fn.executable(browser_cmd) == 1 then
-    local job_opts = {
-      command = browser_cmd,
-      args = { url },
-    }
-    log.debug { 'Opening browser', job_opts }
-    Job:new(job_opts):start()
+    local cmd = { browser_cmd, url }
+    log.debug { 'Opening browser', cmd }
+    compat.system(cmd, nil, function(sc)
+      ---@cast sc vim.SystemCompleted
+      if sc.code ~= 0 then
+        log.error { 'Error opening browser', sc.code, sc.stderr }
+      end
+    end)
     return
   end
   local msg = 'No executable found to open the browser.'
