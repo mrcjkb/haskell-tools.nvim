@@ -105,7 +105,6 @@
                     library =
                       nvim-api
                       ++ [
-                        "${pkgs.vimPlugins.plenary-nvim}/lua"
                         "${pkgs.telescope-plugin}/lua"
                         "${pkgs.toggleterm-plugin}/lua"
                         "${pkgs.nvim-dap-plugin}/lua"
@@ -120,6 +119,7 @@
                       "result"
                       "nix"
                       "doc"
+                      "spec" # FIXME: Add busted library
                     ];
                   };
                   diagnostics = {

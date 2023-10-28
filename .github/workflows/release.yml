@@ -20,8 +20,6 @@ jobs:
         env:
           LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
         with:
-          dependencies: |
-            plenary.nvim
           detailed_description: |
             This plugin automatically configures the haskell-language-server builtin LSP client
             and integrates with other Haskell tools. See the README's #features section
