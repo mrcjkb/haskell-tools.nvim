@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="564.35425"
-   height="71.654007"
-   viewBox="0 0 564.35428 71.654007"
+   width="482.39529"
+   height="145.78102"
+   viewBox="0 0 482.39532 145.78102"
    version="1.1"
    id="svg95"
    sodipodi:docname="nvim-haskell.svg"
@@ -25,15 +25,15 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
      showgrid="false"
-     inkscape:zoom="0.9325332"
-     inkscape:cx="381.21967"
-     inkscape:cy="55.76209"
+     inkscape:zoom="1.3188011"
+     inkscape:cx="242.26549"
+     inkscape:cy="142.55372"
      inkscape:window-width="1920"
      inkscape:window-height="1080"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g8863" />
+     inkscape:current-layer="g5925" />
   <title
      id="title70">neovim-mark@2x</title>
   <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
@@ -234,7 +234,7 @@
      aria-label="haskell-tools.nvim"
      id="text4483"
      style="font-weight:bold;font-size:33.4748px;font-family:Lato;-inkscape-font-specification:'Lato Bold';fill:#1a1a1a;stroke-width:1.39478"
-     transform="translate(272.01146,89.970659)">
+     transform="translate(190.05249,176.17254)">
     <g
        id="g5925"
        transform="matrix(1.6576683,0,0,1.6576683,-217.36825,0)">
@@ -324,7 +324,8 @@
          style="font-weight:bold;font-size:33.4748px;font-family:Lato;-inkscape-font-specification:'Lato Bold';fill:#1a1a1a;stroke-width:1.39478" />
       <g
          id="g1218"
-         transform="matrix(1.032845,0,0,1.032845,69.118415,101.09278)">
+         transform="matrix(1.2659588,0,0,1.2659588,263.17406,84.157601)"
+         style="font-weight:bold;font-size:33.4748px;font-family:Lato;-inkscape-font-specification:'Lato Bold';fill:#1a1a1a;stroke-width:1.39478">
         <path
            d="m -84.641116,-124.3177 c 0,0 -2.2631,-3.04978 -3.35206,-3.8345 -1.09044,-0.78673 -2.74005,0.26607 -2.74005,0.26607 0,0 -0.73426,-1.80766 0.74449,-2.68505 1.47873,-0.87738 3.31693,-0.11733 4.77002,0.74279 3.22927,1.90848 6.316688,5.48474 6.316688,5.48474 l 2.797871,10.41739 -4.053679,1.58463 z"
            fill="#855c54"
