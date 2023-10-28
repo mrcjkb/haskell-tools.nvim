@@ -45,7 +45,7 @@ local pickers = deps.require_telescope('telescope.pickers')
 local finders = deps.require_telescope('telescope.finders')
 local previewers = deps.require_telescope('telescope.previewers')
 local HoogleHelpers = require('haskell-tools.hoogle.helpers')
-local Job = deps.require_plenary('plenary.job')
+local compat = require('haskell-tools.compat')
 
 ---@param search_term string The Hoogle search term
 ---@param opts LocalHoogleOpts|nil
@@ -60,45 +60,43 @@ function HoogleLocal.telescope_search(search_term, opts)
     vim.notify_once('haskell-tools.hoogle: ' .. msg, vim.log.levels.ERROR)
     return
   end
-  Job:new({
-    command = 'hoogle',
-    args = mk_hoogle_args(search_term, opts),
-    on_exit = function(j, exit_code)
-      vim.schedule(function()
-        if exit_code ~= 0 then
-          local err_msg = 'haskell-tools: hoogle search failed. Exit code: ' .. exit_code
-          log.error(err_msg)
-          vim.notify(err_msg, vim.log.levels.ERROR)
-          return
-        end
-        local output = j:result()[1]
-        if #output < 1 then
-          return
-        elseif output == 'No results found' then
-          vim.notify('Hoogle: No results found.', vim.log.levels.WARN)
-          return
-        end
-        local success, results = pcall(vim.json.decode, output)
-        if not success then
-          log.error { 'Hoogle: Could not process result.', output }
-          vim.notify('Hoogle: Could not process result - ' .. vim.inspect(output), vim.log.levels.ERROR)
-          return
-        end
-        pickers
-          .new(opts, {
-            prompt_title = 'Hoogle: ' .. search_term,
-            sorter = config.generic_sorter(opts),
-            finder = finders.new_table {
-              results = results,
-              entry_maker = HoogleHelpers.mk_hoogle_entry,
-            },
-            previewer = previewers.display_content.new(opts),
-            attach_mappings = HoogleHelpers.hoogle_attach_mappings,
-          })
-          :find()
-      end)
-    end,
-  }):start()
+  local cmd = vim.list_extend({ 'hoogle' }, mk_hoogle_args(search_term, opts))
+  compat.system(
+    cmd,
+    nil,
+    vim.schedule_wrap(function(result)
+      ---@cast result vim.SystemCompleted
+      local output = result.stdout
+      if result.code ~= 0 or output == nil then
+        local err_msg = 'haskell-tools: hoogle search failed. Exit code: ' .. result.code
+        log.error(err_msg)
+        vim.notify(err_msg, vim.log.levels.ERROR)
+        return
+      end
+      local success, results = pcall(vim.json.decode, output)
+      if not success then
+        log.error { 'Hoogle: Could not process result.', output }
+        vim.notify('Hoogle: Could not process result - ' .. vim.inspect(output), vim.log.levels.ERROR)
+        return
+      end
+      if #results < 1 or output == 'No results found' then
+        vim.notify('Hoogle: No results found.', vim.log.levels.INFO)
+        return
+      end
+      pickers
+        .new(opts, {
+          prompt_title = 'Hoogle: ' .. search_term,
+          sorter = config.generic_sorter(opts),
+          finder = finders.new_table {
+            results = results,
+            entry_maker = HoogleHelpers.mk_hoogle_entry,
+          },
+          previewer = previewers.display_content.new(opts),
+          attach_mappings = HoogleHelpers.hoogle_attach_mappings,
+        })
+        :find()
+    end)
+  )
 end
 
 return HoogleLocal
