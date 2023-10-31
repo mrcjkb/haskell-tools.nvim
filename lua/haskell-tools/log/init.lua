@@ -1,4 +1,12 @@
 ---@mod haskell-tools.log haskell-tools Logging
+---
+---@brief [[
+--- The following commands are available:
+---
+--- * `:HtLog` - Open the haskell-tools.nvim log file.
+--- * `:HlsLog` - Open the haskell-language-server log file.
+--- * `:HtSetLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+---@brief ]]
 
 ---@class HaskellToolsLog
 local HaskellToolsLog = {}
@@ -27,7 +35,7 @@ function HaskellToolsLog.nvim_open_logfile()
   return require('haskell-tools.log.internal').nvim_open_logfile()
 end
 
----Set the log level
+---Set the haskell-tools.nvim and LSP client log level
 ---@param level (string|integer) The log level
 ---@return nil
 ---@see vim.log.levels

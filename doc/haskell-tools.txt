@@ -454,6 +454,12 @@ FastTagsTools.generate_package_tags({path})
 ==============================================================================
 haskell-tools Logging                                        *haskell-tools.log*
 
+ The following commands are available:
+
+ * `:HtLog` - Open the haskell-tools.nvim log file.
+ * `:HlsLog` - Open the haskell-language-server log file.
+ * `:HtSetLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+
 HaskellToolsLog                                                *HaskellToolsLog*
 
 
