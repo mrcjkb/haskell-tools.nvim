@@ -27,13 +27,11 @@ in {
     lua51Packages
     ;
 
-  vimPlugins.haskell-tools-nvim = final.neovimUtils.buildNeovimPlugin {
+  haskell-tools-nvim-dev = final.neovimUtils.buildNeovimPlugin {
     pname = "haskell-tools.nvim";
     version = "scm-1";
     src = self;
   };
-
-  haskell-tools-nvim-dev = final.vimPlugins.haskell-tools-nvim;
 
   neovim-minimal = let
     neovimConfig = final.neovimUtils.makeNeovimConfig {

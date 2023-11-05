@@ -8,24 +8,24 @@
 with final.lib;
 with final.lib.strings;
 with final.stdenv; let
-  nvim-nightly = final.pkgs.neovim-nightly;
+  nvim-nightly = final.neovim-nightly;
 
-  neodev-plugin = final.pkgs.vimUtils.buildVimPlugin {
+  neodev-plugin = final.vimUtils.buildVimPlugin {
     name = "neodev.nvim";
     src = neodev-nvim;
   };
 
-  telescope-plugin = final.pkgs.vimUtils.buildVimPlugin {
+  telescope-plugin = final.vimUtils.buildVimPlugin {
     name = "telescope.nvim";
     src = telescope-nvim;
   };
 
-  nvim-dap-plugin = final.pkgs.vimUtils.buildVimPlugin {
+  nvim-dap-plugin = final.vimUtils.buildVimPlugin {
     name = "nvim-dap";
     src = nvim-dap;
   };
 
-  toggleterm-plugin = final.pkgs.vimUtils.buildVimPlugin {
+  toggleterm-plugin = final.vimUtils.buildVimPlugin {
     name = "toggleterm";
     src = toggleterm;
   };
@@ -37,7 +37,7 @@ with final.stdenv; let
     withHls ? true,
     extraPkgs ? [],
   }: let
-    nvim-wrapped = final.pkgs.wrapNeovim nvim {
+    nvim-wrapped = final.wrapNeovim nvim {
       configure = {
         packages.myVimPackage = {
           start =
@@ -56,7 +56,7 @@ with final.stdenv; let
       };
     };
   in
-    final.pkgs.neorocksTest {
+    final.neorocksTest {
       inherit name;
       pname = "haskell-tools.nvim";
       src = self;
@@ -79,6 +79,32 @@ with final.stdenv; let
         export HOME=$(realpath .)
       '';
     };
+
+  mkNvimMinimal = nvim:
+    with final; let
+      neovimConfig = neovimUtils.makeNeovimConfig {
+        withPython3 = true;
+        viAlias = true;
+        vimAlias = true;
+        plugins = with vimPlugins; [
+          haskell-tools-nvim
+          nvim-treesitter.withAllGrammars
+        ];
+      };
+      runtimeDeps = [
+        haskell-language-server
+      ];
+    in
+      wrapNeovimUnstable nvim (neovimConfig
+        // {
+          wrapperArgs =
+            lib.escapeShellArgs neovimConfig.wrapperArgs
+            + " "
+            + ''--set NVIM_APPNAME "nvim-haskell-tools"''
+            + " "
+            + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
+          wrapRc = false;
+        });
 in {
   haskell-tools-test = mkNeorocksTest {name = "haskell-tools";};
 
@@ -95,12 +121,12 @@ in {
   haskell-tools-test-no-telescope-with-hoogle = mkNeorocksTest {
     name = "haskell-tools-no-telescope-local-hoogle";
     withTelescope = false;
-    extraPkgs = [final.pkgs.haskellPackages.hoogle];
+    extraPkgs = [final.haskellPackages.hoogle];
   };
 
   haskell-tools-test-with-stack = mkNeorocksTest {
     name = "haskell-tools-with-stack";
-    extraPkgs = [final.pkgs.stack];
+    extraPkgs = [final.stack];
   };
 
   haskell-tools-test-nightly = mkNeorocksTest {
@@ -118,12 +144,14 @@ in {
     nvim = nvim-nightly;
     name = "haskell-tools-no-telescope-local-hoogle-nightly";
     withTelescope = false;
-    extraPkgs = [final.pkgs.haskellPackages.hoogle];
+    extraPkgs = [final.haskellPackages.hoogle];
   };
+
+  nvim-minimal-stable = mkNvimMinimal final.neovim-unwrapped;
+  nvim-minimal-nightly = mkNvimMinimal final.neovim-nightly;
 
   inherit
     nvim-nightly
-    plenary-plugin
     neodev-plugin
     telescope-plugin
     nvim-dap-plugin
