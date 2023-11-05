@@ -178,7 +178,11 @@
       packages = rec {
         default = haskell-tools-nvim;
         haskell-tools-nvim = pkgs.haskell-tools-nvim-dev;
-        inherit (pkgs) neovim-minimal;
+        inherit
+          (pkgs)
+          nvim-minimal-stable
+          nvim-minimal-nightly
+          ;
         inherit
           docgen
           ;

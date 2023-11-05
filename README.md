@@ -630,7 +630,9 @@ NVIM_DATA_MINIMAL="/tmp/minimal" NVIM_APP_NAME="nvim-ht-minimal" nvim -u minimal
 > **Note**
 >
 > If you use Nix, you can run
-> `nix run "github:mrcjkb/haskell-tools.nvim#neovim-minimal"`.
+> `nix run "github:mrcjkb/haskell-tools.nvim#nvim-minimal-stable"`.
+> or
+> `nix run "github:mrcjkb/haskell-tools.nvim#nvim-minimal-nightly"`.
 
 If you cannot reproduce your issue with a minimal config,
 it may be caused by another plugin.
