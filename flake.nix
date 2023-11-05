@@ -80,11 +80,6 @@
         ];
       };
 
-      haskell-tools-nvim = pkgs.vimUtils.buildVimPlugin {
-        name = "haskell-tools.nvim";
-        src = self;
-      };
-
       docgen = pkgs.callPackage ./nix/docgen.nix {};
 
       mkTypeCheck = {
@@ -180,11 +175,12 @@
         haskell-tools = haskell-tools-shell;
       };
 
-      packages = {
+      packages = rec {
         default = haskell-tools-nvim;
+        haskell-tools-nvim = pkgs.haskell-tools-nvim-dev;
+        inherit (pkgs) neovim-minimal;
         inherit
           docgen
-          haskell-tools-nvim
           ;
       };
 
