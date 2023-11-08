@@ -621,7 +621,7 @@ For a health check, run `:checkhealth haskell-tools`
 ### LSP features not working
 
 Check which versions of `hls` and GHC you are using
-(`haskell-language-server-wrapper --version`).
+(`haskell-language-server-wrapper --version` or the more detailed `haskell-language-server-wrapper --probe-tools`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
 You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
