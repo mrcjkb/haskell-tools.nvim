@@ -318,6 +318,14 @@ vim.g.haskell_tools = {
 
 By default, this plugin will look for a `hls.json` file in the project root directory,
 and attempt to load it.
+
+Should you wish to obtain and use such a file, you may [generate](https://haskell-language-server.readthedocs.io/en/latest/configuration.html#generic-plugin-configuration) one to start off of in the following way:
+
+```
+haskell-language-server-wrapper --version  # Take note of the project-specific GHC version used.
+haskell-language-server-<GHC version> generate-default-config > hls.json
+```
+
 If the file does not exist, or it can't be decoded,
 the `hls.default_settings` will be used.
 
