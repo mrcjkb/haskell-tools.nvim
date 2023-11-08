@@ -625,6 +625,9 @@ Check which versions of `hls` and GHC you are using
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
 You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
+Depending on the project, it might also be necessary to manually build (`cabal build` or `stack build`) once.
+Try this if the LSP features seem to be working in some project files only, but not in others.
+
 ### Minimal config
 
 To troubleshoot this plugin with a minimal config in a temporary directory,
