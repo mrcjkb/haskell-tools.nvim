@@ -628,6 +628,9 @@ You can see how well a specific GHC version is supported [here](https://haskell-
 Depending on the project, it might also be necessary to manually build (`cabal build` or `stack build`) once.
 Try this if the LSP features seem to be working in some project files only, but not in others.
 
+Note that as of this date, generated Haskell modules (in particular by tools like `hsc2hs` or `c2hs`) are not supported.
+Such modules will be marked as `Could not find module` errors at their import sites.
+
 ### Minimal config
 
 To troubleshoot this plugin with a minimal config in a temporary directory,
