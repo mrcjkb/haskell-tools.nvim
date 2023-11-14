@@ -38,7 +38,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-17-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-> **Note**
+> [!NOTE]
 >
 > - Just works. [No need to call `setup`!](https://mrcjkb.dev/posts/2023-08-22-setup.html)
 > - No dependency on `lspconfig`.
@@ -88,13 +88,13 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 }
 ```
 
->**Note**
+>[!NOTE]
 >
 >It is suggested to pin to tagged releases if you would like to avoid breaking changes.
 
 To manually generate documentation, use `:helptags ALL`.
 
->**Note**
+>[!NOTE]
 >
 > For NixOS users with flakes enabled, this project provides outputs in the
 > form of a package and an overlay; use it as you wish in your NixOS or
@@ -107,7 +107,7 @@ This plugin automatically configures the `haskell-language-server` builtin LSP
 client and integrates with other haskell tools.
 See the [Features](#features) section for more info.
 
->**Warning**
+>[!WARNING]
 >
 > Do not call the [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig)
 > setup or set up the lsp client for `haskell-language-server` manually,
@@ -147,7 +147,7 @@ end, def_opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
 ```
 
->**Note**
+>[!NOTE]
 >
 > - For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > - If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
@@ -264,7 +264,7 @@ configurations.
 
 ![dap](https://user-images.githubusercontent.com/12857160/232348888-4fea5393-d624-417e-b994-6eb44113a3d9.gif)
 
->**Note**
+>[!NOTE]
 >
 >`haskell-debug-adapter` is an experimental design and implementation of
 >a debug adapter for Haskell.
@@ -309,7 +309,7 @@ vim.g.haskell_tools = {
 }
 ```
 
-> **Note**
+> [!NOTE]
 >
 > `vim.g.haskell_tools` can also be a function that returns
 > a table.
@@ -378,7 +378,7 @@ hls = {
 },
 ```
 
->**Note**
+>[!NOTE]
 >
 >Alternatively, you can [dynamically enable/disable different code lenses per project](#how-to-dynamically-load-different-haskell-language-server-settings-per-project).
 
@@ -554,7 +554,7 @@ ht.tags.generate_project_tags(path, opts)
 ht.tags.generate_package_tags(path)
 ```
 
-> **Note**
+> [!NOTE]
 >
 > By default, `haskell-tools` will automate generating project and package
 > tags, if `fast-tags` is detected.
@@ -573,7 +573,7 @@ local ht = require('haskell-tools')
 ht.dap.discover_configurations(bufnr, opts)
 ```
 
-> **Note**
+> [!NOTE]
 >
 > `haskell-tools.nvim` will discover DAP launch configurations automatically,
 > if `nivm-dap` is installed and the debug adapter server is executable.
@@ -601,7 +601,7 @@ To load the extension, call
 require('telescope').load_extension('ht')
 ```
 
-> **Note**
+> [!NOTE]
 >
 > If you lazy-load this plugin,
 > make sure it is loaded _before_ registering the Telescope extension.
@@ -627,7 +627,7 @@ mkdir -p /tmp/minimal/
 NVIM_DATA_MINIMAL="/tmp/minimal" NVIM_APP_NAME="nvim-ht-minimal" nvim -u minimal.lua
 ```
 
-> **Note**
+> [!NOTE]
 >
 > If you use Nix, you can run
 > `nix run "github:mrcjkb/haskell-tools.nvim#nvim-minimal-stable"`.
@@ -639,7 +639,7 @@ it may be caused by another plugin.
 In this case, add additional plugins and their configurations to `minimal.lua`,
 until you can reproduce it.
 
-> **Note**
+> [!NOTE]
 >
 > This plugin is only tested on Linux.
 > It should work on MacOS, and basic features should also work on Windows
