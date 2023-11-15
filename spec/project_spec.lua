@@ -110,7 +110,7 @@ describe('Internal project helpers:', function()
     it('Can parse multiple package paths', function()
       local project_file = 'spec/fixtures/cabal/multi-package/cabal.project'
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
-      assert.equals(2, #package_paths)
+      assert.equal(2, #package_paths)
       for _, path in pairs(package_paths) do
         assert(vim.fn.isdirectory(path) == 1)
       end
@@ -118,7 +118,7 @@ describe('Internal project helpers:', function()
     it('Can parse single package path', function()
       local project_file = 'spec/fixtures/cabal/single-package/cabal.project'
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
-      assert.equals(1, #package_paths)
+      assert.equal(1, #package_paths)
       for _, path in pairs(package_paths) do
         assert(vim.fn.isdirectory(path) == 1)
       end
@@ -156,7 +156,7 @@ describe('Internal project helpers:', function()
     it('Can parse multi package paths', function()
       local project_file = 'spec/fixtures/stack/multi-package/stack.yaml'
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
-      assert.equals(2, #package_paths)
+      assert.equal(2, #package_paths)
       for _, path in pairs(package_paths) do
         assert(vim.fn.isdirectory(path) == 1)
       end
@@ -164,7 +164,7 @@ describe('Internal project helpers:', function()
     it('Can parse single package path', function()
       local project_file = 'spec/fixtures/stack/single-package/stack.yaml'
       local package_paths = HtProjectHelpers.parse_package_paths(project_file)
-      assert.equals(1, #package_paths)
+      assert.equal(1, #package_paths)
       for _, path in pairs(package_paths) do
         assert(vim.fn.isdirectory(path) == 1)
       end

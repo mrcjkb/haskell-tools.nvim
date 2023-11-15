@@ -5,7 +5,7 @@ describe('LSP client API', function()
   local test_cwd = vim.fn.getcwd() .. '/spec'
   it('Can load haskell-language-server config', function()
     local settings = ht.lsp.load_hls_settings(test_cwd)
-    assert.not_same(HtConfig.hls.default_settings, settings)
+    assert.are_not_same(HtConfig.hls.default_settings, settings)
   end)
   it('Falls back to default haskell-language-server config if none is found', function()
     local settings = ht.lsp.load_hls_settings(test_cwd, { settings_file_pattern = 'bla.json' })

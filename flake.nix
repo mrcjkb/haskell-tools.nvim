@@ -103,10 +103,9 @@
                         "${pkgs.telescope-plugin}/lua"
                         "${pkgs.toggleterm-plugin}/lua"
                         "${pkgs.nvim-dap-plugin}/lua"
-                        # FIXME:
-                        # "${pkgs.luajitPackages.busted}"
+                        "\${3rd}/busted/library"
+                        "\${3rd}/luassert/library"
                       ];
-                    checkThirdParty = false;
                     ignoreDir = [
                       ".git"
                       ".github"
@@ -114,7 +113,6 @@
                       "result"
                       "nix"
                       "doc"
-                      "spec" # FIXME: Add busted library
                     ];
                   };
                   diagnostics = {

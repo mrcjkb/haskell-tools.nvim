@@ -27,25 +27,25 @@ describe('Hoogle:', function()
     if deps.has_telescope() then
       it('Defaults to local handler', function()
         pcall(ht.hoogle.hoogle_signature, { search_term = 'foo' })
-        assert.stub(local_telescope_search).was_called()
+        assert.stub(local_telescope_search).called(1)
         local_telescope_search:revert()
       end)
     else
       it('Defaults to web handler with browser search', function()
         pcall(ht.hoogle.hoogle_signature, { search_term = 'foo' })
-        assert.stub(browser_search).was_called()
+        assert.stub(browser_search).called(1)
       end)
     end
   else
     if deps.has_telescope() then
       it('Defaults to web handler with telescope search', function()
         pcall(ht.hoogle.hoogle_signature, { search_term = 'foo' })
-        assert.stub(web_telescope_search).was_called()
+        assert.stub(web_telescope_search).called(1)
         web_telescope_search:revert()
       end)
       it('Formatting of URL', function()
         pcall(hoogle_web.telescope_search, 'Foldable t => t a -> Bool')
-        assert.spy(mock_compat.system).was_called_with({
+        assert.spy(mock_compat.system).called_with({
           'curl',
           'https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool&mode=json',
           '-H',
@@ -58,14 +58,12 @@ describe('Hoogle:', function()
       end)
       it('Defaults to web handler with browser search', function()
         pcall(ht.hoogle.hoogle_signature, { search_term = 'foo' })
-        assert.stub(browser_search).was_called()
+        assert.stub(browser_search).called(1)
         browser_search:revert()
       end)
       it('Formatting of URL', function()
         hoogle_web.browser_search('Foldable t => t a -> Bool')
-        assert
-          .stub(open_browser)
-          .was_called_with('https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool')
+        assert.stub(open_browser).called_with('https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool')
       end)
     end
   end
