@@ -27,7 +27,11 @@ FastTagsTools.generate_project_tags = function(path, opts)
   path = path or vim.api.nvim_buf_get_name(0)
   opts = vim.tbl_extend('force', { refresh = true }, opts or {})
   local HtProjectHelpers = require('haskell-tools.project.helpers')
-  local project_root = HtProjectHelpers.match_project_root(path) or vim.fn.getcwd() or 'UNDEFINED'
+  local project_root = HtProjectHelpers.match_project_root(path)
+  if not project_root then
+    log.warn('generate_project_tags: No project root found.')
+    return
+  end
   if opts.refresh == false and _state.projects[project_root] then
     log.debug('Project tags already generated. Skipping.')
     return
@@ -43,8 +47,6 @@ FastTagsTools.generate_project_tags = function(path, opts)
       ---@cast sc vim.SystemCompleted
       _state.fast_tags_generating = false
     end)
-  else
-    log.warn('generate_project_tags: No project root found.')
   end
 end
 
