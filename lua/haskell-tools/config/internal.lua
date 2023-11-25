@@ -159,7 +159,6 @@ local HTDefaultConfig = {
       haskell = {
         -- The formatting providers.
         formattingProvider = 'fourmolu',
-        cabalFormattingProvider = 'cabalfmt',
         -- Maximum number of completions sent to the LSP client.
         maxCompletions = 40,
         -- Whether to typecheck the entire project on initial load.
