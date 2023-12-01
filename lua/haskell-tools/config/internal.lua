@@ -261,6 +261,8 @@ local HTDefaultConfig = {
     ---@type boolean | AddDapConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
     auto_discover = true,
   },
+  ---@type boolean
+  was_g_haskell_tools_sourced = vim.g.haskell_tools ~= nil,
 }
 
 local haskell_tools = vim.g.haskell_tools or {}

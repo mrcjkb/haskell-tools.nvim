@@ -214,10 +214,9 @@ end
 
 local function check_config()
   start('Checking config')
-  if vim.g.haskell_tools then
-    ok('vim.g.haskell_tools is set')
-  else
-    ok('vim.g.haskell_tools is not set')
+  if vim.g.haskell_tools and not HTConfig.was_g_haskell_tools_sourced then
+    error('vim.g.haskell_tools is set, but was not sourced before haskell-tools.nvim was initialized.')
+    return
   end
   local valid, err = require('haskell-tools.config.check').validate(HTConfig)
   if valid then
