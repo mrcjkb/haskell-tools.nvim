@@ -316,10 +316,12 @@ vim.g.haskell_tools = {
 
 ### How to dynamically load different `haskell-language-server` settings per project
 
-By default, this plugin will look for a `hls.json` file in the project root directory,
+By default, this plugin will look for a `hls.json`[^2] file in the project root directory,
 and attempt to load it.
 If the file does not exist, or it can't be decoded,
 the `hls.default_settings` will be used.
+
+[^2]: `haskell-language-server` can [generate](https://haskell-language-server.readthedocs.io/en/latest/configuration.html#generic-plugin-configuration) such a file with the `generate-default-config` CLI argument.
 
 You can change this behaviour with the `hls.settings` config:
 
@@ -613,7 +615,8 @@ For a health check, run `:checkhealth haskell-tools`
 ### LSP features not working
 
 Check which versions of `hls` and GHC you are using
-(`haskell-language-server-wrapper --version`).
+(e.g. by calling `haskell-language-server-wrapper --probe-tools`
+or `haskell-language-server --probe-tools`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
 You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
@@ -649,9 +652,9 @@ until you can reproduce it.
 
 #### Logs
 
-To enable debug logging, set the log level to `DEBUG`[^2]:
+To enable debug logging, set the log level to `DEBUG`[^3]:
 
-[^2]: See [`:help vim.log.levels`](https://neovim.io/doc/user/lua.html#vim.log.levels):
+[^3]: See [`:help vim.log.levels`](https://neovim.io/doc/user/lua.html#vim.log.levels):
 
 ```lua
 vim.g.haskell_tools = {
