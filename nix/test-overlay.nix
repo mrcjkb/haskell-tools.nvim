@@ -87,7 +87,7 @@ with final.stdenv; let
         viAlias = true;
         vimAlias = true;
         plugins = with vimPlugins; [
-          haskell-tools-nvim
+          haskell-tools-nvim-dev
           nvim-treesitter.withAllGrammars
         ];
       };
