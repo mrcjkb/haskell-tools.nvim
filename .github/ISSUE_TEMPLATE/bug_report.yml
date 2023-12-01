@@ -21,9 +21,12 @@ body:
       placeholder: "NixOS 22.05"
     validations:
       required: true
-  - type: input
+  - type: textarea
     attributes:
-      label: "Output of `:checkhealth haskell-tools`"
+      label: "Output of :checkhealth haskell-tools"
+      render: "console"
+      placeholder: |
+        Please paste the output here, as it may contain important information for debugging.
     validations:
       required: true
   - type: textarea
@@ -50,21 +53,22 @@ body:
       label: "Actual behaviour"
     validations:
       required: true
-  - type: input
+  - type: textarea
     attributes:
       label: "Log files"
       placeholder: "https://gist.github.com/MrcJkb/1b0a2c9849b2e1e912fb"
       description: |
         - Upload the log files before and after the problem in a [secret gist](https://gist.github.com/). Paste the URLs to the gist.
         - See the [Troubleshooting section of the readme](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/README.md#logs) for information on how to retreive the log files.
+      render: "console"
   - type: textarea
     attributes:
       label: "The minimal config used to reproduce this issue."
       description: |
         See [this example](https://github.com/MrcJkb/haskell-tools.nvim/blob/master/tests/minimal.lua).
       placeholder: |
-        ```lua
-          -- paste your minimal config here
-        ```
+        -- Paste your minimal config here. Please base it on the example provided by this plugin,
+        -- including any additional plugins that must be installed for the issue to be reproducible.
+      render: "Lua"
     validations:
       required: true
