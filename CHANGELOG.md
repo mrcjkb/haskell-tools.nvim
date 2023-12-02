@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Health: Warn if there are unrecognized configs in `vim.g.haskell_tools`.
+
 ### Fixed
 
 - Health: Check if `vim.g.haskell_tools` is set,
