@@ -168,7 +168,7 @@ end
 ---@param tbl table
 ---@param default_tbl table
 ---@param ignored_keys string[]
----@return { [string]: string }
+---@return string[]
 function HtConfigCheck.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
   local unrecognized_keys = {}
   for k, _ in pairs(tbl) do
