@@ -163,4 +163,40 @@ function HtConfigCheck.validate(cfg)
   return true
 end
 
+---Recursively check a table for unrecognized keys,
+---using a default table as a reference
+---@param tbl table
+---@param default_tbl table
+---@param ignored_keys string[]
+---@return { [string]: string }
+function HtConfigCheck.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
+  local unrecognized_keys = {}
+  for k, _ in pairs(tbl) do
+    unrecognized_keys[k] = true
+  end
+  for k, _ in pairs(default_tbl) do
+    unrecognized_keys[k] = false
+  end
+  local ret = {}
+  for k, _ in pairs(unrecognized_keys) do
+    if unrecognized_keys[k] then
+      ret[k] = k
+    end
+    if type(default_tbl[k]) == 'table' and tbl[k] then
+      for _, subk in pairs(HtConfigCheck.get_unrecognized_keys(tbl[k], default_tbl[k], {})) do
+        local key = k .. '.' .. subk
+        ret[key] = key
+      end
+    end
+  end
+  for k, _ in pairs(ret) do
+    for _, ignore in pairs(ignored_keys) do
+      if vim.startswith(k, ignore) then
+        ret[k] = nil
+      end
+    end
+  end
+  return vim.tbl_keys(ret)
+end
+
 return HtConfigCheck

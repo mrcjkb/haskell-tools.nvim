@@ -214,7 +214,7 @@ end
 
 local function check_config()
   start('Checking config')
-  if vim.g.haskell_tools and not HTConfig.was_g_haskell_tools_sourced then
+  if vim.g.haskell_tools and not HTConfig.debug_info.was_g_haskell_tools_sourced then
     error('vim.g.haskell_tools is set, but was not sourced before haskell-tools.nvim was initialized.')
     return
   end
@@ -223,6 +223,10 @@ local function check_config()
     ok('No errors found in config.')
   else
     error(err or '' .. vim.g.haskell_tools and '' or ' This looks like a plugin bug!')
+  end
+  local unrecognized_keys = HTConfig.debug_info.unrecognized_keys
+  if #unrecognized_keys > 0 then
+    warn('unrecognized configs in vim.g.haskell_tools: ' .. vim.inspect(unrecognized_keys))
   end
 end
 

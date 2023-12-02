@@ -261,8 +261,10 @@ local HTDefaultConfig = {
     ---@type boolean | AddDapConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
     auto_discover = true,
   },
-  ---@type boolean
-  was_g_haskell_tools_sourced = vim.g.haskell_tools ~= nil,
+  debug_info = {
+    ---@type boolean
+    was_g_haskell_tools_sourced = vim.g.haskell_tools ~= nil,
+  },
 }
 
 local haskell_tools = vim.g.haskell_tools or {}
@@ -276,5 +278,18 @@ local ok, err = check.validate(HTConfig)
 if not ok then
   vim.notify('haskell-tools: ' .. err, vim.log.levels.ERROR)
 end
+
+local dont_warn = {
+  'tools.repl.auto_focus',
+  'hls.capabilities',
+  'hls.settings',
+  'hls.default_settings',
+}
+local unrecognized_keys = check.get_unrecognized_keys(opts, HTDefaultConfig, dont_warn)
+if #unrecognized_keys > 0 then
+  vim.notify('unrecognized configs in vim.g.haskell_tools: ' .. vim.inspect(unrecognized_keys), vim.log.levels.WARN)
+end
+
+HTConfig.debug_info.unrecognized_keys = unrecognized_keys
 
 return HTConfig
