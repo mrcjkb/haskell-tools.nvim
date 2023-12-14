@@ -155,18 +155,20 @@
         };
       };
 
-      haskell-tools-shell = pkgs.mkShell {
-        name = "haskell-tools.nvim-shell";
+      haskell-tools-shell = pkgs.haskell-tools-test.overrideAttrs (oa: {
+        name = "haskell-tools.nvim-devShell";
         inherit (pre-commit-check) shellHook;
-        buildInputs = with pre-commit-hooks.packages.${system}; [
-          alejandra
-          lua-language-server
-          stylua
-          luacheck
-          editorconfig-checker
-          markdownlint-cli
-        ];
-      };
+        buildInputs = with pre-commit-hooks.packages.${system};
+          [
+            alejandra
+            lua-language-server
+            stylua
+            luacheck
+            editorconfig-checker
+            markdownlint-cli
+          ]
+          ++ oa.buildInputs;
+      });
     in {
       devShells = rec {
         default = haskell-tools;
