@@ -47,6 +47,7 @@ describe('Hoogle:', function()
         pcall(hoogle_web.telescope_search, 'Foldable t => t a -> Bool')
         assert.spy(mock_compat.system).called_with({
           'curl',
+          '--silent',
           'https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool&mode=json',
           '-H',
           'Accept: application/json',
