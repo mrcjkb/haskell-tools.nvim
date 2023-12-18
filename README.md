@@ -35,7 +35,7 @@
 [![LuaRocks][luarocks-shield]][luarocks-url]
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-17-purple.svg?style=for-the-badge)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
@@ -745,6 +745,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://kamoshi.org"><img src="https://avatars.githubusercontent.com/u/18511281?v=4?s=100" width="100px;" alt="Maciej Jur"/><br /><sub><b>Maciej Jur</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Akamoshi" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MaciekFlis"><img src="https://avatars.githubusercontent.com/u/19313722?v=4?s=100" width="100px;" alt="MaciekFlis"/><br /><sub><b>MaciekFlis</b></sub></a><br /><a href="#financial-MaciekFlis" title="Financial">💵</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mbwgh"><img src="https://avatars.githubusercontent.com/u/28275377?v=4?s=100" width="100px;" alt="mbwgh"/><br /><sub><b>mbwgh</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=mbwgh" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/AntonVucinic"><img src="https://avatars.githubusercontent.com/u/64925492?v=4?s=100" width="100px;" alt="AntonVucinic"/><br /><sub><b>AntonVucinic</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=AntonVucinic" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
