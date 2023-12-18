@@ -79,7 +79,7 @@ if deps.has_telescope() then
     opts.hoogle = opts.hoogle or {}
     opts.hoogle.json = true
     local url = mk_hoogle_request(search_term, opts)
-    compat.system({ 'curl', url, '-H', 'Accept: application/json' }, nil, function(result)
+    compat.system({ 'curl', '--silent', url, '-H', 'Accept: application/json' }, nil, function(result)
       ---@cast result vim.SystemCompleted
       log.debug { 'Hoogle web response', result }
       local response = result.stdout
