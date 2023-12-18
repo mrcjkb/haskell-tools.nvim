@@ -162,6 +162,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "AntonVucinic",
+      "name": "AntonVucinic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/64925492?v=4",
+      "profile": "https://github.com/AntonVucinic",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
