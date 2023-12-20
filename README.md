@@ -76,7 +76,9 @@
 
 ## Installation
 
-This plugin is [available on LuaRocks][luarocks-url].
+This plugin is [available on LuaRocks][luarocks-url]:
+
+[`:Rocks install haskell-tools.nvim`](https://github.com/nvim-neorocks/rocks.nvim)
 
 Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
