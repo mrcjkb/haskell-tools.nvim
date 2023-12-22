@@ -233,7 +233,7 @@ end
 local function check_for_conflicts()
   start('Checking for conflicting plugins')
   for _, autocmd in ipairs(vim.api.nvim_get_autocmds { event = 'FileType', pattern = 'haskell' }) do
-    if autocmd.group_name and autocmd.group_name == 'lspconfig' then
+    if autocmd.group_name and autocmd.group_name == 'lspconfig' and autocmd.desc and autocmd.desc:match(' hls ') then
       error('lspconfig.hls has been setup. This will likely lead to conflicts with the haskell-tools LSP client.')
       return
     end
