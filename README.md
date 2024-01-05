@@ -156,6 +156,14 @@ vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
 to generate a database.
 > - See the [Advanced configuration](#advanced-configuration) section
 for more configuration options.
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+>[!IMPORTANT]
+>
+> - Do **not** set `vim.g.haskell_tools`
+>   in `after/ftplugin/haskell.lua`, as
+>   the file is sourced after the plugin
+>   is initialized.
 
 ## Features
 
