@@ -171,6 +171,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "BebeSparkelSparkel",
+      "name": "William Rusnack",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10747532?v=4",
+      "profile": "https://github.com/BebeSparkelSparkel",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
