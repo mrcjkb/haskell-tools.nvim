@@ -79,7 +79,9 @@ if deps.has_telescope() then
     opts.hoogle = opts.hoogle or {}
     opts.hoogle.json = true
     local url = mk_hoogle_request(search_term, opts)
-    compat.system({ 'curl', '--silent', url, '-H', 'Accept: application/json' }, nil, function(result)
+    local curl_command = { 'curl', '--silent', url, '-H', 'Accept: application/json' }
+    log.debug(curl_command)
+    compat.system(curl_command, nil, function(result)
       ---@cast result vim.SystemCompleted
       log.debug { 'Hoogle web response', result }
       local response = result.stdout
@@ -87,8 +89,16 @@ if deps.has_telescope() then
         vim.notify('hoogle web: ' .. (result.stderr or 'error calling curl'), vim.log.levels.ERROR)
         return
       end
-      local results = vim.json.decode(response)
+      local ok, results = pcall(vim.json.decode, response)
       vim.schedule(function()
+        if not ok then
+          log.error { 'Hoogle web response (invalid JSON)', curl_command, 'result: ' .. result }
+          vim.notify(
+            "haskell-tools.hoogle: Received invalid JSON from curl. Likely due to a failed request. See ':HtLog' for details'",
+            vim.log.levels.ERROR
+          )
+          return
+        end
         pickers
           .new(opts, {
             prompt_title = 'Hoogle: ' .. search_term,
