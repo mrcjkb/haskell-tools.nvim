@@ -196,14 +196,26 @@ HlsTools.restart = function(bufnr)
     log.error { 'Could not create timer', err_name, err_msg }
     return
   end
-  timer:start(500, 500, function()
+  local attempts_to_live = 50
+  local stopped_client_count = 0
+  timer:start(200, 100, function()
     for _, client in ipairs(clients) do
       if client:is_stopped() then
+        stopped_client_count = stopped_client_count + 1
         vim.schedule(function()
           lsp.start(bufnr)
         end)
       end
     end
+    if stopped_client_count >= #clients then
+      timer:stop()
+      attempts_to_live = 0
+    elseif attempts_to_live <= 0 then
+      vim.notify('haslell-tools.lsp: Could not restart all LSP clients.', vim.log.levels.ERROR)
+      timer:stop()
+      attempts_to_live = 0
+    end
+    attempts_to_live = attempts_to_live - 1
   end)
 end
 
