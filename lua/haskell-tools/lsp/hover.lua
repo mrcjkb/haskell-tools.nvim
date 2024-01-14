@@ -119,6 +119,10 @@ function hover.on_hover(_, result, ctx, config)
   local ht = require('haskell-tools')
   config = config or {}
   config.focus_id = ctx.method
+  if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
+    -- Ignore result since buffer changed.
+    return
+  end
   if not (result and result.contents) then
     vim.notify('No information available')
     return
