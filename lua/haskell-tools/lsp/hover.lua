@@ -204,8 +204,8 @@ function hover.on_hover(_, result, ctx, config)
         end)
       end
     else -- Display Hoogle search instead
-      local package = location:match('‘(.+)’')
-      local search_term = package and package .. '.' .. cword or cword
+      local pkg = location:match('‘(.+)’')
+      local search_term = pkg and pkg .. '.' .. cword or cword
       table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
       table.insert(_state.commands, function()
         log.debug { 'Hover: Hoogle search for definition', search_term }
