@@ -624,6 +624,12 @@ For a health check, run `:checkhealth haskell-tools`
 
 ### LSP features not working
 
+If `hls` is unable to show diagnostics, or shows an error diagnostic
+at the top of your file, you should first check if you can compile
+your project with cabal or stack.
+If there are compile errors, open the files that cannot be compiled,
+and `hls` should be able to show the error diagnostics for those files.
+
 Check which versions of `hls` and GHC you are using
 (e.g. by calling `haskell-language-server-wrapper --probe-tools`
 or `haskell-language-server --probe-tools`).
