@@ -24,15 +24,35 @@
 
 ---@brief ]]
 
+---@param module string
+---@return table
+local function lazy_require(module)
+  return setmetatable({}, {
+    __index = function(_, key)
+      return require(module)[key]
+    end,
+    __newindex = function(_, key, value)
+      require(module)[key] = value
+    end,
+  })
+end
+
 ---@class HaskellTools
 local HaskellTools = {
-  lsp = require('haskell-tools.lsp'),
-  hoogle = require('haskell-tools.hoogle'),
-  repl = require('haskell-tools.repl'),
-  project = require('haskell-tools.project'),
-  tags = require('haskell-tools.tags'),
-  dap = require('haskell-tools.dap'),
-  log = require('haskell-tools.log'),
+  ---@type HlsTools
+  lsp = lazy_require('haskell-tools.lsp'),
+  ---@type HoogleTools
+  hoogle = lazy_require('haskell-tools.hoogle'),
+  ---@type HsReplTools
+  repl = lazy_require('haskell-tools.repl'),
+  ---@type HsProjectTools
+  project = lazy_require('haskell-tools.project'),
+  ---@type FastTagsTools
+  tags = lazy_require('haskell-tools.tags'),
+  ---@type HsDapTools
+  dap = lazy_require('haskell-tools.dap'),
+  ---@type HaskellToolsLog
+  log = lazy_require('haskell-tools.log'),
 }
 
 return HaskellTools

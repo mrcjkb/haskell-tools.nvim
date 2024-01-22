@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Initialization: Lazy-require `haskell-tools` fields.
+  This prevents configs from being initialized early if
+  calling `require('haskell-tools')` before setting
+  `vim.g.haskell_tools`.
+
 ## [3.1.4] - 2024-01-20
 
 ### Fixed
