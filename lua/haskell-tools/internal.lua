@@ -46,7 +46,7 @@ end
 ---local ht = require('haskell-tools')
 ---ht.start_or_attach()
 ---@usage ]]
-function InternalApi.start_or_attach()
+local function start_or_attach()
   local Types = require('haskell-tools.types.internal')
   local HaskellTools = require('haskell-tools')
   if Types.evaluate(HTConfig.hls.auto_attach) and buf_is_lsp_supported() then
@@ -58,7 +58,7 @@ function InternalApi.start_or_attach()
 end
 
 ---Auto-discover nvim-dap launch configurations (if auto-discovery is enabled)
-function InternalApi.dap_discover()
+local function dap_discover()
   local auto_discover = HTConfig.dap.auto_discover
   if not auto_discover then
     return
@@ -68,6 +68,17 @@ function InternalApi.dap_discover()
   ---@cast auto_discover AddDapConfigOpts
   local bufnr = vim.api.nvim_get_current_buf()
   require('haskell-tools').dap.discover_configurations(bufnr, auto_discover)
+end
+
+---ftplugin implementation
+function InternalApi.ftplugin()
+  local bufnr = vim.api.nvim_get_current_buf()
+  if vim.b[bufnr].did_haskell_tools_ftplugin then
+    return
+  end
+  start_or_attach()
+  dap_discover()
+  vim.b[bufnr].did_haskell_tools_ftplugin = true
 end
 
 return InternalApi
