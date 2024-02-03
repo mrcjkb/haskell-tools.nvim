@@ -90,7 +90,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 }
 ```
 
->[!NOTE]
+>[!TIP]
 >
 >It is suggested to pin to tagged releases if you would like to avoid breaking changes.
 
@@ -149,7 +149,7 @@ end, opts)
 vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
 ```
 
->[!NOTE]
+>[!TIP]
 >
 > - For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > - If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
@@ -319,7 +319,7 @@ vim.g.haskell_tools = {
 }
 ```
 
-> [!NOTE]
+> [!TIP]
 >
 > `vim.g.haskell_tools` can also be a function that returns
 > a table.
@@ -613,7 +613,7 @@ To load the extension, call
 require('telescope').load_extension('ht')
 ```
 
-> [!NOTE]
+> [!IMPORTANT]
 >
 > If you lazy-load this plugin,
 > make sure it is loaded _before_ registering the Telescope extension.
@@ -662,9 +662,9 @@ until you can reproduce it.
 >
 > This plugin is only tested on Linux.
 > It should work on MacOS, and basic features should also work on Windows
-> (since version `1.9.5`), but this has not been tested.
+> (since version `1.9.5`), but I have no way to test this myself.
 > Features that rely on external tools, such as `hoogle`,
-> `fast-tags` or `ghci` are likely to break on non-Unix-like operating systems.
+> `fast-tags` or `ghci` might break on non-Unix-like operating systems.
 
 #### Logs
 
