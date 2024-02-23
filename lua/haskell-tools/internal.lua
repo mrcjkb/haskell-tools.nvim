@@ -72,13 +72,8 @@ end
 
 ---ftplugin implementation
 function InternalApi.ftplugin()
-  local bufnr = vim.api.nvim_get_current_buf()
-  if vim.b[bufnr].did_haskell_tools_ftplugin then
-    return
-  end
   start_or_attach()
   dap_discover()
-  vim.b[bufnr].did_haskell_tools_ftplugin = true
 end
 
 return InternalApi
