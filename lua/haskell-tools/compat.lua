@@ -1,4 +1,4 @@
----@diagnostic disable: deprecated, duplicate-doc-field
+---@diagnostic disable: deprecated, duplicate-doc-field, duplicate-doc-alias
 ---@mod haskell-tools.compat Functions for backward compatibility with older Neovim versions
 ---@brief [[
 
@@ -22,6 +22,8 @@ compat.uv = vim.uv or vim.loop
 --- @field signal integer
 --- @field stdout? string
 --- @field stderr? string
+
+--- @alias lsp.Client vim.lsp.Client
 
 compat.system = vim.system
   -- wrapper around vim.fn.system to give it a similar API to vim.system
