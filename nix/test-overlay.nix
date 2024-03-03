@@ -1,34 +1,8 @@
-{
-  self,
-  neodev-nvim,
-  telescope-nvim,
-  nvim-dap,
-  toggleterm,
-}: final: prev:
+{self}: final: prev:
 with final.lib;
 with final.lib.strings;
 with final.stdenv; let
   nvim-nightly = final.neovim-nightly;
-
-  neodev-plugin = final.vimUtils.buildVimPlugin {
-    name = "neodev.nvim";
-    src = neodev-nvim;
-  };
-
-  telescope-plugin = final.vimUtils.buildVimPlugin {
-    name = "telescope.nvim";
-    src = telescope-nvim;
-  };
-
-  nvim-dap-plugin = final.vimUtils.buildVimPlugin {
-    name = "nvim-dap";
-    src = nvim-dap;
-  };
-
-  toggleterm-plugin = final.vimUtils.buildVimPlugin {
-    name = "toggleterm";
-    src = toggleterm;
-  };
 
   mkNeorocksTest = {
     name,
@@ -37,24 +11,25 @@ with final.stdenv; let
     withHls ? true,
     extraPkgs ? [],
   }: let
-    nvim-wrapped = final.wrapNeovim nvim {
-      configure = {
-        packages.myVimPackage = {
-          start =
-            [
-              toggleterm-plugin
-            ]
-            ++ (
-              if withTelescope
-              then [
-                telescope-plugin
-                final.vimPlugins.plenary-nvim
+    nvim-wrapped = with final.vimPlugins;
+      final.wrapNeovim nvim {
+        configure = {
+          packages.myVimPackage = {
+            start =
+              [
+                toggleterm-nvim
               ]
-              else []
-            );
+              ++ (
+                if withTelescope
+                then [
+                  telescope-nvim
+                  plenary-nvim
+                ]
+                else []
+              );
+          };
         };
       };
-    };
   in
     final.neorocksTest {
       inherit name;
