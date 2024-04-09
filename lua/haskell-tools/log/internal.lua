@@ -90,12 +90,15 @@ function HaskellToolsLogInternal.nvim_open_hls_logfile()
   vim.cmd('e ' .. HaskellToolsLogInternal.get_hls_logfile())
 end
 
+local log_levels = vim.deepcopy(vim.log.levels)
+for levelstr, levelnr in pairs(log_levels) do
+  log_levels[levelnr] = levelstr
+end
+
 --- Set the log level
 --- @param level (string|integer) The log level
 --- @see vim.log.levels
 function HaskellToolsLogInternal.set_level(level)
-  local log_levels = vim.deepcopy(vim.log.levels)
-  vim.tbl_add_reverse_lookup(log_levels)
   if type(level) == 'string' then
     HaskellToolsLogInternal.level =
       assert(log_levels[string.upper(level)], string.format('haskell-tools: Invalid log level: %q', level))
