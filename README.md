@@ -86,7 +86,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 {
   'mrcjkb/haskell-tools.nvim',
   version = '^3', -- Recommended
-  ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
+  lazy = false, -- This plugin is already lazy
 }
 ```
 
