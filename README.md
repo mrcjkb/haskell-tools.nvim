@@ -57,6 +57,14 @@
 - [:link: Recommendations](#link-recommendations)
 - [:green_heart: Contributing](./CONTRIBUTING.md)
 
+## :grey_question: Do I need haskell-tools.nvim
+
+If you are starting out with Haskell, [`nvim-lspconfig.hls`](https://github.com/neovim/nvim-lspconfig)
+is probably enough for you.
+It provides the lowest common denominator of LSP support.
+This plugin is for those who would like [additional features](#star2-features)
+that are specific to Haskell tooling.
+
 ## :pencil: Prerequisites
 
 ### Required
