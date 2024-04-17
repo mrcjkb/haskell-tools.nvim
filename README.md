@@ -44,19 +44,20 @@
 > - No dependency on `lspconfig`.
 > - Lazy initialization by design.
 
-## Quick Links
+## :link: Quick Links
 
-- [Installation](#installation)
-- [Quick Setup](#quick-setup)
-- [Features](#features)
-- [Advanced configuration](#advanced-configuration)
+- [:pencil: Prerequisites](#pencil-prerequisites)
+- [:inbox_tray: Installation](#inbox_tray-installation)
+- [:zap: Quick Setup](#zap-quick-setup)
+- [:star2: Features](#star2-features)
+- [:gear: Advanced configuration](#gear-advanced-configuration)
   - [Available functions and commands](#available-functions-and-commands)
   - [Telescope extension](#telescope-extension)
-- [Troubleshooting](#troubleshooting)
-- [Recommendations](#recommendations)
-- [Contributing](./CONTRIBUTING.md)
+- [:stethoscope: Troubleshooting](#stethoscope-troubleshooting)
+- [:link: Recommendations](#link-recommendations)
+- [:green_heart: Contributing](./CONTRIBUTING.md)
 
-## Prerequisites
+## :pencil: Prerequisites
 
 ### Required
 
@@ -74,7 +75,7 @@
 - [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/) and
   [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
 
-## Installation
+## :inbox_tray: Installation
 
 This plugin is [available on LuaRocks][luarocks-url]:
 
@@ -103,11 +104,11 @@ To manually generate documentation, use `:helptags ALL`.
 > home-manager configuration.
 > It is also available in `nixpkgs`.
 
-## Quick Setup
+## :zap: Quick Setup
 
 This plugin automatically configures the `haskell-language-server` builtin LSP
 client and integrates with other haskell tools.
-See the [Features](#features) section for more info.
+See the [Features](#star2-features) section for more info.
 
 >[!WARNING]
 >
@@ -154,7 +155,7 @@ vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
 > - For more LSP related keymaps, [see the `nvim-lspconfig` suggestions](https://github.com/neovim/nvim-lspconfig#suggested-configuration).
 > - If using a local `hoogle` installation, [follow these instructions](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md#generate-a-hoogle-database)
 to generate a database.
-> - See the [Advanced configuration](#advanced-configuration) section
+> - See the [Advanced configuration](#gear-advanced-configuration) section
 for more configuration options.
 <!-- markdownlint-disable -->
 <!-- markdownlint-restore -->
@@ -165,7 +166,7 @@ for more configuration options.
 >   the file is sourced after the plugin
 >   is initialized.
 
-## Features
+## :star2: Features
 
 - [x] **Set up a `haskell-language-server` client.**
 - [x] **Dynamically load `haskell-language-server` settings per project
@@ -182,7 +183,7 @@ for more configuration options.
     (Adds [folding range](https://haskell-language-server.readthedocs.io/en/latest/features.html#folding-range)
     support).
 - [x] **Automatically refreshes code lenses by default,**
-      which `haskell-language-server` heavily relies on. [Can be disabled.](#advanced-configuration)
+      which `haskell-language-server` heavily relies on. [Can be disabled.](#gear-advanced-configuration)
 
 ![codeLens](https://user-images.githubusercontent.com/12857160/219738949-c20ed266-3b2d-441e-82fe-faf50f5c582a.gif)
 
@@ -224,7 +225,7 @@ Start a GHCi repl for the current project / buffer.
   or `ghci`) for your project.
 - Choose between a builtin handler or [`toggleterm.nvim`](https://github.com/akinsho/toggleterm.nvim).
 - Dynamically create a repl command for [`iron.nvim`](https://github.com/hkupty/iron.nvim)
-  (see [advanced configuration](#advanced-configuration)).
+  (see [advanced configuration](#gear-advanced-configuration)).
 - Interact with the repl from within Haskell files using a lua API.
 
 ![repl](https://user-images.githubusercontent.com/12857160/219758588-68f3c06f-5804-4279-b23d-1bdcc050d892.gif)
@@ -264,7 +265,7 @@ this plugin will set up `autocmd`s to automatically generate tags:
 - For the whole project, when starting a session.
 - For the current (sub)package, when writing a file.
 
-This feature can be tweaked or disabled in the [advanced configuration](#advanced-configuration).
+This feature can be tweaked or disabled in the [advanced configuration](#gear-advanced-configuration).
 
 - [x] **Auto-discover `haskell-debug-adapter` configurations**
 
@@ -283,7 +284,7 @@ configurations.
 
 For planned features, refer to the [issues](https://github.com/MrcJkb/haskell-tools.nvim/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
 
-## Advanced configuration
+## :gear: Advanced configuration
 
 To modify the default configuration, set `vim.g.haskell_tools`.
 
@@ -618,7 +619,7 @@ require('telescope').load_extension('ht')
 > If you lazy-load this plugin,
 > make sure it is loaded _before_ registering the Telescope extension.
 
-## Troubleshooting
+## :stethoscope: Troubleshooting
 
 For a health check, run `:checkhealth haskell-tools`
 
@@ -710,7 +711,7 @@ or open them by calling
 :lua require('haskell-tools').log.nvim_open_hls_logfile() -- or :HlsLog
 ```
 
-## Recommendations
+## :link: Recommendations
 
 Here are some other plugins I recommend for Haskell (and nix) development in neovim:
 
