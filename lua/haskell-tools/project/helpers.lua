@@ -32,7 +32,7 @@ end
 ---@param ... string Search patterns (can be globs)
 ---@return string|nil The first file that matches the globs
 local function find_file(path, ...)
-  for _, search_term in ipairs(vim.tbl_flatten { ... }) do
+  for _, search_term in ipairs(compat.tbl_flatten { ... }) do
     local results = vim.fn.glob(compat.joinpath(path, search_term), true, true)
     if #results > 0 then
       return results[1]
@@ -87,7 +87,7 @@ end
 ---@param ... string Globs to match in the root directory
 ---@return fun(path:string):(string|nil)
 local function root_pattern(...)
-  local args = vim.tbl_flatten { ... }
+  local args = compat.tbl_flatten { ... }
   local function matcher(path)
     return find_file(path, unpack(args))
   end

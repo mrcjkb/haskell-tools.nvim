@@ -15,6 +15,7 @@
 
 local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
+local compat = require('haskell-tools.compat')
 
 ---Extend a repl command for `file`.
 ---If `file` is `nil`, create a repl the nearest package.
@@ -98,7 +99,7 @@ local function mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    local cmd = vim.tbl_flatten { 'ghci', file and { file } or {} }
+    local cmd = compat.tbl_flatten { 'ghci', file and { file } or {} }
     log.debug { 'mk_repl_cmd', cmd }
     return cmd
   end
