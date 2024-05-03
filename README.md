@@ -21,9 +21,7 @@
     </strong>
   </p>
   <p>🦥</p>
-</div>
-<!-- markdownlint-restore -->
-
+  
 [![Neovim][neovim-shield]][neovim-url]
 [![Lua][lua-shield]][lua-url]
 [![Haskell][haskell-shield]][haskell-url]
@@ -33,10 +31,11 @@
 [![Issues][issues-shield]][issues-url]
 [![Build Status][ci-shield]][ci-url]
 [![LuaRocks][luarocks-shield]][luarocks-url]
-
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-19-purple.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+</div>
+<!-- markdownlint-restore -->
 
 > [!NOTE]
 >
