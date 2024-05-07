@@ -43,7 +43,7 @@ compat.system = vim.system
 
 ---@type fun(tbl:table):table
 compat.tbl_flatten = vim.iter and function(tbl)
-  return vim.iter(tbl):flatten():totable()
+  return vim.iter(tbl):flatten(math.huge):totable()
 end or vim.tbl_flatten
 
 return compat
