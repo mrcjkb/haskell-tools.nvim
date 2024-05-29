@@ -34,10 +34,10 @@ local folding_range_capabilities = deps.if_available('ufo', function(_)
 end, {})
 local capabilities = vim.tbl_deep_extend(
   'keep',
-  ht_capabilities,
   cmp_capabilities,
   selection_range_capabilities,
-  folding_range_capabilities
+  folding_range_capabilities,
+  ht_capabilities
 )
 
 ---@class HTConfig haskell-tools.nvim plugin configuration.
