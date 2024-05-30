@@ -33,7 +33,7 @@ local folding_range_capabilities = deps.if_available('ufo', function(_)
   }
 end, {})
 local capabilities = vim.tbl_deep_extend(
-  'keep',
+  'force',
   ht_capabilities,
   cmp_capabilities,
   selection_range_capabilities,
