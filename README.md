@@ -32,7 +32,7 @@
 [![Build Status][ci-shield]][ci-url]
 [![LuaRocks][luarocks-shield]][luarocks-url]
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-19-purple.svg?style=for-the-badge)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-20-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </div>
 <!-- markdownlint-restore -->
@@ -771,6 +771,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mbwgh"><img src="https://avatars.githubusercontent.com/u/28275377?v=4?s=100" width="100px;" alt="mbwgh"/><br /><sub><b>mbwgh</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=mbwgh" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AntonVucinic"><img src="https://avatars.githubusercontent.com/u/64925492?v=4?s=100" width="100px;" alt="AntonVucinic"/><br /><sub><b>AntonVucinic</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=AntonVucinic" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/BebeSparkelSparkel"><img src="https://avatars.githubusercontent.com/u/10747532?v=4?s=100" width="100px;" alt="William Rusnack"/><br /><sub><b>William Rusnack</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=BebeSparkelSparkel" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://johnhamptonjr.com"><img src="https://avatars.githubusercontent.com/u/30007?v=4?s=100" width="100px;" alt="John Hampton"/><br /><sub><b>John Hampton</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=johnhampton" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
