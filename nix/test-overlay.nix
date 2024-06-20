@@ -51,7 +51,7 @@ with final.stdenv; let
 
       preCheck = ''
         # Neovim expects to be able to create log files, etc.
-        export HOME=$(realpath .)
+        export HOME=$(mktemp -d)
       '';
     };
 
