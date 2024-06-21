@@ -10,7 +10,7 @@
 
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
 
-    pre-commit-hooks = {
+    git-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -28,7 +28,7 @@
     nixpkgs,
     neorocks,
     gen-luarc,
-    pre-commit-hooks,
+    git-hooks,
     flake-utils,
     ...
   }: let
@@ -69,13 +69,11 @@
 
       luarc-nightly = pkgs.mk-luarc {
         nvim = pkgs.neovim-nightly;
-        neodev-types = "nightly";
         plugins = luarc-plugins;
       };
 
       luarc-stable = pkgs.mk-luarc {
         nvim = pkgs.neovim-unwrapped;
-        neodev-types = "stable";
         plugins = luarc-plugins;
         disabled-diagnostics = [
           "undefined-doc-name"
@@ -84,7 +82,7 @@
         ];
       };
 
-      type-check-nightly = pre-commit-hooks.lib.${system}.run {
+      type-check-nightly = git-hooks.lib.${system}.run {
         src = self;
         hooks = {
           lua-ls = {
@@ -94,7 +92,7 @@
         };
       };
 
-      type-check-stable = pre-commit-hooks.lib.${system}.run {
+      type-check-stable = git-hooks.lib.${system}.run {
         src = self;
         hooks = {
           lua-ls = {
@@ -104,7 +102,7 @@
         };
       };
 
-      pre-commit-check = pre-commit-hooks.lib.${system}.run {
+      pre-commit-check = git-hooks.lib.${system}.run {
         src = self;
         hooks = {
           alejandra.enable = true;
@@ -115,23 +113,20 @@
         };
       };
 
-      haskell-tools-shell = pkgs.haskell-tools-test.overrideAttrs (oa: {
+      haskell-tools-shell = pkgs.mkShell {
         name = "haskell-tools.nvim-devShell";
         shellHook = ''
           ${pre-commit-check.shellHook}
           ln -fs ${pkgs.luarc-to-json luarc-nightly} .luarc.json
         '';
-        buildInputs = with pre-commit-hooks.packages.${system};
-          [
-            alejandra
+        buildInputs =
+          self.checks.${system}.pre-commit-check.enabledPackages
+          ++ (with pkgs; [
             lua-language-server
-            stylua
-            luacheck
-            editorconfig-checker
-            markdownlint-cli
-          ]
-          ++ oa.buildInputs;
-      });
+            busted-nlua
+            (lua5_1.withPackages (ps: with ps; [luarocks]))
+          ]);
+      };
     in {
       devShells = rec {
         default = haskell-tools;
