@@ -16,7 +16,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: grep -q "${{ github.ref_name }}" CHANGELOG.md
       - name: LuaRocks Upload
-        uses: nvim-neorocks/luarocks-tag-release@v6
+        uses: nvim-neorocks/luarocks-tag-release@v7
         env:
           LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
         with:
