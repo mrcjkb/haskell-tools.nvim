@@ -3,3 +3,4 @@ result
 .luarc.json
 .pre-commit-config.yaml
 .direnv
+.repro

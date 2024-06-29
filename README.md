@@ -650,8 +650,7 @@ To troubleshoot this plugin with a minimal config in a temporary directory,
 you can try [minimal.lua](./troubleshooting/minimal.lua).
 
 ```console
-mkdir -p /tmp/minimal/
-NVIM_DATA_MINIMAL="/tmp/minimal" NVIM_APP_NAME="nvim-ht-minimal" nvim -u minimal.lua
+nvim -u minimal.lua
 ```
 
 > [!NOTE]
