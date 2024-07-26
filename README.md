@@ -482,12 +482,16 @@ ht.hoogle.hoogle_signature()
 #### Repl
 
 <!-- markdownlint-disable -->
-| Command                | Description                         | Arguments           |
-| -----------------------| ----------------------------------- | ------------------- |
-| `:Haskell repl toggle` | Toggle a GHCi repl                  | filepath (optional) |
-| `:Haskell repl quit`   | Quit the current repl               |                     |
-| `:Haskell repl load`   | Load a file into the current repl   | filepath (optional) |
-| `:Haskell repl reload` | Reload the current repl             |                     |
+| Command                                | Description                                              | Arguments           |
+| -------------------------------------- | -------------------------------------------------------- | ------------------- |
+| `:Haskell repl toggle {file?}`         | Toggle a GHCi repl                                       | filepath (optional) |
+| `:Haskell repl quit`                   | Quit the current repl                                    |                     |
+| `:Haskell repl load {file?}`           | Load a file into the current repl                        | filepath (optional) |
+| `:Haskell repl reload`                 | Reload the current repl                                  |                     |
+| `:Haskell repl paste_type {register?}` | Query the repl for the type of {register}                |                     |
+| `:Haskell repl cword_type`             | Query the repl for the type of the word under the cursor |                     |
+| `:Haskell repl paste_info {register?}` | Query the repl for info on {register}                    |                     |
+| `:Haskell repl cword_info {register?}` | Query the repl for info on the word under the cursor     |                     |
 <!-- markdownlint-restore -->
 
 ```lua

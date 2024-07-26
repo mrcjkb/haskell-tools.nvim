@@ -7,10 +7,14 @@
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:Haskell repl toggle` - Toggle a GHCi repl.
+--- * `:Haskell repl toggle {file?}` - Toggle a GHCi repl.
 --- * `:Haskell repl quit` - Quit the current repl.
---- * `:Haskell repl load` - Load a Haskell file into the repl.
+--- * `:Haskell repl load {file?}` - Load a Haskell file into the repl.
 --- * `:Haskell repl reload` - Reload the current repl.
+--- * `:Haskell repl paste_type {register?}` - Query the repl for the type of |registers| {register}
+--- * `:Haskell repl cword_type` - Query the repl for the type of |cword|
+--- * `:Haskell repl paste_info {register?}` - Query the repl for the info on |registers| {register}
+--- * `:Haskell repl cword_info` - Query the repl for info on |cword|
 ---@brief ]]
 
 local log = require('haskell-tools.log.internal')
@@ -259,6 +263,18 @@ local function complete_haskell_files(arg_lead)
 end
 
 ---@param args? string[]
+---@return string?
+local function get_single_opt_arg(args)
+  if type(args) ~= 'table' then
+    return
+  end
+  if #args > 1 then
+    log.warn { 'Too many arguments!', args }
+  end
+  return #args > 0 and args[1] or nil
+end
+
+---@param args? string[]
 ---@return string
 local function get_filepath_arg(args)
   if not args or #args == 0 then
@@ -291,6 +307,24 @@ local subcommands = {
   },
   reload = {
     impl = Repl.reload,
+  },
+  paste_type = {
+    impl = function(args)
+      local reg = get_single_opt_arg(args)
+      Repl.paste_type(reg)
+    end,
+  },
+  cword_type = {
+    impl = Repl.cword_type,
+  },
+  paste_info = {
+    impl = function(args)
+      local reg = get_single_opt_arg(args)
+      Repl.paste_info(reg)
+    end,
+  },
+  cword_info = {
+    impl = Repl.cword_info,
   },
 }
 

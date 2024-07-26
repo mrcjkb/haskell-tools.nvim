@@ -390,10 +390,14 @@ haskell-tools GHCi REPL module                              *haskell-tools.repl*
 
  The following commands are available:
 
- * `:Haskell repl toggle` - Toggle a GHCi repl.
+ * `:Haskell repl toggle {file?}` - Toggle a GHCi repl.
  * `:Haskell repl quit` - Quit the current repl.
- * `:Haskell repl load` - Load a Haskell file into the repl.
+ * `:Haskell repl load {file?}` - Load a Haskell file into the repl.
  * `:Haskell repl reload` - Reload the current repl.
+ * `:Haskell repl paste_type {register?}` - Query the repl for the type of |registers| {register}
+ * `:Haskell repl cword_type` - Query the repl for the type of |cword|
+ * `:Haskell repl paste_info {register?}` - Query the repl for the info on |registers| {register}
+ * `:Haskell repl cword_info` - Query the repl for info on |cword|
 
 haskell-tools.Repl                                          *haskell-tools.Repl*
 

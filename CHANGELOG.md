@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   into `Haskell {projectFile|packageYaml|packageCabal}` subcommands.
 - Merge logging commands into respective `Haskell` and `Hls` subcommands.
 
+### Added
+
+- Repl: subcommands for remaining Lua functions:
+  `paste_type`, `cword_type`, `paste_info`, `cword_info`.
+
 ## [3.1.10] - 2024-05-30
 
 ### Fixed
