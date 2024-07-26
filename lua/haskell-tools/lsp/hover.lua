@@ -14,11 +14,11 @@ local HtProjectHelpers = require('haskell-tools.project.helpers')
 
 local hover = {}
 
----@class HtHoverState
+---@class haskell-tools.hover.State
 ---@field winnr number|nil The hover window number
 ---@field commands (fun():nil)[] List of hover actions
 
----@type HtHoverState
+---@type haskell-tools.hover.State
 local _state = {
   winnr = nil,
   commands = {},

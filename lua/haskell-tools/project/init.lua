@@ -56,13 +56,13 @@ local function telescope_package_files(opts)
   telescope_package_search(t.find_files, opts)
 end
 
----@class HsProjectTools
-local HsProjectTools = {}
+---@class haskell-tools.Project
+local Project = {}
 
 ---Get the project's root directory
 ---@param project_file string The path to a project file
 ---@return string|nil
-HsProjectTools.root_dir = function(project_file)
+Project.root_dir = function(project_file)
   local HtProjectHelpers = require('haskell-tools.project.helpers')
   return HtProjectHelpers.match_cabal_project_root(project_file)
     or HtProjectHelpers.match_stack_project_root(project_file)
@@ -72,7 +72,7 @@ end
 
 ---Open the package.yaml of the package containing the current buffer.
 ---@return nil
-HsProjectTools.open_package_yaml = function()
+Project.open_package_yaml = function()
   local HtProjectHelpers = require('haskell-tools.project.helpers')
   vim.schedule(function()
     local file = vim.api.nvim_buf_get_name(0)
@@ -93,7 +93,7 @@ end
 
 ---Open the *.cabal file of the package containing the current buffer.
 ---@return nil
-HsProjectTools.open_package_cabal = function()
+Project.open_package_cabal = function()
   vim.schedule(function()
     local HtProjectHelpers = require('haskell-tools.project.helpers')
     local file = vim.api.nvim_buf_get_name(0)
@@ -114,7 +114,7 @@ end
 
 ---Open the current buffer's project file (cabal.project or stack.yaml).
 ---@return nil
-HsProjectTools.open_project_file = function()
+Project.open_project_file = function()
   vim.schedule(function()
     local HtProjectHelpers = require('haskell-tools.project.helpers')
     local file = vim.api.nvim_buf_get_name(0)
@@ -138,29 +138,29 @@ HsProjectTools.open_project_file = function()
   end)
 end
 
-HsProjectTools.telescope_package_grep = deps.has('telescope.builtin') and telescope_package_grep or nil
+Project.telescope_package_grep = deps.has('telescope.builtin') and telescope_package_grep or nil
 
-HsProjectTools.telescope_package_files = deps.has('telescope.builtin') and telescope_package_files or nil
+Project.telescope_package_files = deps.has('telescope.builtin') and telescope_package_files or nil
 
 local commands = {
   {
     'HsPackageYaml',
     function()
-      HsProjectTools.open_package_yaml()
+      Project.open_package_yaml()
     end,
     {},
   },
   {
     'HsPackageCabal',
     function()
-      HsProjectTools.open_package_cabal()
+      Project.open_package_cabal()
     end,
     {},
   },
   {
     'HsProjectFile',
     function()
-      HsProjectTools.open_project_file()
+      Project.open_project_file()
     end,
     {},
   },
@@ -171,4 +171,4 @@ for _, command in ipairs(commands) do
   vim.api.nvim_create_user_command(unpack(command))
 end
 
-return HsProjectTools
+return Project

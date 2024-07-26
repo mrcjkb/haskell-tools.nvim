@@ -17,13 +17,13 @@ local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 
----@class HoogleHelpers
-local HoogleHelpers = {}
+---@class haskell-tools.hoogle.Helpers
+local Helpers = {}
 
 ---@param buf number the telescope buffebuffer numberr
 ---@param map fun(mode:string,keys:string,action:function) callback for creating telescope keymaps
 ---@return boolean
-function HoogleHelpers.hoogle_attach_mappings(buf, map)
+function Helpers.hoogle_attach_mappings(buf, map)
   actions.select_default:replace(function()
     -- Copy type signature to clipboard
     local entry = actions_state.get_selected_entry()
@@ -57,19 +57,19 @@ local function format_html(html)
   return html and html:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&amp', '&') or ''
 end
 
----@class TelescopeHoogleEntry
+---@class haskell-tools.hoogle.telescope.Entry
 ---@field value string
 ---@field valid boolean
 ---@field type_sig string The entry's type signature
 ---@field module_name string The name of the module that contains the entry
 ---@field url string|nil The entry's Hackage URL
 ---@field docs string|nil The Hoogle entry's documentation
----@field display fun(TelescopeHoogleEntry):TelescopeDisplay
+---@field display fun(TelescopeHoogleEntry):haskell-tools.telescope.Display
 ---@field ordinal string
 ---@field preview_command fun(TelescopeHoogleEntry, number):nil
 
 ---Show a preview in the Telescope previewer
----@param entry TelescopeHoogleEntry
+---@param entry haskell-tools.hoogle.telescope.Entry
 ---@param buf number the Telescope preview buffer
 local function show_preview(entry, buf)
   local docs = format_html(entry.docs)
@@ -85,10 +85,10 @@ local function show_preview(entry, buf)
   end)
 end
 
----@class TelescopeDisplay
+---@class haskell-tools.telescope.Display
 
----@param entry TelescopeHoogleEntry
----@return TelescopeDisplay
+---@param entry haskell-tools.hoogle.telescope.Entry
+---@return haskell-tools.telescope.Display
 local function make_display(entry)
   local module = entry.module_name
 
@@ -114,18 +114,18 @@ local function get_type_sig(hoogle_item)
   return hoogle_item
 end
 
----@class HoogleData
----@field module HoogleModule|nil
+---@class haskell-tools.hoogle.Data
+---@field module haskell-tools.hoogle.Module|nil
 ---@field item string|nil
 ---@field url string|nil
 ---@field docs string|nil
 
----@class HoogleModule
+---@class haskell-tools.hoogle.Module
 ---@field name string
 
----@param data HoogleData
----@return TelescopeHoogleEntry|nil
-function HoogleHelpers.mk_hoogle_entry(data)
+---@param data haskell-tools.hoogle.Data
+---@return haskell-tools.hoogle.telescope.Entry|nil
+function Helpers.mk_hoogle_entry(data)
   local module_name = (data.module or {}).name
   local type_sig = data.item and get_type_sig(data.item) or ''
   if not module_name or not type_sig then
@@ -144,4 +144,4 @@ function HoogleHelpers.mk_hoogle_entry(data)
   }
 end
 
-return HoogleHelpers
+return Helpers

@@ -1,4 +1,4 @@
----@class DapInternal
+---@class haskell-tools.internal.Dap
 local Dap = {}
 
 ---@param package_name string
@@ -6,9 +6,9 @@ local Dap = {}
 ---@param package_dir string
 ---@param mains string[]
 ---@param source_dirs string[]
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 Dap.mk_entry_points = function(package_name, exe_name, package_dir, mains, source_dirs)
-  ---@type HsEntryPoint[]
+  ---@type haskell-tools.EntryPoint[]
   local entry_points = {}
   for _, source_dir in pairs(source_dirs) do
     for _, main in pairs(mains) do

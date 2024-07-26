@@ -12,17 +12,17 @@ local _state = {
 log.debug('Setting up fast-tags tools')
 local config = HTConfig.tools.tags
 
----@class GenerateProjectTagsOpts
+---@class haskell-tools.tags.generate_project_tags.Opts
 ---@field refresh boolean Whether to refresh the tags if they have already been generated
 --- for the project (default: true)
 
----@class FastTagsTools
-local FastTagsTools = {}
+---@class haskell-tools.FastTags
+local FastTags = {}
 
 ---Generates tags for the current project
 ---@param path string|nil File path
----@param opts GenerateProjectTagsOpts|nil Options
-FastTagsTools.generate_project_tags = function(path, opts)
+---@param opts haskell-tools.tags.generate_project_tags.Opts|nil Options
+FastTags.generate_project_tags = function(path, opts)
   path = path or vim.api.nvim_buf_get_name(0)
   opts = vim.tbl_extend('force', { refresh = true }, opts or {})
   local HtProjectHelpers = require('haskell-tools.project.helpers')
@@ -51,7 +51,7 @@ end
 
 ---Generate tags for the package containing `path`
 ---@param path string|nil File path
-FastTagsTools.generate_package_tags = function(path)
+FastTags.generate_package_tags = function(path)
   path = path or vim.api.nvim_buf_get_name(0)
   _state.fast_tags_generating = true
   local HtProjectHelpers = require('haskell-tools.project.helpers')
@@ -98,9 +98,9 @@ if #package_events > 0 then
       if _state.fast_tags_generating then
         return
       end
-      FastTagsTools.generate_package_tags(meta.file)
+      FastTags.generate_package_tags(meta.file)
     end,
   })
 end
 
-return FastTagsTools
+return FastTags

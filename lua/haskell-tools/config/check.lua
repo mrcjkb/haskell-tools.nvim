@@ -7,8 +7,8 @@
 
 ---@brief ]]
 
----@class HtConfigCheck
-local HtConfigCheck = {}
+---@class haskell-tools.config.Check
+local Check = {}
 
 ---@param path string
 ---@param msg string|nil
@@ -29,10 +29,10 @@ local function validate(path, tbl)
 end
 
 ---Validates the config.
----@param cfg HTConfig
+---@param cfg haskell-tools.Config
 ---@return boolean is_valid
 ---@return string|nil error_message
-function HtConfigCheck.validate(cfg)
+function Check.validate(cfg)
   local ok, err
   local hls = cfg.hls
   ok, err = validate('hls', {
@@ -151,7 +151,7 @@ function HtConfigCheck.validate(cfg)
   end
   local auto_discover = dap.auto_discover
   if type(auto_discover) == 'table' then
-    ---@cast auto_discover AddDapConfigOpts
+    ---@cast auto_discover haskell-tools.dap.AddConfigOpts
     ok, err = validate('dap.auto_discover', {
       autodetect = { auto_discover.autodetect, 'boolean' },
       settings_file_pattern = { auto_discover.settings_file_pattern, 'string' },
@@ -169,7 +169,7 @@ end
 ---@param default_tbl table
 ---@param ignored_keys string[]
 ---@return string[]
-function HtConfigCheck.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
+function Check.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
   local unrecognized_keys = {}
   for k, _ in pairs(tbl) do
     unrecognized_keys[k] = true
@@ -183,7 +183,7 @@ function HtConfigCheck.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
       ret[k] = k
     end
     if type(default_tbl[k]) == 'table' and tbl[k] then
-      for _, subk in pairs(HtConfigCheck.get_unrecognized_keys(tbl[k], default_tbl[k], {})) do
+      for _, subk in pairs(Check.get_unrecognized_keys(tbl[k], default_tbl[k], {})) do
         local key = k .. '.' .. subk
         ret[key] = key
       end
@@ -199,4 +199,4 @@ function HtConfigCheck.get_unrecognized_keys(tbl, default_tbl, ignored_keys)
   return vim.tbl_keys(ret)
 end
 
-return HtConfigCheck
+return Check

@@ -14,7 +14,7 @@ local OS = require('haskell-tools.os')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
 
----@class HtProjectHelpers
+---@class haskell-tools.project.Helpers
 local HtProjectHelpers = {}
 
 ---@param path string
@@ -222,7 +222,7 @@ end
 
 ---Parse the DAP entry points from a *.cabal file
 ---@param package_path string Path to a package directory
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
 function HtProjectHelpers.parse_package_entrypoints(package_path)
   if HtProjectHelpers.is_cabal_project(package_path) then
@@ -232,7 +232,7 @@ function HtProjectHelpers.parse_package_entrypoints(package_path)
 end
 
 ---@param project_root string Project root directory
----@return HsEntryPoint[]
+---@return haskell-tools.EntryPoint[]
 ---@async
 function HtProjectHelpers.parse_project_entrypoints(project_root)
   local entry_points = {}

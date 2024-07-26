@@ -10,24 +10,24 @@
 
 local log = require('haskell-tools.log.internal')
 
----@class BuiltinRepl
+---@class haskell-tools.repl.builtin
 ---@field bufnr number
 ---@field job_id number
 ---@field cmd string[]
 
----@type BuiltinRepl | nil
+---@type haskell-tools.repl.builtin | nil
 local BuiltinRepl = nil
 
 local function is_repl_loaded()
   return BuiltinRepl ~= nil and vim.api.nvim_buf_is_loaded(BuiltinRepl.bufnr)
 end
 
----@param callback fun(repl:BuiltinRepl)
+---@param callback fun(repl:haskell-tools.repl.builtin)
 ---@return nil
 local function when_repl_loaded(callback)
   if is_repl_loaded() then
     local repl = BuiltinRepl
-    ---@cast repl BuiltinRepl
+    ---@cast repl haskell-tools.repl.builtin
     callback(repl)
   end
 end
@@ -40,7 +40,7 @@ end
 ---Creates a repl on buffer with id `bufnr`.
 ---@param bufnr number Buffer to be used.
 ---@param cmd string[] command to start the repl
----@param opts ReplViewOpts?
+---@param opts haskell-tools.repl.view.Opts?
 ---@return nil
 local function buf_create_repl(bufnr, cmd, opts)
   vim.api.nvim_win_set_buf(0, bufnr)
@@ -114,16 +114,16 @@ local function create_tab(_)
 end
 
 ---@param mk_repl_cmd fun(string):(string[]?)
----@param options ReplConfig
----@return ReplHandlerImpl handler
+---@param options haskell-tools.repl.Config
+---@return haskell-tools.repl.impl.Handler handler
 return function(mk_repl_cmd, options)
-  ---@class ReplHandlerImpl
-  local ReplHandlerImpl = {}
+  ---@class haskell-tools.repl.impl.Handler
+  local Handler = {}
 
   ---Create a new repl (or toggle its visibility)
   ---@param create_win function|number Function for creating the window or an existing window number
   ---@param mk_cmd fun():string[] Function for creating the repl command
-  ---@param opts ReplViewOpts?
+  ---@param opts haskell-tools.repl.view.Opts?
   ---@return nil
   local function create_or_toggle(create_win, mk_cmd, opts)
     local cmd = mk_cmd()
@@ -135,11 +135,11 @@ return function(mk_repl_cmd, options)
     end
     if is_new_cmd(cmd) then
       log.debug { 'repl.builtin: New command', cmd }
-      ReplHandlerImpl.quit()
+      Handler.quit()
     end
     if is_repl_loaded() then
       local repl = BuiltinRepl
-      ---@cast repl BuiltinRepl
+      ---@cast repl haskell-tools.repl.builtin
       log.debug('repl.builtin: is loaded')
       local winid = vim.fn.bufwinid(repl.bufnr)
       if winid ~= -1 then
@@ -169,10 +169,10 @@ return function(mk_repl_cmd, options)
     buf_create_repl(bufnr, cmd, opts)
   end
 
-  ---@type ReplView
+  ---@type haskell-tools.repl.View
   local ReplView = {
     ---Create a new repl in a horizontal split
-    ---@param opts ReplViewOpts?
+    ---@param opts haskell-tools.repl.view.Opts?
     ---@return fun(mk_cmd_fun) create_repl
     create_repl_split = function(opts)
       return function(mk_cmd)
@@ -181,7 +181,7 @@ return function(mk_repl_cmd, options)
     end,
 
     ---Create a new repl in a vertical split
-    ---@param opts ReplViewOpts?
+    ---@param opts haskell-tools.repl.view.Opts?
     ---@return fun(function) create_repl
     create_repl_vsplit = function(opts)
       return function(mk_cmd)
@@ -190,7 +190,7 @@ return function(mk_repl_cmd, options)
     end,
 
     ---Create a new repl in a new tab
-    ---@param opts ReplViewOpts?
+    ---@param opts haskell-tools.repl.view.Opts?
     ---@return fun(function) create_repl
     create_repl_tabnew = function(opts)
       return function(mk_cmd)
@@ -199,7 +199,7 @@ return function(mk_repl_cmd, options)
     end,
 
     ---Create a new repl in the current window
-    ---@param opts ReplViewOpts?
+    ---@param opts haskell-tools.repl.view.Opts?
     ---@return fun(function) create_repl
     create_repl_cur_win = function(opts)
       return function(mk_cmd)
@@ -210,11 +210,11 @@ return function(mk_repl_cmd, options)
 
   log.debug { 'repl.builtin setup', options }
   ---@private
-  ReplHandlerImpl.go_back = options.auto_focus ~= true
+  Handler.go_back = options.auto_focus ~= true
 
   ---@param filepath string path of the file to load into the repl
   ---@param _ table?
-  function ReplHandlerImpl.toggle(filepath, _)
+  function Handler.toggle(filepath, _)
     local cur_win = vim.api.nvim_get_current_win()
     if filepath and not vim.endswith(filepath, '.hs') then
       local err_msg = 'haskell-tools.repl.builtin: Not a Haskell file: ' .. filepath
@@ -230,7 +230,7 @@ return function(mk_repl_cmd, options)
 
     local create_or_toggle_callback = options.builtin.create_repl_window(ReplView)
     create_or_toggle_callback(mk_repl_cmd_wrapped)
-    if cur_win ~= -1 and ReplHandlerImpl.go_back then
+    if cur_win ~= -1 and Handler.go_back then
       vim.api.nvim_set_current_win(cur_win)
     else
       vim.cmd('startinsert')
@@ -239,10 +239,10 @@ return function(mk_repl_cmd, options)
 
   ---Quit the repl
   ---@return nil
-  function ReplHandlerImpl.quit()
+  function Handler.quit()
     when_repl_loaded(function(repl)
       log.debug('repl.builtin: sending quit to repl.')
-      local success, result = pcall(ReplHandlerImpl.send_cmd, ':q')
+      local success, result = pcall(Handler.send_cmd, ':q')
       if not success then
         log.warn { 'repl.builtin: Could not send quit command', result }
       end
@@ -257,7 +257,7 @@ return function(mk_repl_cmd, options)
   ---Send a command to the repl, followed by <cr>
   ---@param txt string The text to send
   ---@return nil
-  function ReplHandlerImpl.send_cmd(txt)
+  function Handler.send_cmd(txt)
     when_repl_loaded(function(repl)
       local cr = '\13'
       local repl_winid = vim.fn.bufwinid(repl.bufnr)
@@ -269,11 +269,11 @@ return function(mk_repl_cmd, options)
       repl_set_cursor()
       vim.api.nvim_chan_send(repl.job_id, txt .. cr)
       repl_set_cursor()
-      if not ReplHandlerImpl.go_back and repl_winid ~= nil then
+      if not Handler.go_back and repl_winid ~= nil then
         vim.api.nvim_set_current_win(repl_winid)
         vim.cmd('startinsert')
       end
     end)
   end
-  return ReplHandlerImpl
+  return Handler
 end

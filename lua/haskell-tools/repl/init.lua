@@ -110,11 +110,11 @@ end
 
 local HTConfig = require('haskell-tools.config.internal')
 local opts = HTConfig.tools.repl
----@type ReplHandlerImpl
+---@type haskell-tools.repl.impl.Handler
 local handler
 
 local handler_type = Types.evaluate(opts.handler)
----@cast handler_type ReplHandler
+---@cast handler_type haskell-tools.repl.impl.Handler
 if handler_type == 'toggleterm' then
   log.info('handler = toggleterm')
   handler = require('haskell-tools.repl.toggleterm')(mk_repl_cmd, opts)
@@ -154,30 +154,30 @@ local function repl_send_lines(lines)
   end
 end
 
----@class HsReplTools
-local HsReplTools = {}
+---@class haskell-tools.Repl
+local Repl = {}
 
-HsReplTools.mk_repl_cmd = mk_repl_cmd
+Repl.mk_repl_cmd = mk_repl_cmd
 
 ---Create the command to create a repl for the current buffer.
 ---@return table|nil command
-HsReplTools.buf_mk_repl_cmd = function()
+Repl.buf_mk_repl_cmd = function()
   local file = vim.api.nvim_buf_get_name(0)
   return mk_repl_cmd(file)
 end
 
 ---Toggle a GHCi REPL
-HsReplTools.toggle = handler.toggle
+Repl.toggle = handler.toggle
 
 ---Quit the REPL
-HsReplTools.quit = handler.quit
+Repl.quit = handler.quit
 
 ---Can be used to send text objects to the repl.
 ---@usage [[
 ---vim.keymap.set('n', 'ghc', ht.repl.operator, {noremap = true})
 ---@usage ]]
 ---@see operatorfunc
-HsReplTools.operator = function()
+Repl.operator = function()
   local old_operator_func = vim.go.operatorfunc
   _G.op_func_send_to_repl = function()
     local start = vim.api.nvim_buf_get_mark(0, '[')
@@ -193,7 +193,7 @@ end
 
 ---Paste from register `reg` to the REPL
 ---@param reg string|nil register (defaults to '"')
-HsReplTools.paste = function(reg)
+Repl.paste = function(reg)
   local data = vim.fn.getreg(reg or '"')
   ---@cast data string
   if vim.endswith(data, '\n') then
@@ -208,29 +208,29 @@ end
 
 ---Query the REPL for the type of register `reg`
 ---@param reg string|nil register (defaults to '"')
-HsReplTools.paste_type = function(reg)
+Repl.paste_type = function(reg)
   handle_reg(':t', reg)
 end
 
 ---Query the REPL for the type of word under the cursor
-HsReplTools.cword_type = function()
+Repl.cword_type = function()
   handle_cword(':t')
 end
 
 ---Query the REPL for info on register `reg`
 ---@param reg string|nil register (defaults to '"')
-HsReplTools.paste_info = function(reg)
+Repl.paste_info = function(reg)
   handle_reg(':i', reg)
 end
 
 ---Query the REPL for the type of word under the cursor
-HsReplTools.cword_info = function()
+Repl.cword_info = function()
   handle_cword(':i')
 end
 
 ---Load a file into the REPL
 ---@param filepath string The absolute file path
-HsReplTools.load_file = function(filepath)
+Repl.load_file = function(filepath)
   if vim.fn.filereadable(filepath) == 0 then
     local err_msg = 'File: ' .. filepath .. ' does not exist or is not readable.'
     log.error(err_msg)
@@ -240,11 +240,11 @@ HsReplTools.load_file = function(filepath)
 end
 
 ---Reload the repl
-HsReplTools.reload = function()
+Repl.reload = function()
   handler.send_cmd(':r')
 end
 
-vim.keymap.set('n', 'ghc', HsReplTools.operator, { noremap = true })
+vim.keymap.set('n', 'ghc', Repl.operator, { noremap = true })
 
 local commands = {
   {
@@ -253,7 +253,7 @@ local commands = {
     function(tbl)
       local filepath = tbl.args ~= '' and vim.fn.expand(tbl.args)
       ---@cast filepath string
-      HsReplTools.toggle(filepath)
+      Repl.toggle(filepath)
     end,
     { nargs = '?' },
   },
@@ -263,21 +263,21 @@ local commands = {
     function(tbl)
       local filepath = vim.fn.expand(tbl.args)
       ---@cast filepath string
-      HsReplTools.load_file(filepath)
+      Repl.load_file(filepath)
     end,
     { nargs = 1 },
   },
   {
     'HtReplQuit',
     function()
-      HsReplTools.quit()
+      Repl.quit()
     end,
     {},
   },
   {
     'HtReplReload',
     function()
-      HsReplTools.reload()
+      Repl.reload()
     end,
     {},
   },
@@ -287,4 +287,4 @@ for _, command in ipairs(commands) do
   vim.api.nvim_create_user_command(unpack(command))
 end
 
-return HsReplTools
+return Repl

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### BREAKING CHANGES
 
 - Require Neovim `>= 0.10`
+- Rename types in LuaCATS annotations and vimdoc.
 
 ## [3.1.10] - 2024-05-30
 

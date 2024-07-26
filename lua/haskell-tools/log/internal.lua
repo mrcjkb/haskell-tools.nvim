@@ -8,8 +8,8 @@
 --- The internal API for use by this plugin's ftplugins
 ---@brief ]]
 
----@class HaskellToolsLogInternal
-local HaskellToolsLogInternal = {
+---@class haskell-tools.internal.Log
+local Log = {
   -- NOTE: These functions are initialised as empty for type checking purposes
   -- and implemented later.
   trace = function(_) end,
@@ -33,13 +33,13 @@ local logfilename = HTConfig.tools.log.logfile
 
 ---Get the haskell-tools.nvim log file path.
 ---@return string filepath
-function HaskellToolsLogInternal.get_logfile()
+function Log.get_logfile()
   return logfilename
 end
 
 ---Open the haskell-tools.nvim log file.
-function HaskellToolsLogInternal.nvim_open_logfile()
-  vim.cmd('e ' .. HaskellToolsLogInternal.get_logfile())
+function Log.nvim_open_logfile()
+  vim.cmd('e ' .. Log.get_logfile())
 end
 
 local logfile, openerr
@@ -79,13 +79,13 @@ local opts = HTConfig.tools.log
 local hls_log = HTConfig.hls.logfile
 
 --- Get the haskell-language-server log file
-function HaskellToolsLogInternal.get_hls_logfile()
+function Log.get_hls_logfile()
   return hls_log
 end
 
 -- Open the haskell-language-server log file
-function HaskellToolsLogInternal.nvim_open_hls_logfile()
-  vim.cmd('e ' .. HaskellToolsLogInternal.get_hls_logfile())
+function Log.nvim_open_hls_logfile()
+  vim.cmd('e ' .. Log.get_hls_logfile())
 end
 
 local log_levels = vim.deepcopy(vim.log.levels)
@@ -96,26 +96,25 @@ end
 --- Set the log level
 --- @param level (string|integer) The log level
 --- @see vim.log.levels
-function HaskellToolsLogInternal.set_level(level)
+function Log.set_level(level)
   if type(level) == 'string' then
-    HaskellToolsLogInternal.level =
-      assert(log_levels[string.upper(level)], string.format('haskell-tools: Invalid log level: %q', level))
+    Log.level = assert(log_levels[string.upper(level)], string.format('haskell-tools: Invalid log level: %q', level))
   else
     assert(log_levels[level], string.format('haskell-tools: Invalid log level: %d', level))
-    HaskellToolsLogInternal.level = level
+    Log.level = level
   end
-  vim.lsp.set_log_level(HaskellToolsLogInternal.level)
+  vim.lsp.set_log_level(Log.level)
 end
 
-HaskellToolsLogInternal.set_level(opts.level)
+Log.set_level(opts.level)
 
 for level, levelnr in pairs(vim.log.levels) do
-  HaskellToolsLogInternal[level:lower()] = function(...)
-    if HaskellToolsLogInternal.level == vim.log.levels.OFF or not open_logfile() then
+  Log[level:lower()] = function(...)
+    if Log.level == vim.log.levels.OFF or not open_logfile() then
       return false
     end
     local argc = select('#', ...)
-    if levelnr < HaskellToolsLogInternal.level then
+    if levelnr < Log.level then
       return false
     end
     if argc == 0 then
@@ -141,6 +140,6 @@ for level, levelnr in pairs(vim.log.levels) do
   end
 end
 
-HaskellToolsLogInternal.debug { 'Config', HTConfig }
+Log.debug { 'Config', HTConfig }
 
-return HaskellToolsLogInternal
+return Log

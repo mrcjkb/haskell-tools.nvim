@@ -46,7 +46,7 @@ local function fix_cabal_client(client)
   end
 end
 
----@class LoadHlsSettingsOpts
+---@class haskell-tools.load_hls_settings.Opts
 ---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
 log.debug('Setting up the LSP client...')
@@ -67,15 +67,15 @@ if Types.evaluate(hover_opts.enable) then
   handlers['textDocument/hover'] = hover.on_hover
 end
 
----@class HlsTools
-local HlsTools = {}
+---@class haskell-tools.Hls
+local Hls = {}
 ---Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
 ---Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
 ---@param project_root string|nil The project root
----@param opts LoadHlsSettingsOpts|nil
+---@param opts haskell-tools.load_hls_settings.Opts|nil
 ---@return table hls_settings
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
-HlsTools.load_hls_settings = function(project_root, opts)
+Hls.load_hls_settings = function(project_root, opts)
   local default_settings = HTConfig.hls.default_settings
   if not project_root then
     return default_settings
@@ -105,7 +105,7 @@ end
 ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return number|nil client_id The LSP client ID
-HlsTools.start = function(bufnr)
+Hls.start = function(bufnr)
   local ht = require('haskell-tools')
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local file = vim.api.nvim_buf_get_name(bufnr)
@@ -174,7 +174,7 @@ end
 ---Stop the LSP client.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return table[] clients A list of clients that will be stopped
-HlsTools.stop = function(bufnr)
+Hls.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local LspHelpers = require('haskell-tools.lsp.helpers')
   local clients = LspHelpers.get_active_ht_clients(bufnr)
@@ -186,7 +186,7 @@ end
 ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return number|nil client_id The LSP client ID after restart
-HlsTools.restart = function(bufnr)
+Hls.restart = function(bufnr)
   local lsp = require('haskell-tools').lsp
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local clients = lsp.stop(bufnr)
@@ -221,7 +221,7 @@ end
 ---Evaluate all code snippets in comments.
 ---@param bufnr number|nil Defaults to the current buffer.
 ---@return nil
-HlsTools.buf_eval_all = function(bufnr)
+Hls.buf_eval_all = function(bufnr)
   local eval = require('haskell-tools.lsp.eval')
   return eval.all(bufnr)
 end
@@ -230,28 +230,28 @@ local commands = {
   {
     'HlsStart',
     function()
-      HlsTools.start()
+      Hls.start()
     end,
     {},
   },
   {
     'HlsStop',
     function()
-      HlsTools.stop()
+      Hls.stop()
     end,
     {},
   },
   {
     'HlsRestart',
     function()
-      HlsTools.restart()
+      Hls.restart()
     end,
     {},
   },
   {
     'HlsEvalAll',
     function()
-      HlsTools.buf_eval_all()
+      Hls.buf_eval_all()
     end,
     {},
   },
@@ -261,4 +261,4 @@ for _, command in ipairs(commands) do
   vim.api.nvim_create_user_command(unpack(command))
 end
 
-return HlsTools
+return Hls

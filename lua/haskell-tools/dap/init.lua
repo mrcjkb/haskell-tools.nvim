@@ -14,10 +14,10 @@ local function get_ghci_dap_cmd(root_dir)
 end
 
 ---@param root_dir string
----@param opts AddDapConfigOpts
----@return HsDapLaunchConfiguration[]
+---@param opts haskell-tools.dap.AddConfigOpts
+---@return haskell-tools.dap.LaunchConfiguration[]
 local function find_json_configurations(root_dir, opts)
-  ---@type HsDapLaunchConfiguration[]
+  ---@type haskell-tools.dap.LaunchConfiguration[]
   local configurations = {}
   local log = require('haskell-tools.log.internal')
   local results = vim.fn.glob(vim.fs.joinpath(root_dir, opts.settings_file_pattern), true, true)
@@ -40,16 +40,16 @@ local function find_json_configurations(root_dir, opts)
 end
 
 ---@param root_dir string
----@return HsDapLaunchConfiguration[]
+---@return haskell-tools.dap.LaunchConfiguration[]
 local function detect_launch_configurations(root_dir)
   local launch_configurations = {}
   local HTConfig = require('haskell-tools.config.internal')
   local dap_opts = HTConfig.dap
-  ---@param entry_point HsEntryPoint
-  ---@return HsDapLaunchConfiguration
+  ---@param entry_point haskell-tools.EntryPoint
+  ---@return haskell-tools.dap.LaunchConfiguration
   local function mk_launch_configuration(entry_point)
-    ---@class HsDapLaunchConfiguration
-    local HsDapLaunchConfiguration = {
+    ---@class haskell-tools.dap.LaunchConfiguration
+    local LaunchConfiguration = {
       type = 'ghc',
       request = 'launch',
       name = entry_point.package_name .. ':' .. entry_point.exe_name,
@@ -67,7 +67,7 @@ local function detect_launch_configurations(root_dir)
       ghciCmd = get_ghci_dap_cmd(root_dir),
       forceInspect = false,
     }
-    return HsDapLaunchConfiguration
+    return LaunchConfiguration
   end
   local HtProjectHelpers = require('haskell-tools.project.helpers')
   for _, entry_point in pairs(HtProjectHelpers.parse_project_entrypoints(root_dir)) do
@@ -80,7 +80,7 @@ end
 local _configuration_cache = {}
 
 if not deps.has('dap') then
-  ---@type HsDapTools
+  ---@type haskell-tools.Dap
   local NullHsDapTools = {
     discover_configurations = function(_) end,
   }
@@ -89,22 +89,20 @@ end
 
 local dap = require('dap')
 
----@class HsDapTools
-local HsDapTools = {}
+---@class haskell-tools.Dap
+local Dap = {}
 
----@class AddDapConfigOpts
+---@type haskell-tools.dap.AddConfigOpts
 local DefaultAutoDapConfigOpts = {
-  ---@type boolean Whether to automatically detect launch configurations for the project.
   autodetect = true,
-  ---@type string File name or pattern to search for. Defaults to 'launch.json'.
   settings_file_pattern = 'launch.json',
 }
 
 ---Discover nvim-dap launch configurations for haskell-debug-adapter.
 ---@param bufnr number|nil The buffer number
----@param opts AddDapConfigOpts|nil
+---@param opts haskell-tools.dap.AddConfigOpts|nil
 ---@return nil
-HsDapTools.discover_configurations = function(bufnr, opts)
+Dap.discover_configurations = function(bufnr, opts)
   local HTConfig = require('haskell-tools.config.internal')
   local HTDapConfig = HTConfig.dap
   local log = require('haskell-tools.log.internal')
@@ -139,7 +137,7 @@ HsDapTools.discover_configurations = function(bufnr, opts)
     vim.list_extend(discovered_configurations, detected_configurations)
   end
   _configuration_cache[project_root] = discovered_configurations
-  ---@type HsDapLaunchConfiguration[]
+  ---@type haskell-tools.dap.LaunchConfiguration[]
   local dap_configurations = dap.configurations.haskell or {}
   for _, cfg in ipairs(discovered_configurations) do
     for i, existing_config in pairs(dap_configurations) do
@@ -152,4 +150,4 @@ HsDapTools.discover_configurations = function(bufnr, opts)
   dap.configurations.haskell = dap_configurations
 end
 
-return HsDapTools
+return Dap

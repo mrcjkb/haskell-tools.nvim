@@ -10,7 +10,7 @@
 
 local Types = require('haskell-tools.types.internal')
 
----@class LspHelpers
+---@class haskell-tools.lsp.Helpers
 local LspHelpers = {}
 
 LspHelpers.get_clients = vim.lsp.get_clients
@@ -19,21 +19,21 @@ LspHelpers.haskell_client_name = 'haskell-tools.nvim'
 LspHelpers.cabal_client_name = 'haskell-tools.nvim (cabal)'
 
 ---@param bufnr number the buffer to get clients for
----@return lsp.Client[] haskell_clients
+---@return vim.lsp.Client[] haskell_clients
 ---@see util.get_clients
 function LspHelpers.get_active_haskell_clients(bufnr)
   return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.haskell_client_name }
 end
 
 ---@param bufnr number the buffer to get clients for
----@return lsp.Client[] cabal_clinets
+---@return vim.lsp.Client[] cabal_clinets
 ---@see util.get_clients
 function LspHelpers.get_active_cabal_clients(bufnr)
   return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.cabal_client_name }
 end
 
 ---@param bufnr number the buffer to get clients for
----@return lsp.Client[] ht_clients The haskell + cabal clients
+---@return vim.lsp.Client[] ht_clients The haskell + cabal clients
 ---@see util.get_clients
 ---@see util.get_active_haskell_clients
 ---@see util.get_active_cabal_clients

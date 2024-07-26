@@ -10,7 +10,7 @@
 
 local log = require('haskell-tools.log.internal')
 
----@class OS
+---@class haskell-tools.OS
 local OS = {}
 
 ---@param url string
