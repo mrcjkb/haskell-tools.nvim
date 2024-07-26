@@ -531,11 +531,11 @@ ht.repl.reload()
 #### Project
 
 <!-- markdownlint-disable -->
-| Command           | Description                                                                |
-| ----------------- | ---------------------------------------------------------------------------|
-| `:HsProjectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
-| `:HsPackageYaml`  | Open the package.yaml file for the current buffer                          |
-| `:HsPackageCabal` | Open the *.cabal file for the current buffer                               |
+| Command                 | Description                                                                |
+| ----------------------- | ---------------------------------------------------------------------------|
+| `:Haskell projectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
+| `:Haskell packageYaml`  | Open the package.yaml file for the current buffer                          |
+| `:Haskell packageCabal` | Open the *.cabal file for the current buffer                               |
 <!-- markdownlint-enable -->
 
 ```lua

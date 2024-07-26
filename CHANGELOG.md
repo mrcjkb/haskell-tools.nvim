@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename types in LuaCATS annotations and vimdoc.
 - Merge `HlsStart`, `HlsStop`, `HlsRestart` and `HlsEvalAll`
   into `Hls` `start`, `stop`, `restart` and `evalAll` subcommands.
-- Merge `HTRepl*` commands into `Haskell repl *` subcommands.
+- Merge `HsRepl*` commands into `Haskell repl *` subcommands.
+- Merge `HsProjectFile` `HsPackageYaml` and `HsPackageCabal` commands
+  into `Haskell {projectFile|packageYaml|packageCabal}` subcommands.
 
 ## [3.1.10] - 2024-05-30
 

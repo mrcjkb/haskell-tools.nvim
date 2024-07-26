@@ -6,9 +6,9 @@ local deps = require('haskell-tools.deps')
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:HsProjectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
---- * `:HsPackageYaml` - Open the package.yaml file for the current buffer.
---- * `:HsPackageCabal` - Open the *.cabal file for the current buffer.
+--- * `:Haskell projectFile` - Open the project file for the current buffer (cabal.project or stack.yaml).
+--- * `:Haskell packageYaml` - Open the package.yaml file for the current buffer.
+--- * `:Haskell packageCabal` - Open the *.cabal file for the current buffer.
 ---@brief ]]
 
 ---@param callback fun(opts:table<string,any>):nil
@@ -141,34 +141,5 @@ end
 Project.telescope_package_grep = deps.has('telescope.builtin') and telescope_package_grep or nil
 
 Project.telescope_package_files = deps.has('telescope.builtin') and telescope_package_files or nil
-
-local commands = {
-  {
-    'HsPackageYaml',
-    function()
-      Project.open_package_yaml()
-    end,
-    {},
-  },
-  {
-    'HsPackageCabal',
-    function()
-      Project.open_package_cabal()
-    end,
-    {},
-  },
-  {
-    'HsProjectFile',
-    function()
-      Project.open_project_file()
-    end,
-    {},
-  },
-}
-
---- Available if nvim-telescope/telescope.nvim is installed.
-for _, command in ipairs(commands) do
-  vim.api.nvim_create_user_command(unpack(command))
-end
 
 return Project

@@ -1,5 +1,7 @@
 local HtCommands = {}
 
+local ht = require('haskell-tools')
+
 ---@class haskell-tools.Subcommand
 ---
 ---The command implementation
@@ -13,7 +15,23 @@ local HtCommands = {}
 ---@field bang? boolean
 
 ---@type table<string, haskell-tools.Subcommand>
-local command_tbl = {}
+local command_tbl = {
+  packageYaml = {
+    impl = function()
+      ht.project.open_package_yaml()
+    end,
+  },
+  packageCabal = {
+    impl = function()
+      ht.project.open_package_cabal()
+    end,
+  },
+  projectFile = {
+    impl = function()
+      ht.project.open_project_file()
+    end,
+  },
+}
 
 ---@param name string The name of the subcommand
 ---@param cmd haskell-tools.Subcommand The implementation and optional completions
