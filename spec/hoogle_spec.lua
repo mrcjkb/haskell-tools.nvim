@@ -2,7 +2,6 @@ local stub = require('luassert.stub')
 local mock = require('luassert.mock')
 local match = require('luassert.match')
 local deps = require('haskell-tools.deps')
-local compat = require('haskell-tools.compat')
 
 local hoogle_web = require('haskell-tools.hoogle.web')
 local hoogle_local = require('haskell-tools.hoogle.local')
@@ -16,7 +15,8 @@ local mock_compat = mock {
     return {}
   end,
 }
-compat.system = mock_compat.system
+local orig_system = vim.system
+vim.system = mock_compat.system
 
 describe('Hoogle:', function()
   local ht = require('haskell-tools')
@@ -69,3 +69,5 @@ describe('Hoogle:', function()
     end
   end
 end)
+
+vim.system = orig_system

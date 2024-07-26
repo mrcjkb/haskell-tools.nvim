@@ -13,8 +13,7 @@ local Types = require('haskell-tools.types.internal')
 ---@class LspHelpers
 local LspHelpers = {}
 
-local compat = require('haskell-tools.compat')
-LspHelpers.get_clients = compat.get_clients
+LspHelpers.get_clients = vim.lsp.get_clients
 
 LspHelpers.haskell_client_name = 'haskell-tools.nvim'
 LspHelpers.cabal_client_name = 'haskell-tools.nvim (cabal)'

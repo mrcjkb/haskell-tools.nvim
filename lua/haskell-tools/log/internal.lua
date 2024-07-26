@@ -8,8 +8,6 @@
 --- The internal API for use by this plugin's ftplugins
 ---@brief ]]
 
-local compat = require('haskell-tools.compat')
-
 ---@class HaskellToolsLogInternal
 local HaskellToolsLogInternal = {
   -- NOTE: These functions are initialised as empty for type checking purposes
@@ -64,7 +62,7 @@ local function open_logfile()
     return false
   end
 
-  local log_info = compat.uv.fs_stat(logfilename)
+  local log_info = vim.uv.fs_stat(logfilename)
   if log_info and log_info.size > LARGE then
     local warn_msg =
       string.format('haskell-tools.nvim log is large (%d MB): %s', log_info.size / (1000 * 1000), logfilename)

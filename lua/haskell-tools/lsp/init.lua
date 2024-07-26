@@ -3,7 +3,6 @@
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
-local compat = require('haskell-tools.compat')
 
 ---@brief [[
 --- The following commands are available:
@@ -83,7 +82,7 @@ HlsTools.load_hls_settings = function(project_root, opts)
   end
   local default_opts = { settings_file_pattern = 'hls.json' }
   opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
-  local results = vim.fn.glob(compat.joinpath(project_root, opts.settings_file_pattern), true, true)
+  local results = vim.fn.glob(vim.fs.joinpath(project_root, opts.settings_file_pattern), true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
     return default_settings
@@ -191,7 +190,7 @@ HlsTools.restart = function(bufnr)
   local lsp = require('haskell-tools').lsp
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local clients = lsp.stop(bufnr)
-  local timer, err_name, err_msg = compat.uv.new_timer()
+  local timer, err_name, err_msg = vim.uv.new_timer()
   if not timer then
     log.error { 'Could not create timer', err_name, err_msg }
     return

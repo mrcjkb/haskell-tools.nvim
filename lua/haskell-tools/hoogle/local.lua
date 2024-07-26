@@ -9,7 +9,6 @@
 
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
-local compat = require('haskell-tools.compat')
 
 ---@class LocalHoogleHandler
 local HoogleLocal = {}
@@ -37,7 +36,7 @@ end
 ---@return string[] hoogle_args
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
-  local args = compat.tbl_flatten { '--json', '--count=' .. count, search_term }
+  local args = vim.iter({ '--json', '--count=' .. count, search_term }):flatten():totable()
   log.debug { 'Hoogle local args', args }
   return args
 end
@@ -61,7 +60,7 @@ function HoogleLocal.telescope_search(search_term, opts)
     return
   end
   local cmd = vim.list_extend({ 'hoogle' }, mk_hoogle_args(search_term, opts))
-  compat.system(
+  vim.system(
     cmd,
     nil,
     vim.schedule_wrap(function(result)

@@ -68,7 +68,7 @@ that are specific to Haskell tooling.
 
 ### Required
 
-- `neovim >= 0.9`
+- `neovim >= 0.10`
 
 ### Optional
 
@@ -93,7 +93,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 ```lua
 {
   'mrcjkb/haskell-tools.nvim',
-  version = '^3', -- Recommended
+  version = '^4', -- Recommended
   lazy = false, -- This plugin is already lazy
 }
 ```

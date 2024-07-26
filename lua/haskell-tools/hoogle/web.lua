@@ -10,7 +10,6 @@
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 local OS = require('haskell-tools.os')
-local compat = require('haskell-tools.compat')
 
 ---@class WebHoogleHandler
 local WebHoogleHandler = {}
@@ -81,7 +80,7 @@ if deps.has_telescope() then
     local url = mk_hoogle_request(search_term, opts)
     local curl_command = { 'curl', '--silent', url, '-H', 'Accept: application/json' }
     log.debug(curl_command)
-    compat.system(curl_command, nil, function(result)
+    vim.system(curl_command, nil, function(result)
       ---@cast result vim.SystemCompleted
       log.debug { 'Hoogle web response', result }
       local response = result.stdout

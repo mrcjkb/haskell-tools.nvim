@@ -2,7 +2,6 @@
 
 local deps = require('haskell-tools.deps')
 local Types = require('haskell-tools.types.internal')
-local compat = require('haskell-tools.compat')
 
 ---@param root_dir string
 local function get_ghci_dap_cmd(root_dir)
@@ -21,7 +20,7 @@ local function find_json_configurations(root_dir, opts)
   ---@type HsDapLaunchConfiguration[]
   local configurations = {}
   local log = require('haskell-tools.log.internal')
-  local results = vim.fn.glob(compat.joinpath(root_dir, opts.settings_file_pattern), true, true)
+  local results = vim.fn.glob(vim.fs.joinpath(root_dir, opts.settings_file_pattern), true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. root_dir)
   else
@@ -55,7 +54,7 @@ local function detect_launch_configurations(root_dir)
       request = 'launch',
       name = entry_point.package_name .. ':' .. entry_point.exe_name,
       workspace = '${workspaceFolder}',
-      startup = compat.joinpath(entry_point.package_dir, entry_point.source_dir, entry_point.main),
+      startup = vim.fs.joinpath(entry_point.package_dir, entry_point.source_dir, entry_point.main),
       startupFunc = '', -- defaults to 'main' if not set
       startupArgs = '',
       stopOnEntry = false,

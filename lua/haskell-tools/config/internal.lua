@@ -10,7 +10,6 @@
 ---@brief ]]
 
 local deps = require('haskell-tools.deps')
-local compat = require('haskell-tools.compat')
 
 ---@type HTConfig
 local HTConfig = {}
@@ -110,7 +109,7 @@ local HTDefaultConfig = {
     ---@class HTLogConfig haskell-tools logger options.
     log = {
       ---@diagnostic disable-next-line: param-type-mismatch
-      logfile = compat.joinpath(vim.fn.stdpath('log'), 'haskell-tools.log'),
+      logfile = vim.fs.joinpath(vim.fn.stdpath('log'), 'haskell-tools.log'),
       ---@type number | string The log level.
       ---@see vim.log.levels
       level = vim.log.levels.WARN,

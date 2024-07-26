@@ -12,7 +12,6 @@ local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
-local compat = require('haskell-tools.compat')
 
 ---@class CabalProjectHelper
 local CabalProjectHelper = {}
@@ -115,7 +114,7 @@ end
 ---@async
 function CabalProjectHelper.parse_package_entrypoints(package_path)
   local entry_points = {}
-  for _, package_file in pairs(vim.fn.glob(compat.joinpath(package_path, '*.cabal'), true, true)) do
+  for _, package_file in pairs(vim.fn.glob(vim.fs.joinpath(package_path, '*.cabal'), true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
   end
   return entry_points

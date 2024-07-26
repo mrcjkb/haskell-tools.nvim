@@ -1,5 +1,3 @@
-local compat = require('haskell-tools.compat')
-
 ---@class DapInternal
 local Dap = {}
 
@@ -14,7 +12,7 @@ Dap.mk_entry_points = function(package_name, exe_name, package_dir, mains, sourc
   local entry_points = {}
   for _, source_dir in pairs(source_dirs) do
     for _, main in pairs(mains) do
-      local filename = compat.joinpath(package_dir, source_dir, main)
+      local filename = vim.fs.joinpath(package_dir, source_dir, main)
       if vim.fn.filereadable(filename) == 1 then
         local entry_point = {
           package_name = package_name,

@@ -3,7 +3,6 @@
 local HTConfig = require('haskell-tools.config.internal')
 local Types = require('haskell-tools.types.internal')
 local log = require('haskell-tools.log.internal')
-local compat = require('haskell-tools.compat')
 
 local _state = {
   fast_tags_generating = false,
@@ -40,7 +39,7 @@ FastTagsTools.generate_project_tags = function(path, opts)
   _state.fast_tags_generating = true
   if project_root then
     log.debug('Generating project tags for' .. project_root)
-    compat.system({ 'fast-tags', '-R', project_root }, nil, function(sc)
+    vim.system({ 'fast-tags', '-R', project_root }, nil, function(sc)
       if sc.code ~= 0 then
         log.error { 'Error running fast-tags on project root', sc.code, sc.stderr }
       end
@@ -71,7 +70,7 @@ FastTagsTools.generate_package_tags = function(path)
     log.warn('generate_package_tags: No project root found.')
     return
   end
-  compat.system({ 'fast-tags', '-R', package_root, project_root }, nil, function(sc)
+  vim.system({ 'fast-tags', '-R', package_root, project_root }, nil, function(sc)
     ---@cast sc vim.SystemCompleted
     if sc.code ~= 0 then
       log.error { 'Error running fast-tags on package', sc.code, sc.stderr }
