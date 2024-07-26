@@ -9,35 +9,34 @@
 
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
-local compat = require('haskell-tools.compat')
 
----@class LocalHoogleHandler
-local HoogleLocal = {}
+---@class haskell-tools.hoogle.handler.Local
+local Local = {}
 
 ---@return boolean has_hoogle `true` if the `hoogle` executable exists
-function HoogleLocal.has_hoogle()
+function Local.has_hoogle()
   return vim.fn.executable('hoogle') == 1
 end
 
-if not HoogleLocal.has_hoogle() then
-  return HoogleLocal
+if not Local.has_hoogle() then
+  return Local
 end
 
 if not deps.has_telescope() then
-  return HoogleLocal
+  return Local
 end
 
----@class LocalHoogleOpts
+---@class haskell-tools.hoogle.handler.Local.Opts
 ---@field entry_maker function|nil telescope entry maker
 ---@field count number|nil number of results to display
 
 ---Construct the hoogle cli arguments
 ---@param search_term string The Hoogle search term
----@param opts LocalHoogleOpts
+---@param opts haskell-tools.hoogle.handler.Local.Opts
 ---@return string[] hoogle_args
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
-  local args = compat.tbl_flatten { '--json', '--count=' .. count, search_term }
+  local args = vim.iter({ '--json', '--count=' .. count, search_term }):flatten():totable()
   log.debug { 'Hoogle local args', args }
   return args
 end
@@ -48,9 +47,9 @@ local previewers = deps.require_telescope('telescope.previewers')
 local HoogleHelpers = require('haskell-tools.hoogle.helpers')
 
 ---@param search_term string The Hoogle search term
----@param opts LocalHoogleOpts|nil
+---@param opts haskell-tools.hoogle.handler.Local.Opts|nil
 ---@return nil
-function HoogleLocal.telescope_search(search_term, opts)
+function Local.telescope_search(search_term, opts)
   opts = opts or {}
   opts.entry_maker = opts.entry_maker or HoogleHelpers.mk_hoogle_entry
   local config = deps.require_telescope('telescope.config').values
@@ -61,7 +60,7 @@ function HoogleLocal.telescope_search(search_term, opts)
     return
   end
   local cmd = vim.list_extend({ 'hoogle' }, mk_hoogle_args(search_term, opts))
-  compat.system(
+  vim.system(
     cmd,
     nil,
     vim.schedule_wrap(function(result)
@@ -99,4 +98,4 @@ function HoogleLocal.telescope_search(search_term, opts)
   )
 end
 
-return HoogleLocal
+return Local

@@ -3,7 +3,6 @@
 local HTConfig = require('haskell-tools.config.internal')
 local Types = require('haskell-tools.types.internal')
 local log = require('haskell-tools.log.internal')
-local compat = require('haskell-tools.compat')
 
 local _state = {
   fast_tags_generating = false,
@@ -13,17 +12,17 @@ local _state = {
 log.debug('Setting up fast-tags tools')
 local config = HTConfig.tools.tags
 
----@class GenerateProjectTagsOpts
+---@class haskell-tools.tags.generate_project_tags.Opts
 ---@field refresh boolean Whether to refresh the tags if they have already been generated
 --- for the project (default: true)
 
----@class FastTagsTools
-local FastTagsTools = {}
+---@class haskell-tools.FastTags
+local FastTags = {}
 
 ---Generates tags for the current project
 ---@param path string|nil File path
----@param opts GenerateProjectTagsOpts|nil Options
-FastTagsTools.generate_project_tags = function(path, opts)
+---@param opts haskell-tools.tags.generate_project_tags.Opts|nil Options
+FastTags.generate_project_tags = function(path, opts)
   path = path or vim.api.nvim_buf_get_name(0)
   opts = vim.tbl_extend('force', { refresh = true }, opts or {})
   local HtProjectHelpers = require('haskell-tools.project.helpers')
@@ -40,7 +39,7 @@ FastTagsTools.generate_project_tags = function(path, opts)
   _state.fast_tags_generating = true
   if project_root then
     log.debug('Generating project tags for' .. project_root)
-    compat.system({ 'fast-tags', '-R', project_root }, nil, function(sc)
+    vim.system({ 'fast-tags', '-R', project_root }, nil, function(sc)
       if sc.code ~= 0 then
         log.error { 'Error running fast-tags on project root', sc.code, sc.stderr }
       end
@@ -52,7 +51,7 @@ end
 
 ---Generate tags for the package containing `path`
 ---@param path string|nil File path
-FastTagsTools.generate_package_tags = function(path)
+FastTags.generate_package_tags = function(path)
   path = path or vim.api.nvim_buf_get_name(0)
   _state.fast_tags_generating = true
   local HtProjectHelpers = require('haskell-tools.project.helpers')
@@ -71,7 +70,7 @@ FastTagsTools.generate_package_tags = function(path)
     log.warn('generate_package_tags: No project root found.')
     return
   end
-  compat.system({ 'fast-tags', '-R', package_root, project_root }, nil, function(sc)
+  vim.system({ 'fast-tags', '-R', package_root, project_root }, nil, function(sc)
     ---@cast sc vim.SystemCompleted
     if sc.code ~= 0 then
       log.error { 'Error running fast-tags on package', sc.code, sc.stderr }
@@ -99,9 +98,9 @@ if #package_events > 0 then
       if _state.fast_tags_generating then
         return
       end
-      FastTagsTools.generate_package_tags(meta.file)
+      FastTags.generate_package_tags(meta.file)
     end,
   })
 end
 
-return FastTagsTools
+return FastTags

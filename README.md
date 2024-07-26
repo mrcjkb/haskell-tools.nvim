@@ -68,7 +68,7 @@ that are specific to Haskell tooling.
 
 ### Required
 
-- `neovim >= 0.9`
+- `neovim >= 0.10`
 
 ### Optional
 
@@ -93,7 +93,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 ```lua
 {
   'mrcjkb/haskell-tools.nvim',
-  version = '^3', -- Recommended
+  version = '^4', -- Recommended
   lazy = false, -- This plugin is already lazy
 }
 ```
@@ -443,12 +443,12 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-| Command        | Description                  |
-| -------------- | ---------------------------- |
-| `:HlsStart`    | Start the LSP client         |
-| `:HlsStop`     | Stop the LSP client          |
-| `:HlsRestart`  | Restart the LSP client       |
-| `:HlsEvalAll`  | Evaluate all code snippets   |
+| Command         | Description                  |
+| --------------- | ---------------------------- |
+| `:Hls start`    | Start the LSP client         |
+| `:Hls stop`     | Stop the LSP client          |
+| `:Hls restart`  | Restart the LSP client       |
+| `:Hls evalAll`  | Evaluate all code snippets   |
 
 ```lua
 local ht = require('haskell-tools')
@@ -481,12 +481,18 @@ ht.hoogle.hoogle_signature()
 
 #### Repl
 
-| Command         | Description                         | Arguments           |
-| --------------- | ----------------------------------- | ------------------- |
-| `:HtReplToggle` | Toggle a GHCi repl                  | filepath (optional) |
-| `:HtReplQuit`   | Quit the current repl               |                     |
-| `:HtReplLoad`   | Load a file into the current repl   | filepath (required) |
-| `:HtReplReload` | Reload the current repl             |                     |
+<!-- markdownlint-disable -->
+| Command                                | Description                                              | Arguments           |
+| -------------------------------------- | -------------------------------------------------------- | ------------------- |
+| `:Haskell repl toggle {file?}`         | Toggle a GHCi repl                                       | filepath (optional) |
+| `:Haskell repl quit`                   | Quit the current repl                                    |                     |
+| `:Haskell repl load {file?}`           | Load a file into the current repl                        | filepath (optional) |
+| `:Haskell repl reload`                 | Reload the current repl                                  |                     |
+| `:Haskell repl paste_type {register?}` | Query the repl for the type of {register}                |                     |
+| `:Haskell repl cword_type`             | Query the repl for the type of the word under the cursor |                     |
+| `:Haskell repl paste_info {register?}` | Query the repl for info on {register}                    |                     |
+| `:Haskell repl cword_info {register?}` | Query the repl for info on the word under the cursor     |                     |
+<!-- markdownlint-restore -->
 
 ```lua
 local ht = require('haskell-tools')
@@ -529,11 +535,11 @@ ht.repl.reload()
 #### Project
 
 <!-- markdownlint-disable -->
-| Command           | Description                                                                |
-| ----------------- | ---------------------------------------------------------------------------|
-| `:HsProjectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
-| `:HsPackageYaml`  | Open the package.yaml file for the current buffer                          |
-| `:HsPackageCabal` | Open the *.cabal file for the current buffer                               |
+| Command                 | Description                                                                |
+| ----------------------- | ---------------------------------------------------------------------------|
+| `:Haskell projectFile`  | Open the project file for the current buffer (cabal.project or stack.yaml) |
+| `:Haskell packageYaml`  | Open the package.yaml file for the current buffer                          |
+| `:Haskell packageCabal` | Open the *.cabal file for the current buffer                               |
 <!-- markdownlint-enable -->
 
 ```lua
@@ -691,9 +697,9 @@ vim.g.haskell_tools = {
 
 You can also temporarily set the log level by calling
 
-| Command          | Argument                                           |
-| ---------------- | -------------------------------------------------- |
-| `:HtSetLogLevel` | One of `debug` `error` `warn` `info` `trace` `off` |
+| Command                 | Argument                                           |
+| ----------------------- | -------------------------------------------------- |
+| `:Haskell log setLevel` | One of `debug` `error` `warn` `info` `trace` `off` |
 
 or
 
@@ -713,8 +719,8 @@ You can find the log files by calling
 or open them by calling
 
 ```lua
-:lua require('haskell-tools').log.nvim_open_logfile() -- or :HtLog
-:lua require('haskell-tools').log.nvim_open_hls_logfile() -- or :HlsLog
+:lua require('haskell-tools').log.nvim_open_logfile() -- or :Haskell log openLog
+:lua require('haskell-tools').log.nvim_open_hls_logfile() -- or :Haskell log openHlsLog
 ```
 
 ## :link: Recommendations

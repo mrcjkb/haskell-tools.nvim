@@ -10,9 +10,8 @@
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
 local OS = require('haskell-tools.os')
-local compat = require('haskell-tools.compat')
 
----@class WebHoogleHandler
+---@class haskell-tools.hoogle.handler.Web
 local WebHoogleHandler = {}
 
 ---@param c string A single character
@@ -31,16 +30,16 @@ local function urlencode(url)
   return url
 end
 
----@class TelescopeHoogleWebOpts
----@field hoogle HoogleWebSearchOpts|nil
+---@class haskell-tools.hoogle.telescope.web.Opts
+---@field hoogle haskell-tools.hoogle.web-search.Opts|nil
 
----@class HoogleWebSearchOpts
+---@class haskell-tools.hoogle.web-search.Opts
 ---@field scope string|nil The scope of the search
 ---@field json boolean|nil Whather to request JSON enocded results
 
 ---Build a Hoogle request URL
 ---@param search_term string
----@param opts TelescopeHoogleWebOpts
+---@param opts haskell-tools.hoogle.telescope.web.Opts
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
@@ -59,7 +58,7 @@ if deps.has_telescope() then
   local HoogleHelpers = require('haskell-tools.hoogle.helpers')
 
   ---@param search_term string
-  ---@param opts TelescopeHoogleWebOpts|nil
+  ---@param opts haskell-tools.hoogle.telescope.web.Opts|nil
   ---@return nil
   function WebHoogleHandler.telescope_search(search_term, opts)
     local config = deps.require_telescope('telescope.config').values
@@ -81,7 +80,7 @@ if deps.has_telescope() then
     local url = mk_hoogle_request(search_term, opts)
     local curl_command = { 'curl', '--silent', url, '-H', 'Accept: application/json' }
     log.debug(curl_command)
-    compat.system(curl_command, nil, function(result)
+    vim.system(curl_command, nil, function(result)
       ---@cast result vim.SystemCompleted
       log.debug { 'Hoogle web response', result }
       local response = result.stdout
@@ -117,7 +116,7 @@ if deps.has_telescope() then
 end
 
 ---@param search_term string
----@param opts TelescopeHoogleWebOpts|nil
+---@param opts haskell-tools.hoogle.telescope.web.Opts|nil
 ---@return nil
 function WebHoogleHandler.browser_search(search_term, opts)
   opts = vim.tbl_deep_extend('keep', opts or {}, {

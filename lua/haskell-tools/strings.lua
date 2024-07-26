@@ -8,7 +8,7 @@
 --- Helper functions for working with strings
 ---@brief ]]
 
----@class StringsUtil
+---@class haskell-tools.Strings
 local Strings = {}
 
 ---Trim leading and trailing whitespace.

@@ -12,10 +12,9 @@ local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
-local compat = require('haskell-tools.compat')
 
----@class StackProjectHelper
-local StackProjectHelper = {}
+---@class haskell-tools.project.stack.Helper
+local Helper = {}
 
 ---@param str string
 ---@return boolean is_yaml_comment
@@ -23,16 +22,16 @@ local function is_yaml_comment(str)
   return vim.startswith(Strings.trim(str), '#')
 end
 
----@class StackEntryPointParserData
+---@class haskell-tools.project.stack.EntryPointParserData
 ---@field idx integer
 ---@field lines string[]
 ---@field line string
 ---@field package_dir string
 ---@field next_line string|nil
 
----@class StackEntryPointParserState
+---@class haskell-tools.project.stack.EntryPointParserState
 ---@field package_name string
----@field entry_points HsEntryPoint[]
+---@field entry_points haskell-tools.EntryPoint[]
 ---@field mains string[]
 ---@field source_dirs string[]
 ---@field parsing_exe_list boolean
@@ -41,8 +40,8 @@ end
 ---@field exe_indent integer | nil
 ---@field exe_name string | nil
 
----@param data StackEntryPointParserData
----@param state StackEntryPointParserState
+---@param data haskell-tools.project.stack.EntryPointParserData
+---@param state haskell-tools.project.stack.EntryPointParserState
 local function parse_exe_list_line(data, state)
   local package_dir = data.package_dir
   local idx = data.idx
@@ -92,8 +91,8 @@ local function parse_exe_list_line(data, state)
   end
 end
 
----@param data StackEntryPointParserData
----@param state StackEntryPointParserState
+---@param data haskell-tools.project.stack.EntryPointParserData
+---@param state haskell-tools.project.stack.EntryPointParserState
 local function get_entrypoint_from_line(data, state)
   local line = data.line
   state.package_name = state.package_name or line:match('^name:%s*(.+)')
@@ -109,7 +108,7 @@ end
 
 ---Parse the DAP entry points from a *.cabal file
 ---@param package_file string Path to the *.cabal file
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
 local function parse_package_entrypoints(package_file)
   local state = {
@@ -128,7 +127,7 @@ local function parse_package_entrypoints(package_file)
   local lines = vim.split(content, '\n') or {}
   for idx, line in ipairs(lines) do
     if not is_yaml_comment(line) then
-      ---@type StackEntryPointParserData
+      ---@type haskell-tools.project.stack.EntryPointParserData
       local data = {
         package_dir = package_dir,
         line = line,
@@ -146,14 +145,14 @@ end
 
 ---Parse the DAP entry points from a package.yaml file
 ---@param package_path string Path to a package directory
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
-function StackProjectHelper.parse_package_entrypoints(package_path)
+function Helper.parse_package_entrypoints(package_path)
   local entry_points = {}
-  for _, package_file in pairs(vim.fn.glob(compat.joinpath(package_path, 'package.yaml'), true, true)) do
+  for _, package_file in pairs(vim.fn.glob(vim.fs.joinpath(package_path, 'package.yaml'), true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
   end
   return entry_points
 end
 
-return StackProjectHelper
+return Helper

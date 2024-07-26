@@ -7,7 +7,7 @@
 
 ---@brief ]]
 
----@class Deps
+---@class haskell-tools.Deps
 local Deps = {}
 
 ---@param modname string The name of the module

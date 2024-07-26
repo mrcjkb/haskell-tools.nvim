@@ -10,9 +10,8 @@
 ---@brief ]]
 
 local deps = require('haskell-tools.deps')
-local compat = require('haskell-tools.compat')
 
----@type HTConfig
+---@type haskell-tools.Config
 local HTConfig = {}
 
 local ht_capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -40,22 +39,22 @@ local capabilities = vim.tbl_deep_extend(
   folding_range_capabilities
 )
 
----@class HTConfig haskell-tools.nvim plugin configuration.
+---@class haskell-tools.Config haskell-tools.nvim plugin configuration.
 local HTDefaultConfig = {
 
-  ---@class ToolsConfig haskell-tools module config.
+  ---@class haskell-tools.tools.Config haskell-tools module config.
   tools = {
-    ---@class CodeLensConfig LSP codeLens options.
+    ---@class haskell-tools.codeLens.Config LSP codeLens options.
     codeLens = {
       ---@type boolean | (fun():boolean) (default: `true`) Whether to auto-refresh code-lenses.
       autoRefresh = true,
     },
-    ---@class HoogleConfig hoogle type signature search config.
+    ---@class haskell-tools.hoogle.Config hoogle type signature search config.
     hoogle = {
-      ---@type HoogleMode Use a telescope with a local hoogle installation or a web backend, or use the browser for hoogle signature search?
+      ---@type haskell-tools.hoogle.Mode Use a telescope with a local hoogle installation or a web backend, or use the browser for hoogle signature search?
       mode = 'auto',
     },
-    ---@class HoverConfig Enhanced LSP hover options.
+    ---@class haskell-tools.hover.Config Enhanced LSP hover options.
     hover = {
       ---@type boolean | (fun():boolean) (default: `true`) Whether to enable haskell-tools hover.
       enable = true,
@@ -75,22 +74,22 @@ local HTDefaultConfig = {
       ---@type boolean (default: `false`) Whether to automatically switch to the hover window.
       auto_focus = false,
     },
-    ---@class DefinitionConfig Enhanced LSP go-to-definition options.
+    ---@class haskell-tools.definition.Config Enhanced LSP go-to-definition options.
     definition = {
       ---@type boolean | (fun():boolean) (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`).
       hoogle_signature_fallback = false,
     },
-    ---@class ReplConfig GHCi repl options.
+    ---@class haskell-tools.repl.Config GHCi repl options.
     repl = {
-      ---@type ReplHandler | (fun():ReplHandler) `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim.
+      ---@type haskell-tools.repl.Handler | (fun():haskell-tools.repl.Handler) `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim.
       handler = 'builtin',
-      ---@type repl_backend | (fun():repl_backend) Prefer cabal or stack when both stack and cabal project files are present?
+      ---@type haskell-tools.repl.Backend | (fun():haskell-tools.repl.Backend) Prefer cabal or stack when both stack and cabal project files are present?
       prefer = function()
         return vim.fn.executable('stack') == 1 and 'stack' or 'cabal'
       end,
-      ---@class BuiltinReplConfig Configuration for the builtin repl
+      ---@class haskell-tools.repl.builtin.Config Configuration for the builtin repl
       builtin = {
-        ---@type fun(view:ReplView):fun(mk_repl_cmd:mk_repl_cmd_fun) How to create the repl window. Should return a function that calls one of the `ReplView`'s functions.
+        ---@type fun(view:haskell-tools.repl.View):fun(mk_repl_cmd:mk_ht_repl_cmd_fun) How to create the repl window. Should return a function that calls one of the `ReplView`'s functions.
         create_repl_window = function(view)
           return view.create_repl_split { size = vim.o.lines / 3 }
         end,
@@ -98,7 +97,7 @@ local HTDefaultConfig = {
       ---@type boolean | nil Whether to auto-focus the repl on toggle or send. If unset, the handler decides.
       auto_focus = nil,
     },
-    ---@class FastTagsConfig fast-tags module options.
+    ---@class haskell-tools.fast-tags.Config fast-tags module options.
     tags = {
       ---@type boolean | (fun():boolean) Enabled by default if the `fast-tags` executable is found.
       enable = function()
@@ -107,16 +106,16 @@ local HTDefaultConfig = {
       ---@type string[] `autocmd` Events to trigger package tag generation.
       package_events = { 'BufWritePost' },
     },
-    ---@class HTLogConfig haskell-tools logger options.
+    ---@class haskell-tools.log.Config haskell-tools logger options.
     log = {
       ---@diagnostic disable-next-line: param-type-mismatch
-      logfile = compat.joinpath(vim.fn.stdpath('log'), 'haskell-tools.log'),
+      logfile = vim.fs.joinpath(vim.fn.stdpath('log'), 'haskell-tools.log'),
       ---@type number | string The log level.
       ---@see vim.log.levels
       level = vim.log.levels.WARN,
     },
   },
-  ---@class HaskellLspClientConfig haskell-language-server client options.
+  ---@class haskell-tools.lsp.ClientConfig haskell-language-server client options.
   hls = {
     ---@type boolean | (fun():boolean) Whether to automatically attach the LSP client. Defaults to `true` if the haskell-language-server executable is found.
     auto_attach = function()
@@ -250,15 +249,15 @@ local HTDefaultConfig = {
     ---@type string The path to the haskell-language-server log file.
     logfile = vim.fn.tempname() .. '-haskell-language-server.log',
   },
-  ---@class HTDapConfig debug adapter config for nvim-dap.
+  ---@class haskell-tools.dap.Config debug adapter config for nvim-dap.
   dap = {
     ---@type string[] | (fun():string[]) The command to start the debug adapter server with.
     cmd = { 'haskell-debug-adapter' },
     ---@type string Log file path for detected configurations.
     logFile = vim.fn.stdpath('data') .. '/haskell-dap.log',
-    ---@type HaskellDebugAdapterLogLevel The log level for detected configurations.
+    ---@type haskell-tools.debugAdapter.LogLevel The log level for detected configurations.
     logLevel = 'Warning',
-    ---@type boolean | AddDapConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
+    ---@type boolean | haskell-tools.dap.AddConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
     auto_discover = true,
   },
   debug_info = {
@@ -268,10 +267,10 @@ local HTDefaultConfig = {
 }
 
 local haskell_tools = vim.g.haskell_tools or {}
----@type HTOpts
+---@type haskell-tools.Opts
 local opts = type(haskell_tools) == 'function' and haskell_tools() or haskell_tools
 
----@type HTConfig
+---@type haskell-tools.Config
 HTConfig = vim.tbl_deep_extend('force', {}, HTDefaultConfig, opts)
 local check = require('haskell-tools.config.check')
 local ok, err = check.validate(HTConfig)

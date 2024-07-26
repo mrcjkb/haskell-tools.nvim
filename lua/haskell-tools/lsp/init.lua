@@ -3,19 +3,18 @@
 local HTConfig = require('haskell-tools.config.internal')
 local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
-local compat = require('haskell-tools.compat')
 
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:HlsStart` - Start the LSP client.
---- * `:HlsStop` - Stop the LSP client.
---- * `:HlsRestart` - Restart the LSP client.
---- * `:HlsEvalAll` - Evaluate all code snippets in comments.
+--- * `:Hls start` - Start the LSP client.
+--- * `:Hls stop` - Stop the LSP client.
+--- * `:Hls restart` - Restart the LSP client.
+--- * `:Hls evalAll` - Evaluate all code snippets in comments.
 ---@brief ]]
 
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.
----@param client lsp.Client The LSP client
+---@param client vim.lsp.Client The LSP client
 ---@param bufnr number The buffer number
 ---@return nil
 local function ensure_clean_exit_on_quit(client, bufnr)
@@ -33,7 +32,7 @@ end
 ---Some plugins that add LSP client capabilities which are not built-in to neovim
 ---(like nvim-ufo and nvim-lsp-selection-range) cause error messages, because
 ---haskell-language-server falsly advertises those server_capabilities for cabal files.
----@param client lsp.Client
+---@param client vim.lsp.Client
 ---@return nil
 local function fix_cabal_client(client)
   local LspHelpers = require('haskell-tools.lsp.helpers')
@@ -47,7 +46,7 @@ local function fix_cabal_client(client)
   end
 end
 
----@class LoadHlsSettingsOpts
+---@class haskell-tools.load_hls_settings.Opts
 ---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
 log.debug('Setting up the LSP client...')
@@ -68,22 +67,22 @@ if Types.evaluate(hover_opts.enable) then
   handlers['textDocument/hover'] = hover.on_hover
 end
 
----@class HlsTools
-local HlsTools = {}
+---@class haskell-tools.Hls
+local Hls = {}
 ---Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.
 ---Falls back to the `hls.default_settings` if no file is found or file cannot be read or decoded.
 ---@param project_root string|nil The project root
----@param opts LoadHlsSettingsOpts|nil
+---@param opts haskell-tools.load_hls_settings.Opts|nil
 ---@return table hls_settings
 ---@see https://haskell-language-server.readthedocs.io/en/latest/configuration.html
-HlsTools.load_hls_settings = function(project_root, opts)
+Hls.load_hls_settings = function(project_root, opts)
   local default_settings = HTConfig.hls.default_settings
   if not project_root then
     return default_settings
   end
   local default_opts = { settings_file_pattern = 'hls.json' }
   opts = vim.tbl_deep_extend('force', {}, default_opts, opts or {})
-  local results = vim.fn.glob(compat.joinpath(project_root, opts.settings_file_pattern), true, true)
+  local results = vim.fn.glob(vim.fs.joinpath(project_root, opts.settings_file_pattern), true, true)
   if #results == 0 then
     log.info(opts.settings_file_pattern .. ' not found in project root ' .. project_root)
     return default_settings
@@ -106,7 +105,7 @@ end
 ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return number|nil client_id The LSP client ID
-HlsTools.start = function(bufnr)
+Hls.start = function(bufnr)
   local ht = require('haskell-tools')
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local file = vim.api.nvim_buf_get_name(bufnr)
@@ -175,7 +174,7 @@ end
 ---Stop the LSP client.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return table[] clients A list of clients that will be stopped
-HlsTools.stop = function(bufnr)
+Hls.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local LspHelpers = require('haskell-tools.lsp.helpers')
   local clients = LspHelpers.get_active_ht_clients(bufnr)
@@ -187,11 +186,11 @@ end
 ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
 ---@return number|nil client_id The LSP client ID after restart
-HlsTools.restart = function(bufnr)
+Hls.restart = function(bufnr)
   local lsp = require('haskell-tools').lsp
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local clients = lsp.stop(bufnr)
-  local timer, err_name, err_msg = compat.uv.new_timer()
+  local timer, err_name, err_msg = vim.uv.new_timer()
   if not timer then
     log.error { 'Could not create timer', err_name, err_msg }
     return
@@ -222,44 +221,47 @@ end
 ---Evaluate all code snippets in comments.
 ---@param bufnr number|nil Defaults to the current buffer.
 ---@return nil
-HlsTools.buf_eval_all = function(bufnr)
+Hls.buf_eval_all = function(bufnr)
   local eval = require('haskell-tools.lsp.eval')
   return eval.all(bufnr)
 end
 
-local commands = {
-  {
-    'HlsStart',
-    function()
-      HlsTools.start()
-    end,
-    {},
-  },
-  {
-    'HlsStop',
-    function()
-      HlsTools.stop()
-    end,
-    {},
-  },
-  {
-    'HlsRestart',
-    function()
-      HlsTools.restart()
-    end,
-    {},
-  },
-  {
-    'HlsEvalAll',
-    function()
-      HlsTools.buf_eval_all()
-    end,
-    {},
-  },
+---@enum haskell-tools.HlsCmd
+local HlsCmd = {
+  start = 'start',
+  stop = 'stop',
+  restart = 'restart',
+  evalAll = 'evalAll',
 }
 
-for _, command in ipairs(commands) do
-  vim.api.nvim_create_user_command(unpack(command))
+local function hls_command(opts)
+  local fargs = opts.fargs
+  local cmd = fargs[1] ---@as haskell-tools.HlsCmd
+  if cmd == HlsCmd.start then
+    Hls.start()
+  elseif cmd == HlsCmd.stop then
+    Hls.stop()
+  elseif cmd == HlsCmd.restart then
+    Hls.restart()
+  elseif cmd == HlsCmd.evalAll then
+    Hls.buf_eval_all()
+  end
 end
 
-return HlsTools
+vim.api.nvim_create_user_command('Hls', hls_command, {
+  nargs = '+',
+  desc = 'Commands for interacting with the haskell-language-server LSP client',
+  complete = function(arg_lead, cmdline, _)
+    local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
+    ---@type haskell-tools.HlsCmd[]
+    local available_commands = #clients == 0 and { 'start' } or { 'stop', 'restart', 'evalAll' }
+    ---@type haskell-tools.HlsCmd[]
+    if cmdline:match('^Hls%s+%w*$') then
+      return vim.tbl_filter(function(command)
+        return command:find(arg_lead) ~= nil
+      end, available_commands)
+    end
+  end,
+})
+
+return Hls

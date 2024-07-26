@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2024-07-26
+
+### BREAKING CHANGES
+
+- Require Neovim `>= 0.10`
+- Rename types in LuaCATS annotations and vimdoc.
+- Merge `HlsStart`, `HlsStop`, `HlsRestart` and `HlsEvalAll`
+  into `Hls` `start`, `stop`, `restart` and `evalAll` subcommands.
+- Merge `HsRepl*` commands into `Haskell repl *` subcommands.
+- Merge `HsProjectFile` `HsPackageYaml` and `HsPackageCabal` commands
+  into `Haskell {projectFile|packageYaml|packageCabal}` subcommands.
+- Merge logging commands into respective `Haskell log` subcommands.
+
+### Added
+
+- Repl: subcommands for remaining Lua functions:
+  `paste_type`, `cword_type`, `paste_info`, `cword_info`.
+
 ## [3.1.10] - 2024-05-30
 
 ### Fixed

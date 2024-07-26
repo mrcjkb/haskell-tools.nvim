@@ -8,11 +8,9 @@
 --- Functions for interacting with the operating system
 ---@brief ]]
 
-local compat = require('haskell-tools.compat')
 local log = require('haskell-tools.log.internal')
-local uv = compat.uv
 
----@class OS
+---@class haskell-tools.OS
 local OS = {}
 
 ---@param url string
@@ -32,7 +30,7 @@ OS.open_browser = function(url)
   if browser_cmd and vim.fn.executable(browser_cmd) == 1 then
     local cmd = { browser_cmd, url }
     log.debug { 'Opening browser', cmd }
-    compat.system(cmd, nil, function(sc)
+    vim.system(cmd, nil, function(sc)
       ---@cast sc vim.SystemCompleted
       if sc.code ~= 0 then
         log.error { 'Error opening browser', sc.code, sc.stderr }
@@ -63,16 +61,16 @@ end
 ---@return string|nil content
 ---@async
 OS.read_file_async = function(filename)
-  local file_fd = uv.fs_open(filename, 'r', 438)
+  local file_fd = vim.uv.fs_open(filename, 'r', 438)
   if not file_fd then
     return nil
   end
-  local stat = uv.fs_fstat(file_fd)
+  local stat = vim.uv.fs_fstat(file_fd)
   if not stat then
     return nil
   end
-  local data = uv.fs_read(file_fd, stat.size, 0)
-  uv.fs_close(file_fd)
+  local data = vim.uv.fs_read(file_fd, stat.size, 0)
+  vim.uv.fs_close(file_fd)
   ---@cast data string?
   return data
 end

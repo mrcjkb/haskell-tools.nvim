@@ -8,7 +8,7 @@
 --- Type definitions
 ---@brief ]]
 
----@class HsEntryPoint
+---@class haskell-tools.EntryPoint
 ---@field package_dir string
 ---@field package_name string
 ---@field exe_name string

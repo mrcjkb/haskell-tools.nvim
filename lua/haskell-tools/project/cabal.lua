@@ -12,27 +12,26 @@ local Strings = require('haskell-tools.strings')
 local HtParser = require('haskell-tools.parser')
 local Dap = require('haskell-tools.dap.internal')
 local OS = require('haskell-tools.os')
-local compat = require('haskell-tools.compat')
 
----@class CabalProjectHelper
-local CabalProjectHelper = {}
+---@class haskell-tools.project.cabal.Helper
+local Helper = {}
 
----@class CabalEntryPointParserData
+---@class haskell-tools.project.cabal.EntryPointParserData
 ---@field idx integer
 ---@field lines string[]
 ---@field line string
 ---@field package_dir string
 
----@class CabalEntryPointParserState
+---@class haskell-tools.project.cabal.EntryPointParserState
 ---@field package_name string
----@field entry_points HsEntryPoint[]
+---@field entry_points haskell-tools.EntryPoint[]
 ---@field mains string[]
 ---@field source_dirs string[]
 ---@field src_dir_indent_pattern string
 ---@field exe_name string | nil
 
----@param data CabalEntryPointParserData
----@param state CabalEntryPointParserState
+---@param data haskell-tools.project.cabal.EntryPointParserData
+---@param state haskell-tools.project.cabal.EntryPointParserState
 local function get_entrypoint_from_line(data, state)
   local package_dir = data.package_dir
   local idx = data.idx
@@ -78,7 +77,7 @@ end
 
 ---Parse the DAP entry points from a *.cabal file
 ---@param package_file string Path to the *.cabal file
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
 local function parse_package_entrypoints(package_file)
   local state = {
@@ -96,7 +95,7 @@ local function parse_package_entrypoints(package_file)
   for idx, line in ipairs(lines) do
     local is_comment = vim.startswith(Strings.trim(line), '--')
     if not is_comment then
-      ---@type CabalEntryPointParserData
+      ---@type haskell-tools.project.cabal.EntryPointParserData
       local data = {
         package_dir = package_dir,
         line = line,
@@ -111,14 +110,14 @@ end
 
 ---Parse the DAP entry points from a *.cabal file
 ---@param package_path string Path to a package directory
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
-function CabalProjectHelper.parse_package_entrypoints(package_path)
+function Helper.parse_package_entrypoints(package_path)
   local entry_points = {}
-  for _, package_file in pairs(vim.fn.glob(compat.joinpath(package_path, '*.cabal'), true, true)) do
+  for _, package_file in pairs(vim.fn.glob(vim.fs.joinpath(package_path, '*.cabal'), true, true)) do
     vim.list_extend(entry_points, parse_package_entrypoints(package_file))
   end
   return entry_points
 end
 
-return CabalProjectHelper
+return Helper

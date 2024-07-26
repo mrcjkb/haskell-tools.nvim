@@ -8,7 +8,7 @@
 --- Parsing functions
 ---@brief ]]
 
----@class HtParser
+---@class haskell-tools.Parser
 local HtParser = {}
 
 --- Pretty-print a type signature

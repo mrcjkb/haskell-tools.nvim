@@ -22,13 +22,13 @@ local error = h.error or h.report_error
 ---@diagnostic disable-next-line: deprecated
 local warn = h.warn or h.report_warn
 
----@class LuaDependency
+---@class haskell-tools.LuaDependency
 ---@field module string The name of a module
 ---@field optional fun():boolean Function that returns whether the dependency is optional
 ---@field url string URL (markdown)
 ---@field info string Additional information
 
----@type LuaDependency[]
+---@type haskell-tools.LuaDependency[]
 local lua_dependencies = {
   {
     module = 'telescope',
@@ -44,7 +44,7 @@ local lua_dependencies = {
   },
 }
 
----@class ExternalDependency
+---@class haskell-tools.ExternalDependency
 ---@field name string Name of the dependency
 ---@field get_binaries fun():string[]Function that returns the binaries to check for
 ---@field optional fun():boolean Function that returns whether the dependency is optional
@@ -52,7 +52,7 @@ local lua_dependencies = {
 ---@field info string Additional information
 ---@field extra_checks function|nil Optional extra checks to perform if the dependency is installed
 
----@type ExternalDependency[]
+---@type haskell-tools.ExternalDependency[]
 local external_dependencies = {
   {
     name = 'haskell-language-server',
@@ -153,7 +153,7 @@ local external_dependencies = {
   },
 }
 
----@param dep LuaDependency
+---@param dep haskell-tools.LuaDependency
 local function check_lua_dependency(dep)
   if deps.has(dep.module) then
     ok(dep.url .. ' installed.')
@@ -166,7 +166,7 @@ local function check_lua_dependency(dep)
   end
 end
 
----@param dep ExternalDependency
+---@param dep haskell-tools.ExternalDependency
 ---@return boolean is_installed
 ---@return string|nil version
 local check_installed = function(dep)
@@ -188,7 +188,7 @@ local check_installed = function(dep)
   return false
 end
 
----@param dep ExternalDependency
+---@param dep haskell-tools.ExternalDependency
 local function check_external_dependency(dep)
   local installed, mb_version = check_installed(dep)
   if installed then

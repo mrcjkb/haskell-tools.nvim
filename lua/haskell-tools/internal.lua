@@ -10,8 +10,8 @@
 
 local HTConfig = require('haskell-tools.config.internal')
 
----@class InternalApi
-local InternalApi = {}
+---@class haskell-tools.internal.Api
+local Api = {}
 
 ---@return boolean tf Is LSP supported for the current buffer?
 local function buf_is_lsp_supported()
@@ -65,15 +65,24 @@ local function dap_discover()
   elseif type(auto_discover) == 'boolean' then
     return require('haskell-tools').dap.discover_configurations()
   end
-  ---@cast auto_discover AddDapConfigOpts
+  ---@cast auto_discover haskell-tools.dap.AddConfigOpts
   local bufnr = vim.api.nvim_get_current_buf()
   require('haskell-tools').dap.discover_configurations(bufnr, auto_discover)
 end
 
+local function init()
+  if vim.g.haskell_tools_loaded then
+    return
+  end
+  vim.g.haskell_tools_loaded = true
+  require('haskell-tools.commands').init()
+end
+
 ---ftplugin implementation
-function InternalApi.ftplugin()
+function Api.ftplugin()
+  init()
   start_or_attach()
   dap_discover()
 end
 
-return InternalApi
+return Api

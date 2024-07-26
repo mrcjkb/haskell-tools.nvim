@@ -13,9 +13,8 @@ local Strings = require('haskell-tools.strings')
 local OS = require('haskell-tools.os')
 local cabal = require('haskell-tools.project.cabal')
 local stack = require('haskell-tools.project.stack')
-local compat = require('haskell-tools.compat')
 
----@class HtProjectHelpers
+---@class haskell-tools.project.Helpers
 local HtProjectHelpers = {}
 
 ---@param path string
@@ -32,8 +31,8 @@ end
 ---@param ... string Search patterns (can be globs)
 ---@return string|nil The first file that matches the globs
 local function find_file(path, ...)
-  for _, search_term in ipairs(compat.tbl_flatten { ... }) do
-    local results = vim.fn.glob(compat.joinpath(path, search_term), true, true)
+  for _, search_term in ipairs(vim.iter({ ... }):flatten():totable()) do
+    local results = vim.fn.glob(vim.fs.joinpath(path, search_term), true, true)
     if #results > 0 then
       return results[1]
     end
@@ -55,7 +54,7 @@ local function iterate_parents(startpath)
     if not next or vim.fn.isdirectory(next) == 0 or next == path or next == '/nix/store' then
       return
     end
-    if compat.uv.fs_realpath(next) then
+    if vim.uv.fs_realpath(next) then
       return next, startpath
     end
   end
@@ -87,7 +86,7 @@ end
 ---@param ... string Globs to match in the root directory
 ---@return fun(path:string):(string|nil)
 local function root_pattern(...)
-  local args = compat.tbl_flatten { ... }
+  local args = vim.iter({ ... }):flatten():totable()
   local function matcher(path)
     return find_file(path, unpack(args))
   end
@@ -147,7 +146,7 @@ function HtProjectHelpers.get_package_cabal(path)
     return nil
   end
   dir = escape_glob_wildcards(dir)
-  for _, pattern in ipairs(vim.fn.glob(compat.joinpath(dir, '*.cabal'), true, true)) do
+  for _, pattern in ipairs(vim.fn.glob(vim.fs.joinpath(dir, '*.cabal'), true, true)) do
     if pattern then
       return pattern
     end
@@ -209,7 +208,7 @@ function HtProjectHelpers.parse_package_paths(project_file)
     if packages_start then
       local trimmed = Strings.trim(line)
       local pkg_rel_path = trimmed:match('/(.+)')
-      local pkg_path = compat.joinpath(project_dir, pkg_rel_path)
+      local pkg_path = vim.fs.joinpath(project_dir, pkg_rel_path)
       if vim.fn.isdirectory(pkg_path) == 1 then
         package_paths[#package_paths + 1] = pkg_path
       end
@@ -223,7 +222,7 @@ end
 
 ---Parse the DAP entry points from a *.cabal file
 ---@param package_path string Path to a package directory
----@return HsEntryPoint[] entry_points
+---@return haskell-tools.EntryPoint[] entry_points
 ---@async
 function HtProjectHelpers.parse_package_entrypoints(package_path)
   if HtProjectHelpers.is_cabal_project(package_path) then
@@ -233,18 +232,18 @@ function HtProjectHelpers.parse_package_entrypoints(package_path)
 end
 
 ---@param project_root string Project root directory
----@return HsEntryPoint[]
+---@return haskell-tools.EntryPoint[]
 ---@async
 function HtProjectHelpers.parse_project_entrypoints(project_root)
   local entry_points = {}
-  local project_file = compat.joinpath(project_root, 'cabal.project')
+  local project_file = vim.fs.joinpath(project_root, 'cabal.project')
   if vim.fn.filereadable(project_file) == 1 then
     for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, cabal.parse_package_entrypoints(package_path))
     end
     return entry_points
   end
-  project_file = compat.joinpath(project_root, 'stack.yaml')
+  project_file = vim.fs.joinpath(project_root, 'stack.yaml')
   if vim.fn.filereadable(project_file) == 1 then
     for _, package_path in pairs(HtProjectHelpers.parse_package_paths(project_file)) do
       vim.list_extend(entry_points, stack.parse_package_entrypoints(package_path))

@@ -87,12 +87,12 @@ elseif opts.mode == 'auto' then
   end
 end
 
----@class HoogleTools
-local HoogleTools = {}
+---@class haskell-tools.Hoogle
+local Hoogle = {}
 
 ---@param options table<string,any>|nil Includes the `search_term` and options to pass to the telescope picker (if available)
 ---@return nil
-HoogleTools.hoogle_signature = function(options)
+Hoogle.hoogle_signature = function(options)
   options = options or {}
   log.debug { 'Hoogle signature search options', options }
   if options.search_term then
@@ -111,4 +111,4 @@ HoogleTools.hoogle_signature = function(options)
   end
 end
 
-return HoogleTools
+return Hoogle

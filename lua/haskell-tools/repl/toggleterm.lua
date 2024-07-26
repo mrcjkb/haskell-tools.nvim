@@ -27,8 +27,8 @@ local function quote(str)
 end
 
 ---@param mk_repl_cmd fun(string?):string[]? Function for building the repl that takes an optional file path
----@param opts ReplConfig
----@return ReplHandlerImpl
+---@param opts haskell-tools.repl.Config
+---@return haskell-tools.repl.impl.Handler
 return function(mk_repl_cmd, opts)
   local ReplHandlerImpl = {
     ---@private

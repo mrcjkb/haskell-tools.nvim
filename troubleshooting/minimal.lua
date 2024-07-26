@@ -5,7 +5,7 @@ require('lazy.minit').repro {
   spec = {
     {
       'mrcjkb/haskell-tools.nvim',
-      version = '^3',
+      version = '^4',
       init = function()
         -- Configure haskell-tools.nvim here
         vim.g.haskell_tools = {}
