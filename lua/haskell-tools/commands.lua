@@ -14,6 +14,42 @@ local ht = require('haskell-tools')
 ---Whether this command supports a bang!
 ---@field bang? boolean
 
+---@param arg_lead string
+local function complete_haskell_files(arg_lead)
+  vim.print(arg_lead)
+  return vim
+    .iter(vim.list_extend(vim.fn.getcompletion(arg_lead, 'file'), vim.fn.getcompletion(arg_lead, 'buffer')))
+    :filter(function(file_path)
+      local ext = vim.fn.fnamemodify(file_path, ':e')
+      return ext == 'hs' or ext == ''
+    end)
+    :totable()
+end
+
+---@param args? string[]
+---@return string?
+local function get_single_opt_arg(args)
+  if type(args) ~= 'table' then
+    return
+  end
+  if #args > 1 then
+    require('haskell-tools.log.internal').warn { 'Too many arguments!', args }
+  end
+  return #args > 0 and args[1] or nil
+end
+
+---@param args? string[]
+---@return string
+local function get_filepath_arg(args)
+  if not args or #args == 0 then
+    return vim.api.nvim_buf_get_name(0)
+  end
+  vim.validate('filepath', args[1], 'string')
+  local filepath = vim.fn.expand(args[1])
+  ---@cast filepath string
+  return filepath
+end
+
 ---@type table<string, haskell-tools.Subcommand>
 local command_tbl = {
   packageYaml = {
@@ -31,35 +67,11 @@ local command_tbl = {
       ht.project.open_project_file()
     end,
   },
-  openLog = {
-    impl = function()
-      require('haskell-tools').log.nvim_open_logfile()
-    end,
-  },
-  setLogLevel = {
-    impl = function(args)
-      local level = vim.fn.expand(args[1])
-      ---@cast level string
-      require('haskell-tools').log.set_level(tonumber(level) or level)
-    end,
-    complete = function(arg_lead)
-      local levels = vim.tbl_keys(vim.log.levels)
-      return vim.tbl_filter(function(command)
-        return command:find(arg_lead) ~= nil
-      end, levels)
-    end,
-  },
 }
 
 ---@param name string The name of the subcommand
----@param cmd haskell-tools.Subcommand The implementation and optional completions
-function HtCommands.register_subcommand(name, cmd)
-  command_tbl[name] = cmd
-end
-
----@param name string The name of the subcommand
 ---@param subcmd_tbl table<string, haskell-tools.Subcommand> The subcommand's subcommand table
-function HtCommands.register_subcommand_tbl(name, subcmd_tbl)
+local function register_subcommand_tbl(name, subcmd_tbl)
   command_tbl[name] = {
     impl = function(args, ...)
       local subcmd = subcmd_tbl[table.remove(args, 1)]
@@ -83,6 +95,79 @@ function HtCommands.register_subcommand_tbl(name, subcmd_tbl)
     end,
   }
 end
+
+---@type table<string, haskell-tools.Subcommand>
+local repl_subcommands = {
+  toggle = {
+    impl = function(args)
+      local filepath = get_filepath_arg(args)
+      ht.repl.toggle(filepath)
+    end,
+    complete = complete_haskell_files,
+  },
+  load = {
+    impl = function(args)
+      local filepath = get_filepath_arg(args)
+      ht.repl.load_file(filepath)
+    end,
+    complete = complete_haskell_files,
+  },
+  quit = {
+    impl = ht.repl.quit,
+  },
+  reload = {
+    impl = ht.repl.reload,
+  },
+  paste_type = {
+    impl = function(args)
+      local reg = get_single_opt_arg(args)
+      ht.repl.paste_type(reg)
+    end,
+  },
+  cword_type = {
+    impl = ht.repl.cword_type,
+  },
+  paste_info = {
+    impl = function(args)
+      local reg = get_single_opt_arg(args)
+      ht.repl.paste_info(reg)
+    end,
+  },
+  cword_info = {
+    impl = ht.repl.cword_info,
+  },
+}
+
+-- TODO: Smarter completions. load, quit and reload should only be suggested when a repl is active
+register_subcommand_tbl('repl', repl_subcommands)
+
+local log_command_tbl = {
+  openHlsLog = {
+    impl = function()
+      ht.log.nvim_open_hls_logfile()
+    end,
+  },
+  openLog = {
+    impl = function()
+      require('haskell-tools').log.nvim_open_logfile()
+    end,
+  },
+  setLevel = {
+    impl = function(args)
+      local level = vim.fn.expand(args[1])
+      ---@cast level string
+      require('haskell-tools').log.set_level(tonumber(level) or level)
+    end,
+    complete = function(arg_lead)
+      local levels = vim.tbl_keys(vim.log.levels)
+      return vim.tbl_filter(function(command)
+        return command:find(arg_lead) ~= nil
+      end, levels)
+    end,
+  },
+}
+
+register_subcommand_tbl('log', log_command_tbl)
 
 ---@generic K, V
 ---@param predicate fun(V):boolean
@@ -110,27 +195,29 @@ local function haskell_cmd(opts)
   command.impl(args, opts)
 end
 
-vim.api.nvim_create_user_command('Haskell', haskell_cmd, {
-  nargs = '+',
-  desc = 'haskell-tools.nvim commands',
-  complete = function(arg_lead, cmdline, _)
-    local commands = cmdline:match("^['<,'>]*Haskell!") ~= nil
-        -- bang!
-        and tbl_keys_by_value_filter(function(command)
-          return command.bang == true
-        end, command_tbl)
-      or vim.tbl_keys(command_tbl)
-    local subcmd, subcmd_arg_lead = cmdline:match("^['<,'>]*Haskell[!]*%s(%S+)%s(.*)$")
-    if subcmd and subcmd_arg_lead and command_tbl[subcmd] and command_tbl[subcmd].complete then
-      return command_tbl[subcmd].complete(subcmd_arg_lead)
-    end
-    if cmdline:match("^['<,'>]*Haskell[!]*%s+%w*$") then
-      return vim.tbl_filter(function(command)
-        return command:find(arg_lead) ~= nil
-      end, commands)
-    end
-  end,
-  bang = false, -- might change
-})
+function HtCommands.init()
+  vim.api.nvim_create_user_command('Haskell', haskell_cmd, {
+    nargs = '+',
+    desc = 'haskell-tools.nvim commands',
+    complete = function(arg_lead, cmdline, _)
+      local commands = cmdline:match("^['<,'>]*Haskell!") ~= nil
+          -- bang!
+          and tbl_keys_by_value_filter(function(command)
+            return command.bang == true
+          end, command_tbl)
+        or vim.tbl_keys(command_tbl)
+      local subcmd, subcmd_arg_lead = cmdline:match("^['<,'>]*Haskell[!]*%s(%S+)%s(.*)$")
+      if subcmd and subcmd_arg_lead and command_tbl[subcmd] and command_tbl[subcmd].complete then
+        return command_tbl[subcmd].complete(subcmd_arg_lead)
+      end
+      if cmdline:match("^['<,'>]*Haskell[!]*%s+%w*$") then
+        return vim.tbl_filter(function(command)
+          return command:find(arg_lead) ~= nil
+        end, commands)
+      end
+    end,
+    bang = false, -- might change
+  })
+end
 
 return HtCommands

@@ -70,8 +70,17 @@ local function dap_discover()
   require('haskell-tools').dap.discover_configurations(bufnr, auto_discover)
 end
 
+local function init()
+  if vim.g.haskell_tools_loaded then
+    return
+  end
+  vim.g.haskell_tools_loaded = true
+  require('haskell-tools.commands').init()
+end
+
 ---ftplugin implementation
 function Api.ftplugin()
+  init()
   start_or_attach()
   dap_discover()
 end

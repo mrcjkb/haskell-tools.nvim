@@ -3,9 +3,9 @@
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:Haskell setLogLevel` - Set the haskell-tools.nvim and LSP client log level.
---- * `:Haskell openLog` - Open the haskell-tools.nvim log file.
---- * `:Hls openLog` - Open the haskell-language-server log file.
+--- * `:Haskell log setLevel` - Set the haskell-tools.nvim and LSP client log level.
+--- * `:Haskell log openLog` - Open the haskell-tools.nvim log file.
+--- * `:Haskell log openHlsLog` - Open the haskell-language-server log file.
 ---@brief ]]
 
 ---@class haskell-tools.Log
