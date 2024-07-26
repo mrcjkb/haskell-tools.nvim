@@ -233,7 +233,7 @@ return function(mk_repl_cmd, options)
     if cur_win ~= -1 and Handler.go_back then
       vim.api.nvim_set_current_win(cur_win)
     else
-      vim.cmd('startinsert')
+      vim.cmd.startinsert()
     end
   end
 

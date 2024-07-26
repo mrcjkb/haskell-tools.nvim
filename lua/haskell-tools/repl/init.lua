@@ -7,10 +7,10 @@
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:HtReplToggle` - Toggle a GHCi repl.
---- * `:HtReplQuit` - Quit the current repl.
---- * `:HtReplLoad` - Load a Haskell file into the repl.
---- * `:HtReplReload` - Reload the current repl.
+--- * `:Haskell repl toggle` - Toggle a GHCi repl.
+--- * `:Haskell repl quit` - Quit the current repl.
+--- * `:Haskell repl load` - Load a Haskell file into the repl.
+--- * `:Haskell repl reload` - Reload the current repl.
 ---@brief ]]
 
 local log = require('haskell-tools.log.internal')
@@ -246,45 +246,55 @@ end
 
 vim.keymap.set('n', 'ghc', Repl.operator, { noremap = true })
 
-local commands = {
-  {
-    'HtReplToggle',
-    ---@param tbl table
-    function(tbl)
-      local filepath = tbl.args ~= '' and vim.fn.expand(tbl.args)
-      ---@cast filepath string
+---@param arg_lead string
+local function complete_haskell_files(arg_lead)
+  vim.print(arg_lead)
+  return vim
+    .iter(vim.list_extend(vim.fn.getcompletion(arg_lead, 'file'), vim.fn.getcompletion(arg_lead, 'buffer')))
+    :filter(function(file_path)
+      local ext = vim.fn.fnamemodify(file_path, ':e')
+      return ext == 'hs' or ext == ''
+    end)
+    :totable()
+end
+
+---@param args? string[]
+---@return string
+local function get_filepath_arg(args)
+  if not args or #args == 0 then
+    return vim.api.nvim_buf_get_name(0)
+  end
+  vim.validate('filepath', args[1], 'string')
+  local filepath = vim.fn.expand(args[1])
+  ---@cast filepath string
+  return filepath
+end
+
+---@type table<string, haskell-tools.Subcommand>
+local subcommands = {
+  toggle = {
+    impl = function(args)
+      local filepath = get_filepath_arg(args)
       Repl.toggle(filepath)
     end,
-    { nargs = '?' },
+    complete = complete_haskell_files,
   },
-  {
-    'HtReplLoad',
-    ---@param tbl table
-    function(tbl)
-      local filepath = vim.fn.expand(tbl.args)
-      ---@cast filepath string
+  load = {
+    impl = function(args)
+      local filepath = get_filepath_arg(args)
       Repl.load_file(filepath)
     end,
-    { nargs = 1 },
+    complete = complete_haskell_files,
   },
-  {
-    'HtReplQuit',
-    function()
-      Repl.quit()
-    end,
-    {},
+  quit = {
+    impl = Repl.quit,
   },
-  {
-    'HtReplReload',
-    function()
-      Repl.reload()
-    end,
-    {},
+  reload = {
+    impl = Repl.reload,
   },
 }
 
-for _, command in ipairs(commands) do
-  vim.api.nvim_create_user_command(unpack(command))
-end
+-- TODO: Smarter completions. load, quit and reload should only be suggested when a repl is active
+require('haskell-tools.commands').register_subcommand_tbl('repl', subcommands)
 
 return Repl

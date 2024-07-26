@@ -481,12 +481,14 @@ ht.hoogle.hoogle_signature()
 
 #### Repl
 
-| Command         | Description                         | Arguments           |
-| --------------- | ----------------------------------- | ------------------- |
-| `:HtReplToggle` | Toggle a GHCi repl                  | filepath (optional) |
-| `:HtReplQuit`   | Quit the current repl               |                     |
-| `:HtReplLoad`   | Load a file into the current repl   | filepath (required) |
-| `:HtReplReload` | Reload the current repl             |                     |
+<!-- markdownlint-disable -->
+| Command                | Description                         | Arguments           |
+| -----------------------| ----------------------------------- | ------------------- |
+| `:Haskell repl toggle` | Toggle a GHCi repl                  | filepath (optional) |
+| `:Haskell repl quit`   | Quit the current repl               |                     |
+| `:Haskell repl load`   | Load a file into the current repl   | filepath (optional) |
+| `:Haskell repl reload` | Reload the current repl             |                     |
+<!-- markdownlint-restore -->
 
 ```lua
 local ht = require('haskell-tools')

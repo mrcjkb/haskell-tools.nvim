@@ -15,11 +15,6 @@
 ---@field main string
 ---@field source_dir string
 
----@class haskell-tools.command_tbl
----@field impl fun(args: string[], opts: vim.api.keyset.user_command) The command implementation
----@field complete? fun(subcmd_arg_lead: string): string[] Command completions callback, taking the lead of the subcommand's arguments
----@field bang? boolean Whether this command supports a bang!
-
 local Types = {}
 
 ---Evaluate a value that may be a function

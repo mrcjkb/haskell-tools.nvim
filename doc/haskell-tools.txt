@@ -390,10 +390,10 @@ haskell-tools GHCi REPL module                              *haskell-tools.repl*
 
  The following commands are available:
 
- * `:HtReplToggle` - Toggle a GHCi repl.
- * `:HtReplQuit` - Quit the current repl.
- * `:HtReplLoad` - Load a Haskell file into the repl.
- * `:HtReplReload` - Reload the current repl.
+ * `:Haskell repl toggle` - Toggle a GHCi repl.
+ * `:Haskell repl quit` - Quit the current repl.
+ * `:Haskell repl load` - Load a Haskell file into the repl.
+ * `:Haskell repl reload` - Reload the current repl.
 
 haskell-tools.Repl                                          *haskell-tools.Repl*
 
