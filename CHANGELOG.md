@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Require Neovim `>= 0.10`
 - Rename types in LuaCATS annotations and vimdoc.
+- Replace `HlsStart`, `HlsStop`, `HlsRestart` and `HlsEvalAll`
+  with a single `Hls` command that has `start`, `stop`, `restart` and `evalAll` subcommands
+  with completions for the currently available subcommands.
 
 ## [3.1.10] - 2024-05-30
 

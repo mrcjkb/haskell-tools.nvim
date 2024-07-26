@@ -443,12 +443,12 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-| Command        | Description                  |
-| -------------- | ---------------------------- |
-| `:HlsStart`    | Start the LSP client         |
-| `:HlsStop`     | Stop the LSP client          |
-| `:HlsRestart`  | Restart the LSP client       |
-| `:HlsEvalAll`  | Evaluate all code snippets   |
+| Command         | Description                  |
+| --------------- | ---------------------------- |
+| `:Hls start`    | Start the LSP client         |
+| `:Hls stop`     | Stop the LSP client          |
+| `:Hls restart`  | Restart the LSP client       |
+| `:Hls evalAll`  | Evaluate all code snippets   |
 
 ```lua
 local ht = require('haskell-tools')

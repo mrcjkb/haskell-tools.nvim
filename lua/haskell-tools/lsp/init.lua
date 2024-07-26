@@ -7,14 +7,14 @@ local Types = require('haskell-tools.types.internal')
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:HlsStart` - Start the LSP client.
---- * `:HlsStop` - Stop the LSP client.
---- * `:HlsRestart` - Restart the LSP client.
---- * `:HlsEvalAll` - Evaluate all code snippets in comments.
+--- * `:Hls start` - Start the LSP client.
+--- * `:Hls stop` - Stop the LSP client.
+--- * `:Hls restart` - Restart the LSP client.
+--- * `:Hls evalAll` - Evaluate all code snippets in comments.
 ---@brief ]]
 
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.
----@param client lsp.Client The LSP client
+---@param client vim.lsp.Client The LSP client
 ---@param bufnr number The buffer number
 ---@return nil
 local function ensure_clean_exit_on_quit(client, bufnr)
@@ -32,7 +32,7 @@ end
 ---Some plugins that add LSP client capabilities which are not built-in to neovim
 ---(like nvim-ufo and nvim-lsp-selection-range) cause error messages, because
 ---haskell-language-server falsly advertises those server_capabilities for cabal files.
----@param client lsp.Client
+---@param client vim.lsp.Client
 ---@return nil
 local function fix_cabal_client(client)
   local LspHelpers = require('haskell-tools.lsp.helpers')
@@ -226,39 +226,41 @@ Hls.buf_eval_all = function(bufnr)
   return eval.all(bufnr)
 end
 
-local commands = {
-  {
-    'HlsStart',
-    function()
-      Hls.start()
-    end,
-    {},
-  },
-  {
-    'HlsStop',
-    function()
-      Hls.stop()
-    end,
-    {},
-  },
-  {
-    'HlsRestart',
-    function()
-      Hls.restart()
-    end,
-    {},
-  },
-  {
-    'HlsEvalAll',
-    function()
-      Hls.buf_eval_all()
-    end,
-    {},
-  },
+---@enum haskell-tools.HlsCmd
+local HlsCmd = {
+  start = 'start',
+  stop = 'stop',
+  restart = 'restart',
+  evalAll = 'evalAll',
 }
 
-for _, command in ipairs(commands) do
-  vim.api.nvim_create_user_command(unpack(command))
+local function hls_command(opts)
+  local fargs = opts.fargs
+  local cmd = fargs[1] ---@as haskell-tools.HlsCmd
+  if cmd == HlsCmd.start then
+    Hls.start()
+  elseif cmd == HlsCmd.stop then
+    Hls.stop()
+  elseif cmd == HlsCmd.restart then
+    Hls.restart()
+  elseif cmd == HlsCmd.evalAll then
+    Hls.buf_eval_all()
+  end
 end
+
+vim.api.nvim_create_user_command('Hls', hls_command, {
+  nargs = '+',
+  desc = 'Commands for interacting with the haskell-language-server LSP client',
+  complete = function(arg_lead, cmdline, _)
+    local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
+    ---@type haskell-tools.HlsCmd[]
+    local available_commands = #clients == 0 and { 'start' } or { 'stop', 'restart', 'evalAll' }
+    if cmdline:match('^Hls%s+%w*$') then
+      return vim.tbl_filter(function(command)
+        return command:find(arg_lead) ~= nil
+      end, available_commands)
+    end
+  end,
+})
 
 return Hls

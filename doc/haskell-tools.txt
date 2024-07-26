@@ -277,10 +277,10 @@ haskell-language-server LSP client tools                     *haskell-tools.lsp*
 
  The following commands are available:
 
- * `:HlsStart` - Start the LSP client.
- * `:HlsStop` - Stop the LSP client.
- * `:HlsRestart` - Restart the LSP client.
- * `:HlsEvalAll` - Evaluate all code snippets in comments.
+ * `:Hls start` - Start the LSP client.
+ * `:Hls stop` - Stop the LSP client.
+ * `:Hls restart` - Restart the LSP client.
+ * `:Hls evalAll` - Evaluate all code snippets in comments.
 
 haskell-tools.load_hls_settings.Opts      *haskell-tools.load_hls_settings.Opts*
 
