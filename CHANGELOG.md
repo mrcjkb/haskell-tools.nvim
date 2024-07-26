@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Merge `HsRepl*` commands into `Haskell repl *` subcommands.
 - Merge `HsProjectFile` `HsPackageYaml` and `HsPackageCabal` commands
   into `Haskell {projectFile|packageYaml|packageCabal}` subcommands.
+- Merge logging commands into respective `Haskell` and `Hls` subcommands.
 
 ## [3.1.10] - 2024-05-30
 

@@ -529,9 +529,9 @@ haskell-tools Logging                                        *haskell-tools.log*
 
  The following commands are available:
 
- * `:HtLog` - Open the haskell-tools.nvim log file.
- * `:HlsLog` - Open the haskell-language-server log file.
- * `:HtSetLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+ * `:Haskell setLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+ * `:Haskell openLog` - Open the haskell-tools.nvim log file.
+ * `:Hls openLog` - Open the haskell-language-server log file.
 
 haskell-tools.Log                                            *haskell-tools.Log*
 

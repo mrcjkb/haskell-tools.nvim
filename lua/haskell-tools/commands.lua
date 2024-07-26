@@ -31,6 +31,24 @@ local command_tbl = {
       ht.project.open_project_file()
     end,
   },
+  openLog = {
+    impl = function()
+      require('haskell-tools').log.nvim_open_logfile()
+    end,
+  },
+  setLogLevel = {
+    impl = function(args)
+      local level = vim.fn.expand(args[1])
+      ---@cast level string
+      require('haskell-tools').log.set_level(tonumber(level) or level)
+    end,
+    complete = function(arg_lead)
+      local levels = vim.tbl_keys(vim.log.levels)
+      return vim.tbl_filter(function(command)
+        return command:find(arg_lead) ~= nil
+      end, levels)
+    end,
+  },
 }
 
 ---@param name string The name of the subcommand

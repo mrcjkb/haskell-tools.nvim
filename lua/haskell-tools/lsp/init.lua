@@ -232,6 +232,7 @@ local HlsCmd = {
   stop = 'stop',
   restart = 'restart',
   evalAll = 'evalAll',
+  openLog = 'openLog',
 }
 
 local function hls_command(opts)
@@ -245,6 +246,9 @@ local function hls_command(opts)
     Hls.restart()
   elseif cmd == HlsCmd.evalAll then
     Hls.buf_eval_all()
+  elseif cmd == HlsCmd.openLog then
+    local ht = require('haskell-tools')
+    ht.log.nvim_open_hls_logfile()
   end
 end
 
@@ -255,10 +259,12 @@ vim.api.nvim_create_user_command('Hls', hls_command, {
     local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
     ---@type haskell-tools.HlsCmd[]
     local available_commands = #clients == 0 and { 'start' } or { 'stop', 'restart', 'evalAll' }
+    ---@type haskell-tools.HlsCmd[]
+    local always_available_commands = { 'openLog' }
     if cmdline:match('^Hls%s+%w*$') then
       return vim.tbl_filter(function(command)
         return command:find(arg_lead) ~= nil
-      end, available_commands)
+      end, vim.list_extend(always_available_commands, available_commands))
     end
   end,
 })

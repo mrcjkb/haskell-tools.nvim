@@ -3,9 +3,9 @@
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:HtLog` - Open the haskell-tools.nvim log file.
---- * `:HlsLog` - Open the haskell-language-server log file.
---- * `:HtSetLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+--- * `:Haskell setLogLevel` - Set the haskell-tools.nvim and LSP client log level.
+--- * `:Haskell openLog` - Open the haskell-tools.nvim log file.
+--- * `:Hls openLog` - Open the haskell-language-server log file.
 ---@brief ]]
 
 ---@class haskell-tools.Log
@@ -41,36 +41,6 @@ end
 ---@see vim.log.levels
 function Log.set_level(level)
   return require('haskell-tools.log.internal').set_level(level)
-end
-
-local commands = {
-  {
-    'HtLog',
-    function()
-      Log.nvim_open_logfile()
-    end,
-    {},
-  },
-  {
-    'HlsLog',
-    function()
-      Log.nvim_open_hls_logfile()
-    end,
-    { nargs = 1 },
-  },
-  {
-    'HtSetLogLevel',
-    function(tbl)
-      local level = vim.fn.expand(tbl.args)
-      ---@cast level string
-      Log.set_level(tonumber(level) or level)
-    end,
-    { nargs = 1 },
-  },
-}
-
-for _, command in ipairs(commands) do
-  vim.api.nvim_create_user_command(unpack(command))
 end
 
 return Log
