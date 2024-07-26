@@ -114,7 +114,7 @@ local opts = HTConfig.tools.repl
 local handler
 
 local handler_type = Types.evaluate(opts.handler)
----@cast handler_type haskell-tools.repl.impl.Handler
+---@cast handler_type haskell-tools.repl.Handler
 if handler_type == 'toggleterm' then
   log.info('handler = toggleterm')
   handler = require('haskell-tools.repl.toggleterm')(mk_repl_cmd, opts)
