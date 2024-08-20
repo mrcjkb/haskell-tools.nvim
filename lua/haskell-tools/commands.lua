@@ -44,7 +44,7 @@ local function get_filepath_arg(args)
   if not args or #args == 0 then
     return vim.api.nvim_buf_get_name(0)
   end
-  vim.validate('filepath', args[1], 'string')
+  assert(type(args[1]) == 'string', 'filepath is not a string')
   local filepath = vim.fn.expand(args[1])
   ---@cast filepath string
   return filepath
