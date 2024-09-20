@@ -246,17 +246,40 @@ Start a GHCi repl for the current project / buffer.
 Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim),
 this plugin adds the following hover actions (if available):
 
-- Hoogle search.
-- Open documentation in browser.
-- Open source in browser.
-- Go to definition.
-- Go to type definition.
-- Find references.
+- Hoogle search
+  (no dedicated `<Plug>` mapping
+  because there can be multiple signatures to search for).
+- Open documentation in browser (`<Plug>HaskellHoverActionDocs`).
+- Open source in browser (`<Plug>HaskellHoverActionSource`).
+- Go to definition (`<Plug>HaskellHoverActionDefinition`).
+- Go to type definition (`<Plug>HaskellHoverActionTypeDefinition`).
+- Find references (`<Plug>HaskellHoverActionReferences`).
+
+You can invoke them by switching to the hover window and entering `<CR>`
+on the respective line, or with a keymap for the respective `<Plug>` mapping.
+If you do not wish to create a separate keymap for each `<Plug>` mapping,
+you can also create a keymap for `<Plug>HaskellHoverAction`, which accepts
+a `<count>` prefix as the (1-based) index of the hover action to invoke.
+
+For example, if you set the following keymap:
+
+```lua
+vim.keymap.set('n', '<space>a', '<Plug>HaskellHoverAction')
+```
+
+you can invoke the third hover action with `3<space>a`.
 
 Additionally, the default behaviour of stylizing markdown is disabled.
 And the hover buffer's filetype is set to markdown,
 so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 users can benefit from syntax highlighting of code snippets.
+
+For invoking hover actions with a keymap in normal mode, this plugin
+provides the following `<Plug>` mappings:
+
+- `HaskellHoverAction`: Takes a `<count>` prefix for the hover action to invoke.
+- `HaskellHoverActionHoogle`: Invokes the first Hoogle search hover action.
+- `HaskellHoverActionOpenDocs`: Open
 
 ![hoverActions](https://user-images.githubusercontent.com/12857160/219763211-61fc4207-4300-41f2-99c4-6a420cf940f2.gif)
 
