@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/4.0.1...v4.1.0) (2024-09-20)
+
+
+### Features
+
+* **lsp:** `<Plug>` mappings for hover actions ([#398](https://github.com/mrcjkb/haskell-tools.nvim/issues/398)) ([f32ba45](https://github.com/mrcjkb/haskell-tools.nvim/commit/f32ba4538f3554e1b6636e296ad15833727ad52a)), closes [#395](https://github.com/mrcjkb/haskell-tools.nvim/issues/395)
+
+
+### Bug Fixes
+
+* **lsp:** disable hover actions if luajit is not available ([24865bf](https://github.com/mrcjkb/haskell-tools.nvim/commit/24865bf7ec58308e164bd92efd810ae68c9451f2))
+* nil error when trying to invoke some subcommands ([e7a5bdb](https://github.com/mrcjkb/haskell-tools.nvim/commit/e7a5bdb55eed8a37afeb2171c9feb5990749168e))
+
 ## [4.0.1] - 2024-08-20
 
 ### Fixed
