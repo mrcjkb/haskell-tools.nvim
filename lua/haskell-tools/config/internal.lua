@@ -57,7 +57,10 @@ local HTDefaultConfig = {
     ---@class haskell-tools.hover.Config Enhanced LSP hover options.
     hover = {
       ---@type boolean | (fun():boolean) (default: `true`) Whether to enable haskell-tools hover.
-      enable = true,
+      enable = function()
+        local has_jit = pcall(require, 'jit')
+        return has_jit
+      end,
       ---@type string[][] | nil The hover window's border. Set to `nil` to disable.
       border = {
         { '╭', 'FloatBorder' },
