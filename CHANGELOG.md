@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Features
 
-* **lsp:** `&lt;Plug&gt;` mappings for hover actions ([#398](https://github.com/mrcjkb/haskell-tools.nvim/issues/398)) ([f32ba45](https://github.com/mrcjkb/haskell-tools.nvim/commit/f32ba4538f3554e1b6636e296ad15833727ad52a)), closes [#395](https://github.com/mrcjkb/haskell-tools.nvim/issues/395)
+* **lsp:** `<Plug>` mappings for hover actions ([#398](https://github.com/mrcjkb/haskell-tools.nvim/issues/398)) ([f32ba45](https://github.com/mrcjkb/haskell-tools.nvim/commit/f32ba4538f3554e1b6636e296ad15833727ad52a)), closes [#395](https://github.com/mrcjkb/haskell-tools.nvim/issues/395)
 
 
 ### Bug Fixes
