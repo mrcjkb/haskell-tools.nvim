@@ -75,7 +75,18 @@ local function register_subcommand_tbl(name, subcmd_tbl)
   command_tbl[name] = {
     impl = function(args, ...)
       local subcmd = subcmd_tbl[table.remove(args, 1)]
-      subcmd.impl(args, ...)
+      if subcmd then
+        subcmd.impl(args, ...)
+      else
+        vim.notify(
+          ([[
+Haskell %s: Expected subcommand.
+Avaiable subcommands:
+%s
+]]):format(name, table.concat(vim.tbl_keys(subcmd_tbl), ', ')),
+          vim.log.levels.ERROR
+        )
+      end
     end,
     complete = function(subcmd_arg_lead)
       local subcmd, next_arg_lead = subcmd_arg_lead:match('^(%S+)%s(.*)$')
