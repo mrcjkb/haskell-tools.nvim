@@ -34,12 +34,30 @@ local function close_hover()
   end
 end
 
----Execute the command at the cursor position
----@retrun nil
-local function run_command()
-  local winnr = vim.api.nvim_get_current_win()
-  local line = vim.api.nvim_win_get_cursor(winnr)[1]
+---@param bufnr number
+local function delete_plug_mappings(bufnr)
+  vim
+    .iter({
+      '',
+      'Docs',
+      'Source',
+      'Definition',
+      'TypeDefinition',
+      'References',
+    })
+    :map(function(suffix)
+      return '<Plug>HaskellHoverAction' .. suffix
+    end)
+    :each(function(mapping)
+      pcall(function()
+        vim.keymap.del('n', mapping, { buffer = bufnr })
+      end)
+    end)
+end
 
+---Execute the command at the cursor position
+---@param line integer
+local function run_command(line)
   if line > #_state.commands then
     return
   end
@@ -109,6 +127,13 @@ local function is_same_position(params, result)
     and params.position.character == range_start.character
 end
 
+---@param suffix string
+---@param action function
+---@param bufnr integer
+local function create_plug_mapping(suffix, action, bufnr)
+  vim.keymap.set('n', '<Plug>HaskellHoverAction' .. suffix, action, { buffer = bufnr, noremap = true, silent = true })
+end
+
 ---LSP handler for textDocument/hover
 ---@param result table
 ---@param ctx table
@@ -133,6 +158,7 @@ function hover.on_hover(_, result, ctx, config)
     vim.notify('No information available')
     return
   end
+  local current_bufnr = vim.api.nvim_get_current_buf()
   local to_remove = {}
   local actions = {}
   _state.commands = {}
@@ -141,10 +167,12 @@ function hover.on_hover(_, result, ctx, config)
   local _, signatures = HtParser.try_get_signatures_from_markdown(func_name, result.contents.value)
   for _, signature in pairs(signatures) do
     table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, signature))
-    table.insert(_state.commands, function()
+    local action = function()
       log.debug { 'Hover: Hoogle search for signature', signature }
       ht.hoogle.hoogle_signature { search_term = signature }
-    end)
+      close_hover()
+    end
+    table.insert(_state.commands, action)
   end
   local cword = vim.fn.expand('<cword>')
   table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, cword))
@@ -163,23 +191,31 @@ function hover.on_hover(_, result, ctx, config)
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. Open documentation in browser', #actions + 1))
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
-      table.insert(_state.commands, function()
+      local action = function()
         log.debug { 'Hover: Open documentation in browser', uri }
         OS.open_browser(uri)
-      end)
+        close_hover()
+      end
+      table.insert(_state.commands, action)
+      create_plug_mapping('Docs', action, current_bufnr)
     elseif vim.startswith(value, '[Source]') and not found_source then
       found_source = true
       table.insert(to_remove, 1, i)
       table.insert(actions, 1, string.format('%d. View source in browser', #actions + 1))
       local uri = string.match(value, '%[Source%]%((.+)%)')
-      table.insert(_state.commands, function()
+      local action = function()
         log.debug { 'Hover: View source in browser', uri }
         OS.open_browser(uri)
-      end)
+        close_hover()
+      end
+      table.insert(_state.commands, action)
+      create_plug_mapping('Source', action, current_bufnr)
     end
     local location = string.match(value, '*Defined [ia][nt] (.+)')
     local current_file = params.textDocument.uri:gsub('file://', '')
     local results, err, definition_results
+    ---@type function
+    local references_action -- defined here because of the goto statements
     if location == nil or found_location then
       goto SkipDefinition
     end
@@ -196,7 +232,7 @@ function hover.on_hover(_, result, ctx, config)
       if not is_same_position(params, definition_result) then
         log.debug { 'Hover: definition location', location_suffix }
         table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
-        table.insert(_state.commands, function()
+        local action = function()
           -- We don't call vim.lsp.buf.definition() because the location params may have changed
           local definition_ctx = vim.tbl_extend('force', ctx, {
             method = 'textDocument/definition',
@@ -205,7 +241,10 @@ function hover.on_hover(_, result, ctx, config)
           ---Neovim 0.9 has a bug in the lua doc
           ---@diagnostic disable-next-line: param-type-mismatch
           vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
-        end)
+          close_hover()
+        end
+        table.insert(_state.commands, action)
+        create_plug_mapping('Definition', action, current_bufnr)
       end
     else -- Display Hoogle search instead
       local pkg = location:match('‘(.+)’')
@@ -217,13 +256,16 @@ function hover.on_hover(_, result, ctx, config)
       end)
     end
     table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
-    table.insert(_state.commands, function()
+    references_action = function()
       local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
       log.debug { 'Hover: Find references', reference_params }
       -- We don't call vim.lsp.buf.references() because the location params may have changed
       ---@diagnostic disable-next-line: missing-parameter
       vim.lsp.buf_request(0, 'textDocument/references', reference_params)
-    end)
+      close_hover()
+    end
+    table.insert(_state.commands, references_action)
+    create_plug_mapping('Referenes', references_action, current_bufnr)
     ::SkipDefinition::
     if found_type_definition then
       goto SkipTypeDefinition
@@ -244,7 +286,7 @@ function hover.on_hover(_, result, ctx, config)
     end
     log.debug { 'Hover: type definition location', type_def_suffix }
     table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
-    table.insert(_state.commands, function()
+    local typedef_action = function()
       -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
       local type_definition_ctx = vim.tbl_extend('force', ctx, {
         method = 'textDocument/typeDefinition',
@@ -253,7 +295,10 @@ function hover.on_hover(_, result, ctx, config)
       ---Neovim 0.9 has a bug in the lua doc
       ---@diagnostic disable-next-line: param-type-mismatch
       vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
-    end)
+      close_hover()
+    end
+    table.insert(_state.commands, typedef_action)
+    create_plug_mapping('TypeDefinition', typedef_action, current_bufnr)
     ::SkipTypeDefinition::
   end
   for _, pos in ipairs(to_remove) do
@@ -275,38 +320,52 @@ function hover.on_hover(_, result, ctx, config)
     focus_id = 'haskell-tools-hover',
     close_events = { 'CursorMoved', 'BufHidden', 'InsertCharPre' },
   }, config or {})
-  local bufnr, winnr = lsp_util.open_floating_preview(markdown_lines, 'markdown', config)
+  local hover_bufnr, winnr = lsp_util.open_floating_preview(markdown_lines, 'markdown', config)
   if opts.stylize_markdown == false then
-    vim.bo[bufnr].filetype = 'markdown'
+    vim.bo[hover_bufnr].filetype = 'markdown'
   end
   if opts.auto_focus == true then
     vim.api.nvim_set_current_win(winnr)
   end
 
   if _state.winnr ~= nil then
-    return bufnr, winnr
+    return hover_bufnr, winnr
   end
 
   _state.winnr = winnr
-  vim.keymap.set('n', '<Esc>', close_hover, { buffer = bufnr, noremap = true, silent = true })
-  vim.api.nvim_buf_attach(bufnr, false, {
+  vim.keymap.set('n', '<Esc>', close_hover, { buffer = hover_bufnr, noremap = true, silent = true })
+  vim.api.nvim_buf_attach(hover_bufnr, false, {
     on_detach = function()
       _state.winnr = nil
     end,
   })
 
   if #_state.commands == 0 then
-    return bufnr, winnr
+    return hover_bufnr, winnr
   end
 
   vim.api.nvim_set_option_value('cursorline', true, { win = winnr })
 
   -- run the command under the cursor
   vim.keymap.set('n', '<CR>', function()
-    run_command()
-  end, { buffer = bufnr, noremap = true, silent = true })
+    local win = vim.api.nvim_get_current_win()
+    local line = vim.api.nvim_win_get_cursor(win)[1]
+    run_command(line)
+  end, { buffer = hover_bufnr, noremap = true, silent = true })
 
-  return bufnr, winnr
+  local function run_command_mapping()
+    run_command(math.max(vim.v.count, 1))
+  end
+  create_plug_mapping('', run_command_mapping, current_bufnr)
+  vim.api.nvim_create_autocmd('WinClosed', {
+    group = vim.api.nvim_create_augroup('HaskellHoverAction', { clear = true }),
+    pattern = tostring(winnr),
+    callback = function()
+      delete_plug_mappings(current_bufnr)
+    end,
+  })
+
+  return hover_bufnr, winnr
 end
 
 return hover
