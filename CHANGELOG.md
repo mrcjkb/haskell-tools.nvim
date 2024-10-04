@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.1.0...v4.2.0) (2024-10-04)
+
+
+### Features
+
+* add `open_url` config option ([#403](https://github.com/mrcjkb/haskell-tools.nvim/issues/403)) ([8cfe955](https://github.com/mrcjkb/haskell-tools.nvim/commit/8cfe95549b5cba27c03f13b649a578f6b98e27e0))
+
 ## [4.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/4.0.1...v4.1.0) (2024-09-20)
 
 
