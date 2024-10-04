@@ -91,6 +91,8 @@ haskell-tools.tools.Opts                              *haskell-tools.tools.Opts*
                                                         fast-tags module options.
         {log?}         (haskell-tools.log.Opts)
                                                         haskell-tools logger options.
+        {open_url?}    (fun(url:string))
+                                                        custom action for opening a url
 
 
 haskell-tools.codeLens.Opts                        *haskell-tools.codeLens.Opts*

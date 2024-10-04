@@ -93,6 +93,13 @@ function Check.validate(cfg)
   if not ok then
     return false, err
   end
+  local open_url = tools.open_url
+  ok, err = validate('tools.open_url', {
+    open_url = { open_url, 'function' },
+  })
+  if not ok then
+    return false, err
+  end
   local repl = tools.repl
   local valid_handlers = { 'builtin', 'toggleterm' }
   local valid_backends = { 'cabal', 'stack' }

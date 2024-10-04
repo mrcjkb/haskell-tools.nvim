@@ -67,6 +67,9 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---
 ---haskell-tools logger options.
 ---@field log? haskell-tools.log.Opts
+---
+---custom action for opening a url
+---@field open_url? fun(url: string)
 
 ---@class haskell-tools.codeLens.Opts
 ---
