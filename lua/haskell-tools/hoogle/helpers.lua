@@ -34,7 +34,7 @@ function Helpers.hoogle_attach_mappings(buf, map)
   map('i', '<C-b>', function()
     -- Open in browser
     local entry = actions_state.get_selected_entry()
-    OS.open_browser(entry.url)
+    require('haskell-tools.config.internal').tools.open_url(entry.url)
   end)
   map('i', '<C-r>', function()
     -- Replace word under cursor

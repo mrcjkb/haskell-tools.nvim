@@ -117,6 +117,10 @@ local HTDefaultConfig = {
       ---@see vim.log.levels
       level = vim.log.levels.WARN,
     },
+    ---@type fun(url: string) custom action for opening url
+    open_url = function(url)
+      require('haskell-tools.os').open_browser(url)
+    end,
   },
   ---@class haskell-tools.lsp.ClientConfig haskell-language-server client options.
   hls = {

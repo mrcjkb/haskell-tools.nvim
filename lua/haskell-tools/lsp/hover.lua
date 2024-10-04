@@ -9,7 +9,6 @@
 local log = require('haskell-tools.log.internal')
 local lsp_util = vim.lsp.util
 local HtParser = require('haskell-tools.parser')
-local OS = require('haskell-tools.os')
 local HtProjectHelpers = require('haskell-tools.project.helpers')
 
 local hover = {}
@@ -142,6 +141,7 @@ end
 ---@return number|nil winnr
 function hover.on_hover(_, result, ctx, config)
   local ht = require('haskell-tools')
+  local HTConfig = require('haskell-tools.config.internal')
   config = config or {}
   config.focus_id = ctx.method
   if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
@@ -193,7 +193,7 @@ function hover.on_hover(_, result, ctx, config)
       local uri = string.match(value, '%[Documentation%]%((.+)%)')
       local action = function()
         log.debug { 'Hover: Open documentation in browser', uri }
-        OS.open_browser(uri)
+        HTConfig.tools.open_url(uri)
         close_hover()
       end
       table.insert(_state.commands, action)
@@ -205,7 +205,7 @@ function hover.on_hover(_, result, ctx, config)
       local uri = string.match(value, '%[Source%]%((.+)%)')
       local action = function()
         log.debug { 'Hover: View source in browser', uri }
-        OS.open_browser(uri)
+        HTConfig.tools.open_url(uri)
         close_hover()
       end
       table.insert(_state.commands, action)
@@ -311,7 +311,6 @@ function hover.on_hover(_, result, ctx, config)
     table.insert(markdown_lines, #actions + 1, '')
     table.insert(markdown_lines, #actions + 1, '')
   end
-  local HTConfig = require('haskell-tools.config.internal')
   local opts = HTConfig.tools.hover
   config = vim.tbl_extend('keep', {
     border = opts.border,
