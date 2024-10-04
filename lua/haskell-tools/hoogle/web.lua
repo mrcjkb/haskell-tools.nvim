@@ -9,7 +9,6 @@
 
 local log = require('haskell-tools.log.internal')
 local deps = require('haskell-tools.deps')
-local OS = require('haskell-tools.os')
 
 ---@class haskell-tools.hoogle.handler.Web
 local WebHoogleHandler = {}

@@ -12,7 +12,6 @@
 ---@brief ]]
 
 local deps = require('haskell-tools.deps')
-local OS = require('haskell-tools.os')
 local actions = deps.require_telescope('telescope.actions')
 local actions_state = deps.require_telescope('telescope.actions.state')
 local entry_display = deps.require_telescope('telescope.pickers.entry_display')
