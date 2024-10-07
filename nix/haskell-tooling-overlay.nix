@@ -19,18 +19,22 @@
   lua5_1 = prev.lua5_1.override {
     packageOverrides = haskell-tools-nvim-luaPackage-override;
   };
+  luajit = prev.luajit.override {
+    packageOverrides = haskell-tools-nvim-luaPackage-override;
+  };
 
   lua51Packages = final.lua5_1.pkgs;
+  luajitPackages = final.luajit.pkgs;
 in {
   inherit
     lua5_1
     lua51Packages
+    luajit
+    luajitPackages
     ;
 
   haskell-tools-nvim-dev = final.neovimUtils.buildNeovimPlugin {
-    pname = "haskell-tools.nvim";
-    version = "scm-1";
-    src = self;
+    luaAttr = final.luajitPackages.haskell-tools-nvim;
   };
 
   neovim-minimal = let
