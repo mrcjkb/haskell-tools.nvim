@@ -33,6 +33,7 @@ end
 ---@field hoogle haskell-tools.hoogle.web-search.Opts|nil
 
 ---@class haskell-tools.hoogle.web-search.Opts
+---@field base_url string|nil The base URL of the hoogle server
 ---@field scope string|nil The scope of the search
 ---@field json boolean|nil Whather to request JSON enocded results
 
@@ -42,7 +43,8 @@ end
 local function mk_hoogle_request(search_term, opts)
   local hoogle_opts = opts.hoogle or {}
   local scope_param = hoogle_opts.scope and '&scope=' .. hoogle_opts.scope or ''
-  local hoogle_request = 'https://hoogle.haskell.org/?hoogle='
+  local hoogle_request = (hoogle_opts.base_url or 'https://hoogle.haskell.org')
+    .. '/?hoogle='
     .. urlencode(search_term)
     .. scope_param
     .. (hoogle_opts.json and '&mode=json' or '')
