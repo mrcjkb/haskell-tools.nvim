@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.2.0...v4.3.0) (2024-10-20)
+
+
+### Features
+
+* add `hoogle.web-search.base_url` option ([#409](https://github.com/mrcjkb/haskell-tools.nvim/issues/409)) ([a870f75](https://github.com/mrcjkb/haskell-tools.nvim/commit/a870f75a5de0d63d8cd6e11ea277be4c118ddb80))
+
 ## [4.2.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.1.0...v4.2.0) (2024-10-04)
 
 
