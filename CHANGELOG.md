@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.3.0...v4.3.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* **config:** `hls.cmd` validation fails on list with one element ([#412](https://github.com/mrcjkb/haskell-tools.nvim/issues/412)) ([37a2881](https://github.com/mrcjkb/haskell-tools.nvim/commit/37a2881dfe828be5d879e2312da0018348162ae1))
+
 ## [4.3.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.2.0...v4.3.0) (2024-10-20)
 
 
