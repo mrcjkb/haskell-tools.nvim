@@ -50,7 +50,7 @@ LspHelpers.get_hls_cmd = function()
   local cmd = Types.evaluate(HTConfig.hls.cmd)
   ---@cast cmd string[]
   assert(type(cmd) == 'table', 'haskell-tools: hls.cmd should evaluate to a string[]')
-  assert(#cmd > 1, 'haskell-tools: hls.cmd evaluates to an empty list.')
+  assert(#cmd > 0, 'haskell-tools: hls.cmd evaluates to an empty list.')
   return cmd
 end
 
