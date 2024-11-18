@@ -749,6 +749,11 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
 
 - [neotest-haskell](https://github.com/MrcJkb/neotest-haskell):
   Interact with tests in neovim.
+- [ghcid-error-file.nvim](https://github.com/jecaro/ghcid-error-file.nvim)
+  Parses error files produced by [ghcid](https://github.com/ndmitchell/ghcid)
+  or [ghciwatch](https://github.com/MercuryTechnologies/ghciwatch)
+  and adds them to the quickfix list.
+  Useful when haskell-language-server is too slow.
 - [haskell-snippets.nvim](https://github.com/mrcjkb/haskell-snippets.nvim)
   Collection of Haskell snippets for [LuaSnip](https://github.com/L3MON4D3/LuaSnip).
 - [telescope_hoogle](https://github.com/luc-tielen/telescope_hoogle):
