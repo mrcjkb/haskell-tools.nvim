@@ -214,8 +214,8 @@ Hls.restart = function(bufnr)
       timer:stop()
       attempts_to_live = 0
     elseif attempts_to_live <= 0 then
-        vim.schedule(function()
-      vim.notify('haslell-tools.lsp: Could not restart all LSP clients.', vim.log.levels.ERROR)
+      vim.schedule(function()
+        vim.notify('haslell-tools.lsp: Could not restart all LSP clients.', vim.log.levels.ERROR)
       end)
       timer:stop()
       attempts_to_live = 0
