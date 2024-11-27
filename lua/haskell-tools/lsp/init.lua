@@ -94,7 +94,9 @@ Hls.load_hls_settings = function(project_root, opts)
   if not success then
     local msg = 'Could not decode ' .. settings_json .. '. Falling back to default settings.'
     log.warn { msg, error }
-    vim.notify('haskell-tools.lsp: ' .. msg, vim.log.levels.WARN)
+    vim.schedule(function()
+      vim.notify('haskell-tools.lsp: ' .. msg, vim.log.levels.WARN)
+    end)
     return default_settings
   end
   log.debug { 'hls settings', settings }
@@ -139,7 +141,9 @@ Hls.start = function(bufnr)
       if not ok then
         ---@cast err string
         log.error { 'on_attach failed', err }
-        vim.notify('haskell-tools.lsp: Error in hls.on_attach: ' .. err)
+        vim.schedule(function()
+          vim.notify('haskell-tools.lsp: Error in hls.on_attach: ' .. err)
+        end)
       end
       local function buf_refresh_codeLens()
         vim.schedule(function()
@@ -210,7 +214,9 @@ Hls.restart = function(bufnr)
       timer:stop()
       attempts_to_live = 0
     elseif attempts_to_live <= 0 then
+        vim.schedule(function()
       vim.notify('haslell-tools.lsp: Could not restart all LSP clients.', vim.log.levels.ERROR)
+      end)
       timer:stop()
       attempts_to_live = 0
     end
