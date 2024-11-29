@@ -27,8 +27,9 @@ local function mk_lsp_hoogle_signature_handler(options)
 end
 
 ---@param options table
-local function lsp_hoogle_signature(options)
-  local params = lsp_util.make_position_params()
+---@param offset_encoding 'utf-8'|'utf-16'|'utf-32'
+local function lsp_hoogle_signature(options, offset_encoding)
+  local params = lsp_util.make_position_params(0, offset_encoding)
   return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
 end
 
@@ -100,9 +101,9 @@ Hoogle.hoogle_signature = function(options)
     return
   end
   local LspHelpers = require('haskell-tools.lsp.helpers')
-  local clients = LspHelpers.get_clients { bufnr = vim.api.nvim_get_current_buf() }
+  local clients = LspHelpers.get_active_haskell_clients(vim.api.nvim_get_current_buf())
   if #clients > 0 then
-    lsp_hoogle_signature(options)
+    lsp_hoogle_signature(options, clients[1].offset_encoding)
   else
     log.debug('Hoogle signature search: No clients attached. Falling back to <cword>.')
     local cword = vim.fn.expand('<cword>')
