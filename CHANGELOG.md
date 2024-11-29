@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.3.1...v4.3.2) (2024-11-29)
+
+
+### Bug Fixes
+
+* **lsp/nightly:** set offset encoding in client requests ([361d36e](https://github.com/mrcjkb/haskell-tools.nvim/commit/361d36ec6a11135dc5f99da8b4fb56091bf61b8b))
+* **lsp:** schedule notifications ([3c90274](https://github.com/mrcjkb/haskell-tools.nvim/commit/3c90274818a980ddfdd72ac9000daf475a08cd0b))
+
 ## [4.3.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.3.0...v4.3.1) (2024-10-22)
 
 
