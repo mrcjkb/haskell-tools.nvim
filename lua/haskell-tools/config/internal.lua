@@ -12,6 +12,7 @@
 local deps = require('haskell-tools.deps')
 
 ---@type haskell-tools.Config
+---@diagnostic disable-next-line: missing-fields
 local HTConfig = {}
 
 local ht_capabilities = vim.lsp.protocol.make_client_capabilities()
