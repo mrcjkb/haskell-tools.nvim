@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.3.2...v4.4.0) (2025-01-27)
+
+
+### Features
+
+* notify if using an unsupported Nvim version ([182e4b7](https://github.com/mrcjkb/haskell-tools.nvim/commit/182e4b74278a2f02daa097e54387849bc4aa8933))
+
 ## [4.3.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.3.1...v4.3.2) (2024-11-29)
 
 
