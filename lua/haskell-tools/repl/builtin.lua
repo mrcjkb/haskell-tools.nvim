@@ -71,8 +71,19 @@ local function buf_create_repl(bufnr, cmd, opts)
     opts.on_stderr = repl_log(log.warn)
     opts.on_stdin = repl_log(log.debug)
   end
-  opts.term = true
   log.debug { 'repl.builtin: Opening terminal', cmd, opts }
+
+  -- TODO(0.11): Replace with vim.fn.jobstart(full_command, { term = true })
+  -- run the command
+  ---@diagnostic disable-next-line: deprecated
+  if type(vim.fn.termopen) == 'function' then
+    ---@diagnostic disable-next-line: deprecated
+    vim.fn.termopen(cmd, opts)
+  else
+    opts.term = true
+    vim.fn.jobstart(cmd, opts)
+  end
+
   local job_id = vim.fn.jobstart(cmd, opts)
   if not job_id then
     log.error('repl.builtin: Failed to open a terminal')
