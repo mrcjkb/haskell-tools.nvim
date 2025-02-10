@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.4.1...v4.4.2) (2025-02-10)
+
+
+### Bug Fixes
+
+* **repl/builtin:** regression introduced in v4.4.1 ([#438](https://github.com/mrcjkb/haskell-tools.nvim/issues/438)) ([dbc154f](https://github.com/mrcjkb/haskell-tools.nvim/commit/dbc154fd7b64208b4526ff905240c530351426f0)), closes [#437](https://github.com/mrcjkb/haskell-tools.nvim/issues/437)
+
 ## [4.4.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.4.0...v4.4.1) (2025-02-09)
 
 
