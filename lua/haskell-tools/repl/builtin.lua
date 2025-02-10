@@ -75,16 +75,16 @@ local function buf_create_repl(bufnr, cmd, opts)
 
   -- TODO(0.11): Replace with vim.fn.jobstart(full_command, { term = true })
   -- run the command
+  local job_id
   ---@diagnostic disable-next-line: deprecated
   if type(vim.fn.termopen) == 'function' then
     ---@diagnostic disable-next-line: deprecated
-    vim.fn.termopen(cmd, opts)
+    job_id = vim.fn.termopen(cmd, opts)
   else
     opts.term = true
-    vim.fn.jobstart(cmd, opts)
+    job_id = vim.fn.jobstart(cmd, opts)
   end
 
-  local job_id = vim.fn.jobstart(cmd, opts)
   if not job_id then
     log.error('repl.builtin: Failed to open a terminal')
     vim.notify('haskell-tools: Could not start the repl.', vim.log.levels.ERROR)
