@@ -26,7 +26,7 @@ function LspHelpers.get_active_haskell_clients(bufnr)
 end
 
 ---@param bufnr number the buffer to get clients for
----@return vim.lsp.Client[] cabal_clinets
+---@return vim.lsp.Client[] cabal_clients
 ---@see util.get_clients
 function LspHelpers.get_active_cabal_clients(bufnr)
   return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.cabal_client_name }

@@ -31,7 +31,7 @@ end
 ---A workaround for #48:
 ---Some plugins that add LSP client capabilities which are not built-in to neovim
 ---(like nvim-ufo and nvim-lsp-selection-range) cause error messages, because
----haskell-language-server falsly advertises those server_capabilities for cabal files.
+---haskell-language-server falsely advertises those server_capabilities for cabal files.
 ---@param client vim.lsp.Client
 ---@return nil
 local function fix_cabal_client(client)

@@ -1,6 +1,6 @@
 ---@mod haskell-tools.telescope-extension haskell-tools Telescope extension
 ---@brief [[
---- If `telescope.nvim` is installed, `haskell-tools` will register the `ht` extenstion
+--- If `telescope.nvim` is installed, `haskell-tools` will register the `ht` extension
 --- with the following commands:
 ---
 --- * `:Telescope ht package_files` - Search for files within the current (sub)package.

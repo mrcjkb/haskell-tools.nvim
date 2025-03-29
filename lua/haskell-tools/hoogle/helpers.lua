@@ -19,7 +19,7 @@ local entry_display = deps.require_telescope('telescope.pickers.entry_display')
 ---@class haskell-tools.hoogle.Helpers
 local Helpers = {}
 
----@param buf number the telescope buffebuffer numberr
+---@param buf number the telescope buffebuffer number
 ---@param map fun(mode:string,keys:string,action:function) callback for creating telescope keymaps
 ---@return boolean
 function Helpers.hoogle_attach_mappings(buf, map)

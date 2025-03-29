@@ -94,7 +94,7 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---
 ---(default: `false`) The builtin LSP client's default behaviour is to stylize markdown.
 ---Setting this option to false sets the file type to markdown
----and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed.
+---and enables treesitter syntax highlighting for Haskell snippets if nvim-treesitter is installed.
 ---@field stylize_markdown? boolean
 ---
 ---(default: `false`) Whether to automatically switch to the hover window.

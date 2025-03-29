@@ -265,7 +265,7 @@ function hover.on_hover(_, result, ctx, config)
       close_hover()
     end
     table.insert(_state.commands, references_action)
-    create_plug_mapping('Referenes', references_action, current_bufnr)
+    create_plug_mapping('References', references_action, current_bufnr)
     ::SkipDefinition::
     if found_type_definition then
       goto SkipTypeDefinition
