@@ -109,7 +109,7 @@ return function(mk_repl_cmd, opts)
   end
 
   ---Quit the repl
-  ---@retrun nil
+  ---@return nil
   function ReplHandlerImpl.quit()
     if ReplHandlerImpl.terminal ~= nil then
       log.debug('repl.toggleterm: sending quit to repl.')

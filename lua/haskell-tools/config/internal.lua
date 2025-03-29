@@ -73,7 +73,7 @@ local HTDefaultConfig = {
         { '╰', 'FloatBorder' },
         { '│', 'FloatBorder' },
       },
-      ---@type boolean (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highligting for Haskell snippets if nvim-treesitter is installed.
+      ---@type boolean (default: `false`) The builtin LSP client's default behaviour is to stylize markdown. Setting this option to false sets the file type to markdown and enables treesitter syntax highlighting for Haskell snippets if nvim-treesitter is installed.
       stylize_markdown = false,
       ---@type boolean (default: `false`) Whether to automatically switch to the hover window.
       auto_focus = false,
