@@ -127,7 +127,7 @@ local external_dependencies = {
       return not hoogle_mode or hoogle_mode ~= 'telescope-web'
     end,
     url = '[curl](https://curl.se/)',
-    info = 'Required for "telescope-web" hoogle seach mode.',
+    info = 'Required for "telescope-web" hoogle search mode.',
   },
   {
     name = 'haskell-debug-adapter',

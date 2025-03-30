@@ -81,7 +81,7 @@ local function register_subcommand_tbl(name, subcmd_tbl)
         vim.notify(
           ([[
 Haskell %s: Expected subcommand.
-Avaiable subcommands:
+Available subcommands:
 %s
 ]]):format(name, table.concat(vim.tbl_keys(subcmd_tbl), ', ')),
           vim.log.levels.ERROR

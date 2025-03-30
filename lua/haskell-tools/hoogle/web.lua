@@ -35,7 +35,7 @@ end
 ---@class haskell-tools.hoogle.web-search.Opts
 ---@field base_url string|nil The base URL of the hoogle server
 ---@field scope string|nil The scope of the search
----@field json boolean|nil Whather to request JSON enocded results
+---@field json boolean|nil Whether to request JSON encoded results
 
 ---Build a Hoogle request URL
 ---@param search_term string
