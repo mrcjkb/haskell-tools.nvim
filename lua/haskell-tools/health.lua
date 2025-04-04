@@ -12,15 +12,7 @@ local health = {}
 local Types = require('haskell-tools.types.internal')
 local deps = require('haskell-tools.deps')
 local HTConfig = require('haskell-tools.config.internal')
-local h = vim.health or require('health')
----@diagnostic disable-next-line: deprecated
-local start = h.start or h.report_start
----@diagnostic disable-next-line: deprecated
-local ok = h.ok or h.report_ok
----@diagnostic disable-next-line: deprecated
-local error = h.error or h.report_error
----@diagnostic disable-next-line: deprecated
-local warn = h.warn or h.report_warn
+local h = vim.health
 
 ---@class haskell-tools.LuaDependency
 ---@field module string The name of a module
@@ -99,9 +91,9 @@ local external_dependencies = {
       if errmsg then
         local hoogle_mode = HTConfig.tools.hoogle.mode
         if hoogle_mode and hoogle_mode == 'auto' or hoogle_mode == 'telescope-local' then
-          error('hoogle: ' .. errmsg)
+          h.error('hoogle: ' .. errmsg)
         else
-          warn('hoogle: ' .. errmsg)
+          h.warn('hoogle: ' .. errmsg)
         end
       end
     end,
@@ -156,13 +148,13 @@ local external_dependencies = {
 ---@param dep haskell-tools.LuaDependency
 local function check_lua_dependency(dep)
   if deps.has(dep.module) then
-    ok(dep.url .. ' installed.')
+    h.ok(dep.url .. ' installed.')
     return
   end
   if dep.optional() then
-    warn(('%s not installed. %s %s'):format(dep.module, dep.info, dep.url))
+    h.warn(('%s not installed. %s %s'):format(dep.module, dep.info, dep.url))
   else
-    error(('Lua dependency %s not found: %s'):format(dep.module, dep.url))
+    h.error(('Lua dependency %s not found: %s'):format(dep.module, dep.url))
   end
 end
 
@@ -195,20 +187,20 @@ local function check_external_dependency(dep)
     local mb_version_newline_idx = mb_version and mb_version:find('\n')
     local mb_version_len = mb_version and (mb_version_newline_idx and mb_version_newline_idx - 1 or mb_version:len())
     local version = mb_version and mb_version:sub(0, mb_version_len) or '(unknown version)'
-    ok(('%s: found %s'):format(dep.name, version))
+    h.ok(('%s: found %s'):format(dep.name, version))
     if dep.extra_checks then
       dep.extra_checks()
     end
     return
   end
   if dep.optional() then
-    warn(([[
+    h.warn(([[
       %s: not found.
       Install %s for extended capabilities.
       %s
       ]]):format(dep.name, dep.url, dep.info))
   else
-    error(([[
+    h.error(([[
       %s: not found.
       haskell-tools.nvim requires %s.
       %s
@@ -217,41 +209,41 @@ local function check_external_dependency(dep)
 end
 
 local function check_config()
-  start('Checking config')
+  h.start('Checking config')
   if vim.g.haskell_tools and not HTConfig.debug_info.was_g_haskell_tools_sourced then
-    error('vim.g.haskell_tools is set, but was not sourced before haskell-tools.nvim was initialized.')
+    h.error('vim.g.haskell_tools is set, but was not sourced before haskell-tools.nvim was initialized.')
     return
   end
   local valid, err = require('haskell-tools.config.check').validate(HTConfig)
   if valid then
-    ok('No errors found in config.')
+    h.ok('No errors found in config.')
   else
-    error(err or '' .. vim.g.haskell_tools and '' or ' This looks like a plugin bug!')
+    h.error(err or '' .. vim.g.haskell_tools and '' or ' This looks like a plugin bug!')
   end
   local unrecognized_keys = HTConfig.debug_info.unrecognized_keys
   if #unrecognized_keys > 0 then
-    warn('unrecognized configs in vim.g.haskell_tools: ' .. vim.inspect(unrecognized_keys))
+    h.warn('unrecognized configs in vim.g.haskell_tools: ' .. vim.inspect(unrecognized_keys))
   end
 end
 
 local function check_for_conflicts()
-  start('Checking for conflicting plugins')
+  h.start('Checking for conflicting plugins')
   for _, autocmd in ipairs(vim.api.nvim_get_autocmds { event = 'FileType', pattern = 'haskell' }) do
     if autocmd.group_name and autocmd.group_name == 'lspconfig' and autocmd.desc and autocmd.desc:match(' hls ') then
-      error('lspconfig.hls has been setup. This will likely lead to conflicts with the haskell-tools LSP client.')
+      h.error('lspconfig.hls has been setup. This will likely lead to conflicts with the haskell-tools LSP client.')
       return
     end
   end
-  ok('No conflicting plugins detected.')
+  h.ok('No conflicting plugins detected.')
 end
 
 function health.check()
-  start('Checking for Lua dependencies')
+  h.start('Checking for Lua dependencies')
   for _, dep in ipairs(lua_dependencies) do
     check_lua_dependency(dep)
   end
 
-  start('Checking external dependencies')
+  h.start('Checking external dependencies')
   for _, dep in ipairs(external_dependencies) do
     check_external_dependency(dep)
   end

@@ -68,7 +68,12 @@ that are specific to Haskell tooling.
 
 ### Required
 
-- `neovim >= 0.10`
+- `neovim >= 0.11`
+
+> [!NOTE]
+>
+> For versions that are compatible with older Neovim versions,
+> see previous major version bumps in [the changelog](./CHANGELOG.md).
 
 ### Optional
 
