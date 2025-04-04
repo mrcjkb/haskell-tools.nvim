@@ -177,7 +177,7 @@ end
 
 ---Stop the LSP client.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
----@return table[] clients A list of clients that will be stopped
+---@return vim.lsp.Client[] clients A list of clients that will be stopped
 Hls.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local LspHelpers = require('haskell-tools.lsp.helpers')
