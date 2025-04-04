@@ -9,36 +9,9 @@
 --- Merges the default config with `vim.g.haskell_tools`.
 ---@brief ]]
 
-local deps = require('haskell-tools.deps')
-
 ---@type haskell-tools.Config
 ---@diagnostic disable-next-line: missing-fields
 local HTConfig = {}
-
-local ht_capabilities = vim.lsp.protocol.make_client_capabilities()
-local cmp_capabilities = deps.if_available('cmp_nvim_lsp', function(cmp_nvim_lsp)
-  return cmp_nvim_lsp.default_capabilities()
-end, {})
-local selection_range_capabilities = deps.if_available('lsp-selection-range', function(lsp_selection_range)
-  return lsp_selection_range.update_capabilities {}
-end, {})
-local folding_range_capabilities = deps.if_available('ufo', function(_)
-  return {
-    textDocument = {
-      foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
-      },
-    },
-  }
-end, {})
-local capabilities = vim.tbl_deep_extend(
-  'force',
-  ht_capabilities,
-  cmp_capabilities,
-  selection_range_capabilities,
-  folding_range_capabilities
-)
 
 ---@class haskell-tools.Config haskell-tools.nvim plugin configuration.
 local HTDefaultConfig = {
@@ -155,7 +128,7 @@ local HTDefaultConfig = {
     ---@type lsp.ClientCapabilities | nil LSP client capabilities.
     ---@see vim.lsp.protocol.make_client_capabilities
     ---@see vim.lsp.start
-    capabilities = capabilities,
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
     ---@type table | (fun(project_root:string|nil):table) | nil The haskell-language-server settings or a function that creates them. To view the default settings, run `haskell-language-server generate-default-config`.
     settings = function(project_root)
       local ht = require('haskell-tools')
