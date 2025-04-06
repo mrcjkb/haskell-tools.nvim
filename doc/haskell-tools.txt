@@ -327,7 +327,7 @@ Hls.stop({bufnr})                                                     *Hls.stop*
         {bufnr}  (number|nil)  The buffer number (optional), defaults to the current buffer
 
     Returns: ~
-        (table[])  A list of clients that will be stopped
+        (vim.lsp.Client[])  A list of clients that will be stopped
 
 
 Hls.restart({bufnr})                                               *Hls.restart*
