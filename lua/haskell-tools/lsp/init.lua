@@ -117,10 +117,11 @@ Hls.start = function(bufnr)
     return
   end
   local HtProjectHelpers = require('haskell-tools.project.helpers')
+  local LspHelpers = require('haskell-tools.lsp.helpers')
   local is_cabal = HtProjectHelpers.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
-  local LspHelpers = require('haskell-tools.lsp.helpers')
+
   local cmd = LspHelpers.get_hls_cmd()
   local hls_bin = cmd[1]
   if vim.fn.executable(hls_bin) == 0 then
@@ -170,8 +171,8 @@ Hls.start = function(bufnr)
       fix_cabal_client(client)
     end,
   }
-  log.debug('LSP start options: lsp_start_opts')
-  local client_id = vim.lsp.start(lsp_start_opts)
+  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config['hls'] or {})
+  local client_id = vim.lsp.start(client_config)
   return client_id
 end
 

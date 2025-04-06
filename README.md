@@ -331,11 +331,12 @@ To modify the default configuration, set `vim.g.haskell_tools`.
 
 ```lua
 vim.g.haskell_tools = {
-  ---@type ToolsOpts
+  ---@type haskell-tools.tools.Opts
   tools = {
     -- ...
   },
-  ---@type HaskellLspClientOpts
+  ---@type haskell-tools.lsp.ClientOpts
+  ---You can also configure these via `:h vim.lsp.config`, with the "hls" key.
   hls = {
     ---@param client number The LSP client ID.
     ---@param bufnr number The buffer number
@@ -345,7 +346,7 @@ vim.g.haskell_tools = {
     end,
     -- ...
   },
-  ---@type HTDapOpts
+  ---@type haskell-tools.dap.Opts
   dap = {
     -- ...
   },
