@@ -41,6 +41,7 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---@field tools? haskell-tools.tools.Opts
 ---
 ---haskell-language-server client options.
+---You can also configure these via |vim.lsp.config|, with the `"hls"` key.
 ---@field hls? haskell-tools.lsp.ClientOpts
 ---
 ---debug adapter config for nvim-dap.
@@ -187,7 +188,7 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---@field capabilities? lsp.ClientCapabilities
 ---
 ---The haskell-language-server settings or a function that creates them.
---- To view the default settings, run `haskell-language-server generate-default-config`.
+---To view the default settings, run `haskell-language-server generate-default-config`.
 ---@field settings? (fun(project_root:string|nil):table) | table
 ---
 ---The default haskell-language-server settings that will be used if no settings are specified or detected.

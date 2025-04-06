@@ -71,6 +71,7 @@ haskell-tools.Opts                                          *haskell-tools.Opts*
                                                   haskell-tools module options.
         {hls?}    (haskell-tools.lsp.ClientOpts)
                                                   haskell-language-server client options.
+                                                  You can also configure these via |vim.lsp.config|, with the `"hls"` key.
         {dap?}    (haskell-tools.dap.Opts)
                                                   debug adapter config for nvim-dap.
 
@@ -236,7 +237,7 @@ haskell-tools.lsp.ClientOpts                      *haskell-tools.lsp.ClientOpts*
                                                                                 LSP client capabilities.
         {settings?}          (fun(project_root:string|nil):table|table)
                                                                                 The haskell-language-server settings or a function that creates them.
-                                                                                 To view the default settings, run `haskell-language-server generate-default-config`.
+                                                                                To view the default settings, run `haskell-language-server generate-default-config`.
         {default_settings?}  (table)
                                                                                 The default haskell-language-server settings that will be used if no settings are specified or detected.
         {logfile?}           (string)
