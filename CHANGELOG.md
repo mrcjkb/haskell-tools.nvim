@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.4.3...v5.0.0) (2025-04-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop nvim 0.10 support
+* **lsp:** don't auto-register client capabilities
+
+### Features
+
+* drop nvim 0.10 support ([a566c3e](https://github.com/mrcjkb/haskell-tools.nvim/commit/a566c3ecfb884845375277243b9f9e3d552706d5))
+* **lsp:** don't auto-register client capabilities ([9ac2bd1](https://github.com/mrcjkb/haskell-tools.nvim/commit/9ac2bd1983139b91626b972e8f53b8d3e031dae7))
+* support `vim.lsp.config` ([53d9888](https://github.com/mrcjkb/haskell-tools.nvim/commit/53d9888aebe27cd50c0404d88a7aa51d7341784a))
+
 ## [4.4.3](https://github.com/mrcjkb/haskell-tools.nvim/compare/v4.4.2...v4.4.3) (2025-03-30)
 
 
