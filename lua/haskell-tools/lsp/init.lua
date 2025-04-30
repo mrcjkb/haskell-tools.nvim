@@ -171,7 +171,7 @@ Hls.start = function(bufnr)
       fix_cabal_client(client)
     end,
   }
-  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config['hls'] or {})
+  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config['haskell-tools'] or {})
   local client_id = vim.lsp.start(client_config)
   return client_id
 end
