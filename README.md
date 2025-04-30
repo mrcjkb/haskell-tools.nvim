@@ -336,7 +336,7 @@ vim.g.haskell_tools = {
     -- ...
   },
   ---@type haskell-tools.lsp.ClientOpts
-  ---You can also configure these via `:h vim.lsp.config`, with the "hls" key.
+  ---You can also configure these via `:h vim.lsp.config`, with the "haskell-tools" key.
   hls = {
     ---@param client number The LSP client ID.
     ---@param bufnr number The buffer number
