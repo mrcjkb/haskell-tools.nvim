@@ -11,6 +11,7 @@ describe('Can require haskell-tools with default configs.', function()
     assert(ht.project ~= nil)
     assert(ht.tags ~= nil)
   end)
+  require('haskell-tools.config.internal')
   it('No notifications at startup.', function()
     if not pcall(assert.stub(notify_once).called_at_most, 0) then
       -- fails and outputs arguments
