@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.0.0...v6.1.0) (2025-05-25)
+
+
+### Features
+
+* compatibility with nvim nightly 0.12.0-dev-434 ([489b208](https://github.com/mrcjkb/haskell-tools.nvim/commit/489b208a308937b471aa90e4696da8925875792a))
+
 ## [6.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v5.0.0...v6.0.0) (2025-04-30)
 
 
