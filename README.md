@@ -675,7 +675,7 @@ Check which versions of `hls` and GHC you are using
 (e.g. by calling `haskell-language-server-wrapper --probe-tools`
 or `haskell-language-server --probe-tools`).
 Sometimes, certain features take some time to be implemented for the latest GHC versions.
-You can see how well a specific GHC version is supported [here](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
+You can see how well a specific GHC version is supported [in the hls docs](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
 ### Minimal config
 
