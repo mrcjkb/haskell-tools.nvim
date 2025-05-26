@@ -24,6 +24,14 @@ I use
 - [`sumneko-lua-language-server`](https://github.com/sumneko/lua-language-server/wiki/Diagnosis-Report#create-a-report)
   for static type checking.
 
+### Type safety
+
+Lua is incredibly responsive, giving immediate feedback for configuration.
+But its dynamic typing makes Neovim plugins susceptible to unexpected bugs
+at the wrong time.
+To mitigate this, I rely on [LuaCATS annotations](https://luals.github.io/wiki/annotations/),
+which are checked in CI.
+
 ### Running tests
 
 This plugin uses [`busted`](https://lunarmodules.github.io/busted/) for testing.
@@ -59,15 +67,13 @@ pre-commit run --all
 If you use [`direnv`](https://direnv.net/),
 just run `direnv allow` and you will be dropped in this devShell.
 
-## Tests
-
 To run tests locally
 
 ```console
 nix-build -A haskell-tools-test
 ```
 
-or (with flakes enabled)
+Or (with flakes enabled)
 
 ```console
 nix build .#checks.<your-system>.haskell-tools-test --print-build-logs
@@ -79,7 +85,7 @@ For formatting and linting:
 nix-build -A pre-commit-check
 ```
 
-or (with flakes enabled)
+Or (with flakes enabled)
 
 ```console
 nix build .#checks.<your-system>.formatting --print-build-logs
