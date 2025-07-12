@@ -30,7 +30,7 @@ return {
     -- Find Haskell files within the current (sub)package
     package_hsfiles = function(opts)
       opts = vim.tbl_deep_extend('keep', { type_filter = 'haskell' }, opts or {})
-      n_assert(require('haskell-tools').project).telescope_package_grep(opts)
+      n_assert(require('haskell-tools').project).telescope_package_files(opts)
     end,
     hoogle_signature = function(opts)
       n_assert(require('haskell-tools').hoogle).hoogle_signature(opts)
