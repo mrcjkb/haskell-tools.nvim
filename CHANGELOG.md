@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.1.0...v6.1.1) (2025-07-12)
+
+
+### Bug Fixes
+
+* **telescope:** `package_hsfiles` extension ([#489](https://github.com/mrcjkb/haskell-tools.nvim/issues/489)) ([34cfd62](https://github.com/mrcjkb/haskell-tools.nvim/commit/34cfd62465b0645de3fdcdeefcc5eaa2712fcc54))
+
 ## [6.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.0.0...v6.1.0) (2025-05-25)
 
 
