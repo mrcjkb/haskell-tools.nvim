@@ -161,6 +161,8 @@ end
 ---@class haskell-tools.Repl
 local Repl = {}
 
+Repl.repl_send_lines = repl_send_lines
+
 Repl.mk_repl_cmd = mk_repl_cmd
 
 ---Create the command to create a repl for the current buffer.
