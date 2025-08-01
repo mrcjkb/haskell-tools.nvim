@@ -400,6 +400,7 @@ haskell-tools GHCi REPL module                              *haskell-tools.repl*
  * `:Haskell repl paste_type {register?}` - Query the repl for the type of |registers| {register}
  * `:Haskell repl cword_type` - Query the repl for the type of |cword|
  * `:Haskell repl paste_info {register?}` - Query the repl for the info on |registers| {register}
+ * `:Haskell repl repl_send_lines {lines}` - Sends {lines} to the repl for execution
  * `:Haskell repl cword_info` - Query the repl for info on |cword|
 
 haskell-tools.Repl                                          *haskell-tools.Repl*
@@ -441,6 +442,14 @@ Repl.paste_info({reg})                                         *Repl.paste_info*
 
     Parameters: ~
         {reg}  (string|nil)  register (defaults to '"')
+
+
+Repl.repl_send_lines({lines})					Repl.repl_send_lines
+    Sends {lines} to the repl for execution
+
+    Parameters:
+	{lines}	(string[])   text commands to send
+
 
 
 Repl.cword_info()                                              *Repl.cword_info*
