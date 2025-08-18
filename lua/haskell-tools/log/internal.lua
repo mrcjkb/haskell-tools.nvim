@@ -103,7 +103,11 @@ function Log.set_level(level)
     assert(log_levels[level], string.format('haskell-tools: Invalid log level: %d', level))
     Log.level = level
   end
-  vim.lsp.set_log_level(Log.level)
+  if vim.tbl_get(vim, 'lsp', 'log', 'set_level') then
+    vim.lsp.log.set_level(Log.level)
+  else
+    vim.lsp.set_log_level(Log.level)
+  end
 end
 
 Log.set_level(opts.level)
