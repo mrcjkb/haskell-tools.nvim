@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.1.1...v6.2.0) (2025-08-18)
+
+
+### Features
+
+* **lsp/hover:** remove LuaJIT requirement ([c4e6df5](https://github.com/mrcjkb/haskell-tools.nvim/commit/c4e6df5ec7654f91b8d9d4d2a532ab2df5ae0766))
+
+
+### Bug Fixes
+
+* **log:** avoid deprecation warning on nightly ([6b100ca](https://github.com/mrcjkb/haskell-tools.nvim/commit/6b100ca069a554ab49fed541e052aae00b44e8ea))
+
 ## [6.1.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.1.0...v6.1.1) (2025-07-12)
 
 
