@@ -279,10 +279,6 @@ And the hover buffer's filetype is set to markdown,
 so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 users can benefit from syntax highlighting of code snippets.
 
-> [!NOTE]
->
-> Hover actions are disabled if Neovim is not built with luajit.
-
 ![hoverActions](https://user-images.githubusercontent.com/12857160/219763211-61fc4207-4300-41f2-99c4-6a420cf940f2.gif)
 
 - [x] **Automatically generate tags**

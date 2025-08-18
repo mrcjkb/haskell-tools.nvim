@@ -215,91 +215,82 @@ function hover.on_hover(_, result, ctx, config)
     local current_file = params.textDocument.uri:gsub('file://', '')
     local results, err, definition_results
     ---@type function
-    local references_action -- defined here because of the goto statements
-    if location == nil or found_location then
-      goto SkipDefinition
-    end
-    found_location = true
-    table.insert(to_remove, 1, i)
-    results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
-    if err or results == nil or #results == 0 then
-      goto SkipDefinition
-    end
-    definition_results = results[1] and results[1].result or {}
-    if #definition_results > 0 then
-      local location_suffix = ('%s'):format(format_location(location, current_file))
-      local definition_result = definition_results[1]
-      if not is_same_position(params, definition_result) then
-        log.debug { 'Hover: definition location', location_suffix }
-        table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
-        local action = function()
-          -- We don't call vim.lsp.buf.definition() because the location params may have changed
-          local definition_ctx = vim.tbl_extend('force', ctx, {
-            method = 'textDocument/definition',
-          })
-          log.debug { 'Hover: Go to definition', definition_result }
-          ---Neovim 0.9 has a bug in the lua doc
-          ---@diagnostic disable-next-line: param-type-mismatch
-          vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
+    if location ~= nil and not found_location then
+      found_location = true
+      table.insert(to_remove, 1, i)
+      results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
+      if not err and results ~= nil and #results >= 0 then
+        definition_results = results[1] and results[1].result or {}
+        if #definition_results > 0 then
+          local location_suffix = ('%s'):format(format_location(location, current_file))
+          local definition_result = definition_results[1]
+          if not is_same_position(params, definition_result) then
+            log.debug { 'Hover: definition location', location_suffix }
+            table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
+            local action = function()
+              -- We don't call vim.lsp.buf.definition() because the location params may have changed
+              local definition_ctx = vim.tbl_extend('force', ctx, {
+                method = 'textDocument/definition',
+              })
+              log.debug { 'Hover: Go to definition', definition_result }
+              ---Neovim 0.9 has a bug in the lua doc
+              ---@diagnostic disable-next-line: param-type-mismatch
+              vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
+              close_hover()
+            end
+            table.insert(_state.commands, action)
+            create_plug_mapping('Definition', action, current_bufnr)
+          end
+        else -- Display Hoogle search instead
+          local pkg = location:match('‘(.+)’')
+          local search_term = pkg and pkg .. '.' .. cword or cword
+          table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
+          table.insert(_state.commands, function()
+            log.debug { 'Hover: Hoogle search for definition', search_term }
+            ht.hoogle.hoogle_signature { search_term = search_term }
+          end)
+        end
+        table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
+        local references_action = function()
+          local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
+          log.debug { 'Hover: Find references', reference_params }
+          -- We don't call vim.lsp.buf.references() because the location params may have changed
+          ---@diagnostic disable-next-line: missing-parameter
+          vim.lsp.buf_request(0, 'textDocument/references', reference_params)
           close_hover()
         end
-        table.insert(_state.commands, action)
-        create_plug_mapping('Definition', action, current_bufnr)
+        table.insert(_state.commands, references_action)
+        create_plug_mapping('References', references_action, current_bufnr)
       end
-    else -- Display Hoogle search instead
-      local pkg = location:match('‘(.+)’')
-      local search_term = pkg and pkg .. '.' .. cword or cword
-      table.insert(actions, 1, string.format('%d. Hoogle search: `%s`', #actions + 1, search_term))
-      table.insert(_state.commands, function()
-        log.debug { 'Hover: Hoogle search for definition', search_term }
-        ht.hoogle.hoogle_signature { search_term = search_term }
-      end)
     end
-    table.insert(actions, 1, string.format('%d. Find references', #actions + 1))
-    references_action = function()
-      local reference_params = vim.tbl_deep_extend('force', params, { context = { includeDeclaration = true } })
-      log.debug { 'Hover: Find references', reference_params }
-      -- We don't call vim.lsp.buf.references() because the location params may have changed
-      ---@diagnostic disable-next-line: missing-parameter
-      vim.lsp.buf_request(0, 'textDocument/references', reference_params)
-      close_hover()
+    if not found_type_definition then
+      results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
+      if not err and results ~= nil and #results > 0 then -- Can go to type definition
+        found_type_definition = true
+        local type_definition_results = results[1] and results[1].result or {}
+        if #type_definition_results > 0 then
+          local type_definition_result = type_definition_results[1]
+          local type_def_suffix = format_location(mk_location(type_definition_result), current_file)
+          if not is_same_position(params, result) then
+            log.debug { 'Hover: type definition location', type_def_suffix }
+            table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
+            local typedef_action = function()
+              -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
+              local type_definition_ctx = vim.tbl_extend('force', ctx, {
+                method = 'textDocument/typeDefinition',
+              })
+              log.debug { 'Hover: Go to type definition', type_definition_result }
+              ---Neovim 0.9 has a bug in the lua doc
+              ---@diagnostic disable-next-line: param-type-mismatch
+              vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
+              close_hover()
+            end
+            table.insert(_state.commands, typedef_action)
+            create_plug_mapping('TypeDefinition', typedef_action, current_bufnr)
+          end
+        end
+      end
     end
-    table.insert(_state.commands, references_action)
-    create_plug_mapping('References', references_action, current_bufnr)
-    ::SkipDefinition::
-    if found_type_definition then
-      goto SkipTypeDefinition
-    end
-    results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
-    if err or results == nil or #results == 0 then -- Can go to type definition
-      goto SkipTypeDefinition
-    end
-    found_type_definition = true
-    local type_definition_results = results[1] and results[1].result or {}
-    if #type_definition_results == 0 then
-      goto SkipTypeDefinition
-    end
-    local type_definition_result = type_definition_results[1]
-    local type_def_suffix = format_location(mk_location(type_definition_result), current_file)
-    if is_same_position(params, result) then
-      goto SkipTypeDefinition
-    end
-    log.debug { 'Hover: type definition location', type_def_suffix }
-    table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
-    local typedef_action = function()
-      -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
-      local type_definition_ctx = vim.tbl_extend('force', ctx, {
-        method = 'textDocument/typeDefinition',
-      })
-      log.debug { 'Hover: Go to type definition', type_definition_result }
-      ---Neovim 0.9 has a bug in the lua doc
-      ---@diagnostic disable-next-line: param-type-mismatch
-      vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
-      close_hover()
-    end
-    table.insert(_state.commands, typedef_action)
-    create_plug_mapping('TypeDefinition', typedef_action, current_bufnr)
-    ::SkipTypeDefinition::
   end
   for _, pos in ipairs(to_remove) do
     table.remove(markdown_lines, pos)
