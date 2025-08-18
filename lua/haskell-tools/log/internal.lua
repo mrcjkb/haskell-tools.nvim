@@ -106,6 +106,7 @@ function Log.set_level(level)
   if vim.tbl_get(vim, 'lsp', 'log', 'set_level') then
     vim.lsp.log.set_level(Log.level)
   else
+    ---@diagnostic disable-next-line: deprecated
     vim.lsp.set_log_level(Log.level)
   end
 end
