@@ -68,12 +68,7 @@ haskell-tools.Opts                                          *haskell-tools.Opts*
 
     Fields: ~
         {tools?}  (haskell-tools.tools.Opts)
-                                                  haskell-tools module options.
-        {hls?}    (haskell-tools.lsp.ClientOpts)
-                                                  haskell-language-server client options.
-                                                  You can also configure these via |vim.lsp.config|, with the `"hls"` key.
-        {dap?}    (haskell-tools.dap.Opts)
-                                                  debug adapter config for nvim-dap.
+                                              haskell-tools module options.
 
 
 haskell-tools.tools.Opts                              *haskell-tools.tools.Opts*
