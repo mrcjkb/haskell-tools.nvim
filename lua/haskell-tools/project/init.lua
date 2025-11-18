@@ -64,10 +64,10 @@ local Project = {}
 ---@return string|nil
 Project.root_dir = function(project_file)
   local HtProjectHelpers = require('haskell-tools.project.helpers')
-  return HtProjectHelpers.match_cabal_project_root(project_file)
+  return HtProjectHelpers.match_hie_yaml(project_file)
+    or HtProjectHelpers.match_cabal_project_root(project_file)
     or HtProjectHelpers.match_stack_project_root(project_file)
     or HtProjectHelpers.match_package_root(project_file)
-    or HtProjectHelpers.match_hie_yaml(project_file)
 end
 
 ---Open the package.yaml of the package containing the current buffer.
