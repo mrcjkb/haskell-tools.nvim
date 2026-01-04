@@ -22,7 +22,7 @@ local function ensure_clean_exit_on_quit(client, bufnr)
     group = vim.api.nvim_create_augroup('haskell-tools-hls-clean-exit-' .. tostring(client.id), { clear = true }),
     callback = function()
       log.debug('Stopping LSP client...')
-      vim.lsp.stop_client(client, false)
+      client:stop(false)
     end,
     buffer = bufnr,
   })
@@ -188,7 +188,15 @@ Hls.stop = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local LspHelpers = require('haskell-tools.lsp.helpers')
   local clients = LspHelpers.get_active_ht_clients(bufnr)
-  vim.lsp.stop_client(clients)
+  if type(clients) == 'table' then
+    ---@cast clients vim.lsp.Client[]
+    for _, client in ipairs(clients) do
+      client:stop()
+    end
+  else
+    clients:stop()
+    ---@cast clients vim.lsp.Client
+  end
   return clients
 end
 
