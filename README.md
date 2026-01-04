@@ -83,9 +83,10 @@ that are specific to Haskell tooling.
 - A local [`hoogle`](https://github.com/ndmitchell/hoogle/blob/master/docs/Install.md)
   installation (recommended for better hoogle search performance).
 - [`fast-tags`](https://github.com/elaforge/fast-tags)
-  (for automatic tag generation as a fallback for [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
-- [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/) and
-  [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
+  (for automatic tag generation as a fallback for
+  [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
+- [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/)
+  and [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
 
 ## :inbox_tray: Installation
 
@@ -357,8 +358,8 @@ vim.g.haskell_tools = {
 
 ### How to dynamically load different `haskell-language-server` settings per project
 
-By default, this plugin will look for a `hls.json`[^2] file in the project root directory,
-and attempt to load it.
+By default, this plugin will look for a `hls.json`[^2] file
+in the project root directory, and attempt to load it.
 If the file does not exist, or it can't be decoded,
 the `hls.default_settings` will be used.
 
@@ -670,7 +671,8 @@ and `hls` should be able to show the error diagnostics for those files.
 Check which versions of `hls` and GHC you are using
 (e.g. by calling `haskell-language-server-wrapper --probe-tools`
 or `haskell-language-server --probe-tools`).
-Sometimes, certain features take some time to be implemented for the latest GHC versions.
+Sometimes, certain features take some time to be implemented
+for the latest GHC versions.
 You can see how well a specific GHC version is supported [in the hls docs](https://haskell-language-server.readthedocs.io/en/latest/support/index.html).
 
 ### Minimal config
