@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.0...v6.2.1) (2026-01-07)
+
+
+### Bug Fixes
+
+* **lsp:** resolve `vim.lsp.config[*]` ([#522](https://github.com/mrcjkb/haskell-tools.nvim/issues/522)) ([1516ab3](https://github.com/mrcjkb/haskell-tools.nvim/commit/1516ab3a8564c70b8a9a9c2c92a62dec3f6a8811))
+* **lsp:** update deprecated api use ([eda4431](https://github.com/mrcjkb/haskell-tools.nvim/commit/eda4431fa27632aa261eba4f66114000eb6200af))
+
 ## [6.2.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.1.1...v6.2.0) (2025-08-18)
 
 
