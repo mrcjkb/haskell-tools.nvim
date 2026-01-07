@@ -171,7 +171,12 @@ Hls.start = function(bufnr)
       fix_cabal_client(client)
     end,
   }
-  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config['haskell-tools'] or {})
+  local hs_config_name = 'haskell-tools'
+  -- Force resolution of `vim.lsp.config['*']` for `hs_config_name`,
+  -- in case it has not been set
+  -- (This does not overwrite any existing configs).
+  vim.lsp.config(hs_config_name, {})
+  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config[hs_config_name] or {})
   local client_id = vim.lsp.start(client_config)
   return client_id
 end
