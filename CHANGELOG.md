@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.3...v7.0.0) (2026-01-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove no-op config option `hover.enable`
+* remove no-op config option `hoogle_signature_fallback`
+
+### Features
+
+* `Haskell definition` command with hoogle fallback ([cf167c1](https://github.com/mrcjkb/haskell-tools.nvim/commit/cf167c19b79ed6b39596fca19a583ff385521f46))
+* `Haskell hover` command for hover actions ([6ffd2ed](https://github.com/mrcjkb/haskell-tools.nvim/commit/6ffd2ed2c274259b9db05d7e99d1bd301af000d2))
+* remove no-op config option `hoogle_signature_fallback` ([ab5f2b9](https://github.com/mrcjkb/haskell-tools.nvim/commit/ab5f2b92667582eab624b581dd490b0238f4cc4f))
+* remove no-op config option `hover.enable` ([a4dff38](https://github.com/mrcjkb/haskell-tools.nvim/commit/a4dff3815ad01a0294afa0e2f29eb1fb3b3415e8))
+
 ## [6.2.3](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.2...v6.2.3) (2026-01-24)
 
 
