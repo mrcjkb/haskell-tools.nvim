@@ -74,21 +74,20 @@ haskell-tools.Opts                                          *haskell-tools.Opts*
 haskell-tools.tools.Opts                              *haskell-tools.tools.Opts*
 
     Fields: ~
-        {codeLens?}    (haskell-tools.codeLens.Opts)
-                                                        LSP codeLens options.
-        {hoogle?}      (haskell-tools.hoogle.Opts)
-                                                        Hoogle type signature search options.
-        {hover?}       (haskell-tools.hover.Opts)
-                                                        LSP hover options.
-        {definition?}  (haskell-tools.definition.Opts)  LSP go-to-definition options.
-        {repl?}        (haskell-tools.repl.Opts)
-                                                        GHCi repl options.
-        {tags?}        (haskell-tools.fast-tags.Opts)
-                                                        fast-tags module options.
-        {log?}         (haskell-tools.log.Opts)
-                                                        haskell-tools logger options.
-        {open_url?}    (fun(url:string))
-                                                        custom action for opening a url
+        {codeLens?}  (haskell-tools.codeLens.Opts)
+                                                     LSP codeLens options.
+        {hoogle?}    (haskell-tools.hoogle.Opts)
+                                                     Hoogle type signature search options.
+        {hover?}     (haskell-tools.hover.Opts)
+                                                     LSP hover options.
+        {repl?}      (haskell-tools.repl.Opts)
+                                                     GHCi repl options.
+        {tags?}      (haskell-tools.fast-tags.Opts)
+                                                     fast-tags module options.
+        {log?}       (haskell-tools.log.Opts)
+                                                     haskell-tools logger options.
+        {open_url?}  (fun(url:string))
+                                                     custom action for opening a url
 
 
 haskell-tools.codeLens.Opts                        *haskell-tools.codeLens.Opts*
@@ -125,14 +124,6 @@ haskell-tools.hover.Opts                              *haskell-tools.hover.Opts*
                                                       and enables treesitter syntax highlighting for Haskell snippets if nvim-treesitter is installed.
         {auto_focus?}        (boolean)
                                                       (default: `false`) Whether to automatically switch to the hover window.
-
-
-haskell-tools.definition.Opts                    *haskell-tools.definition.Opts*
-
-    Fields: ~
-        {hoogle_signature_fallback?}  (fun():boolean|boolean)
-                                                               (default: `false`) Configure |vim.lsp.definition| to fall back to hoogle search
-                                                               (does not affect |vim.lsp.tagfunc|).
 
 
 haskell-tools.repl.Opts                                *haskell-tools.repl.Opts*

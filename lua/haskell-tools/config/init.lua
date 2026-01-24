@@ -63,8 +63,6 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---
 ---LSP hover options.
 ---@field hover? haskell-tools.hover.Opts
----LSP go-to-definition options.
----@field definition? haskell-tools.definition.Opts
 ---
 ---GHCi repl options.
 ---@field repl? haskell-tools.repl.Opts
@@ -106,12 +104,6 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---
 ---(default: `false`) Whether to automatically switch to the hover window.
 ---@field auto_focus? boolean
-
----@class haskell-tools.definition.Opts
----
----(default: `false`) Configure |vim.lsp.definition| to fall back to hoogle search
----(does not affect |vim.lsp.tagfunc|).
----@field hoogle_signature_fallback? (fun():boolean) | boolean
 
 ---@class haskell-tools.repl.Opts
 ---

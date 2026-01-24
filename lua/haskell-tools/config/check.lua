@@ -81,19 +81,6 @@ function Check.validate(cfg)
   if not ok then
     return false, err
   end
-  local definition = tools.definition
-  ok, err = validate('haskell_tools.tools.definition', definition, 'table')
-  if not ok then
-    return false, err
-  end
-  ok, err = validate(
-    'haskell_tools.tools.definition.hoogle_signature_fallback',
-    definition.hoogle_signature_fallback,
-    { 'boolean', 'function' }
-  )
-  if not ok then
-    return false, err
-  end
   local hoogle = tools.hoogle
   ok, err = validate('haskell_tools.tools.hoogle', hoogle, 'table')
   if not ok then

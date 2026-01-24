@@ -48,11 +48,6 @@ local HTDefaultConfig = {
       ---@type boolean (default: `false`) Whether to automatically switch to the hover window.
       auto_focus = false,
     },
-    ---@class haskell-tools.definition.Config Enhanced LSP go-to-definition options.
-    definition = {
-      ---@type boolean | (fun():boolean) (default: `false`) Configure `vim.lsp.definition` to fall back to hoogle search (does not affect `vim.lsp.tagfunc`).
-      hoogle_signature_fallback = false,
-    },
     ---@class haskell-tools.repl.Config GHCi repl options.
     repl = {
       ---@type haskell-tools.repl.Handler | (fun():haskell-tools.repl.Handler) `'builtin'`: Use the simple builtin repl. `'toggleterm'`: Use akinsho/toggleterm.nvim.

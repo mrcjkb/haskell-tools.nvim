@@ -56,14 +56,7 @@ local hls_opts = HTConfig.hls
 local handlers = {}
 
 local tools_opts = HTConfig.tools
-local definition_opts = tools_opts.definition or {}
 
-if Types.evaluate(definition_opts.hoogle_signature_fallback) then
-  local lsp_definition = require('haskell-tools.lsp.definition')
-  log.debug('Wrapping vim.lsp.buf.definition with Hoogle signature fallback.')
-  handlers[vim.lsp.protocol.Methods.textDocument_definition] =
-    lsp_definition.mk_hoogle_fallback_definition_handler(definition_opts)
-end
 local hover_opts = tools_opts.hover
 if Types.evaluate(hover_opts.enable) then
   local hover = require('haskell-tools.lsp.hover')
