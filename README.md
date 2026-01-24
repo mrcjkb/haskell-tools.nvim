@@ -249,8 +249,8 @@ Start a GHCi repl for the current project / buffer.
 
 - [x] **Hover actions**
 
-Inspired by [rust-tools.nvim](https://github.com/simrat39/rust-tools.nvim),
-this plugin adds the following hover actions (if available):
+This plugin adds the following hover actions (if available),
+via the `:Haskell hover` command:
 
 - Hoogle search
   (no dedicated `<Plug>` mapping
@@ -279,6 +279,13 @@ Additionally, the default behaviour of stylizing markdown is disabled.
 And the hover buffer's filetype is set to markdown,
 so that [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 users can benefit from syntax highlighting of code snippets.
+
+To override Neovim's built-in hover keymap with the haskell-tools hover actions,
+you can add the following, e.g. in `ftplugin/haskell.lua`:
+
+```lua
+vim.keymap.set('n', 'K', function() vim.cmd.Haskell { 'hover' } end)
+```
 
 ![hoverActions](https://user-images.githubusercontent.com/12857160/219763211-61fc4207-4300-41f2-99c4-6a420cf940f2.gif)
 

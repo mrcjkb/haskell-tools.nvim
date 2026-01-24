@@ -66,6 +66,12 @@ local command_tbl = {
       ht.project.open_project_file()
     end,
   },
+  hover = {
+    impl = function()
+      local hover = require('haskell-tools.lsp.hover')
+      hover.hover_actions()
+    end,
+  },
 }
 
 ---@param name string The name of the subcommand

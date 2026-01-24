@@ -358,4 +358,15 @@ function hover.on_hover(_, result, ctx, config)
   return hover_bufnr, winnr
 end
 
+--- Sends the request to hls to get hover actions and handle it
+function hover.hover_actions()
+  local LspHelpers = require('haskell-tools.lsp.helpers')
+  local clients = LspHelpers.get_active_haskell_clients(vim.api.nvim_get_current_buf())
+  if #clients == 0 then
+    return
+  end
+  local params = lsp_util.make_position_params(0, clients[1].offset_encoding or 'utf-8')
+  return vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_hover, params, hover.on_hover)
+end
+
 return hover
