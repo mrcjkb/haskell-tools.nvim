@@ -57,12 +57,6 @@ local handlers = {}
 
 local tools_opts = HTConfig.tools
 
-local hover_opts = tools_opts.hover
-if Types.evaluate(hover_opts.enable) then
-  local hover = require('haskell-tools.lsp.hover')
-  handlers[vim.lsp.protocol.Methods.textDocument_hover] = hover.on_hover
-end
-
 ---@class haskell-tools.Hls
 local Hls = {}
 ---Search the project root for a haskell-language-server settings JSON file and load it to a Lua table.

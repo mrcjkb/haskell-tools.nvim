@@ -106,10 +106,6 @@ function Check.validate(cfg)
   if not ok then
     return false, err
   end
-  ok, err = validate('haskell_tools.tools.hover.enable', hover.enable, { 'boolean', 'function' })
-  if not ok then
-    return false, err
-  end
   ok, err = validate('haskell_tools.tools.hover.stylize_markdown', hover.stylize_markdown, 'boolean')
   if not ok then
     return false, err

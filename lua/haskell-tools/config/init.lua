@@ -91,9 +91,6 @@ vim.g.haskell_tools = vim.g.haskell_tools
 
 ---@class haskell-tools.hover.Opts
 ---
----(default: `true`) Whether to enable haskell-tools hover.
----@field enable? (fun():boolean) | boolean
----
 ---The hover window's border. Set to `nil` to disable.
 ---@field border? string[][]
 ---
