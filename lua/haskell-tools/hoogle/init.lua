@@ -30,7 +30,12 @@ end
 ---@param offset_encoding 'utf-8'|'utf-16'|'utf-32'
 local function lsp_hoogle_signature(options, offset_encoding)
   local params = lsp_util.make_position_params(0, offset_encoding)
-  return vim.lsp.buf_request(0, 'textDocument/hover', params, mk_lsp_hoogle_signature_handler(options))
+  return vim.lsp.buf_request(
+    0,
+    vim.lsp.protocol.Methods.textDocument_hover,
+    params,
+    mk_lsp_hoogle_signature_handler(options)
+  )
 end
 
 local HTConfig = require('haskell-tools.config.internal')

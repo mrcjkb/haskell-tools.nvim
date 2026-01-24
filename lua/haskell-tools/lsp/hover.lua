@@ -218,7 +218,7 @@ function hover.on_hover(_, result, ctx, config)
     if location ~= nil and not found_location then
       found_location = true
       table.insert(to_remove, 1, i)
-      results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
+      results, err = vim.lsp.buf_request_sync(0, vim.lsp.protocol.Methods.textDocument_definition, params, 1000)
       if not err and results ~= nil and #results >= 0 then
         definition_results = results[1] and results[1].result or {}
         if #definition_results > 0 then
@@ -230,12 +230,12 @@ function hover.on_hover(_, result, ctx, config)
             local action = function()
               -- We don't call vim.lsp.buf.definition() because the location params may have changed
               local definition_ctx = vim.tbl_extend('force', ctx, {
-                method = 'textDocument/definition',
+                method = vim.lsp.protocol.Methods.textDocument_definition,
               })
               log.debug { 'Hover: Go to definition', definition_result }
               ---Neovim 0.9 has a bug in the lua doc
               ---@diagnostic disable-next-line: param-type-mismatch
-              vim.lsp.handlers['textDocument/definition'](nil, definition_result, definition_ctx)
+              vim.lsp.handlers[vim.lsp.protocol.Methods.textDocument_definition](nil, definition_result, definition_ctx)
               close_hover()
             end
             table.insert(_state.commands, action)
@@ -256,7 +256,7 @@ function hover.on_hover(_, result, ctx, config)
           log.debug { 'Hover: Find references', reference_params }
           -- We don't call vim.lsp.buf.references() because the location params may have changed
           ---@diagnostic disable-next-line: missing-parameter
-          vim.lsp.buf_request(0, 'textDocument/references', reference_params)
+          vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_references, reference_params)
           close_hover()
         end
         table.insert(_state.commands, references_action)
@@ -264,7 +264,7 @@ function hover.on_hover(_, result, ctx, config)
       end
     end
     if not found_type_definition then
-      results, err = vim.lsp.buf_request_sync(0, 'textDocument/typeDefinition', params, 1000)
+      results, err = vim.lsp.buf_request_sync(0, vim.lsp.protocol.Methods.textDocument_typeDefinition, params, 1000)
       if not err and results ~= nil and #results > 0 then -- Can go to type definition
         found_type_definition = true
         local type_definition_results = results[1] and results[1].result or {}
@@ -277,12 +277,16 @@ function hover.on_hover(_, result, ctx, config)
             local typedef_action = function()
               -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
               local type_definition_ctx = vim.tbl_extend('force', ctx, {
-                method = 'textDocument/typeDefinition',
+                method = vim.lsp.protocol.Methods.textDocument_typeDefinition,
               })
               log.debug { 'Hover: Go to type definition', type_definition_result }
               ---Neovim 0.9 has a bug in the lua doc
               ---@diagnostic disable-next-line: param-type-mismatch
-              vim.lsp.handlers['textDocument/typeDefinition'](nil, type_definition_result, type_definition_ctx)
+              vim.lsp.handlers[vim.lsp.protocol.Methods.textDocument_typeDefinition](
+                nil,
+                type_definition_result,
+                type_definition_ctx
+              )
               close_hover()
             end
             table.insert(_state.commands, typedef_action)
