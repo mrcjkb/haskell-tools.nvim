@@ -16,7 +16,6 @@ local ht = require('haskell-tools')
 
 ---@param arg_lead string
 local function complete_haskell_files(arg_lead)
-  vim.print(arg_lead)
   return vim
     .iter(vim.list_extend(vim.fn.getcompletion(arg_lead, 'file'), vim.fn.getcompletion(arg_lead, 'buffer')))
     :filter(function(file_path)
