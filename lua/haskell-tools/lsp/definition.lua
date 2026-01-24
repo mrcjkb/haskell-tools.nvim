@@ -12,7 +12,7 @@ local log = require('haskell-tools.log.internal')
 local lsp_definition = {}
 
 ---@param opts table<string,any>|nil
----@return nil
+---@return lsp.Handler
 function lsp_definition.mk_hoogle_fallback_definition_handler(opts)
   return function(_, result, ...)
     local ht = require('haskell-tools')

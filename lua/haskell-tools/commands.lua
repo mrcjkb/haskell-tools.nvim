@@ -72,6 +72,16 @@ local command_tbl = {
       hover.hover_actions()
     end,
   },
+  definition = {
+    impl = function()
+      local lsp_definition = require('haskell-tools.lsp.definition')
+      vim.lsp.buf.definition()
+      local win = vim.api.nvim_get_current_win()
+      vim.lsp.buf_request_all(0, vim.lsp.protocol.Methods.textDocument_definition, function(client)
+        return vim.lsp.util.make_position_params(win, client.offset_encoding)
+      end, lsp_definition.mk_hoogle_fallback_definition_handler())
+    end,
+  },
 }
 
 ---@param name string The name of the subcommand

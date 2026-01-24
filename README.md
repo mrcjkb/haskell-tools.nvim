@@ -592,6 +592,14 @@ ht.project.telescope_package_files(opts)
 ht.project.telescope_package_grep(opts)
 ```
 
+#### Go to definition with Hoogle fallback
+
+<!-- markdownlint-disable -->
+| Command                 | Description                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------------|
+| `:Haskell definition`   | `vim.lsp.buf.definition()`, but fall back to a Hoogle search if no definition is found |
+<!-- markdownlint-enable -->
+
 #### Tags
 
 The following functions depend on [`fast-tags`](https://github.com/elaforge/fast-tags).
