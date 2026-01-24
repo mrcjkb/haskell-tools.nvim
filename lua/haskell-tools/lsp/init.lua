@@ -51,6 +51,8 @@ end
 
 log.debug('Setting up the LSP client...')
 local hls_opts = HTConfig.hls
+
+---@type table<string, lsp.Handler>
 local handlers = {}
 
 local tools_opts = HTConfig.tools
@@ -171,7 +173,7 @@ Hls.start = function(bufnr)
       fix_cabal_client(client)
     end,
   }
-  local hs_config_name = 'haskell-tools'
+  local hs_config_name = lsp_start_opts.name
   -- Force resolution of `vim.lsp.config['*']` for `hs_config_name`,
   -- in case it has not been set
   -- (This does not overwrite any existing configs).
