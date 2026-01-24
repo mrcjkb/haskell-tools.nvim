@@ -99,7 +99,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 ```lua
 {
   'mrcjkb/haskell-tools.nvim',
-  version = '^6', -- Recommended
+  version = '^7', -- Recommended
   lazy = false, -- This plugin is already lazy
 }
 ```
