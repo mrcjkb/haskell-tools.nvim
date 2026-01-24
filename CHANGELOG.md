@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.3](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.2...v6.2.3) (2026-01-24)
+
+
+### Bug Fixes
+
+* remove debug print ([483d825](https://github.com/mrcjkb/haskell-tools.nvim/commit/483d825e54b91e2db2b5c425975ed3d0ca34ad15))
+
 ## [6.2.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.1...v6.2.2) (2026-01-24)
 
 
