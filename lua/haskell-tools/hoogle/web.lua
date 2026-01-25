@@ -123,6 +123,7 @@ function WebHoogleHandler.browser_search(search_term, opts)
   opts = vim.tbl_deep_extend('keep', opts or {}, {
     hoogle = { json = false },
   })
+  ---@cast opts haskell-tools.hoogle.telescope.web.Opts
   local HTConfig = require('haskell-tools.config.internal')
   HTConfig.tools.open_url(mk_hoogle_request(search_term, opts))
 end
