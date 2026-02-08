@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.0...v7.0.1) (2026-02-08)
+
+
+### Bug Fixes
+
+* **lsp:** support nvim-nightly (0.12) codelens API ([#535](https://github.com/mrcjkb/haskell-tools.nvim/issues/535)) ([9462bba](https://github.com/mrcjkb/haskell-tools.nvim/commit/9462bbabbfcd66069a4f992bfa837f523800820e))
+
 ## [7.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v6.2.3...v7.0.0) (2026-01-24)
 
 
