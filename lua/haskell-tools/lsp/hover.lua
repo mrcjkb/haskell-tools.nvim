@@ -229,13 +229,10 @@ function hover.on_hover(_, result, ctx, config)
             table.insert(actions, 1, string.format('%d. Go to definition at ' .. location_suffix, #actions + 1))
             local action = function()
               -- We don't call vim.lsp.buf.definition() because the location params may have changed
-              local definition_ctx = vim.tbl_extend('force', ctx, {
-                method = vim.lsp.protocol.Methods.textDocument_definition,
-              })
               log.debug { 'Hover: Go to definition', definition_result }
-              ---Neovim 0.9 has a bug in the lua doc
-              ---@diagnostic disable-next-line: param-type-mismatch
-              vim.lsp.handlers[vim.lsp.protocol.Methods.textDocument_definition](nil, definition_result, definition_ctx)
+              local client = vim.lsp.get_client_by_id(ctx.client_id)
+              local encoding = client and client.offset_encoding or 'utf-8'
+              vim.lsp.util.show_document(definition_result, encoding, { focus = true })
               close_hover()
             end
             table.insert(_state.commands, action)
@@ -276,17 +273,10 @@ function hover.on_hover(_, result, ctx, config)
             table.insert(actions, 1, string.format('%d. Go to type definition at ' .. type_def_suffix, #actions + 1))
             local typedef_action = function()
               -- We don't call vim.lsp.buf.typeDefinition() because the location params may have changed
-              local type_definition_ctx = vim.tbl_extend('force', ctx, {
-                method = vim.lsp.protocol.Methods.textDocument_typeDefinition,
-              })
               log.debug { 'Hover: Go to type definition', type_definition_result }
-              ---Neovim 0.9 has a bug in the lua doc
-              ---@diagnostic disable-next-line: param-type-mismatch
-              vim.lsp.handlers[vim.lsp.protocol.Methods.textDocument_typeDefinition](
-                nil,
-                type_definition_result,
-                type_definition_ctx
-              )
+              local client = vim.lsp.get_client_by_id(ctx.client_id)
+              local encoding = client and client.offset_encoding or 'utf-8'
+              vim.lsp.util.show_document(type_definition_result, encoding, { focus = true })
               close_hover()
             end
             table.insert(_state.commands, typedef_action)

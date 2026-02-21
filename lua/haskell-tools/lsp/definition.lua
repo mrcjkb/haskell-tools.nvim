@@ -14,11 +14,13 @@ local lsp_definition = {}
 ---@param opts table<string,any>|nil
 ---@return lsp.Handler
 function lsp_definition.mk_hoogle_fallback_definition_handler(opts)
-  return function(_, result, ...)
+  return function(_, result, ctx, ...)
     local ht = require('haskell-tools')
     if #result > 0 then
-      local default_handler = vim.lsp.handlers[vim.lsp.protocol.Methods.textDocument_definition]
-      return default_handler(_, result, ...)
+      local client = vim.lsp.get_client_by_id(ctx.client_id)
+      local encoding = client and client.offset_encoding or 'utf-8'
+      vim.lsp.util.show_document(result[1], encoding, { focus = true })
+      return
     end
     log.debug('Definition not found. Falling back to Hoogle search.')
     vim.notify('Definition not found. Falling back to Hoogle search...', vim.log.levels.WARN)
