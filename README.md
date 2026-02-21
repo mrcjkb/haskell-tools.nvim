@@ -31,9 +31,6 @@
 [![Issues][issues-shield]][issues-url]
 [![Build Status][ci-shield]][ci-url]
 [![LuaRocks][luarocks-shield]][luarocks-url]
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-20-purple.svg?style=for-the-badge)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 </div>
 <!-- markdownlint-restore -->
 
@@ -787,52 +784,6 @@ Here are some other plugins I recommend for Haskell (and nix) development in neo
   For syntax highlighting, and much more.
 - [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects):
   For TreeSitter-based textobjects.
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fabfianda"><img src="https://avatars.githubusercontent.com/u/275653?v=4?s=100" width="100px;" alt="fabfianda"/><br /><sub><b>fabfianda</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=fabfianda" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MangoIV"><img src="https://avatars.githubusercontent.com/u/40720523?v=4?s=100" width="100px;" alt="Mango The Fourth"/><br /><sub><b>Mango The Fourth</b></sub></a><br /><a href="#infra-MangoIV" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yen3"><img src="https://avatars.githubusercontent.com/u/387292?v=4?s=100" width="100px;" alt="Yen3"/><br /><sub><b>Yen3</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=yen3" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sebastianselander"><img src="https://avatars.githubusercontent.com/u/70573736?v=4?s=100" width="100px;" alt="Sebastian Selander"/><br /><sub><b>Sebastian Selander</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=sebastianselander" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/typesafety"><img src="https://avatars.githubusercontent.com/u/21952939?v=4?s=100" width="100px;" alt="Thomas Li"/><br /><sub><b>Thomas Li</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=typesafety" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/teto"><img src="https://avatars.githubusercontent.com/u/886074?v=4?s=100" width="100px;" alt="Matthieu Coudron"/><br /><sub><b>Matthieu Coudron</b></sub></a><br /><a href="#infra-teto" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Ateto" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://mzchael.com"><img src="https://avatars.githubusercontent.com/u/44309097?v=4?s=100" width="100px;" alt="Michael Lan"/><br /><sub><b>Michael Lan</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Amizlan" title="Bug reports">🐛</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://dhruvas.vercel.app"><img src="https://avatars.githubusercontent.com/u/66675022?v=4?s=100" width="100px;" alt="Dhruva Srinivas"/><br /><sub><b>Dhruva Srinivas</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=carrotfarmer" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://gacallea.info/"><img src="https://avatars.githubusercontent.com/u/3269984?v=4?s=100" width="100px;" alt="Andrea Callea (he/him/his)"/><br /><sub><b>Andrea Callea (he/him/his)</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Agacallea" title="Bug reports">🐛</a> <a href="#userTesting-gacallea" title="User Testing">📓</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://monique.dev"><img src="https://avatars.githubusercontent.com/u/70070?v=4?s=100" width="100px;" alt="Cyber Oliveira"/><br /><sub><b>Cyber Oliveira</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Amoniquelive" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Br3akp01nt"><img src="https://avatars.githubusercontent.com/u/91327649?v=4?s=100" width="100px;" alt="Br3akp01nt"/><br /><sub><b>Br3akp01nt</b></sub></a><br /><a href="#userTesting-Br3akp01nt" title="User Testing">📓</a> <a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3ABr3akp01nt" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Alper-Celik"><img src="https://avatars.githubusercontent.com/u/110625473?v=4?s=100" width="100px;" alt="Alper Çelik"/><br /><sub><b>Alper Çelik</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3AAlper-Celik" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mauke"><img src="https://avatars.githubusercontent.com/u/278465?v=4?s=100" width="100px;" alt="mauke"/><br /><sub><b>mauke</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=mauke" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://ravi.fyi"><img src="https://avatars.githubusercontent.com/u/9625484?v=4?s=100" width="100px;" alt="Ravi Dayabhai"/><br /><sub><b>Ravi Dayabhai</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3APer48edjes" title="Bug reports">🐛</a> <a href="#userTesting-Per48edjes" title="User Testing">📓</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://kamoshi.org"><img src="https://avatars.githubusercontent.com/u/18511281?v=4?s=100" width="100px;" alt="Maciej Jur"/><br /><sub><b>Maciej Jur</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/issues?q=author%3Akamoshi" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MaciekFlis"><img src="https://avatars.githubusercontent.com/u/19313722?v=4?s=100" width="100px;" alt="MaciekFlis"/><br /><sub><b>MaciekFlis</b></sub></a><br /><a href="#financial-MaciekFlis" title="Financial">💵</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mbwgh"><img src="https://avatars.githubusercontent.com/u/28275377?v=4?s=100" width="100px;" alt="mbwgh"/><br /><sub><b>mbwgh</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=mbwgh" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/AntonVucinic"><img src="https://avatars.githubusercontent.com/u/64925492?v=4?s=100" width="100px;" alt="AntonVucinic"/><br /><sub><b>AntonVucinic</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=AntonVucinic" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BebeSparkelSparkel"><img src="https://avatars.githubusercontent.com/u/10747532?v=4?s=100" width="100px;" alt="William Rusnack"/><br /><sub><b>William Rusnack</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=BebeSparkelSparkel" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://johnhamptonjr.com"><img src="https://avatars.githubusercontent.com/u/30007?v=4?s=100" width="100px;" alt="John Hampton"/><br /><sub><b>John Hampton</b></sub></a><br /><a href="https://github.com/mrcjkb/haskell-tools.nvim/commits?author=johnhampton" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [neovim-shield]: https://img.shields.io/badge/NeoVim-%2357A143.svg?&style=for-the-badge&logo=neovim&logoColor=white
