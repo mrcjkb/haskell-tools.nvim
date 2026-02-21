@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.1...v7.0.2) (2026-02-21)
+
+
+### Bug Fixes
+
+* **lsp/hover:** broken handlers for go-to-&lt;location&gt; actions ([c7a83f7](https://github.com/mrcjkb/haskell-tools.nvim/commit/c7a83f73b0f6fd74ef3994e2fa19de98fcf3fa1c))
+* **lsp:** broken handler for hoogle go-to-definition fallback ([30ab739](https://github.com/mrcjkb/haskell-tools.nvim/commit/30ab739805172ef381e34303666267aa5816687c))
+
 ## [7.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.0...v7.0.1) (2026-02-08)
 
 
