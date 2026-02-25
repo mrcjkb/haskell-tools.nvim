@@ -78,8 +78,12 @@ local function init()
   require('haskell-tools.commands').init()
 end
 
----ftplugin implementation
-function Api.ftplugin()
+---Common ftplugin logic
+function Api.common_ftplugin()
+  if vim.fn.has('nvim-0.11') ~= 1 then
+    vim.notify_once('haskell-tools.nvim requires Neovim 0.11 or above', vim.log.levels.ERROR)
+    return
+  end
   init()
   start_or_attach()
   dap_discover()
