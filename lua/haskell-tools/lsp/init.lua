@@ -172,7 +172,13 @@ Hls.start = function(bufnr)
   -- in case it has not been set
   -- (This does not overwrite any existing configs).
   vim.lsp.config(hs_config_name, {})
-  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, vim.lsp.config[hs_config_name] or {})
+  local hls_config = vim.lsp.config[hs_config_name] or {}
+  if hls_config.settings then
+    -- Ensure vim.lsp.config settings get merged with server.default_settings.
+    hls_config.default_settings = hls_config.settings
+    hls_config.settings = nil
+  end
+  local client_config = vim.tbl_deep_extend('force', {}, lsp_start_opts, hls_config)
   local client_id = vim.lsp.start(client_config)
   return client_id
 end
