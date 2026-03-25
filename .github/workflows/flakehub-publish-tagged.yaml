@@ -26,4 +26,3 @@ jobs:
           visibility: "public"
           name: "mrcjkb/haskell-tools.nvim"
           tag: "${{ inputs.tag }}"
-          

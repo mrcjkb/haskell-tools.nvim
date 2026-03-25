@@ -3,7 +3,7 @@ name: Generate docs
 on:
   push:
     branches-ignore:
-      - master
+      - main
 
 jobs:
   docs:
