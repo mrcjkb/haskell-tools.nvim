@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.3...v8.0.0) (2026-04-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lsp:** move `:Hls evalAll` subcommand to `:Haskell hls evalAll`
+* **lsp:** remove `:Hls [start|restart|stop]` commands
+* drop Neovim 0.11 support
+
+### Features
+
+* drop Neovim 0.11 support ([6c9ae50](https://github.com/mrcjkb/haskell-tools.nvim/commit/6c9ae50485ae0b7554783d4efd4d419e6bc2affd))
+* **lsp:** move `:Hls evalAll` subcommand to `:Haskell hls evalAll` ([04b370e](https://github.com/mrcjkb/haskell-tools.nvim/commit/04b370eea89822277dd591e5aafd5e330dca0693))
+* **lsp:** remove `:Hls [start|restart|stop]` commands ([b458648](https://github.com/mrcjkb/haskell-tools.nvim/commit/b45864817b74fa434ab9da986c9cf9d0d852adcc))
+
 ## [7.0.3](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.2...v7.0.3) (2026-02-25)
 
 
