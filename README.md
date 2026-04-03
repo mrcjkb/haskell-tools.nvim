@@ -87,17 +87,35 @@ that are specific to Haskell tooling.
 
 ## :inbox_tray: Installation
 
-This plugin is [available on LuaRocks][luarocks-url]:
+Using Neovim's built-in plugin manager:
 
-[`:Rocks install haskell-tools.nvim`](https://github.com/nvim-neorocks/rocks.nvim)
+```lua
+vim.pack.add {
+  src = 'https://github.com/mrcjkb/haskell-tools.nvim',
+  -- To avoid being surprised by breaking changes,
+  -- I recommend you set a version range
+  version = vim.version.range('^8')
+}
+```
+
+This plugin is [available on LuaRocks][luarocks-url] and can be installed
+using [rocks.nvim](https://github.com/nvim-neorocks/rocks.nvim):
+
+```sh
+:Rocks install haskell-tools.nvim
+```
 
 Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
   'mrcjkb/haskell-tools.nvim',
-  version = '^7', -- Recommended
-  lazy = false, -- This plugin is already lazy
+  -- To avoid being surprised by breaking changes,
+  -- I recommend you set a version range
+  version = '^8',
+  -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
+  -- No need for lazy.nvim to lazy-load it.
+  lazy = false,
 }
 ```
 
