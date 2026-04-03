@@ -65,7 +65,7 @@ that are specific to Haskell tooling.
 
 ### Required
 
-- `neovim >= 0.11`
+- `neovim >= 0.12`
 
 > [!NOTE]
 >
