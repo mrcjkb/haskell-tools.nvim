@@ -80,8 +80,8 @@ end
 
 ---Common ftplugin logic
 function Api.common_ftplugin()
-  if vim.fn.has('nvim-0.11') ~= 1 then
-    vim.notify_once('haskell-tools.nvim requires Neovim 0.11 or above', vim.log.levels.ERROR)
+  if vim.fn.has('nvim-0.12') ~= 1 then
+    vim.notify_once('haskell-tools.nvim requires Neovim 0.12 or above', vim.log.levels.ERROR)
     return
   end
   init()

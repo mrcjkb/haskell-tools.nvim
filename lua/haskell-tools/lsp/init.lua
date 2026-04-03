@@ -136,30 +136,9 @@ Hls.start = function(bufnr)
           vim.notify('haskell-tools.lsp: Error in hls.on_attach: ' .. err)
         end)
       end
-      local function buf_refresh_codeLens()
-        vim.schedule(function()
-          for _, client in pairs(LspHelpers.get_active_ht_clients(bufnr)) do
-            if client.server_capabilities.codeLensProvider then
-              ---@diagnostic disable-next-line: deprecated TODO: Remove this when dropping Nvim 0.11 support
-              vim.lsp.codelens.refresh()
-              return
-            end
-          end
-        end)
-      end
       local code_lens_opts = tools_opts.codeLens or {}
       if Types.evaluate(code_lens_opts.autoRefresh) then
-        -- TODO: Remove this when dropping Nvim 0.11 support
-        if vim.version.lt(vim.version(), '0.12') then
-          vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
-            group = vim.api.nvim_create_augroup('haskell-tools-code-lens', {}),
-            callback = buf_refresh_codeLens,
-            buffer = buf,
-          })
-          buf_refresh_codeLens()
-        else
-          vim.lsp.codelens.enable(true, { buffer = bufnr })
-        end
+        vim.lsp.codelens.enable(true, { buffer = bufnr })
       end
     end,
     on_init = function(client, _)

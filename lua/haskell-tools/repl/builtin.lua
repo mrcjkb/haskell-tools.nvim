@@ -44,7 +44,7 @@ end
 ---@return nil
 local function buf_create_repl(bufnr, cmd, opts)
   vim.api.nvim_win_set_buf(0, bufnr)
-  opts = vim.tbl_extend('force', vim.empty_dict(), opts or {})
+  opts = vim.tbl_extend('force', { term = true }, opts or {})
   local function delete_repl_buf()
     local winid = vim.fn.bufwinid(bufnr)
     if winid ~= nil then
@@ -73,17 +73,7 @@ local function buf_create_repl(bufnr, cmd, opts)
   end
   log.debug { 'repl.builtin: Opening terminal', cmd, opts }
 
-  -- TODO(0.11): Replace with vim.fn.jobstart(full_command, { term = true })
-  -- run the command
-  local job_id
-  ---@diagnostic disable-next-line: deprecated
-  if type(vim.fn.termopen) == 'function' then
-    ---@diagnostic disable-next-line: deprecated
-    job_id = vim.fn.termopen(cmd, opts)
-  else
-    opts.term = true
-    job_id = vim.fn.jobstart(cmd, opts)
-  end
+  local job_id = vim.fn.jobstart(cmd, opts)
 
   if not job_id then
     log.error('repl.builtin: Failed to open a terminal')
@@ -287,5 +277,6 @@ return function(mk_repl_cmd, options)
       end
     end)
   end
+
   return Handler
 end

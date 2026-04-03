@@ -10,32 +10,11 @@ local eval = {}
 
 local LspHelpers = require('haskell-tools.lsp.helpers')
 
----TODO: Remove this when dropping Nvim 0.11 support
----@param bufnr number The buffer number
----@return table[] The `evalCommand` lenses, in reverse order
-local function get_eval_command_lenses_legacy(bufnr, exclude_lines)
-  exclude_lines = exclude_lines or {}
-  local eval_cmd_lenses = {}
-  ---@diagnostic disable-next-line: param-type-mismatch
-  for _, lens in pairs(vim.lsp.codelens.get(bufnr)) do
-    ---@diagnostic disable-next-line: undefined-field
-    if lens.command.command:match('evalCommand') and not vim.tbl_contains(exclude_lines, lens.range.start.line) then
-      table.insert(eval_cmd_lenses, 1, lens)
-    end
-  end
-  return eval_cmd_lenses
-end
-
 ---@param bufnr number The buffer number
 ---@return table[] The `evalCommand` lenses, in reverse order
 local function get_eval_command_lenses(bufnr, exclude_lines)
-  if vim.version.lt(vim.version(), '0.12') then
-    return get_eval_command_lenses_legacy(bufnr, exclude_lines)
-  end
   exclude_lines = exclude_lines or {}
   local eval_cmd_lenses = {}
-  -- TODO: Remove diagnostic-disables when dropping Nvim 0.11 support
-  ---@diagnostic disable-next-line: param-type-mismatch
   for _, result in ipairs(vim.lsp.codelens.get { bufnr = bufnr }) do
     ---@diagnostic disable-next-line: undefined-field
     local lens = result.lens
@@ -73,10 +52,6 @@ function eval.all(bufnr)
   local lenses = get_eval_command_lenses(bufnr)
   if #lenses > 0 then
     go(client, bufnr, lenses[1], {})
-    if vim.version.lt(vim.version(), '0.12') then
-      ---@diagnostic disable-next-line: deprecated TODO: Remove this when dropping Nvim 0.11 support
-      vim.lsp.codelens.refresh()
-    end
   end
 end
 
