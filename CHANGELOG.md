@@ -10,7 +10,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### ⚠ BREAKING CHANGES
 
 * **lsp:** move `:Hls evalAll` subcommand to `:Haskell hls evalAll`
-* **lsp:** remove `:Hls [start|restart|stop]` commands
+* **lsp:** remove `:Hls [start|restart|stop]` commands.
+  You can use the built-in `:lsp` command instead.
 * drop Neovim 0.11 support
 
 ### Features
