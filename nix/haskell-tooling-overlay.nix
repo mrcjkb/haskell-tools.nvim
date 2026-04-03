@@ -38,26 +38,21 @@ in {
   };
 
   neovim-minimal = let
-    neovimConfig = final.neovimUtils.makeNeovimConfig {
+    runtimeDeps = [
+      final.haskell-language-server
+    ];
+  in
+    final.wrapNeovimUnstable final.neovim-nightly {
       withPython3 = true;
       viAlias = true;
       vimAlias = true;
       plugins = with final.vimPlugins; [
         haskell-tools-nvim
       ];
+      wrapperArgs =
+        ''--set NVIM_APPNAME "nvim-haskell-tools"''
+        + " "
+        + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
+      wrapRc = false;
     };
-    runtimeDeps = [
-      final.haskell-language-server
-    ];
-  in
-    final.wrapNeovimUnstable final.neovim-nightly (neovimConfig
-      // {
-        wrapperArgs =
-          lib.escapeShellArgs neovimConfig.wrapperArgs
-          + " "
-          + ''--set NVIM_APPNAME "nvim-haskell-tools"''
-          + " "
-          + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
-        wrapRc = false;
-      });
 }

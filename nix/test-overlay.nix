@@ -57,7 +57,11 @@ with final.stdenv; let
 
   mkNvimMinimal = nvim:
     with final; let
-      neovimConfig = neovimUtils.makeNeovimConfig {
+      runtimeDeps = [
+        haskell-language-server
+      ];
+    in
+      wrapNeovimUnstable nvim {
         withPython3 = true;
         viAlias = true;
         vimAlias = true;
@@ -65,21 +69,12 @@ with final.stdenv; let
           haskell-tools-nvim-dev
           nvim-treesitter.withAllGrammars
         ];
+        wrapperArgs =
+          ''--set NVIM_APPNAME "nvim-haskell-tools"''
+          + " "
+          + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
+        wrapRc = false;
       };
-      runtimeDeps = [
-        haskell-language-server
-      ];
-    in
-      wrapNeovimUnstable nvim (neovimConfig
-        // {
-          wrapperArgs =
-            lib.escapeShellArgs neovimConfig.wrapperArgs
-            + " "
-            + ''--set NVIM_APPNAME "nvim-haskell-tools"''
-            + " "
-            + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
-          wrapRc = false;
-        });
 in {
   haskell-tools-test = mkNeorocksTest {name = "haskell-tools";};
 
