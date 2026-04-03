@@ -8,6 +8,12 @@ local Types = require('haskell-tools.types.internal')
 --- The following commands are available if an LSP client is active:
 ---
 --- * `:Haskell hls evalAll` - Evaluate all code snippets in comments.
+--- * `:Haskell hls stop` - Stop the haskell-tools LSP client for the current buffer.
+--- * `:Haskell hls restart` - Restart the haskell-tools LSP client for the current buffer.
+---
+--- The following commands are available if no LSP client is active:
+---
+--- * `:Haskell hls start` - Start the haskell-tools LSP client for the current buffer.
 ---@brief ]]
 
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.

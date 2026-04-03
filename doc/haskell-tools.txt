@@ -265,6 +265,12 @@ haskell-language-server LSP client tools                     *haskell-tools.lsp*
  The following commands are available if an LSP client is active:
 
  * `:Haskell hls evalAll` - Evaluate all code snippets in comments.
+ * `:Haskell hls stop` - Stop the haskell-tools LSP client for the current buffer.
+ * `:Haskell hls restart` - Restart the haskell-tools LSP client for the current buffer.
+
+ The following commands are available if no LSP client is active:
+
+ * `:Haskell hls start` - Start the haskell-tools LSP client for the current buffer.
 
 haskell-tools.load_hls_settings.Opts      *haskell-tools.load_hls_settings.Opts*
 

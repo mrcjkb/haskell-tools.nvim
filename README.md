@@ -490,9 +490,12 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-| Command                 | Description                             |
-| ------------------------| --------------------------------------- |
-| `:Haskell hls evalAll`  | Evaluate all code snippets in comments  |
+| Command                 | Description                                   |
+| ------------------------| --------------------------------------------- |
+| `:Haskell hls evalAll`  | Evaluate all code snippets in comments        |
+| `:Haskell hls start`    | Start an HLS client for the current buffer    |
+| `:Haskell hls stop`     | Stop the HLS client for the current buffer    |
+| `:Haskell hls restart`  | Restart the HLS client for the current buffer |
 
 ```lua
 local ht = require('haskell-tools')
