@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.0.0...v8.1.0) (2026-04-03)
+
+
+### Features
+
+* add `:Haskell hls [start|stop|restart]` commands ([85509e7](https://github.com/mrcjkb/haskell-tools.nvim/commit/85509e799f1cbffc372c94c10faea1dd55d5e380))
+
 ## [8.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v7.0.3...v8.0.0) (2026-04-03)
 
 
