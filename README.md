@@ -473,21 +473,12 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 | Command         | Description                  |
 | --------------- | ---------------------------- |
-| `:Hls start`    | Start the LSP client         |
-| `:Hls stop`     | Stop the LSP client          |
-| `:Hls restart`  | Restart the LSP client       |
 | `:Hls evalAll`  | Evaluate all code snippets   |
 
 ```lua
 local ht = require('haskell-tools')
 --- Start or attach the LSP client.
 ht.lsp.start()
-
---- Stop the LSP client.
-ht.lsp.stop()
-
---- Restart the LSP client.
-ht.lsp.restart()
 
 --- Callback for dynamically loading haskell-language-server settings
 --- Falls back to the `hls.default_settings` if no file is found

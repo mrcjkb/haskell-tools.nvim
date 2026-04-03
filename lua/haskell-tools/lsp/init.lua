@@ -7,9 +7,6 @@ local Types = require('haskell-tools.types.internal')
 ---@brief [[
 --- The following commands are available:
 ---
---- * `:Hls start` - Start the LSP client.
---- * `:Hls stop` - Stop the LSP client.
---- * `:Hls restart` - Restart the LSP client.
 --- * `:Hls evalAll` - Evaluate all code snippets in comments.
 ---@brief ]]
 
@@ -162,63 +159,6 @@ Hls.start = function(bufnr)
   return client_id
 end
 
----Stop the LSP client.
----@param bufnr number|nil The buffer number (optional), defaults to the current buffer
----@return vim.lsp.Client[] clients A list of clients that will be stopped
-Hls.stop = function(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local LspHelpers = require('haskell-tools.lsp.helpers')
-  local clients = LspHelpers.get_active_ht_clients(bufnr)
-  if type(clients) == 'table' then
-    ---@cast clients vim.lsp.Client[]
-    for _, client in ipairs(clients) do
-      client:stop()
-    end
-  else
-    clients:stop()
-    ---@cast clients vim.lsp.Client
-  end
-  return clients
-end
-
----Restart the LSP client.
----Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
----@param bufnr number|nil The buffer number (optional), defaults to the current buffer
----@return number|nil client_id The LSP client ID after restart
-Hls.restart = function(bufnr)
-  local lsp = require('haskell-tools').lsp
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local clients = lsp.stop(bufnr)
-  local timer, err_name, err_msg = vim.uv.new_timer()
-  if not timer then
-    log.error { 'Could not create timer', err_name, err_msg }
-    return
-  end
-  local attempts_to_live = 50
-  local stopped_client_count = 0
-  timer:start(200, 100, function()
-    for _, client in ipairs(clients) do
-      if client:is_stopped() then
-        stopped_client_count = stopped_client_count + 1
-        vim.schedule(function()
-          lsp.start(bufnr)
-        end)
-      end
-    end
-    if stopped_client_count >= #clients then
-      timer:stop()
-      attempts_to_live = 0
-    elseif attempts_to_live <= 0 then
-      vim.schedule(function()
-        vim.notify('haslell-tools.lsp: Could not restart all LSP clients.', vim.log.levels.ERROR)
-      end)
-      timer:stop()
-      attempts_to_live = 0
-    end
-    attempts_to_live = attempts_to_live - 1
-  end)
-end
-
 ---Evaluate all code snippets in comments.
 ---@param bufnr number|nil Defaults to the current buffer.
 ---@return nil
@@ -229,22 +169,13 @@ end
 
 ---@enum haskell-tools.HlsCmd
 local HlsCmd = {
-  start = 'start',
-  stop = 'stop',
-  restart = 'restart',
   evalAll = 'evalAll',
 }
 
 local function hls_command(opts)
   local fargs = opts.fargs
   local cmd = fargs[1] ---@as haskell-tools.HlsCmd
-  if cmd == HlsCmd.start then
-    Hls.start()
-  elseif cmd == HlsCmd.stop then
-    Hls.stop()
-  elseif cmd == HlsCmd.restart then
-    Hls.restart()
-  elseif cmd == HlsCmd.evalAll then
+  if cmd == HlsCmd.evalAll then
     Hls.buf_eval_all()
   end
 end
@@ -255,7 +186,7 @@ vim.api.nvim_create_user_command('Hls', hls_command, {
   complete = function(arg_lead, cmdline, _)
     local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
     ---@type haskell-tools.HlsCmd[]
-    local available_commands = #clients == 0 and { 'start' } or { 'stop', 'restart', 'evalAll' }
+    local available_commands = #clients == 0 and {} or { 'evalAll' }
     ---@type haskell-tools.HlsCmd[]
     if cmdline:match('^Hls%s+%w*$') then
       return vim.tbl_filter(function(command)
