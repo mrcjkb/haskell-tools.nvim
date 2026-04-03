@@ -200,7 +200,8 @@ for more configuration options.
 - [x] **Evaluate all code snippets at once**
 
 `haskell-language-server` can evaluate code snippets using code lenses.
-`haskell-tools.nvim` provides a `require('haskell-tools').lsp.buf_eval_all()`
+`haskell-tools.nvim` provides a `:Haskell hls evalAll`
+(`require('haskell-tools').lsp.buf_eval_all()`)
 shortcut to evaluate all of them at once.
 
 ![evalAll](https://user-images.githubusercontent.com/12857160/219743339-e7b7f4e0-478b-4310-a903-36d0a5564937.gif)
@@ -471,9 +472,9 @@ For a complete overview, enter `:help haskell-tools` in Neovim.
 
 #### LSP
 
-| Command         | Description                  |
-| --------------- | ---------------------------- |
-| `:Hls evalAll`  | Evaluate all code snippets   |
+| Command                 | Description                             |
+| ------------------------| --------------------------------------- |
+| `:Haskell hls evalAll`  | Evaluate all code snippets in comments  |
 
 ```lua
 local ht = require('haskell-tools')

@@ -5,9 +5,9 @@ local log = require('haskell-tools.log.internal')
 local Types = require('haskell-tools.types.internal')
 
 ---@brief [[
---- The following commands are available:
+--- The following commands are available if an LSP client is active:
 ---
---- * `:Hls evalAll` - Evaluate all code snippets in comments.
+--- * `:Haskell hls evalAll` - Evaluate all code snippets in comments.
 ---@brief ]]
 
 ---To minimise the risk of this occurring, we attempt to shut down hls cleanly before exiting neovim.
@@ -166,34 +166,5 @@ Hls.buf_eval_all = function(bufnr)
   local eval = require('haskell-tools.lsp.eval')
   return eval.all(bufnr)
 end
-
----@enum haskell-tools.HlsCmd
-local HlsCmd = {
-  evalAll = 'evalAll',
-}
-
-local function hls_command(opts)
-  local fargs = opts.fargs
-  local cmd = fargs[1] ---@as haskell-tools.HlsCmd
-  if cmd == HlsCmd.evalAll then
-    Hls.buf_eval_all()
-  end
-end
-
-vim.api.nvim_create_user_command('Hls', hls_command, {
-  nargs = '+',
-  desc = 'Commands for interacting with the haskell-language-server LSP client',
-  complete = function(arg_lead, cmdline, _)
-    local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
-    ---@type haskell-tools.HlsCmd[]
-    local available_commands = #clients == 0 and {} or { 'evalAll' }
-    ---@type haskell-tools.HlsCmd[]
-    if cmdline:match('^Hls%s+%w*$') then
-      return vim.tbl_filter(function(command)
-        return command:find(arg_lead) ~= nil
-      end, available_commands)
-    end
-  end,
-})
 
 return Hls

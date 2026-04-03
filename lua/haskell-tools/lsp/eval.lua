@@ -46,6 +46,7 @@ function eval.all(bufnr)
   bufnr = bufnr or vim.api.nvim_win_get_buf(0)
   local clients = LspHelpers.get_active_ht_clients(bufnr)
   if not clients or #clients == 0 then
+    vim.notify('No haskell-tools LSP client attached.', vim.log.levels.ERROR)
     return
   end
   local client = clients[1]

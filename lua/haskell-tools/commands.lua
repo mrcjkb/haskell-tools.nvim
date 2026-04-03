@@ -86,7 +86,8 @@ local command_tbl = {
 
 ---@param name string The name of the subcommand
 ---@param subcmd_tbl table<string, haskell-tools.Subcommand> The subcommand's subcommand table
-local function register_subcommand_tbl(name, subcmd_tbl)
+---@param enable? fun():boolean Function to determine whether the registered subcommand is enabled if disabled, it is not included in completions)
+local function register_subcommand_tbl(name, subcmd_tbl, enable)
   command_tbl[name] = {
     impl = function(args, ...)
       local subcmd = subcmd_tbl[table.remove(args, 1)]
@@ -104,6 +105,9 @@ Available subcommands:
       end
     end,
     complete = function(subcmd_arg_lead)
+      if type(enable) == 'function' and not enable() then
+        return {}
+      end
       local subcmd, next_arg_lead = subcmd_arg_lead:match('^(%S+)%s(.*)$')
       if subcmd and next_arg_lead and subcmd_tbl[subcmd] and subcmd_tbl[subcmd].complete then
         return subcmd_tbl[subcmd].complete(next_arg_lead)
@@ -121,6 +125,22 @@ Available subcommands:
     end,
   }
 end
+
+local hls_subcommands = {
+  evalAll = {
+    impl = function()
+      return ht.lsp.buf_eval_all()
+    end,
+  },
+}
+
+---@return boolean tf True if the current buffer has an active haskell-language-server LSP client
+local function buf_has_active_hls_client()
+  local clients = require('haskell-tools.lsp.helpers').get_active_haskell_clients(0)
+  return #clients > 0
+end
+
+register_subcommand_tbl('hls', hls_subcommands, buf_has_active_hls_client)
 
 ---@type table<string, haskell-tools.Subcommand>
 local repl_subcommands = {
@@ -238,6 +258,10 @@ function HtCommands.init()
       end
       if cmdline:match("^['<,'>]*Haskell[!]*%s+%w*$") then
         return vim.tbl_filter(function(command)
+          if command == 'hls' and not buf_has_active_hls_client() then
+            -- don't complete hls command if no client is active
+            return false
+          end
           return command:find(arg_lead) ~= nil
         end, commands)
       end
