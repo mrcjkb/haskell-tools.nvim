@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.1.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.1.0...v8.1.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* notify, don't error, when trying to set an invalid log level ([b3b6ebd](https://github.com/mrcjkb/haskell-tools.nvim/commit/b3b6ebd39a7aa60cafbeedfdcf99626982e4b55b))
+
 ## [8.1.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.0.0...v8.1.0) (2026-04-03)
 
 
