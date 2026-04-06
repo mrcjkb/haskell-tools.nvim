@@ -17,6 +17,7 @@ local Log = {
   info = function(_) end,
   warn = function(_) end,
   error = function(_) end,
+  level = vim.log.levels.WARN,
 }
 
 local LARGE = 1e9
@@ -97,12 +98,20 @@ end
 --- @param level (string|integer) The log level
 --- @see vim.log.levels
 function Log.set_level(level)
+  ---@type integer | nil
+  local levelnr
   if type(level) == 'string' then
-    Log.level = assert(log_levels[string.upper(level)], string.format('haskell-tools: Invalid log level: %q', level))
+    levelnr = log_levels[string.upper(level)]
   else
-    assert(log_levels[level], string.format('haskell-tools: Invalid log level: %d', level))
-    Log.level = level
+    levelnr = level
   end
+  if not levelnr then
+    vim.schedule(function()
+      vim.notify(string.format('haskell-tools: Invalid log level: %d', level), vim.log.levels.WARN)
+    end)
+    return
+  end
+  Log.level = levelnr
   if vim.tbl_get(vim, 'lsp', 'log', 'set_level') then
     vim.lsp.log.set_level(Log.level)
   else
