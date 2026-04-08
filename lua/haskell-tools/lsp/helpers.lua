@@ -16,32 +16,12 @@ local LspHelpers = {}
 LspHelpers.get_clients = vim.lsp.get_clients
 
 LspHelpers.haskell_client_name = 'haskell-tools.nvim'
-LspHelpers.cabal_client_name = 'haskell-tools.nvim (cabal)'
 
 ---@param bufnr number the buffer to get clients for
 ---@return vim.lsp.Client[] haskell_clients
 ---@see util.get_clients
-function LspHelpers.get_active_haskell_clients(bufnr)
+function LspHelpers.get_active_hls_clients(bufnr)
   return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.haskell_client_name }
-end
-
----@param bufnr number the buffer to get clients for
----@return vim.lsp.Client[] cabal_clients
----@see util.get_clients
-function LspHelpers.get_active_cabal_clients(bufnr)
-  return LspHelpers.get_clients { bufnr = bufnr, name = LspHelpers.cabal_client_name }
-end
-
----@param bufnr number the buffer to get clients for
----@return vim.lsp.Client[] ht_clients The haskell + cabal clients
----@see util.get_clients
----@see util.get_active_haskell_clients
----@see util.get_active_cabal_clients
-function LspHelpers.get_active_ht_clients(bufnr)
-  local clients = {}
-  vim.list_extend(clients, LspHelpers.get_active_haskell_clients(bufnr))
-  vim.list_extend(clients, LspHelpers.get_active_cabal_clients(bufnr))
-  return clients
 end
 
 ---@return string[] cmd The command to invoke haskell-language-server
