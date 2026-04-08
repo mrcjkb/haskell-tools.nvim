@@ -354,7 +354,7 @@ end
 --- Sends the request to hls to get hover actions and handle it
 function hover.hover_actions()
   local LspHelpers = require('haskell-tools.lsp.helpers')
-  local clients = LspHelpers.get_active_haskell_clients(vim.api.nvim_get_current_buf())
+  local clients = LspHelpers.get_active_hls_clients(vim.api.nvim_get_current_buf())
   if #clients == 0 then
     return
   end

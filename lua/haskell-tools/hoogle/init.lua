@@ -106,7 +106,7 @@ Hoogle.hoogle_signature = function(options)
     return
   end
   local LspHelpers = require('haskell-tools.lsp.helpers')
-  local clients = LspHelpers.get_active_haskell_clients(vim.api.nvim_get_current_buf())
+  local clients = LspHelpers.get_active_hls_clients(vim.api.nvim_get_current_buf())
   if #clients > 0 then
     lsp_hoogle_signature(options, clients[1].offset_encoding)
   else

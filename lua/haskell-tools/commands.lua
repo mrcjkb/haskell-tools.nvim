@@ -142,7 +142,7 @@ local hls_subcommands = {
   stop = {
     impl = function()
       local LspHelpers = require('haskell-tools.lsp.helpers')
-      local hls_clients = LspHelpers.get_active_ht_clients(0)
+      local hls_clients = LspHelpers.get_active_hls_clients(0)
       for _, client in ipairs(hls_clients) do
         vim.cmd.lsp { 'stop', client.name }
       end
@@ -151,7 +151,7 @@ local hls_subcommands = {
   restart = {
     impl = function()
       local LspHelpers = require('haskell-tools.lsp.helpers')
-      local hls_clients = LspHelpers.get_active_ht_clients(0)
+      local hls_clients = LspHelpers.get_active_hls_clients(0)
       for _, client in ipairs(hls_clients) do
         vim.cmd.lsp { 'restart', client.name }
       end
@@ -161,7 +161,7 @@ local hls_subcommands = {
 
 ---@return boolean tf True if the current buffer has an active haskell-language-server LSP client
 local function buf_has_active_hls_client()
-  local hls_clients = require('haskell-tools.lsp.helpers').get_active_ht_clients(0)
+  local hls_clients = require('haskell-tools.lsp.helpers').get_active_hls_clients(0)
   return #hls_clients > 0
 end
 

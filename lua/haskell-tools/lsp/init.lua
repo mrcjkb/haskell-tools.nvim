@@ -31,24 +31,6 @@ local function ensure_clean_exit_on_quit(client, bufnr)
   })
 end
 
----A workaround for #48:
----Some plugins that add LSP client capabilities which are not built-in to neovim
----(like nvim-ufo and nvim-lsp-selection-range) cause error messages, because
----haskell-language-server falsely advertises those server_capabilities for cabal files.
----@param client vim.lsp.Client
----@return nil
-local function fix_cabal_client(client)
-  local LspHelpers = require('haskell-tools.lsp.helpers')
-  if client.name == LspHelpers.cabal_client_name and client.server_capabilities then
-    ---@diagnostic disable-next-line: inject-field
-    client.server_capabilities = vim.tbl_extend('force', client.server_capabilities, {
-      foldingRangeProvider = false,
-      selectionRangeProvider = false,
-      documentHighlightProvider = false,
-    })
-  end
-end
-
 ---@class haskell-tools.load_hls_settings.Opts
 ---@field settings_file_pattern string|nil File name or pattern to search for. Defaults to 'hls.json'
 
@@ -109,9 +91,7 @@ Hls.start = function(bufnr)
     log.debug('lsp.start: ' .. msg)
     return
   end
-  local HtProjectHelpers = require('haskell-tools.project.helpers')
   local LspHelpers = require('haskell-tools.lsp.helpers')
-  local is_cabal = HtProjectHelpers.is_cabal_file(bufnr)
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
 
@@ -122,10 +102,10 @@ Hls.start = function(bufnr)
   end
 
   local lsp_start_opts = {
-    name = is_cabal and LspHelpers.cabal_client_name or LspHelpers.haskell_client_name,
+    name = LspHelpers.haskell_client_name,
     cmd = Types.evaluate(cmd),
     root_dir = project_root,
-    filetypes = is_cabal and { 'cabal', 'cabalproject' } or { 'haskell', 'lhaskell' },
+    filetypes = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     capabilities = hls_opts.capabilities,
     handlers = handlers,
     settings = hls_settings,
@@ -146,7 +126,6 @@ Hls.start = function(bufnr)
     end,
     on_init = function(client, _)
       ensure_clean_exit_on_quit(client, bufnr)
-      fix_cabal_client(client)
     end,
   }
   local hs_config_name = lsp_start_opts.name
