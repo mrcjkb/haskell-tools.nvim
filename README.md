@@ -94,7 +94,7 @@ vim.pack.add {
   src = 'https://github.com/mrcjkb/haskell-tools.nvim',
   -- To avoid being surprised by breaking changes,
   -- I recommend you set a version range
-  version = vim.version.range('^8')
+  version = vim.version.range('^9')
 }
 ```
 
@@ -112,7 +112,7 @@ Example using [`lazy.nvim`](https://github.com/folke/lazy.nvim):
   'mrcjkb/haskell-tools.nvim',
   -- To avoid being surprised by breaking changes,
   -- I recommend you set a version range
-  version = '^8',
+  version = '^9',
   -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
   -- No need for lazy.nvim to lazy-load it.
   lazy = false,
