@@ -78,6 +78,21 @@ Hls.load_hls_settings = function(project_root, opts)
   return settings or default_settings
 end
 
+---@param default_handler lsp.Handler
+---@return lsp.Handler
+local function suppress_method_not_found_error(default_handler)
+  return function(err, ...)
+    if
+      err
+      and err.code == vim.lsp.protocol.ErrorCodes.MethodNotFound
+      and err.message:match('Plugins installed for this method, but not available to handle this request') ~= nil
+    then
+      return
+    end
+    return default_handler(err, ...)
+  end
+end
+
 ---Start or attach the LSP client.
 ---Fails silently if the buffer's filetype is not one of the filetypes specified in the config.
 ---@param bufnr number|nil The buffer number (optional), defaults to the current buffer
@@ -91,6 +106,16 @@ Hls.start = function(bufnr)
     log.debug('lsp.start: ' .. msg)
     return
   end
+  local HtProjectHelpers = require('haskell-tools.project.helpers')
+
+  if HtProjectHelpers.is_cabal_file(bufnr) then
+    -- HACK: hls spams error messages in cabal files if the user enables features like inlay hints
+    -- See https://github.com/haskell/haskell-language-server/issues/4550#issuecomment-4239601683
+    for k, default_handler in pairs(vim.lsp.handlers) do
+      handlers[k] = suppress_method_not_found_error(default_handler)
+    end
+  end
+
   local LspHelpers = require('haskell-tools.lsp.helpers')
   local project_root = ht.project.root_dir(file)
   local hls_settings = type(hls_opts.settings) == 'function' and hls_opts.settings(project_root) or hls_opts.settings
