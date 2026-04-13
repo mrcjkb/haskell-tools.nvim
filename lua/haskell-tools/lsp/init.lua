@@ -125,6 +125,24 @@ Hls.start = function(bufnr)
       end
     end,
     on_init = function(client, _)
+      -- FIX: HLS has the (arguably) bug where it advertises support for inlay hints,
+      -- but errors if requested for cabal files.
+      -- As a workaround, we explicitly disable inlay hints for cabal files.
+      local original_supports_method = client.supports_method
+      client.supports_method = function(self, method, buf)
+        if method == 'textDocument/inlayHint' then
+          if buf == nil then
+            buf = vim.api.nvim_get_current_buf()
+          end
+          if vim.api.nvim_buf_is_valid(buf) then
+            local ft = vim.bo[buf].filetype
+            if ft == 'cabal' or ft == 'cabalproject' then
+              return false
+            end
+          end
+        end
+        return original_supports_method(self, method, buf)
+      end
       ensure_clean_exit_on_quit(client, bufnr)
     end,
   }
