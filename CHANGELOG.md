@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.1.1...v9.0.0) (2026-04-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lsp:** single client for haskell and cabal files ([#559](https://github.com/mrcjkb/haskell-tools.nvim/issues/559))
+
+### Features
+
+* **lsp:** single client for haskell and cabal files ([#559](https://github.com/mrcjkb/haskell-tools.nvim/issues/559)) ([220b4ac](https://github.com/mrcjkb/haskell-tools.nvim/commit/220b4ac60751637211847a0a62c63992b7365942))
+* **lsp:** suppress `MethodNotFound` errors due to lack of support for cabal files ([#568](https://github.com/mrcjkb/haskell-tools.nvim/issues/568)) ([d5fd459](https://github.com/mrcjkb/haskell-tools.nvim/commit/d5fd45950d3801526f2cdb2e902c46601206c134))
+
 ## [8.1.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.1.0...v8.1.1) (2026-04-06)
 
 
