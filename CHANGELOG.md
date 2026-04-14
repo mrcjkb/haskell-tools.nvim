@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.0...v9.0.1) (2026-04-14)
+
+
+### Bug Fixes
+
+* **lsp:** only enable code lenses for the current buffer ([#571](https://github.com/mrcjkb/haskell-tools.nvim/issues/571)) ([e31dd3c](https://github.com/mrcjkb/haskell-tools.nvim/commit/e31dd3c2512788ea887b780177ab53f4e3263096))
+
 ## [9.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v8.1.1...v9.0.0) (2026-04-13)
 
 
