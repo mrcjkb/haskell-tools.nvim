@@ -146,7 +146,7 @@ Hls.start = function(bufnr)
       end
       local code_lens_opts = tools_opts.codeLens or {}
       if Types.evaluate(code_lens_opts.autoRefresh) then
-        vim.lsp.codelens.enable(true, { buffer = bufnr })
+        vim.lsp.codelens.enable(true, { buffer = buf })
       end
     end,
     on_init = function(client, _)
