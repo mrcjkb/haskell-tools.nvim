@@ -90,12 +90,12 @@ that are specific to Haskell tooling.
 Using Neovim's built-in plugin manager:
 
 ```lua
-vim.pack.add {
+vim.pack.add {{
   src = 'https://github.com/mrcjkb/haskell-tools.nvim',
   -- To avoid being surprised by breaking changes,
   -- I recommend you set a version range
   version = vim.version.range('^9')
-}
+}}
 ```
 
 This plugin is [available on LuaRocks][luarocks-url] and can be installed
