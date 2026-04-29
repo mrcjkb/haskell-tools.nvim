@@ -165,16 +165,20 @@ local check_installed = function(dep)
   local binaries = dep.get_binaries()
   for _, binary in ipairs(binaries) do
     if vim.fn.executable(binary) == 1 then
-      local handle = io.popen(binary .. ' --version')
-      if handle then
-        local binary_version, error_msg = handle:read('*a')
-        handle:close()
-        if error_msg then
-          return true
-        end
-        return true, binary_version
+      local ok, result = pcall(function()
+        return vim.system({ binary, '--version' }, { text = true })
+      end)
+      if not ok then
+        return false, binary .. ' --version could not be run: ' .. tostring(result)
       end
-      return true
+      local obj = vim.print(result:wait(1000))
+      if obj.code == 124 then
+        return false, binary .. ' --version timed out.'
+      elseif obj.code ~= 0 then
+        return false, obj.stderr ~= '' and obj.stderr or binary .. ' --version had non-zero exit code.'
+      end
+      local binary_version = obj.stdout
+      return true, binary_version
     end
   end
   return false

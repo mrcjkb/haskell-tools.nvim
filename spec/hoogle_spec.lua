@@ -16,7 +16,7 @@ local mock_compat = mock {
   end,
 }
 local orig_system = vim.system
-vim.system = mock_compat.system
+-- vim.system = mock_compat.system
 
 describe('Hoogle:', function()
   local ht = require('haskell-tools')
