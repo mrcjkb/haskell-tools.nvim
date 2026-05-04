@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.1...v9.0.2) (2026-05-04)
+
+
+### Bug Fixes
+
+* **health:** use `vim.system` for depencency version detection ([e86225d](https://github.com/mrcjkb/haskell-tools.nvim/commit/e86225d12ca379ff4d27dcbc5241cbd9c12b9f7c))
+
 ## [9.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.0...v9.0.1) (2026-04-14)
 
 
