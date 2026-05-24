@@ -6,9 +6,13 @@
 
     neorocks = {
       url = "github:nvim-neorocks/neorocks";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
+    gen-luarc = {
+      url = "github:mrcjkb/nix-gen-luarc-json";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     git-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
