@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.2...v10.0.0) (2026-06-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* prioritise `hie.yaml` in package root search ([#622](https://github.com/mrcjkb/haskell-tools.nvim/issues/622))
+
+### Features
+
+* prioritise `hie.yaml` in package root search ([#622](https://github.com/mrcjkb/haskell-tools.nvim/issues/622)) ([35c5fec](https://github.com/mrcjkb/haskell-tools.nvim/commit/35c5fec23d775aacae3ae3c9153e318e84e0236f))
+
 ## [9.0.2](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.1...v9.0.2) (2026-05-04)
 
 
