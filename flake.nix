@@ -2,7 +2,7 @@
   description = "haskell-tools.nvim - supercharge your haskell experience in neovim";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     neorocks = {
       url = "github:nvim-neorocks/neorocks";
@@ -36,12 +36,7 @@
     flake-utils,
     ...
   }: let
-    supportedSystems = [
-      "aarch64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-      "x86_64-linux"
-    ];
+    supportedSystems = builtins.attrNames nixpkgs.legacyPackages;
 
     test-overlay = import ./nix/test-overlay.nix {
       inherit
@@ -65,7 +60,7 @@
 
       docgen = pkgs.callPackage ./nix/docgen.nix {};
 
-      luarc-plugins = with pkgs.lua51Packages; (with pkgs.vimPlugins; [
+      luarc-plugins = with pkgs.luajitPackages; (with pkgs.vimPlugins; [
         toggleterm-nvim
         telescope-nvim
         nvim-dap
@@ -128,7 +123,7 @@
           ++ (with pkgs; [
             lua-language-server
             busted-nlua
-            (lua5_1.withPackages (ps: with ps; [luarocks]))
+            (luajit.withPackages (ps: with ps; [luarocks]))
           ]);
       };
     in {
