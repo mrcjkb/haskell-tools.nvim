@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v10.0.0...v10.0.1) (2026-06-29)
+
+
+### Bug Fixes
+
+* **lsp:** prevent error when hovering on closed parens ([#646](https://github.com/mrcjkb/haskell-tools.nvim/issues/646)) ([6fda625](https://github.com/mrcjkb/haskell-tools.nvim/commit/6fda625527314c1421d04e08ad84b7d707a62115))
+
 ## [10.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v9.0.2...v10.0.0) (2026-06-06)
 
 
