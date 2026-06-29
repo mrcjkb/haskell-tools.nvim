@@ -30,8 +30,11 @@ end
 --- @return string[] signatures Other type signatures returned by hls
 HtParser.try_get_signatures_from_markdown = function(func_name, docs)
   local all_sigs = {}
-  ---@type string|nil
-  local raw_func_sig = docs:match('```haskell\n' .. func_name .. '%s::%s([^```]*)')
+  ---@type boolean, string|nil
+  local ok, raw_func_sig = pcall(string.match, docs, '```haskell\n' .. func_name .. '%s::%s([^```]*)')
+  if not ok then
+    return nil, {}
+  end
   for code_block in docs:gmatch('```haskell\n([^```]*)\n```') do
     ---@type string|nil
     local sig = code_block:match('::%s([^```]*)')
