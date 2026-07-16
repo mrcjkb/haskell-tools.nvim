@@ -292,11 +292,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783841878,
-        "narHash": "sha256-OsJVWQ96ZvRmMvMFdrZvXbCXVHAog9FOu6m0Rh6J5YE=",
+        "lastModified": 1784100072,
+        "narHash": "sha256-VhBvENtI6amARW/ehwLNB3HCdy6pgd3yDFUs0ojAAtU=",
         "owner": "nvim-neorocks",
         "repo": "neorocks",
-        "rev": "28cd57b8fb6b3c4a0bd9de7045d3d26e6d43a0b8",
+        "rev": "c7a3223a64c81e8162130e13988d229ddf9193c0",
         "type": "github"
       },
       "original": {
