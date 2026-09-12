@@ -1,5 +1,4 @@
 local stub = require('luassert.stub')
-local mock = require('luassert.mock')
 local match = require('luassert.match')
 local deps = require('haskell-tools.deps')
 
@@ -10,13 +9,6 @@ local browser_search = stub(hoogle_web, 'browser_search')
 local web_telescope_search = stub(hoogle_web, 'telescope_search')
 local os = require('haskell-tools.os')
 local open_browser = stub(os, 'open_browser')
-local mock_compat = mock {
-  system = function(_)
-    return {}
-  end,
-}
-local orig_system = vim.system
--- vim.system = mock_compat.system
 
 describe('Hoogle:', function()
   local ht = require('haskell-tools')
@@ -44,14 +36,16 @@ describe('Hoogle:', function()
         web_telescope_search:revert()
       end)
       it('Formatting of URL', function()
+        local system_stub = stub(vim, 'system')
         pcall(hoogle_web.telescope_search, 'Foldable t => t a -> Bool')
-        assert.spy(mock_compat.system).called_with({
+        assert.stub(system_stub).called_with({
           'curl',
           '--silent',
           'https://hoogle.haskell.org/?hoogle=Foldable+t+%3D%3E+t+a+%2D%3E+Bool&mode=json',
           '-H',
           'Accept: application/json',
         }, nil, match.is_not_nil())
+        system_stub:revert()
       end)
     else
       it('Web handler is available', function()
@@ -69,5 +63,3 @@ describe('Hoogle:', function()
     end
   end
 end)
-
-vim.system = orig_system

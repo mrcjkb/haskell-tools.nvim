@@ -4,172 +4,169 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    neorocks = {
-      url = "github:nvim-neorocks/neorocks";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     gen-luarc = {
       url = "github:mrcjkb/nix-gen-luarc-json";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    git-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    flake-utils.url = "github:numtide/flake-utils";
-
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        git-hooks.follows = "git-hooks";
+      };
     };
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
-    neorocks,
-    gen-luarc,
+    flake-parts,
     git-hooks,
-    flake-utils,
+    gen-luarc,
     ...
   }: let
-    supportedSystems = builtins.attrNames nixpkgs.legacyPackages;
+    name = "haskell-tools.nvim";
 
-    test-overlay = import ./nix/test-overlay.nix {
-      inherit
-        (inputs)
-        self
-        ;
-    };
-
-    haskell-tooling-overlay = import ./nix/haskell-tooling-overlay.nix {inherit self;};
+    plugin-overlay = import ./nix/plugin-overlay.nix {inherit name self;};
   in
-    flake-utils.lib.eachSystem supportedSystems (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          haskell-tooling-overlay
-          test-overlay
-          neorocks.overlays.default
-          gen-luarc.overlays.default
-        ];
-      };
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = builtins.attrNames nixpkgs.legacyPackages;
+      imports = [
+        git-hooks.flakeModule
+      ];
+      perSystem = {
+        system,
+        pkgs,
+        ...
+      }: let
+        neovim-nightly = inputs.neovim-nightly-overlay.packages.${system}.default;
 
-      docgen = pkgs.callPackage ./nix/docgen.nix {};
+        ci-overlay = import ./nix/ci-overlay.nix {inherit neovim-nightly;};
 
-      luarc-plugins = with pkgs.luajitPackages; (with pkgs.vimPlugins; [
-        toggleterm-nvim
-        telescope-nvim
-        nvim-dap
-      ]);
+        luarc-plugins = with pkgs.luajitPackages; (with pkgs.vimPlugins; [
+          toggleterm-nvim
+          telescope-nvim
+          nvim-dap
+        ]);
 
-      luarc-nightly = pkgs.mk-luarc {
-        nvim = pkgs.neovim-nightly;
-        plugins = luarc-plugins;
-      };
+        luarc-nightly = pkgs.mk-luarc {
+          nvim = neovim-nightly;
+          plugins = luarc-plugins;
+        };
 
-      luarc-stable = pkgs.mk-luarc {
-        nvim = pkgs.neovim-unwrapped;
-        plugins = luarc-plugins;
-        disabled-diagnostics = [
-          "undefined-doc-name"
-          "redundant-parameter"
-          "invisible"
-        ];
-      };
+        luarc-stable = pkgs.mk-luarc {
+          nvim = pkgs.neovim-unwrapped;
+          plugins = luarc-plugins;
+          disabled-diagnostics = [
+            "undefined-doc-name"
+            "redundant-parameter"
+            "invisible"
+          ];
+        };
 
-      type-check-nightly = git-hooks.lib.${system}.run {
-        src = self;
-        hooks = {
-          lua-ls = {
-            enable = true;
-            settings.configuration = luarc-nightly;
+        type-check-nightly = git-hooks.lib.${system}.run {
+          src = self;
+          hooks = {
+            lua-ls = {
+              enable = true;
+              settings.configuration = luarc-nightly;
+            };
           };
         };
-      };
 
-      type-check-stable = git-hooks.lib.${system}.run {
-        src = self;
-        hooks = {
-          lua-ls = {
-            enable = true;
-            settings.configuration = luarc-stable;
+        type-check-stable = git-hooks.lib.${system}.run {
+          src = self;
+          hooks = {
+            lua-ls = {
+              enable = true;
+              settings.configuration = luarc-stable;
+            };
           };
         };
-      };
 
-      pre-commit-check = git-hooks.lib.${system}.run {
-        src = self;
-        hooks = {
-          alejandra.enable = true;
-          stylua.enable = true;
-          luacheck.enable = true;
-          editorconfig-checker.enable = true;
-          markdownlint.enable = true;
+        pre-commit-check = git-hooks.lib.${system}.run {
+          src = self;
+          hooks = {
+            alejandra.enable = true;
+            stylua.enable = true;
+            luacheck.enable = true;
+            editorconfig-checker.enable = true;
+            markdownlint.enable = true;
+          };
+        };
+
+        docgen = pkgs.callPackage ./nix/docgen.nix {};
+
+        devShell = pkgs.mkShell {
+          name = "haskell-tools.nvim-devShell";
+          shellHook = ''
+            ${pre-commit-check.shellHook}
+          '';
+          buildInputs =
+            pre-commit-check.enabledPackages
+            ++ (with pkgs; [
+              lua-language-server
+              lux-cli
+            ]);
+        };
+      in {
+        _module.args.pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            ci-overlay
+            gen-luarc.overlays.default
+            plugin-overlay
+          ];
+        };
+
+        devShells = {
+          default = devShell;
+          ci = pkgs.mkShell {
+            name = "haskell-tools.nvim devShell";
+            shellHook = ''
+              ${pre-commit-check.shellHook}
+            '';
+            buildInputs = with pkgs; [
+              haskell-language-server
+              cabal-install
+              stack
+              ghc
+            ];
+          };
+        };
+
+        legacyPackages = pkgs;
+
+        packages = rec {
+          default = haskell-tools-nvim;
+          inherit docgen;
+          inherit
+            (pkgs)
+            haskell-tools-nvim
+            nvim-minimal-stable
+            nvim-minimal-nightly
+            ;
+        };
+
+        checks = {
+          formatting = pre-commit-check;
+          inherit
+            type-check-stable
+            type-check-nightly
+            ;
         };
       };
-
-      haskell-tools-shell = pkgs.mkShell {
-        name = "haskell-tools.nvim-devShell";
-        shellHook = ''
-          ${pre-commit-check.shellHook}
-          ln -fs ${pkgs.luarc-to-json luarc-nightly} .luarc.json
-        '';
-        buildInputs =
-          self.checks.${system}.pre-commit-check.enabledPackages
-          ++ (with pkgs; [
-            lua-language-server
-            busted-nlua
-            (luajit.withPackages (ps: with ps; [luarocks]))
-          ]);
-      };
-    in {
-      devShells = rec {
-        default = haskell-tools;
-        haskell-tools = haskell-tools-shell;
-      };
-
-      packages = rec {
-        default = haskell-tools-nvim;
-        haskell-tools-nvim = pkgs.haskell-tools-nvim-dev;
-        inherit
-          (pkgs)
-          nvim-minimal-stable
-          nvim-minimal-nightly
-          ;
-        inherit
-          docgen
-          ;
-      };
-
-      checks = {
-        inherit
-          type-check-stable
-          type-check-nightly
-          pre-commit-check
-          ;
-        inherit
-          (pkgs)
-          haskell-tools-test
-          haskell-tools-test-no-hls
-          haskell-tools-test-no-telescope
-          haskell-tools-test-no-telescope-with-hoogle
-          haskell-tools-test-nightly
-          haskell-tools-test-no-telescope-nightly
-          haskell-tools-test-no-telescope-with-hoogle-nightly
-          ;
-      };
-    })
-    // {
-      overlays = {
-        inherit
-          test-overlay
-          haskell-tooling-overlay
-          ;
-        default = haskell-tooling-overlay;
+      flake = {
+        overlays.default = plugin-overlay;
       };
     };
 }
