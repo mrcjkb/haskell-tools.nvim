@@ -50,15 +50,9 @@ which are checked in CI.
 
 ### Running tests
 
-This plugin uses [`busted`](https://lunarmodules.github.io/busted/) for testing.
+This plugin uses [`lux`](https://lux.lumen-labs.org) for testing.
 
-The best way to run tests is with Nix (see below),
-because this includes tests that take different
-envrionments into account (e.g. with/without `fast-tags`, `hoogle`, ...).
-
-If you do not use Nix, you can run a basic version of the test suite using
-`luarocks test`.
-For more information, see the [neorocks tutorial](https://github.com/nvim-neorocks/neorocks#without-neolua).
+Run `lx --nvim test` to run the test suite.
 
 ### Development using Nix
 
@@ -86,13 +80,7 @@ just run `direnv allow` and you will be dropped in this devShell.
 To run tests locally
 
 ```console
-nix-build -A haskell-tools-test
-```
-
-Or (with flakes enabled)
-
-```console
-nix build .#checks.<your-system>.haskell-tools-test --print-build-logs
+lx --nvim test
 ```
 
 For formatting and linting:
