@@ -53,6 +53,9 @@ local HaskellTools = {
   dap = lazy_require('haskell-tools.dap'),
   ---@type haskell-tools.Log
   log = lazy_require('haskell-tools.log'),
+  setup = function(opts)
+    vim.g.haskell_tools = opts
+  end,
 }
 
 return HaskellTools
