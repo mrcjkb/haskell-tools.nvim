@@ -116,12 +116,12 @@
         name = "haskell-tools.nvim-devShell";
         shellHook = ''
           ${pre-commit-check.shellHook}
-          ln -fs ${pkgs.luarc-to-json luarc-nightly} .luarc.json
         '';
         buildInputs =
           self.checks.${system}.pre-commit-check.enabledPackages
           ++ (with pkgs; [
             lua-language-server
+            lux-cli
             busted-nlua
             (luajit.withPackages (ps: with ps; [luarocks]))
           ]);
@@ -139,6 +139,10 @@
           (pkgs)
           nvim-minimal-stable
           nvim-minimal-nightly
+          haskell-language-server
+          cabal-install
+          stack
+          ghc
           ;
         inherit
           docgen

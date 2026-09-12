@@ -4,3 +4,4 @@ result
 .pre-commit-config.yaml
 .direnv
 .repro
+.lux
