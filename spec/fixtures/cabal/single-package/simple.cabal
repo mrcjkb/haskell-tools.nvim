@@ -2,5 +2,9 @@ cabal-version:      3.0
 name:               simple
 version:            0.1.0.0
 build-type:         Simple
-common warnings
-    ghc-options: -Wall
+
+library
+    exposed-modules:  Lib
+    hs-source-dirs:   src
+    build-depends:    base >=4.7 && <5
+    default-language: Haskell2010
