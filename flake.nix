@@ -100,7 +100,12 @@
             stylua.enable = true;
             luacheck.enable = true;
             editorconfig-checker.enable = true;
-            markdownlint.enable = true;
+            markdownlint = {
+              enable = true;
+              excludes = [
+                ".github/PULL_REQUEST_TEMPLATE.md"
+              ];
+            };
           };
         };
 
