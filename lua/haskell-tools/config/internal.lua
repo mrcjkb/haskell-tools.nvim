@@ -223,11 +223,11 @@ local HTDefaultConfig = {
   ---@class haskell-tools.dap.Config debug adapter config for nvim-dap.
   dap = {
     ---@type string[] | (fun():string[]) The command to start the debug adapter server with.
-    cmd = { 'haskell-debug-adapter' },
-    ---@type string Log file path for detected configurations.
-    logFile = vim.fn.stdpath('data') .. '/haskell-dap.log',
-    ---@type haskell-tools.debugAdapter.LogLevel The log level for detected configurations.
-    logLevel = 'Warning',
+    cmd = { 'hdb', 'server', '--port', '${port}' },
+    ---@type string[] The arguments passed to the entry point of detected launch configurations.
+    entryArgs = {},
+    ---@type string[] Additional arguments to pass to the GHC invocation of detected launch configurations.
+    extraGhcArgs = {},
     ---@type boolean | haskell-tools.dap.AddConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
     auto_discover = true,
   },
