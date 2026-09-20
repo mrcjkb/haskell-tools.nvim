@@ -115,6 +115,11 @@
           name = "haskell-tools.nvim-devShell";
           shellHook = ''
             ${pre-commit-check.shellHook}
+            if command -v nvim >/dev/null 2>&1; then
+              export VIMRUNTIME="$(nvim --clean --headless -c 'lua io.write(vim.env.VIMRUNTIME)' +q)";
+            else
+              export VIMRUNTIME="${pkgs.neovim-unwrapped}/share/nvim/runtime";
+            fi
           '';
           buildInputs =
             pre-commit-check.enabledPackages
