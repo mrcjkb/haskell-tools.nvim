@@ -121,6 +121,7 @@
             ++ (with pkgs; [
               lua-language-server
               lux-cli
+              haskell.packages.ghc914.haskell-debugger
             ]);
         };
       in {
@@ -145,6 +146,7 @@
               cabal-install
               stack
               ghc
+              haskell.packages.ghc914.haskell-debugger
             ];
           };
         };
@@ -153,6 +155,7 @@
 
         packages = rec {
           default = haskell-tools-nvim;
+          hdb = pkgs.haskell.packages.ghc914.haskell-debugger;
           inherit docgen;
           inherit
             (pkgs)
