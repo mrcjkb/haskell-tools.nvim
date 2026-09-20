@@ -82,7 +82,7 @@ that are specific to Haskell tooling.
 - [`fast-tags`](https://github.com/elaforge/fast-tags)
   (for automatic tag generation as a fallback for
   [`vim.lsp.tagfunc`](https://neovim.io/doc/user/lsp.html#vim.lsp.tagfunc())).
-- [`haskell-debug-adapter`](https://github.com/phoityne/haskell-debug-adapter/)
+- [`haskell-debugger`](https://well-typed.github.io/haskell-debugger/)
   and [`nvim-dap`](https://github.com/mfussenegger/nvim-dap).
 
 ## :inbox_tray: Installation
@@ -319,18 +319,17 @@ this plugin will set up `autocmd`s to automatically generate tags:
 
 This feature can be tweaked or disabled in the [advanced configuration](#gear-advanced-configuration).
 
-- [x] **Auto-discover `haskell-debug-adapter` configurations**
+- [x] **Auto-discover `haskell-debugger` configurations**
 
 If the [`nvim-dap`](https://github.com/mfussenegger/nvim-dap) plugin is installed,
-`haskell-tools.nvim` will automatically discover [`haskell-debug-adapter`](https://hackage.haskell.org/package/haskell-debug-adapter)
+`haskell-tools.nvim` will automatically discover [`haskell-debugger`](https://well-typed.github.io/haskell-debugger/)
 configurations.
 
 ![dap](https://user-images.githubusercontent.com/12857160/232348888-4fea5393-d624-417e-b994-6eb44113a3d9.gif)
 
 >[!NOTE]
 >
->`haskell-debug-adapter` is an experimental design and implementation of
->a debug adapter for Haskell.
+>`haskell-debugger` requires GHC 9.14 or above.
 
 - [ ] **Planned**
 
@@ -476,13 +475,12 @@ iron.setup {
 }
 ```
 
-### Create `haskell-debug-adapter` launch configurations
+### Create `haskell-debugger` launch configurations
 
-There are two ways this plugin will detect `haskell-debug-adapter` launch configurations:
+There are two ways this plugin will detect `haskell-debugger` launch configurations:
 
 1. Automatically, by parsing Cabal or Stack project files.
-1. By loading a [`launch.json`](https://github.com/phoityne/hdx4vsc/tree/master/configs)
-  file in the project root.
+1. By loading a `launch.json` file in the project root.
 
 ### Available functions and commands
 
@@ -651,7 +649,7 @@ ht.dap.discover_configurations(bufnr, opts)
 > [!NOTE]
 >
 > `haskell-tools.nvim` will discover DAP launch configurations automatically,
-> if `nivm-dap` is installed and the debug adapter server is executable.
+> if `nvim-dap` is installed and the debug adapter server is executable.
 > There is typically no need to call this function manually.
 
 ### Telescope extension
