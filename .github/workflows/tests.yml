@@ -42,4 +42,4 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Run tests
-        run: nix shell .#haskell-language-server .#cabal-install .#stack .#ghc -c lx --nvim test
+        run: nix shell .#haskell-language-server .#cabal-install .#stack .#ghc .#hdb -c lx --nvim test
