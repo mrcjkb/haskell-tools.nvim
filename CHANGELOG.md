@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [11.0.0](https://github.com/mrcjkb/haskell-tools.nvim/compare/v10.0.1...v11.0.0) (2026-09-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **dap:** The following `haskell-tools.dap` config options are removed:
+    - `logFile`
+    - `logLevel`
+
+### Features
+
+* **dap:** replace haskell-debug-adapter with haskell-debugger (hdb) ([d734256](https://github.com/mrcjkb/haskell-tools.nvim/commit/d73425655f06a56b62efa2224a88c4eb861d5d5e))
+* **health:** check for haskell-debugger (hdb) ([5a24592](https://github.com/mrcjkb/haskell-tools.nvim/commit/5a24592cbfd543f8de1bc813580b4da260588ad9))
+
 ## [10.0.1](https://github.com/mrcjkb/haskell-tools.nvim/compare/v10.0.0...v10.0.1) (2026-06-29)
 
 
