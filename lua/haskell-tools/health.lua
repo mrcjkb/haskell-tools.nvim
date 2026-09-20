@@ -122,26 +122,15 @@ local external_dependencies = {
     info = 'Required for "telescope-web" hoogle search mode.',
   },
   {
-    name = 'haskell-debug-adapter',
+    name = 'hdb',
     get_binaries = function()
-      return { 'haskell-debug-adapter' }
+      return { 'hdb' }
     end,
     optional = function()
       return true
     end,
-    url = '[haskell-debug-adapter](https://github.com/phoityne/haskell-debug-adapter)',
-    info = 'Optional, for `dap` support.',
-  },
-  {
-    name = 'ghci-dap',
-    get_binaries = function()
-      return { 'ghci-dap' }
-    end,
-    optional = function()
-      return true
-    end,
-    url = '[ghci-dap](https://github.com/phoityne/ghci-dap)',
-    info = 'Optional, for `dap` support.',
+    url = '[haskell-debugger](https://well-typed.github.io/haskell-debugger/)',
+    info = 'Optional, for `dap` support. Requires GHC 9.14 or above.',
   },
 }
 
