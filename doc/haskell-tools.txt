@@ -236,17 +236,12 @@ haskell-tools.dap.Opts                                  *haskell-tools.dap.Opts*
     Fields: ~
         {cmd?}            (string[])
                                                                      The command to start the debug adapter server with.
-        {logFile?}        (string)
-                                                                     Log file path for detected configurations.
-        {logLevel?}       (haskell-tools.debugAdapter.LogLevel)
-                                                                     The log level for detected configurations.
+        {entryArgs?}      (string[])
+                                                                     The arguments passed to the entry point of detected launch configurations.
+        {extraGhcArgs?}   (string[])
+                                                                     Additional arguments to pass to the GHC invocation of detected launch configurations.
         {auto_discover?}  (boolean|haskell-tools.dap.AddConfigOpts)  Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
 
-
-haskell-tools.debugAdapter.LogLevel        *haskell-tools.debugAdapter.LogLevel*
-
-    Type: ~
-        "Debug"|"Info"|"Warning"|"Error"
 
 
 haskell-tools.dap.AddConfigOpts                *haskell-tools.dap.AddConfigOpts*
@@ -329,7 +324,7 @@ haskell-tools.Dap                                            *haskell-tools.Dap*
 
                                                    *Dap.discover_configurations*
 Dap.discover_configurations({bufnr}, {opts})
-    Discover nvim-dap launch configurations for haskell-debug-adapter.
+    Discover nvim-dap launch configurations for haskell-debugger (hdb).
 
     Parameters: ~
         {bufnr}  (number|nil)                           The buffer number
