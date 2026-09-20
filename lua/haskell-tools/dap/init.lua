@@ -4,16 +4,6 @@ local deps = require('haskell-tools.deps')
 local Types = require('haskell-tools.types.internal')
 
 ---@param root_dir string
-local function get_ghci_dap_cmd(root_dir)
-  local HtProjectHelpers = require('haskell-tools.project.helpers')
-  if HtProjectHelpers.is_cabal_project(root_dir) then
-    return 'cabal exec -- ghci-dap --interactive -i ${workspaceFolder}'
-  else
-    return 'stack ghci --test --no-load --no-build --main-is TARGET --ghci-options -fprint-evld-with-show'
-  end
-end
-
----@param root_dir string
 ---@param opts haskell-tools.dap.AddConfigOpts
 ---@return haskell-tools.dap.LaunchConfiguration[]
 local function find_json_configurations(root_dir, opts)
@@ -48,24 +38,17 @@ local function detect_launch_configurations(root_dir)
   ---@param entry_point haskell-tools.EntryPoint
   ---@return haskell-tools.dap.LaunchConfiguration
   local function mk_launch_configuration(entry_point)
+    local entry_file = vim.fs.joinpath(entry_point.package_dir, entry_point.source_dir, entry_point.main)
     ---@class haskell-tools.dap.LaunchConfiguration
     local LaunchConfiguration = {
-      type = 'ghc',
+      type = 'haskell-debugger',
       request = 'launch',
       name = entry_point.package_name .. ':' .. entry_point.exe_name,
-      workspace = '${workspaceFolder}',
-      startup = vim.fs.joinpath(entry_point.package_dir, entry_point.source_dir, entry_point.main),
-      startupFunc = '', -- defaults to 'main' if not set
-      startupArgs = '',
-      stopOnEntry = false,
-      mainArgs = '',
-      logFile = dap_opts.logFile,
-      logLevel = dap_opts.logLevel,
-      ghciEnv = vim.empty_dict(),
-      ghciPrompt = 'λ: ',
-      ghciInitialPrompt = 'ghci> ',
-      ghciCmd = get_ghci_dap_cmd(root_dir),
-      forceInspect = false,
+      projectRoot = root_dir,
+      entryFile = vim.fs.relpath(root_dir, entry_file) or entry_file,
+      entryPoint = 'main',
+      entryArgs = vim.deepcopy(dap_opts.entryArgs),
+      extraGhcArgs = vim.deepcopy(dap_opts.extraGhcArgs),
     }
     return LaunchConfiguration
   end
@@ -98,7 +81,7 @@ local DefaultAutoDapConfigOpts = {
   settings_file_pattern = 'launch.json',
 }
 
----Discover nvim-dap launch configurations for haskell-debug-adapter.
+---Discover nvim-dap launch configurations for haskell-debugger (hdb).
 ---@param bufnr number|nil The buffer number
 ---@param opts haskell-tools.dap.AddConfigOpts|nil
 ---@return nil
@@ -112,9 +95,13 @@ Dap.discover_configurations = function(bufnr, opts)
     return
   end
   ---@cast dap_cmd string[]
-  dap.adapters.ghc = {
-    type = 'executable',
-    command = table.concat(dap_cmd, ' '),
+  dap.adapters['haskell-debugger'] = {
+    type = 'server',
+    port = '${port}',
+    executable = {
+      command = dap_cmd[1],
+      args = vim.list_slice(dap_cmd, 2),
+    },
   }
   bufnr = bufnr or 0 -- Default to current buffer
   opts = vim.tbl_deep_extend('force', {}, DefaultAutoDapConfigOpts, opts or {})
@@ -141,7 +128,7 @@ Dap.discover_configurations = function(bufnr, opts)
   local dap_configurations = dap.configurations.haskell or {}
   for _, cfg in ipairs(discovered_configurations) do
     for i, existing_config in pairs(dap_configurations) do
-      if cfg.name == existing_config.name and cfg.startup == existing_config.startup then
+      if cfg.name == existing_config.name and cfg.entryFile == existing_config.entryFile then
         table.remove(dap_configurations, i)
       end
     end

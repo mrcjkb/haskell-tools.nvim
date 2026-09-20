@@ -202,14 +202,13 @@ vim.g.haskell_tools = vim.g.haskell_tools
 ---The command to start the debug adapter server with.
 ---@field cmd? string[]
 ---
----Log file path for detected configurations.
----@field logFile? string
+---The arguments passed to the entry point of detected launch configurations.
+---@field entryArgs? string[]
 ---
----The log level for detected configurations.
----@field logLevel? haskell-tools.debugAdapter.LogLevel
+---Additional arguments to pass to the GHC invocation of detected launch configurations.
+---@field extraGhcArgs? string[]
+---
 ---@field auto_discover? boolean | haskell-tools.dap.AddConfigOpts Set to `false` to disable auto-discovery of launch configurations. `true` uses the default configurations options`.
-
----@alias haskell-tools.debugAdapter.LogLevel 'Debug' | 'Info' | 'Warning' | 'Error'
 
 ---@class haskell-tools.dap.AddConfigOpts
 ---

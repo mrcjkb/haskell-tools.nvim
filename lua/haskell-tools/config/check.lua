@@ -177,14 +177,11 @@ function Check.validate(cfg)
   if not ok then
     return false, err
   end
-  ok, err = validate('haskell_tools.dap.logFile', dap.logFile, 'string')
+  ok, err = validate('haskell_tools.dap.entryArgs', dap.entryArgs, 'table')
   if not ok then
     return false, err
   end
-  local valid_dap_log_levels = { 'Debug', 'Info', 'Warning', 'Error' }
-  ok, err = validate('haskell_tools.dap.logLevel', dap.logLevel, function(level)
-    return type(level) == 'string' and vim.tbl_contains(valid_dap_log_levels, level)
-  end, false, 'one of ' .. vim.inspect(valid_backends))
+  ok, err = validate('haskell_tools.dap.extraGhcArgs', dap.extraGhcArgs, 'table')
   if not ok then
     return false, err
   end
