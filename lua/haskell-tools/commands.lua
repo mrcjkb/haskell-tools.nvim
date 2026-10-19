@@ -18,6 +18,7 @@ local ht = require('haskell-tools')
 local function complete_haskell_files(arg_lead)
   return vim
     .iter(vim.list_extend(vim.fn.getcompletion(arg_lead, 'file'), vim.fn.getcompletion(arg_lead, 'buffer')))
+    ---@param file_path string
     :filter(function(file_path)
       local ext = vim.fn.fnamemodify(file_path, ':e')
       return ext == 'hs' or ext == ''
@@ -113,12 +114,14 @@ Available subcommands:
         return subcmd_tbl[subcmd].complete(next_arg_lead)
       end
       local enabled_subcommands = vim.iter(subcmd_tbl):map(function(subcmd_name)
+        ---@diagnostic disable-next-line: missing-return-value
         return enable(subcmd_name) and subcmd_name or nil
       end)
       if subcmd_arg_lead and subcmd_arg_lead ~= '' then
         return enabled_subcommands
           ---@param subcmd_name string
           :map(function(subcmd_name)
+            ---@diagnostic disable-next-line: missing-return-value
             return subcmd_name:find(subcmd_arg_lead) ~= nil
           end)
           :totable()

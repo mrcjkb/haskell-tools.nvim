@@ -36,7 +36,7 @@ end
 ---@return string[] hoogle_args
 local function mk_hoogle_args(search_term, opts)
   local count = opts.count or 50
-  local args = vim.iter({ '--json', '--count=' .. count, search_term }):flatten():totable()
+  local args = vim.iter({ '--json', '--count=' .. count, search_term }):totable()
   log.debug { 'Hoogle local args', args }
   return args
 end
