@@ -45,6 +45,7 @@ local function delete_plug_mappings(bufnr)
       'References',
     })
     :map(function(suffix)
+      ---@diagnostic disable-next-line: missing-return-value
       return '<Plug>HaskellHoverAction' .. suffix
     end)
     :each(function(mapping)

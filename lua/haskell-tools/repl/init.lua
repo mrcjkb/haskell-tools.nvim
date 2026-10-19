@@ -102,7 +102,7 @@ local function mk_repl_cmd(file)
     return mk_stack_repl_cmd(file)
   end
   if vim.fn.executable('ghci') == 1 then
-    local cmd = vim.iter({ 'ghci', file and { file } or {} }):flatten():totable()
+    local cmd = vim.list_extend({ 'ghci' }, file and { file } or {})
     log.debug { 'mk_repl_cmd', cmd }
     return cmd
   end
