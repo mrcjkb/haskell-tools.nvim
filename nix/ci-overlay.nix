@@ -2,30 +2,19 @@
   inherit (final) lib;
 
   mkNvimMinimal = nvim:
-    with final; let
-      neovimConfig = neovimUtils.makeNeovimConfig {
-        withPython3 = true;
-        viAlias = true;
-        vimAlias = true;
-        plugins = with vimPlugins; [
-          haskell-tools-nvim
-          prev.vimPlugins.nvim-treesitter.withAllGrammars
-        ];
-      };
-      runtimeDeps = [
-        haskell-language-server
+    final.wrapNeovimUnstable nvim {
+      withPython3 = true;
+      viAlias = true;
+      vimAlias = true;
+      wrapRc = false;
+      plugins = with final.vimPlugins; [
+        haskell-tools-nvim
+        prev.vimPlugins.nvim-treesitter.withAllGrammars
       ];
-    in
-      final.wrapNeovimUnstable nvim (neovimConfig
-        // {
-          wrapperArgs =
-            lib.escapeShellArgs neovimConfig.wrapperArgs
-            + " "
-            + ''--set NVIM_APPNAME "nvim-haskell-tools"''
-            + " "
-            + ''--prefix PATH : "${lib.makeBinPath runtimeDeps}"'';
-          wrapRc = false;
-        });
+      wrapperArgs =
+        ''--set NVIM_APPNAME "nvim-haskell-tools" ''
+        + ''--prefix PATH : "${lib.makeBinPath [final.haskell-language-server]}"'';
+    };
 in {
   nvim-minimal-stable = mkNvimMinimal final.neovim-unwrapped;
   nvim-minimal-nightly = mkNvimMinimal neovim-nightly;

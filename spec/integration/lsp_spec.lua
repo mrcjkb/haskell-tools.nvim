@@ -54,7 +54,7 @@ local function hover(bufnr, row, col)
   end
   local result
   clients[1]:request('textDocument/hover', {
-    textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+    textDocument = vim.lsp.util.make_text_document_params(bufnr),
     position = { line = row, character = col },
   }, function(_, res)
     result = res
