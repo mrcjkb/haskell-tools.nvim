@@ -16,7 +16,7 @@ local function copy_project()
   local src = vim.fn.getcwd() .. '/spec/fixtures/cabal/single-package'
   local dst = vim.fn.tempname()
   vim.fn.system { 'cp', '-r', src, dst }
-  return dst
+  return vim.uv.fs_realpath(dst) or dst
 end
 
 local function start_client()

@@ -7,13 +7,14 @@ on:
 
 jobs:
   test:
-    name: ${{ matrix.job.target }} - Neovim ${{ matrix.nvim-version }}
+    name: ${{ matrix.job.os }} - Neovim ${{ matrix.nvim-version }}
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
       matrix:
         job:
-          - { os: ubuntu-24.04, target: x86_64-linux }
+          - { os: ubuntu-24.04, hdb: '.#hdb' }
+          - { os: macos-15, hdb: '' }
         nvim-version:
           - stable
           - nightly
@@ -26,6 +27,10 @@ jobs:
         with:
           neovim: true
           version: ${{ matrix.nvim-version }}
+
+      - name: Install LuaJIT (macOS)
+        if: runner.os == 'macOS'
+        run: brew install luajit
 
       - name: Install Lux
         uses: lumen-oss/gh-actions-lux@v1
@@ -42,4 +47,4 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Run tests
-        run: nix shell .#haskell-language-server .#cabal-install .#stack .#ghc .#hdb -c lx --nvim test
+        run: nix shell .#haskell-language-server .#cabal-install .#stack .#ghc ${{ matrix.job.hdb }} -c lx --nvim test
