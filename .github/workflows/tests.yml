@@ -38,7 +38,7 @@ jobs:
           version: 0.43.5
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v31
+        uses: cachix/install-nix-action@v32
 
       - name: Setup cachix
         uses: cachix/cachix-action@v17
